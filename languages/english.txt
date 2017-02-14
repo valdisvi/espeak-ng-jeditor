@@ -1,0 +1,69 @@
+﻿File
+Open...
+Open2…
+Save
+Save as
+Close
+Quit
+Speak
+Translate
+Show Rules
+Show IPA
+Speak
+Speak File...
+Pause
+Stop
+Voice
+Select Voice...
+Select Voice Variant…
+Select Voice
+English
+Russian
+Latvian
+Polish
+Options
+Set Paths
+Master phonemes file...
+Phoneme data source...
+Dictionary data source...
+Synthesized sound wAV file...
+Voice file to modify formant peaks...
+Language
+English
+Latvian
+Russian
+Speed
+Speak Punctuation
+Speak Characters
+Speak Character Name
+Tools
+Make Vowels Chart
+From compiled phoneme data
+From directory of vowel files...
+Process Lexicon
+Russian
+Bulgarian
+German
+Italian
+Convert file to UTF8...
+Count word frequencies...
+Test (temporary)
+Compile
+Compile dictionary
+Compile dictionary (debug)
+Compile phoneme data 22050HZ
+Compile at sample rate
+Compile mbrola phonemes list...
+Compile intonation data
+Layout '_rules' file
+Sort '_rules' file
+Help
+eSpeak Documentation
+About
+Zoom-
+Zoom+
+Text
+Translate
+Show Rules
+Speak
+Show IPA

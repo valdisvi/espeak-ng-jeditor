@@ -1,0 +1,96 @@
+
+//====================================================
+//  Esperanto
+//====================================================
+
+
+phoneme a
+  vowel starttype #a endtype #a
+  length 180
+  FMT(vowel/a_2)
+endphoneme
+
+
+phoneme e
+  vowel starttype #e endtype #e
+  length 170
+  FMT(vowel/e_mid2)
+endphoneme
+
+
+phoneme i
+  vowel starttype #i endtype #i
+  length 170
+  IfNextVowelAppend(;)
+  FMT(vowel/i)
+endphoneme
+
+
+phoneme o
+  vowel starttype #o endtype #o
+  length 170
+  IF thisPh(isWordEnd) THEN
+    FMT(vowel/o)
+  ENDIF
+  FMT(vowel/oo_1)
+endphoneme
+
+
+phoneme u
+  vowel starttype #u endtype #u
+  length 170
+  FMT(vowel/u)
+endphoneme
+
+
+phoneme aU
+  vowel starttype #a endtype #u
+  length 250
+  FMT(vdiph/au_4)
+endphoneme
+
+
+phoneme eU
+  vowel starttype #e endtype #u
+  length 250
+  FMT(vdiph/eu)
+endphoneme
+
+
+phoneme aI
+  vowel starttype #a endtype #i
+  length 250
+  FMT(vdiph/ai)
+endphoneme
+
+
+phoneme eI
+  vowel starttype #e endtype #i
+  length 250
+  FMT(vdiph/eei_2)
+endphoneme
+
+
+phoneme oI
+  vowel starttype #o endtype #i
+  length 250
+  FMT(vdiph/ooi_2)
+endphoneme
+
+
+phoneme uI
+  vowel starttype #u endtype #i
+  length 250
+  FMT(vdiph/ui)
+endphoneme
+
+
+
+// CONSONANTS
+//===========
+
+phoneme ts
+  import_phoneme consonants/ts
+endphoneme
+
+
