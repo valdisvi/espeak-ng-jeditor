@@ -1,0 +1,75 @@
+
+//====================================================
+//  Ancient Greek  - based on base2
+//====================================================
+
+phoneme : //  Lengthen previous vowel by "length"
+  virtual
+  length 100
+endphoneme
+
+
+phoneme y
+  vowel starttype #i endtype #i
+  length 160
+  FMT(vowel/yy_4)
+endphoneme
+
+phoneme e
+  vowel starttype #e endtype #e
+  length 140
+  FMT(vowel/e)
+endphoneme
+
+phoneme E
+  vowel starttype #e endtype #e
+  length 150
+  FMT(vowel/ee_1)
+endphoneme
+
+phoneme o
+  vowel starttype #o endtype #o
+  length 140
+  FMT(vowel/o)
+endphoneme
+
+phoneme O
+  vowel starttype #o endtype #o
+  length 150
+  FMT(vowel/0)
+endphoneme
+
+
+phoneme EU
+  vowel starttype #e endtype #u
+  length 230
+  FMT(vdiph/eeu)
+endphoneme
+
+phoneme OI
+  vowel starttype #o endtype #i
+  length 230
+  FMT(vdiph/0i)
+endphoneme
+
+phoneme OU
+  vowel starttype #o endtype #u
+  length 230
+  FMT(vdiph/oou)
+endphoneme
+
+
+phoneme yI
+  vowel starttype #i endtype #i
+  length 230
+  FMT(vdiph/yi)
+endphoneme
+
+
+phoneme f   // consider this an affrictive
+  vls blb afr
+  lengthmod 2
+  Vowelout f1=0  f2=1000 -500 -350  f3=-200 80
+  WAV(ufric/f)    // could replace this with a [pf] wav file
+endphoneme
+

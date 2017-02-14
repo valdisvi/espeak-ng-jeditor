@@ -1,0 +1,69 @@
+﻿Fails
+Atvērt...
+Atvērt2…
+Saglabāt
+Saglabāt kā
+Aizvērt
+Beigt darbu
+Runāt
+Tulkot
+Rādīt noteikumus
+Parādīt IPA
+Runāt
+Runāšanas fails...
+Pauze
+Beigt
+Balss
+Izvēlieties balss...
+Izvēlieties balss variant…
+Izvēlieties balss
+Anglu
+Krievu
+Latviesu
+Polu
+Opcijas
+Skatīt ceļus
+Pārvaldīt fonēmas failu...
+Fonēmas datu avots...
+Vārdnīca datu avots...
+Sintezēt skaņas wAV failu...
+Mainīt balss failu  virsotnes  formants...
+Izvēlnes valoda
+Angļu
+Latviešu
+Krievu
+Ātrums
+Runāšanas punktuacija
+Runā rakstzīmes
+Runā rakstzīmju nosaukums
+Instrumenti
+Padarīt patskaņu diagrammu
+No apkopota fonēma datu
+No direktorijas ar patskanu failiem
+Ražot leksikonu
+Krievu
+Bulgāru
+Vācu
+Itāļu
+Konvertēt failu UTF-8...
+Vārdu frekvences skaits...
+Tests (pagaidu)
+Kompilēt
+Kompilēt vārdnīcu
+Kompilēt vārdnīcu (atkļūdošana)
+Kompilēt fonēmas datu 22050HZ
+Kompilēt paraugu atrumu
+Kompilēt mbrola fonēmas katalogs
+Kompilēt intonācijas datu
+Izkārtot '_rules' failu
+Šķirot '_rules' failu
+Palīdzība
+eSpeak documentacija
+Par mūms
+Atlikt
+Tuvināt
+Teksts
+Tulkot
+Parādīt noteikumus
+Runāt
+Parādīt IPA

@@ -1,0 +1,274 @@
+
+phoneme N
+  vcd vel nasal
+  lengthmod 8            // longer than 'n'
+  IfNextVowelAppend(g)
+  CALL base/N
+endphoneme
+
+
+
+//*******************************************************************
+// VOWELS
+//*******************************************************************
+
+phoneme 3    //  Schwa, used for rhotic schwa in American
+  vowel   starttype #@  endtype #@
+  ipa ə
+  unstressed
+  length 140
+  IfNextVowelAppend(r-)
+  FMT(vowel/@_fr)
+endphoneme
+
+
+phoneme a
+  vowel  starttype #a  endtype #a
+  length 140
+  ChangeIfDiminished(a#)
+  FMT(vowel/a)
+endphoneme
+
+
+phoneme E
+  vowel  starttype #a  endtype #a
+  length 150
+  IF nextPhW(n) THEN
+    ChangeIfDiminished(@)
+  ELSE
+    ChangeIfDiminished(I2)
+  ENDIF
+  FMT(vowel/ee)
+endphoneme
+
+
+phoneme I
+  vowel  starttype #i endtype #i
+  length 130
+  IfNextVowelAppend(;)
+  FMT(vowel/ii)
+endphoneme
+
+
+phoneme I2
+  vowel  starttype #i  endtype #i
+  unstressed
+  length 140
+  IfNextVowelAppend(;)
+  FMT(vowel/ii)
+endphoneme
+
+
+phoneme i   //  optional variant of [I] for end of words
+  vowel  starttype #i  endtype #i
+  length 150
+  FMT(vowel/e_2)
+endphoneme
+
+
+phoneme 0
+  vowel  starttype #o   endtype #o
+  length 150
+  ChangeIfDiminished(@)
+  FMT(vowel/0_2)
+endphoneme
+
+
+phoneme V
+  vowel  starttype #o  endtype #o
+  ipa ʊ
+  length 140
+  ChangeIfDiminished(@)
+  FMT(vowel/o-_2)
+endphoneme
+
+
+phoneme U
+  vowel  starttype #o  endtype #o
+  length 170
+  FMT(vowel/uu)
+endphoneme
+
+
+
+phoneme a#
+  vowel  starttype #@  endtype #@
+  ipa ɐ
+  unstressed
+  length 140
+  IfNextVowelAppend(r-)
+  FMT(vowel/a#_3)
+endphoneme
+
+
+phoneme A:
+  vowel  starttype #a  endtype #@
+  length 240
+  IfNextVowelAppend(r-)
+  FMT(vowel/aa_5)
+endphoneme
+
+
+phoneme A@
+  vowel  starttype #a  endtype #@
+  ipa ɑː
+  length 250
+  IfNextVowelAppend(r-)
+  FMT(vowel/aa_5)
+endphoneme
+
+
+phoneme aa   //   'bath' etc.
+  vowel  starttype #a  endtype #a
+  ipa a
+  length 150
+  FMT(vowel/a)
+endphoneme
+
+
+phoneme 3:
+  vowel  starttype #@  endtype #@
+  length 230
+  IfNextVowelAppend(r-)
+  ChangeIfDiminished(@)
+  FMT(vowel/3_2)
+endphoneme
+
+
+phoneme i:
+  vowel  starttype #i  endtype #i
+  length 175
+  IfNextVowelAppend(;)
+  IF prevPh(w) THEN
+    VowelStart(w/wi2)
+  ENDIF
+  FMT(vowel/i)
+endphoneme
+
+
+phoneme O:
+  vowel  starttype #o  endtype #o
+  length 240
+  IfNextVowelAppend(r-)
+  ChangeIfDiminished(@)
+  FMT(vowel/oo_1)
+endphoneme
+
+
+phoneme O@
+  vowel  starttype #o  endtype #@
+  ipa ɔː
+  length 240
+  IfNextVowelAppend(r-)
+  FMT(vwl_en_n/O@)
+endphoneme
+
+
+phoneme o@
+  vowel  starttype #o  endtype #@
+  ipa ɔː
+  length 240
+  IfNextVowelAppend(r-)
+  FMT(vwl_en_n/O@)
+endphoneme
+
+
+phoneme O
+  vowel  starttype #o  endtype #o
+  length 150
+  ChangeIfDiminished(@)
+  FMT(vowel/oo_en)
+endphoneme
+
+
+phoneme u:
+  vowel  starttype #u  endtype #u
+  length 200
+  FMT(vdiph2/uw_4)
+endphoneme
+
+
+phoneme aU
+  vowel  starttype #e  endtype #u
+  ipa æʊ
+  length 230
+  FMT(vdiph/eeu_3)
+endphoneme
+
+
+phoneme oU
+  vowel  starttype #o  endtype #o
+  ipa oː
+  length 220
+  FMT(vowel/o)
+endphoneme
+
+
+phoneme aI
+  vowel  starttype #a  endtype #i
+  length 230
+  FMT(vdiph/ae_2)
+endphoneme
+
+
+phoneme eI
+  vowel  starttype #i  endtype #i
+  ipa eː
+  length 210
+  FMT(vowel/e)
+endphoneme
+
+
+phoneme OI
+  vowel  starttype #o  endtype #i
+  length 230
+  FMT(vdiph/ooi)
+endphoneme
+
+
+phoneme e@
+  vowel  starttype #e  endtype #@
+  length 220
+  IfNextVowelAppend(r-)
+  FMT(vdiph2/ee@)
+endphoneme
+
+
+phoneme i@
+  vowel  starttype #i  endtype #@
+  length 240
+  IfNextVowelAppend(r-)
+  FMT(vdiph2/i@)
+endphoneme
+
+
+phoneme U@
+  vowel  starttype #u  endtype #@
+  length 200
+  IfNextVowelAppend(r-)
+  FMT(vdiph2/uu@)
+endphoneme
+
+
+phoneme aI@
+  vowel  starttype #a  endtype #@
+  length 280
+  IfNextVowelAppend(r-)
+  FMT(vwl_en/aI@)
+endphoneme
+
+
+phoneme aI3
+  vowel  starttype #a  endtype #@
+  length 280
+  ChangePhoneme(aI@)
+endphoneme
+
+
+phoneme aU@
+  vowel  starttype #a   endtype #@
+  length 280
+  IfNextVowelAppend(r-)
+  FMT(vwl_en/aU@)
+endphoneme
+
