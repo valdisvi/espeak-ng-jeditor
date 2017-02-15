@@ -30,7 +30,7 @@ public class EventHandlers {
 				mainW.setVisible(false);
 				mainW.dispose();
 			}
-			if (e.getSource() == mainW.mntmNewMenuItem) {
+			if (e.getSource() == mainW.mntmOpen) {
 				int returnVal = fc.showOpenDialog(mainW);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -157,7 +157,7 @@ public class EventHandlers {
 		// file>quit
 		mainW.mntmQuit.addActionListener(event);
 		// file>open
-		mainW.mntmNewMenuItem.addActionListener(event);
+		mainW.mntmOpen.addActionListener(event);
 
 		// // file>open2 mainW.mntmOpen.addActionListener();
 		//

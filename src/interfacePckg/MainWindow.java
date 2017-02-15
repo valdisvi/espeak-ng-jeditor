@@ -24,8 +24,8 @@ public class MainWindow extends JFrame {
 	//TODO grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
 	// menuBar group File
 	public JMenu mnNewMenu;
-	public JMenuItem mntmNewMenuItem;
 	public JMenuItem mntmOpen;
+	public JMenuItem mntmOpen2;
 	public JMenuItem mntmSave;
 	public JMenuItem mntmSaveAs;
 	public JMenuItem mntmClose;
@@ -140,11 +140,11 @@ public class MainWindow extends JFrame {
 		mnNewMenu = new JMenu("File");
 		menuBar.add(mnNewMenu);
 
-		mntmNewMenuItem = new JMenuItem("Open...");
-		mnNewMenu.add(mntmNewMenuItem);
-
-		mntmOpen = new JMenuItem("Open2...");
+		mntmOpen = new JMenuItem("Open...");
 		mnNewMenu.add(mntmOpen);
+
+		mntmOpen2 = new JMenuItem("Open2...");
+		mnNewMenu.add(mntmOpen2);
 
 		mntmSave = new JMenuItem("Save");
 		mntmSave.setVisible(false);
@@ -399,6 +399,8 @@ public class MainWindow extends JFrame {
                         .addComponent(tabbedPane))
                     .addGap(0))
         );
+        
+        // keyframe sequence ("Spect") tab
 		JPanel panel_Spect = new JPanel();
 		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
@@ -792,7 +794,12 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(tfmS);
 		panel_Spect.add(lblMs);
 		panel_Spect.add(spkopen);
-		panel_Spect.add(spTilt);
+		panel_Spect.add(spTilt);btnTranslate = new JButton("Translate");
+		btnSpeak = new JButton("Speak");
+		btnNewButton = new JButton("Show Rules");
+		btnNewButton_1 = new JButton("Show IPA");
+
+		
 		panel_Spect.add(lblTilt);
 		panel_Spect.add(spAV);
 		panel_Spect.add(spAVp);
@@ -861,27 +868,31 @@ public class MainWindow extends JFrame {
 		label_8.setBounds(63, 473, 21, 15);
 		panel_Spect.add(label_8);
 
+		// Translation ("Text") tab
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 		panel_text.setToolTipText("Text");
 		tabbedPane.addTab("Text", null, panel_text, null);
 
+		// input text area
+		textAreaIn = new JTextArea();
+		textAreaIn.setLineWrap(true);
+		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		// output text area
+		textAreaOut = new JTextArea();
+		textAreaOut.setLineWrap(true);
+		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		// command buttons
 		btnTranslate = new JButton("Translate");
 		btnSpeak = new JButton("Speak");
 		btnNewButton = new JButton("Show Rules");
 		btnNewButton_1 = new JButton("Show IPA");
 
-		textAreaIn = new JTextArea();
-		textAreaIn.setLineWrap(true);
-
-		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		textAreaOut = new JTextArea();
-		textAreaOut.setLineWrap(true);
-		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
+		// Translation ("Text") tab horizontal grouping
 		GroupLayout gl_panel_text = new GroupLayout(panel_text);
 		gl_panel_text.setHorizontalGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_text
 				.createSequentialGroup().addContainerGap()
@@ -898,6 +909,7 @@ public class MainWindow extends JFrame {
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(btnNewButton_1, Alignment.LEADING))))
 				.addContainerGap()));
+		// Translation ("Text") tab vertical grouping
 		gl_panel_text.setVerticalGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_text.createSequentialGroup().addContainerGap()
 						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
