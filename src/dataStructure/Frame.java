@@ -18,6 +18,7 @@ public class Frame {
 	// Not used in SPECTSEQ
 	public int[] klatt_param;
 	public int[] spect_data;
+	public boolean selected = false;
 
 	
 	 static int default_freq[] = {200,500,1200,3000,3500,4000,6900,7800,9000}; 
