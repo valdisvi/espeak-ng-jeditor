@@ -24,38 +24,52 @@ public class EventHandlers {
 		fileChooser = new JFileChooser("./phsource/");
 	}
 
+	ChangeListener getPhoneme = new ChangeListener() {
+		public void stateChanged(ChangeEvent arg0) {
+			setVisibleMenuItemsFile(mainW);
+			PhonemeLoad.getPhoneme((JPanel) mainW.tabbedPaneGraphs.getSelectedComponent());
+		}
+	};
+
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmQuit) {
-				mainW.setVisible(false);
-				mainW.dispose();
-			}
 			if (e.getSource() == mainW.mntmOpen) {
 				int returnVal = fileChooser.showOpenDialog(mainW);
-
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					PhonemeLoad.phonemeOpen(file, mainW);
 				}
-			}
-			if (e.getSource() == mainW.mntmAbout) {
-				AboutWindow.OpenAboutWindow();
-			}
-			if (e.getSource() == mainW.mntmSpeed) {
-				mainW.optionsSpeed.showOptionsSpeed();
-			}
-			if (e.getSource() == mainW.mntmEnglish) {
+			} else if (e.getSource() == mainW.mntmQuit) {
+				mainW.setVisible(false);
+				mainW.dispose();
+			} else if (e.getSource() == mainW.mntmEnglish) {
 				File file = new File("./languages/english.txt");
 				Language.initLanguage(file, mainW);
-			}
-			if (e.getSource() == mainW.mntmLatvian) {
+			} else if (e.getSource() == mainW.mntmLatvian) {
 				File file = new File("./languages/latvian.txt");
 				Language.initLanguage(file, mainW);
-			}
-			if (e.getSource() == mainW.mntmRussian) {
+			} else if (e.getSource() == mainW.mntmRussian) {
 				File file = new File("./languages/russian.txt");
 				Language.initLanguage(file, mainW);
+			} else if (e.getSource() == mainW.mntmSpeed) {
+				mainW.optionsSpeed.showOptionsSpeed();
+			} else if (e.getSource() == mainW.mntmAbout) {
+				AboutWindow.OpenAboutWindow();
 			}
+		}
+	};
+	
+
+	// TODO clear the text field and spinner values in this and in closeAllTab
+	ActionListener closeTab = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			mainW.tabbedPaneGraphs.remove(mainW.tabbedPaneGraphs.getSelectedComponent());
+		}
+	};
+
+	ActionListener closeAllTab = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			mainW.tabbedPaneGraphs.removeAll();
 		}
 	};
 
@@ -67,13 +81,6 @@ public class EventHandlers {
 		}
 	};
 
-	ActionListener speak = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speak");
-		}
-	};
-
 	ActionListener showRules = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -81,19 +88,6 @@ public class EventHandlers {
 		}
 	};
 
-	ActionListener closeTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			mainW.tabbedPaneGraphs.remove(mainW.tabbedPaneGraphs
-					.getSelectedComponent());
-		}
-	};
-
-	ActionListener closeAllTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			mainW.tabbedPaneGraphs.removeAll();
-		}
-	};
-	
 	//requires espeak-ng library
 	ActionListener showIpa = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -102,14 +96,15 @@ public class EventHandlers {
 		}
 	};
 
-	ChangeListener getPhoneme = new ChangeListener() {
-		public void stateChanged(ChangeEvent arg0) {
-			setVisibleMenuItemsFile(mainW);
-			PhonemeLoad.getPhoneme((JPanel) mainW.tabbedPaneGraphs.getSelectedComponent());
+	ActionListener speak = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			espeakNg.makeAction("speak");
 		}
 	};
 
 	//requires espeak-ng library
+	// speaking without ignoring punctuation (says "dot" where is ".")
 	ActionListener speakPunctuation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -118,6 +113,7 @@ public class EventHandlers {
 	};
 
 	//requires espeak-ng library
+	// splits word and spell it by symbol
 	ActionListener speakBySymbol = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -141,154 +137,82 @@ public class EventHandlers {
 
 		mainW.tabbedPaneGraphs.addChangeListener(getPhoneme);
 
-		mainW.mntmClose.addActionListener(closeTab);
+		// File
 		
-		mainW.mntmCloseAll.addActionListener(closeAllTab);
-
-		mainW.btnShowRules.addActionListener(showRules);
-
-		mainW.btnSpeak.addActionListener(speak);
-
-		mainW.btnTranslate.addActionListener(translate);
-
-		mainW.btnShowIPA.addActionListener(showIpa);
-		
-		// file>quit
-		mainW.mntmQuit.addActionListener(event);
-		// file>open
 		mainW.mntmOpen.addActionListener(event);
+		// mainW.mntmOpen2.addActionListener();
+		// mainW.mntmSave.addActionListener();
+		// mainW.mntmSaveAs.addActionListener();
+		mainW.mntmClose.addActionListener(closeTab);
+		mainW.mntmCloseAll.addActionListener(closeAllTab);
+		mainW.mntmQuit.addActionListener(event);
 
-		// // file>open2 mainW.mntmOpen.addActionListener();
-		//
-		//
 		// Speak
-		//
-		//
-		// // Speak>Translate
-		mainW.mntmTranslate.addActionListener(translate);
-		//
-		// // Speak>Show_Rules
-		mainW.mntmShowRules.addActionListener(showRules);
-
-		// Speak>Show_IPA 
-		mainW.mntmShowIPA.addActionListener(showIpa);
 		
-		// Speak>Speak 
+		mainW.mntmTranslate.addActionListener(translate);
+		mainW.mntmShowRules.addActionListener(showRules);
+		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
-
-		// // Options>Speak punctuation
-		// speaking without ignoring punctuation (says "dot" where is ".")
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
-
-		// // Options>Speak characters
-		// splits word and spell it by symbol
-		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-
-		// // Speak>Speak_file... mainW.mntmNewMenuItem_4.addActionListener();
-		// // Speak>Pause mainW.mntmNewMenuItem_5.addActionListener();
-		//
-		// // Speak>Stop mainW.mntmNewMenuItem_6.addActionListener();
-		//
-		//
+		// mainW.mntmSpeakfile.addActionListener();
+		// mainW.mntmPause.addActionListener();
+		// mainW.mntmStop.addActionListener();
+		
 		// Voice
-		//
-		//
-		// mainW.mntmNewMenuItem_7.addActionListener();
-		//
-		// // Voice>Select_Voice_Variant...
-		// mainW.mntmNewMenuItem_8.addActionListener();
-		//
-		//
+		// mainW.mntmSelectVoice.addActionListener();
+		// mainW.mntmSelectVoiceVariant.addActionListener();
+		// mainW.rdbtnmntmEnglish.addActionListener();
+		// mainW.rdbtnmntmLatvian.addActionListener();
+		// mainW.rdbtnmntmPolish.addActionListener();
+		// mainW.rdbtnmntmRussian.addActionListener();
+		
 		// Options
-		//
-		//
-		// // Options>See_Paths>Master_Phonemes_File...
-		// mainW.mntmNewMenuItem_9.addActionListener(); 
-		// // Options>See_Paths>Phoneme data source...
-		// mainW.mntmNewMenuItem_10.addActionListener();
-		// // Options>See_Paths>Dictionary data source...
-		// mainW.mntmNewMenuItem_11.addActionListener();
-		// // Options>See_Paths>Synthesized sound wAV file...
-		// mainW.mntmNewMenuItem_12.addActionListener();
-		// // Options>See_Paths>Voice file to modify formant peaks...
-		// mainW.mntmNewMenuItem_13.addActionListener();
-		//
-		// Options>Language
+		
+		// mainW.mntmMasterPhonemesFile.addActionListener();
+		// mainW.mntmPhonemeDataSource.addActionListener();
+		// mainW.mntmDictionaryDataSource.addActionListener();
+		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
+		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
-		// Options>Speed...
 		mainW.mntmSpeed.addActionListener(event);
-
-		// // Options>Speak character name
+		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
+		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
 		// mainW.mntmSpeakCharacterName.addActionListener();
-		//
-		//
-		// Tools
-		//
-		//
-		// // Tools>Make Vowels Chart>From compiled phoneme "en"data
-		// mainW.mntmFromCompiledPhoneme.addActionListener();
-		//
-		// // Tools>Make Vowels Chart>From directory of vowel files...
-		// mainW.mntmNewMenuItem_14.addActionListener();
-		//
-		// // Tools>Process Lexicon>Russian
-		// mainW.mntmNewMenuItem_15.addActionListener();
-		//
-		// // Tools>Process Lexicon>Bulgarian
-		// mainW.mntmNewMenuItem_16.addActionListener();
-		//
-		// // Tools>Process Lexicon>German
-		// mainW.mntmNewMenuItem_17.addActionListener();
-		//
-		// // Tools>Process Lexicon>Italian
-		// mainW.mntmNewMenuItem_18.addActionListener();
-		//
-		// // Tools>Convert fimainWle to UTF8...
-		// mainW.mntmNewMenuItem_19.addActionListener();
-		//
-		// // Tools>Count word frequencies...
-		// mainW.mntmCountWordFrequencies.addActionListener();
-		//
-		// // Tools>Test (temporary)
-		//
-		//
-		// Compile
-		//
-		// // Compile>Compile dictionary
-		// mainW.mntmCompileDictionary.addActionListener();
-		//
-		// // Compile>Compile dictionary (debug)
-		// mainW.mntmCompileDictionarydebug.addActionListener();
-		//
-		// // Compile>Compile phoneme data 22050HZ
-		// mainW.mntmCompilePhonemeData.addActionListener();
-		//
-		// // Compile>Compile at sample rate
-		// Window for this event is ready - InterfaceCompileAtSample.java
-		// mainW.mntmCompileAtSample.addActionListener();
-		//
-		// // Compile>Compile mbrola phonemes list...
-		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
-		//
-		// // Compile>Compile intonation data
-		// mainW.mntmCompileIntonationData.addActionListener();
-		//
-		// // Compile>Layout '_rules' file
-		// mainW.mntmLayoutrulesFile.addActionListener();
-		//
-		// // Compile>Sort '_rules' file
-		// mainW.mntmSortrulesFile.addActionListener();
-		//
-		// Help
-		//
-		//
-		// // Help>eSpeak Documentation
-		mainW.mntmEspeakDocumentation.addActionListener(showDocumentation);
 
-		// Help>About
+		// Tools
+
+		// mainW.mntmFromCompiledPhoneme.addActionListener();
+		// mainW.mntmFromDirectoryVowelFiles.addActionListener();
+		// mainW.mntmPLBulgarian.addActionListener();
+		// mainW.mntmPLGerman.addActionListener();
+		// mainW.mntmPLItalian.addActionListener();
+		// mainW.mntmPLRussian.addActionListener();
+		// mainW.mntmConvertFileUTF8.addActionListener();
+		// mainW.mntmCountWordFrequencies.addActionListener();
+		// mainW.mntmTesttemporary.addActionListener();
+		
+		// Compile
+		
+		// mainW.mntmCompileDictionary.addActionListener();
+		// mainW.mntmCompileDictionarydebug.addActionListener();
+		// mainW.mntmCompilePhonemeData.addActionListener();
+		// mainW.mntmCompileAtSample.addActionListener();
+		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
+		// mainW.mntmCompileIntonationData.addActionListener();
+		// mainW.mntmLayoutrulesFile.addActionListener();
+		// mainW.mntmSortrulesFile.addActionListener();
+		
+		// Help
+		
+		mainW.mntmEspeakDocumentation.addActionListener(showDocumentation);
 		mainW.mntmAbout.addActionListener(event);
+		
+		// Prosody ("Text") tab buttons
+		mainW.btnTranslate.addActionListener(translate);
+		mainW.btnSpeak.addActionListener(speak);
+		mainW.btnShowRules.addActionListener(showRules);
+		mainW.btnShowIPA.addActionListener(showIpa);
 	}
 
 	
@@ -301,7 +225,7 @@ public class EventHandlers {
 		mainW.mntmCloseAll.setVisible(toSetVisible);
 	}
 	
-	//TODO Implement FocusListener for changing values in textfields
+	//TODO Implement FocusListener for changing values in text fields
 	FocusListener tfSave=new FocusListener(){
 		
 		//Not needed

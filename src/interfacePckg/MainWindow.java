@@ -41,16 +41,16 @@ public class MainWindow extends JFrame {
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
 	public JRadioButtonMenuItem rdbtnmntmEnglish;
-	public JRadioButtonMenuItem rdbtnmntmRussian;
 	public JRadioButtonMenuItem rdbtnmntmLatvian;
 	public JRadioButtonMenuItem rdbtnmntmPolish;
+	public JRadioButtonMenuItem rdbtnmntmRussian;
 	// menuBar group Options
 	public JMenu mnOptions;
 	public JMenu mnSetPaths;
 	public JMenuItem mntmMasterPhonemesFile;
 	public JMenuItem mntmPhonemeDataSource;
 	public JMenuItem mntmDictionaryDataSource;
-	public JMenuItem mntmSyntheInterfaceHandlerssizedSoundWAVfile;
+	public JMenuItem mntmSynthesizedSoundWAVfile;
 	public JMenuItem mntmVoiceFileToModifyFormantPeaks;
 	public JMenu mnLanguage;
 	public JMenuItem mntmEnglish;
@@ -67,10 +67,10 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmFromCompiledPhoneme;
 	public JMenuItem mntmFromDirectoryVowelFiles;
 	public JMenu mnProcessLexicon;
-	public JMenuItem mntmPLRussian;
 	public JMenuItem mntmPLBulgarian;
 	public JMenuItem mntmPLGerman;
 	public JMenuItem mntmPLItalian;
+	public JMenuItem mntmPLRussian;
 	public JMenuItem mntmConvertFileUTF8;
 	public JMenuItem mntmCountWordFrequencies;
 	public JMenuItem mntmTesttemporary;
@@ -122,9 +122,9 @@ public class MainWindow extends JFrame {
 		frameInit();
 		menuBarInit();
 		bodyInit();
+		PhonemeLoad.phonemeListInit();
 		eventHandlers = new EventHandlers(this);
 		eventHandlers.initHandlers();
-		PhonemeLoad.phonemeListInit();
 	}
 
 	public static void main(String[] args) {
@@ -201,7 +201,7 @@ public class MainWindow extends JFrame {
 		mntmStop = new JMenuItem("Stop");
 		mnSpeak.add(mntmStop);
 
-		// Group VoiceInterfaceHandlers
+		// Group Voice
 		mnVoice = new JMenu("Voice");
 		menuBar.add(mnVoice);
 
@@ -221,14 +221,14 @@ public class MainWindow extends JFrame {
 		rdbtnmntmEnglish.setSelected(true);
 		mnSelectVoice.add(rdbtnmntmEnglish);
 
-		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
-		mnSelectVoice.add(rdbtnmntmRussian);
-
 		rdbtnmntmLatvian = new JRadioButtonMenuItem("Latvian");
 		mnSelectVoice.add(rdbtnmntmLatvian);
 
 		rdbtnmntmPolish = new JRadioButtonMenuItem("Polish");
 		mnSelectVoice.add(rdbtnmntmPolish);
+
+		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
+		mnSelectVoice.add(rdbtnmntmRussian);
 
 		groupOfVoices = new ButtonGroup();
 		groupOfVoices.add(rdbtnmntmEnglish);
@@ -252,8 +252,8 @@ public class MainWindow extends JFrame {
 		mntmDictionaryDataSource = new JMenuItem("Dictionary data source...");
 		mnSetPaths.add(mntmDictionaryDataSource);
 
-		mntmSyntheInterfaceHandlerssizedSoundWAVfile = new JMenuItem("SyntheInterfaceHandlerssized sound wAV file...");
-		mnSetPaths.add(mntmSyntheInterfaceHandlerssizedSoundWAVfile);
+		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
+		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
 
 		JSeparator separator_1 = new JSeparator();
 		mnSetPaths.add(separator_1);
@@ -376,7 +376,7 @@ public class MainWindow extends JFrame {
 	public void bodyInit() {
 		// initiate keyframe sequence/prosody tab pane
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setToolTipText("");
+//		tabbedPane.setToolTipText("");
 		
 		// initiate keyframe sequence graph pane
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
@@ -410,7 +410,7 @@ public class MainWindow extends JFrame {
         // keyframe sequence ("Spect") tab
 		JPanel panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-		panel_Spect.setToolTipText("Spect");
+//		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 		
 		// formant parameter text fields with labels
@@ -882,7 +882,7 @@ public class MainWindow extends JFrame {
 		// Translation ("Text") tab
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
-		panel_text.setToolTipText("Text");
+//		panel_text.setToolTipText("Text");
 		tabbedPane.addTab("Text", null, panel_text, null);
 
 		// input text area

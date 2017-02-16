@@ -73,7 +73,7 @@ public class Language {
 		mainW.mntmMasterPhonemesFile.setText(translation.get(25));
 		mainW.mntmPhonemeDataSource.setText(translation.get(26));
 		mainW.mntmDictionaryDataSource.setText(translation.get(27));
-		mainW.mntmSyntheInterfaceHandlerssizedSoundWAVfile.setText(translation.get(28));
+		mainW.mntmSynthesizedSoundWAVfile.setText(translation.get(28));
 		mainW.mntmVoiceFileToModifyFormantPeaks.setText(translation.get(29));
 		mainW.mnLanguage.setText(translation.get(30));
 		mainW.mntmEnglish.setText(translation.get(31));

@@ -32,13 +32,9 @@ import interfacePckg.MainWindow;
 
 public class Graph {
 
-	/**
-	 * @param args
-	 */
 	private JTabbedPane tabbedPaneGraphs;
 	private JPanel filePanel;
-	// mapButtons will collect for each button it own frame
-	private Map<JPanel, Frame> mapPanels;
+	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
@@ -120,11 +116,10 @@ public class Graph {
 		return filePanel;
 	}
 
-	// to get first element in mapButtons
+	// to get first element in mapPanels
 	public void loadFirstFrame() {
 		// load first frame
-		Map.Entry<JPanel, Frame> entry = mapPanels.entrySet().iterator()
-				.next();
+		Map.Entry<JPanel, Frame> entry = mapPanels.entrySet().iterator().next();
 		loadFrame(entry.getKey());
 	}
 
