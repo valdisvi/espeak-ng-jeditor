@@ -1,12 +1,13 @@
 package interfacePckg;
 
 import java.awt.Dimension;
+import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
 import dataStructure.PhonemeLoad;
-import java.awt.Font;
-import java.util.ArrayList;
 
 public class MainWindow extends JFrame {
 
@@ -135,7 +136,7 @@ public class MainWindow extends JFrame {
 		tfBp = new ArrayList<JTextField>();
 		MainWindow mainW = new MainWindow();
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainW.setTitle("Espeak Jedit");
+		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
 	}

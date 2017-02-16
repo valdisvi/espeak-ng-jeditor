@@ -6,10 +6,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 
 import dataStructure.PhonemeLoad;
 
@@ -17,11 +17,11 @@ import dataStructure.PhonemeLoad;
 public class EventHandlers {
 
 	private MainWindow mainW;
-	private JFileChooser fc;
+	private JFileChooser fileChooser;
 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
-		fc = new JFileChooser("./phsource/");
+		fileChooser = new JFileChooser("./phsource/");
 	}
 
 	ActionListener event = new ActionListener() {
@@ -31,10 +31,10 @@ public class EventHandlers {
 				mainW.dispose();
 			}
 			if (e.getSource() == mainW.mntmOpen) {
-				int returnVal = fc.showOpenDialog(mainW);
+				int returnVal = fileChooser.showOpenDialog(mainW);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
+					File file = fileChooser.getSelectedFile();
 					PhonemeLoad.phonemeOpen(file, mainW);
 				}
 			}
@@ -105,8 +105,7 @@ public class EventHandlers {
 	ChangeListener getPhoneme = new ChangeListener() {
 		public void stateChanged(ChangeEvent arg0) {
 			setVisibleMenuItemsFile(mainW);
-			PhonemeLoad.getPhoneme((JPanel) mainW.tabbedPaneGraphs
-					.getSelectedComponent());
+			PhonemeLoad.getPhoneme((JPanel) mainW.tabbedPaneGraphs.getSelectedComponent());
 		}
 	};
 
@@ -295,17 +294,11 @@ public class EventHandlers {
 	
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
 
-		if (mainW.tabbedPaneGraphs.getTabCount() != 0) {
-			mainW.mntmSave.setVisible(true);
-			mainW.mntmSaveAs.setVisible(true);
-			mainW.mntmClose.setVisible(true);
-			mainW.mntmCloseAll.setVisible(true);
-		} else {
-			mainW.mntmSave.setVisible(false);
-			mainW.mntmSaveAs.setVisible(false);
-			mainW.mntmClose.setVisible(false);
-			mainW.mntmCloseAll.setVisible(false);
-		}
+		boolean toSetVisible = (mainW.tabbedPaneGraphs.getTabCount() == 0) ? false : true;
+		mainW.mntmSave.setVisible(toSetVisible);
+		mainW.mntmSaveAs.setVisible(toSetVisible);
+		mainW.mntmClose.setVisible(toSetVisible);
+		mainW.mntmCloseAll.setVisible(toSetVisible);
 	}
 	
 	//TODO Implement FocusListener for changing values in textfields
