@@ -38,7 +38,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(file, mainW);
 				}
 			}
-			if (e.getSource() == mainW.mntmNewMenuItem_21) {
+			if (e.getSource() == mainW.mntmAbout) {
 				AboutWindow.OpenAboutWindow();
 			}
 			if (e.getSource() == mainW.mntmSpeed) {
@@ -146,13 +146,13 @@ public class EventHandlers {
 		
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 
-		mainW.btnNewButton.addActionListener(showRules);
+		mainW.btnShowRules.addActionListener(showRules);
 
 		mainW.btnSpeak.addActionListener(speak);
 
 		mainW.btnTranslate.addActionListener(translate);
 
-		mainW.btnNewButton_1.addActionListener(showIpa);
+		mainW.btnShowIPA.addActionListener(showIpa);
 		
 		// file>quit
 		mainW.mntmQuit.addActionListener(event);
@@ -166,16 +166,16 @@ public class EventHandlers {
 		//
 		//
 		// // Speak>Translate
-		mainW.mntmNewMenuItem_1.addActionListener(translate);
+		mainW.mntmTranslate.addActionListener(translate);
 		//
 		// // Speak>Show_Rules
 		mainW.mntmShowRules.addActionListener(showRules);
 
 		// Speak>Show_IPA 
-		mainW.mntmNewMenuItem_2.addActionListener(showIpa);
+		mainW.mntmShowIPA.addActionListener(showIpa);
 		
 		// Speak>Speak 
-		mainW.mntmNewMenuItem_3.addActionListener(speak);
+		mainW.mntmSpeak.addActionListener(speak);
 
 		// // Options>Speak punctuation
 		// speaking without ignoring punctuation (says "dot" where is ".")
@@ -286,10 +286,10 @@ public class EventHandlers {
 		//
 		//
 		// // Help>eSpeak Documentation
-		mainW.mntmNewMenuItem_20.addActionListener(showDocumentation);
+		mainW.mntmEspeakDocumentation.addActionListener(showDocumentation);
 
 		// Help>About
-		mainW.mntmNewMenuItem_21.addActionListener(event);
+		mainW.mntmAbout.addActionListener(event);
 	}
 
 	
