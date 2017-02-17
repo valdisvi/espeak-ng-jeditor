@@ -175,8 +175,7 @@ public class Graph {
 		double xinc;
 		double yf;
 		double scaley = 100 / currentFrame.max_y;
-		double scalex = 400 / 9000;
-		// double dx = currentFrame.dx;
+		double scalex = 400 / 9000; // 400 == panel_width, 9000 - default value
 		System.out.println("\nDOUBLE dx " + currentFrame.dx + "\n");
 
 		double dx = currentFrame.dx;
@@ -194,24 +193,7 @@ public class Graph {
 		xinc = dx;
 		x0 = xinc;
 		x1 = nx * xinc;
-/*
-		for (peak = 1; peak <= 5; peak++) {
-			if (formants[peak][0] != 0) {
-				// set height from linear interpolation of the adjacent
-				// points in the spectrum
-				pt = (int) (formants[peak][0] / dx);
-				System.out.println(" pt "+pt+" spect size "+spect.length);
-				y0 = spect[pt - 1];
-				y1 = spect[pt];
-				yf = (y1 - y0) * (formants[peak][0] - pt * dx) / dx;
 
-				y1 = offy - (int) ((y0 + yf) * scaley);
-				x1 = formants[peak][0] * scalex;
-				g.setColor(Color.BLUE);
-				g.drawLine((int) x1, offy, (int) x1, y1);
-			}
-		}
-*/
 		g.setColor(Color.BLACK);
 		if (spect != null) {
 			y0 = offy - (int) (spect[0] * scaley);
@@ -219,7 +201,7 @@ public class Graph {
 				x1 = x0 + xinc;
 				y1 = offy
 						- (int) (SpectTilt(spect[pt], (int) (pt * dx)) * scaley);
-			//	System.out.println("y1 " + y1 + " x1 " + x1);
+				// System.out.println("y1 " + y1 + " x1 " + x1);
 				g.drawLine(((int) x0 / 2), y0, ((int) x1 / 2), y1);
 				x0 = x1;
 				y0 = y1;
@@ -229,10 +211,10 @@ public class Graph {
 
 	}
 
-	double SpectTilt(int value, int freq) {// =================================
+	double SpectTilt(int value, int freq) {
 		double x;
 		double y;
-		//System.out.println("Value " + value + " freq " + freq);
+		// System.out.println("Value " + value + " freq " + freq);
 		y = value * value * 2;
 
 		if (freq < 600) {
