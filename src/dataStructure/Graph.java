@@ -35,37 +35,23 @@ import interfacePckg.MainWindow;
 
 public class Graph {
 
-	/**
-	 * @param args
-	 */
 	private JTabbedPane tabbedPaneGraphs;
 	private JPanel filePanel;
-
-	// mapButtons will collect for each button it own frame
-private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
+	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 	private int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
-
-		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 		filePanel = new JPanel();
-		filePanel.setToolTipText(fileName);
-		
-		mapPanels = new LinkedHashMap<JPanel, Frame>();
-
+		// filePanel.setToolTipText(fileName);
 		filePanel.setLayout(null);
-		
+		mapPanels = new LinkedHashMap<JPanel, Frame>();
 		ShowFrames (frameList, filePanel, mapPanels);
-
-
-
+		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
-
 	}
-
 
 	class Draw extends JPanel {
 		public Frame currentFrame;
@@ -185,7 +171,6 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 		}
 	}
 
-
 	public JPanel getjPanelOfGraph() {
 		return filePanel;
 	}
@@ -232,13 +217,11 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 		// outputPhonemes();
 
 	}
-
 	
 	KeyListener keyListener = new KeyListener() {
 
 		@Override
 		public void keyPressed(KeyEvent ke) {
-			// TODO Auto-generated method stub
 			//System.out.println(ke.getKeyCode());
 			
 			int x_incr=0;
@@ -435,8 +418,7 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 			
 			final JPanel keyframe = new Draw(currentFrame);
 			
-			
-			keyframe.setBounds(10, y, 900, 100);
+			keyframe.setBounds(10, y, 475, 100);
 			keyframe.setBackground(Color.WHITE);
 			keyframe.setVisible(true);
 			y += 105;
@@ -484,7 +466,6 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 					
 				}
 			});
-			
 			
 			filePanel.add(keyframe);
 			mapPanels.put(keyframe, currentFrame);

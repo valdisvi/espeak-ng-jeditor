@@ -34,31 +34,29 @@ public class EventHandlers {
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmOpen) {
-				int returnVal = fileChooser.showOpenDialog(mainW);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					PhonemeLoad.phonemeOpen(file, mainW);
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 				}
 			} else if (e.getSource() == mainW.mntmQuit) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
-				File file = new File("./languages/english.txt");
-				Language.initLanguage(file, mainW);
+				Language.initLanguage(new File("./languages/english.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmLatvian) {
-				File file = new File("./languages/latvian.txt");
-				Language.initLanguage(file, mainW);
+				Language.initLanguage(new File("./languages/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
-				File file = new File("./languages/russian.txt");
-				Language.initLanguage(file, mainW);
+				Language.initLanguage(new File("./languages/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
 				AboutWindow.OpenAboutWindow();
+			} else if (e.getSource() == mainW.btnZoom) {
+				// TODO implement
+			} else if (e.getSource() == mainW.btnZoom_1) {
+				// TODO implement
 			}
 		}
 	};
-	
 
 	// TODO clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
@@ -73,6 +71,9 @@ public class EventHandlers {
 		}
 	};
 
+	
+	//requires espeak-ng library
+	//requires espeak-ng library
 	ActionListener translate = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -80,7 +81,8 @@ public class EventHandlers {
 
 		}
 	};
-
+	
+	//requires espeak-ng library
 	ActionListener showRules = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -96,13 +98,16 @@ public class EventHandlers {
 		}
 	};
 
+	//requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			espeakNg.makeAction("speak");
 		}
 	};
+	
 
+	//requires espeak-ng library
 	//requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
 	ActionListener speakPunctuation = new ActionListener() {
@@ -111,6 +116,8 @@ public class EventHandlers {
 			espeakNg.makeAction("speakPunctuation");
 		}
 	};
+	
+	//requires espeak-ng library
 
 	//requires espeak-ng library
 	// splits word and spell it by symbol
@@ -208,6 +215,10 @@ public class EventHandlers {
 		mainW.mntmEspeakDocumentation.addActionListener(showDocumentation);
 		mainW.mntmAbout.addActionListener(event);
 		
+		// Zoom buttons
+		mainW.btnZoom.addActionListener(event);
+		mainW.btnZoom_1.addActionListener(event);
+		
 		// Prosody ("Text") tab buttons
 		mainW.btnTranslate.addActionListener(translate);
 		mainW.btnSpeak.addActionListener(speak);
@@ -215,7 +226,6 @@ public class EventHandlers {
 		mainW.btnShowIPA.addActionListener(showIpa);
 	}
 
-	
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
 
 		boolean toSetVisible = (mainW.tabbedPaneGraphs.getTabCount() == 0) ? false : true;
