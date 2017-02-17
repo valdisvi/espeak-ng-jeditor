@@ -810,20 +810,6 @@ public class MainWindow extends JFrame {
 		lblAv.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
 		lblAv.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAv);
-<<<<<<< HEAD
-		panel_Spect.add(spSkew);
-		panel_Spect.add(spFricBP);
-		panel_Spect.add(tfmS);
-		panel_Spect.add(lblMs);
-		panel_Spect.add(spkopen);
-
-		panel_Spect.add(spTilt);btnTranslate = new JButton("Translate");
-		btnSpeak = new JButton("Speak");
-		btnNewButton = new JButton("Show Rules");
-		btnNewButton_1 = new JButton("Show IPA");
-
-=======
->>>>>>> 3ef565f201cdad591b62de8ef1787caeee7f597e
 		
 		JLabel lblTilt = new JLabel("Tilt");
 		lblTilt.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 22, labelHeight);
