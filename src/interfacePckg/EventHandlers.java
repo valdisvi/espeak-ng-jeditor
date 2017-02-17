@@ -33,14 +33,7 @@ public class EventHandlers {
 
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-			if (e.getSource() == mainW.mntmQuit) {
-				mainW.setVisible(false);
-				mainW.dispose();
-			}
 
-=======
->>>>>>> 3ef565f201cdad591b62de8ef1787caeee7f597e
 			if (e.getSource() == mainW.mntmOpen) {
 				int returnVal = fileChooser.showOpenDialog(mainW);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -154,12 +147,7 @@ public class EventHandlers {
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-<<<<<<< HEAD
-		// file>open
 
-		mainW.mntmOpen.addActionListener(event);
-=======
->>>>>>> 3ef565f201cdad591b62de8ef1787caeee7f597e
 
 		// Speak
 		
