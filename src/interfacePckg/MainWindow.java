@@ -108,6 +108,8 @@ public class MainWindow extends JFrame {
 	public static ArrayList<JTextField> tfBp;
 	public JTextField tfmS;
 	public JSpinner spampF;
+	public JButton btnZoom;
+	public JButton btnZoom_1;
 	public JTextArea textAreaIn;
 	public JTextArea textAreaOut;
 	public JButton btnTranslate;
@@ -857,11 +859,11 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(lblFricbp);
 		
 		// zoom buttons
-		JButton btnZoom = new JButton("Zoom-");
+		btnZoom = new JButton("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
 		
-		JButton btnZoom_1 = new JButton("Zoom+");
+		btnZoom_1 = new JButton("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
 
