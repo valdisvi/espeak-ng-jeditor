@@ -6,6 +6,7 @@ import java.awt.Color;
 
 import java.awt.event.ActionEvent;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -17,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -28,6 +30,7 @@ import javax.swing.BorderFactory;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
 
 import dataStructure.Frame;
 
@@ -97,24 +100,29 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 			int[] y = { 100, 0, 100 };
 			int[][] points = new int[8][4];
 			for (int i = 0; i < 8; i++) {
-				points[i][0] = peaks[i][0] / 20; // peak x value
-				points[i][1] = -(peaks[i][1] >> 6) / 3 + 100; // peak y value
-				points[i][2] = (int) (peaks[i][2] / 20 * 0.44); // left x
-				points[i][3] = (int) (peaks[i][3] / 20 * 0.44); // right x
+				{
+					if(i == sel_peak && currentFrame.selected)
+					{
+						points[i][0] = peaks[i][0] / 20; // peak x value
+						points[i][1] = -(peaks[i][1] >> 6) / 3 + 100; // peak y value
+						points[i][2] = (int) (peaks[i][2] / 20 * 0.44); // left x
+						points[i][3] = (int) (peaks[i][3] / 20 * 0.44); // right x
 
-				if (y[1] < 5)
-					y[1] = 5;
+						if (y[1] < 5)
+							y[1] = 5;
 
-				x[0] = points[i][0] - points[i][2];
-				x[1] = points[i][0];
-				x[2] = points[i][0] + points[i][3];
-				y[1] = points[i][1];
+						x[0] = points[i][0] - points[i][2];
+						x[1] = points[i][0];
+						x[2] = points[i][0] + points[i][3];
+						y[1] = points[i][1];
 
-				g.setColor(Color.ORANGE);
-				Polygon poly = new Polygon(x, y, 3);
-				g.fillPolygon(poly);
-				g.setColor(Color.RED);
-				g.drawPolygon(poly);
+						g.setColor(Color.ORANGE);
+						Polygon poly = new Polygon(x, y, 3);
+						g.fillPolygon(poly);
+						g.setColor(Color.RED);
+						g.drawPolygon(poly);
+					}
+				}
 				drawFormants(currentFrame, g);
 			}
 		}
@@ -134,14 +142,14 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 		double yf;
 		double scaley = 100 / currentFrame.max_y;
 		double scalex = 400 / 9000; // 400 == panel_width, 9000 - default value
-		System.out.println("\nDOUBLE dx " + currentFrame.dx + "\n");
+		//System.out.println("\nDOUBLE dx " + currentFrame.dx + "\n");
 
 		double dx = currentFrame.dx;
 		while (dx > 10 || dx < -10) {
 			dx /= 10;
 		}
 
-		System.out.println("\ndx " + dx + "\n");
+		//System.out.println("\ndx " + dx + "\n");
 
 		int nx = currentFrame.nx;
 		int[] pk;
@@ -203,6 +211,24 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 	public void loadFrame(JPanel currentPanel) {
 
 		Frame frameToLoad = mapPanels.get(currentPanel);
+		frameToLoad.selected = true;
+		selectedFrames.clear();
+		selectedFrames.add(frameToLoad);
+		
+		for (Map.Entry<JPanel, Frame> entry : mapPanels.entrySet())
+		{
+		    if(!entry.getValue().equals(frameToLoad))
+		    {
+		    	Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+				Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		    	entry.getValue().selected = false;
+		    	entry.getKey().setBorder(BorderFactory.createCompoundBorder(
+	                    raisedbevel, loweredbevel));
+		    }
+		}
+		currentPanel.requestFocus();
+		currentPanel.setBorder(BorderFactory.createMatteBorder(
+                1, 5, 1, 1, Color.red));
 
 		int[][] peaks = frameToLoad.getPeaks();
 		String value;
@@ -296,14 +322,18 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 					frameToLoad.peaks[sel_peak][0] += x_incr;
 					loadFrame(curr);
 					curr.repaint();
+					curr.validate();
 					break;
 				}
 				case KeyEvent.VK_LEFT:
 				{
-					frameToLoad.peaks[sel_peak][0] -= x_incr;
-					loadFrame(curr);
-					curr.validate();
-					curr.repaint();
+					if((mapPanels.get(curr).peaks[sel_peak][0] - x_incr) >= 0)
+					{
+						frameToLoad.peaks[sel_peak][0] -= x_incr;
+						loadFrame(curr);
+						curr.validate();
+						curr.repaint();
+					}
 					break;
 				}
 				case KeyEvent.VK_UP:
@@ -316,10 +346,13 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 				}
 				case KeyEvent.VK_DOWN:
 				{
-					frameToLoad.peaks[sel_peak][1] -= y_incr;
-					loadFrame(curr);
-					curr.validate();
-					curr.repaint();
+					if((mapPanels.get(curr).peaks[sel_peak][0] - y_incr) >= 0)
+					{
+						frameToLoad.peaks[sel_peak][1] -= y_incr;
+						loadFrame(curr);
+						curr.validate();
+						curr.repaint();
+					}
 					break;
 				}
 				case KeyEvent.VK_PERIOD:
@@ -332,10 +365,13 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 				}
 				case KeyEvent.VK_COMMA:
 				{
-					frameToLoad.peaks[sel_peak][2] -= 5;
-					loadFrame(curr);
-					curr.validate();
-					curr.repaint();
+					if((mapPanels.get(curr).peaks[sel_peak][0] - 5) >= 0)
+					{
+						frameToLoad.peaks[sel_peak][2] -= 5;
+						loadFrame(curr);
+						curr.validate();
+						curr.repaint();
+					}
 					break;
 				}
 				case KeyEvent.VK_SLASH:
@@ -351,15 +387,26 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 				{
 					prev.requestFocus();
 					loadFrame(prev);
-					curr.validate();
-					curr.repaint();
+					for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
+					    JPanel element = i.next();
+					    
+					   element.repaint();
+					   element.revalidate();
+					}
+					
 					break;
 				}
 				case KeyEvent.VK_PAGE_DOWN:
 				{
 					next.requestFocus();
 					loadFrame(next);
-					curr.revalidate();
+					
+					for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
+					    JPanel element = i.next();
+					    
+					   element.repaint();
+					   element.revalidate();
+					}
 					break;
 				}
 				default:
@@ -367,6 +414,8 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 					if(ke.getKeyCode()>=0x30 && ke.getKeyCode()<=0x39)
 					{
 						sel_peak =  ke.getKeyCode()-48;
+						curr.repaint();
+						curr.revalidate();
 					}
 					break;
 				}
@@ -384,9 +433,11 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 						
 						for(Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
 						    JPanel element = i.next();
-						    element.setBorder(BorderFactory.createLineBorder(Color.RED));
+						    element.setBorder(BorderFactory.createMatteBorder(
+                                    1, 5, 1, 1, Color.red));
 						    mapPanels.get(element).selected = true;
 						}
+						
 						break;
 					}
 					case KeyEvent.VK_C:
@@ -405,6 +456,29 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 						copyFrames.clear();
 						break;
 					}
+					case KeyEvent.VK_S:
+					{
+						
+						//public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
+						//public int file_format;
+						//public int name_length;
+						//public int n;
+						//public int amplitude;
+						//public int max_y;
+						//public String fileName;
+						//public ArrayList<Frame> frameList;
+						//private Graph graph;
+						
+						
+						//Phoneme p = new Phoneme();
+						//p.amplitude = 
+						//p.frameList = new ArrayList<Frame>(mapPanels.values());
+						//p.max_y = 
+						//p.file_format = 1;
+						//p.fileName = filePanel.getName();
+						
+						//saveToDirectory(p, file);
+					}
 				}
 			}
 		}
@@ -422,7 +496,7 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 		
 	};
 	
-	public void ShowFrames (ArrayList<Frame> frames, JPanel filePanel, final Map<JPanel,Frame> mapPanels)
+	public void ShowFrames (ArrayList<Frame> frames, final JPanel filePanel, final Map<JPanel,Frame> mapPanels)
 	{
 		filePanel.removeAll();
 		mapPanels.clear();
@@ -435,28 +509,67 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 			
 			final JPanel keyframe = new Draw(currentFrame);
 			
-			
+			Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+			Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 			keyframe.setBounds(10, y, 900, 100);
 			keyframe.setBackground(Color.WHITE);
+			keyframe.setBorder(BorderFactory.createCompoundBorder(
+                    raisedbevel, loweredbevel));
 			keyframe.setVisible(true);
 			y += 105;
 			keyframe.addKeyListener(keyListener);
 			
 			keyframe.addMouseListener(new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
-					loadFrame((JPanel) e.getSource());
-					keyframe.requestFocus();
-							
+											
 					if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)
 					{
 						Frame f = mapPanels.get(keyframe);
 						
 						if(!f.selected)
 						{
-							keyframe.setBorder(BorderFactory.createLineBorder(Color.RED));
+							keyframe.setBorder(BorderFactory.createMatteBorder(
+                                    1, 5, 1, 1, Color.red));
 							f.selected = true;
 							selectedFrames.add(f);
+							System.out.println(selectedFrames);
 						}
+						else
+						{
+							Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+							Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+							keyframe.setBorder(BorderFactory.createCompoundBorder(
+				                    raisedbevel, loweredbevel));
+							selectedFrames.remove(f);
+							f.selected=false;
+							System.out.println(selectedFrames);
+						}
+					}
+					else
+					{
+						Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+						Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+						keyframe.setBorder(BorderFactory.createCompoundBorder(
+			                    raisedbevel, loweredbevel));
+						loadFrame((JPanel) e.getSource());
+						keyframe.requestFocus();
+					}
+					
+					if(e.getSource().equals(filePanel))
+					{
+						selectedFrames.clear();
+						
+						for (Map.Entry<JPanel, Frame> entry : mapPanels.entrySet())
+						{
+						    
+						    	Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+								Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+						    	entry.getValue().selected = false;
+						    	entry.getKey().setBorder(BorderFactory.createCompoundBorder(
+					                    raisedbevel, loweredbevel));
+						    	System.out.println(selectedFrames);
+						}
+
 					}
 				}
 
@@ -493,6 +606,7 @@ private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 		filePanel.revalidate();
 		filePanel.repaint(); 
 		filePanel.addKeyListener(keyListener);
+		filePanel.requestFocus();
 
 		loadFirstFrame();
 	}

@@ -22,6 +22,8 @@ public class Phoneme {
 	public ArrayList<Frame> getFrameList() {
 		return frameList;
 	}
+	
+	
 
 	// TODO Add support for SPECSPC2 type phonemes
 	public Phoneme(File file) {

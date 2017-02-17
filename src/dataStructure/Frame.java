@@ -47,34 +47,34 @@ public class Frame {
 		byte[] buffer = new byte[8];
 		inRead.read(buffer, 0, 8);
 		time = Phoneme.byteWrapper(buffer);
-		System.out.println("time "+time);
+		//System.out.println("time "+time);
 		
 		inRead.read(buffer, 0, 8);
 		pitch = Phoneme.byteWrapper(buffer);
-		System.out.println("pitch "+pitch);
+		//System.out.println("pitch "+pitch);
 
 		inRead.read(buffer, 0, 8);
 		length = Phoneme.byteWrapper(buffer);
-		System.out.println("length "+length);
+		//System.out.println("length "+length);
 
 		inRead.read(buffer, 0, 8);
 		dx = Phoneme.byteWrapper(buffer);
-		System.out.println("dx "+dx);
+		//System.out.println("dx "+dx);
 		inRead.read(buffer, 0, 8);
 
 		
 		buffer = new byte[2];
 		inRead.read(buffer, 0, 2);
 		nx = Phoneme.byteWrapper(buffer);
-		System.out.println("nx "+nx);
+		//System.out.println("nx "+nx);
 
 		inRead.read(buffer, 0, 2);
 		primarkers = Phoneme.byteWrapper(buffer);
-		System.out.println("primarkers "+primarkers);
+		//System.out.println("primarkers "+primarkers);
 
 		inRead.read(buffer, 0, 2);
 		amp_adjust = Phoneme.byteWrapper(buffer);
-		System.out.println("amp_adjust "+amp_adjust+"\n");
+		//System.out.println("amp_adjust "+amp_adjust+"\n");
 
 		if (file_format == 2) {
 			inRead.read(buffer, 0, 2);
