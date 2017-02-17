@@ -14,6 +14,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 public class Language {
 	private static ArrayList<String> translation;
+
 	public static void initLanguage(File file, MainWindow mainW){
 		BufferedReader br;
 		translation=new ArrayList<String>();
@@ -33,12 +34,13 @@ public class Language {
 		initTranslation(mainW);
 	}
 	
+
 	public static void initTranslation(MainWindow mainW){
 		//There might exist a better way of processing different languages, for example separate ArrayLists
 		//for JMenu objects and JMenuItem objects.
 		mainW.mnNewMenu.setText(translation.get(0));
-		mainW.mntmNewMenuItem.setText(translation.get(1));
-		mainW.mntmOpen.setText(translation.get(2));
+		mainW.mntmOpen.setText(translation.get(1));
+		mainW.mntmOpen2.setText(translation.get(2));
 		mainW.mntmSave.setText(translation.get(3));;
 		mainW.mntmSaveAs.setText(translation.get(4));;
 		mainW.mntmClose.setText(translation.get(5));;

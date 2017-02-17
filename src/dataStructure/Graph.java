@@ -17,6 +17,8 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import dataStructure.Frame;
+
 import interfacePckg.MainWindow;
 
 public class Graph {
@@ -59,13 +61,13 @@ public class Graph {
 			 * jButton.setBounds(10, y, 400, 25);
 			 */
 
-			JPanel sin = new DrawTriangle(currentFrame);
-			sin.setBounds(10, y, 900, 100);
-			sin.setBackground(Color.WHITE);
-			sin.setVisible(true);
+			JPanel keyframe = new Draw(currentFrame);
+			keyframe.setBounds(10, y, 900, 100);
+			keyframe.setBackground(Color.WHITE);
+			keyframe.setVisible(true);
 			y += 105;
 
-			sin.addMouseListener(new MouseListener() {
+			keyframe.addMouseListener(new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
 					loadFrame((JPanel) e.getSource());
 				}
@@ -95,9 +97,9 @@ public class Graph {
 				}
 			});
 
-			filePanel.add(sin);
+			filePanel.add(keyframe);
 			// filePanel.add(jButton);
-			mapPanels.put(sin, currentFrame);
+			mapPanels.put(keyframe, currentFrame);
 
 		}
 
@@ -107,10 +109,10 @@ public class Graph {
 
 	}
 
-	class DrawTriangle extends JPanel {
+	class Draw extends JPanel {
 		public Frame currentFrame;
 
-		public DrawTriangle(Frame currentFrame) {
+		public Draw(Frame currentFrame) {
 			this.currentFrame = currentFrame;
 
 		}
@@ -132,51 +134,116 @@ public class Graph {
 			 * p.npoints);
 			 */
 			// Polygon p = new Polygon();
+
 			int[] x = new int[3];
 			int[] y = { 100, 0, 100 };
 			int[][] points = new int[8][4];
 			for (int i = 0; i < 8; i++) {
-				points[i][0] = peaks[i][0] / 25; // peak x value
-				points[i][1] = -(peaks[i][1] >> 6) / 2 + 100; // peak y value
-				points[i][2] = (peaks[i][2] / 25 / 2); // left x
-				points[i][3] = (peaks[i][3] / 25 / 2); // right x
+				points[i][0] = peaks[i][0] / 20; // peak x value
+				points[i][1] = -(peaks[i][1] >> 6) / 3 + 100; // peak y value
+				points[i][2] = (int) (peaks[i][2] / 20 * 0.44); // left x
+				points[i][3] = (int) (peaks[i][3] / 20 * 0.44); // right x
+
+				if (y[1] < 5)
+					y[1] = 5;
 
 				x[0] = points[i][0] - points[i][2];
 				x[1] = points[i][0];
 				x[2] = points[i][0] + points[i][3];
 				y[1] = points[i][1];
+
 				g.setColor(Color.ORANGE);
 				Polygon poly = new Polygon(x, y, 3);
 				g.fillPolygon(poly);
 				g.setColor(Color.RED);
 				g.drawPolygon(poly);
+				drawFormants(currentFrame, g);
+			}
+		}
+
+	}
+
+	public void drawFormants(Frame currentFrame, Graphics g) {
+		// draw the measured formants
+		int pt;
+		int peak;
+		int ix;
+		int offy = 100; // This is y of graph panel
+		double x0, x1;
+		int y0, y1;
+		int x, x2, x3;
+		double xinc;
+		double yf;
+		double scaley = 100 / currentFrame.max_y;
+		double scalex = 400 / 9000;
+		// double dx = currentFrame.dx;
+		System.out.println("\nDOUBLE dx " + currentFrame.dx + "\n");
+
+		double dx = currentFrame.dx;
+		while (dx > 10 || dx < -10) {
+			dx /= 10;
+		}
+
+		System.out.println("\ndx " + dx + "\n");
+
+		int nx = currentFrame.nx;
+		int[] pk;
+		int pk_select = 1; // pk_select is currently selected triangle
+		int[][] formants = currentFrame.getFormants();
+		int[] spect = currentFrame.getSpect();
+		xinc = dx;
+		x0 = xinc;
+		x1 = nx * xinc;
+/*
+		for (peak = 1; peak <= 5; peak++) {
+			if (formants[peak][0] != 0) {
+				// set height from linear interpolation of the adjacent
+				// points in the spectrum
+				pt = (int) (formants[peak][0] / dx);
+				System.out.println(" pt "+pt+" spect size "+spect.length);
+				y0 = spect[pt - 1];
+				y1 = spect[pt];
+				yf = (y1 - y0) * (formants[peak][0] - pt * dx) / dx;
+
+				y1 = offy - (int) ((y0 + yf) * scaley);
+				x1 = formants[peak][0] * scalex;
+				g.setColor(Color.BLUE);
+				g.drawLine((int) x1, offy, (int) x1, y1);
+			}
+		}
+*/
+		g.setColor(Color.BLACK);
+		if (spect != null) {
+			y0 = offy - (int) (spect[0] * scaley);
+			for (pt = 1; pt < nx; pt++) {
+				x1 = x0 + xinc;
+				y1 = offy
+						- (int) (SpectTilt(spect[pt], (int) (pt * dx)) * scaley);
+			//	System.out.println("y1 " + y1 + " x1 " + x1);
+				g.drawLine(((int) x0 / 2), y0, ((int) x1 / 2), y1);
+				x0 = x1;
+				y0 = y1;
 
 			}
 		}
 
 	}
-	
-	public void drawWave(Frame currentFrame){
-		int  pt;
-		int  peak;
-		int  ix;
-		double x0, x1;
-		int  y0, y1;
-		int  x, x2, x3;
-		double xinc;
-		double yf;
-		int font_height;
-		double dx = currentFrame.dx;
-		double nx = currentFrame.nx;
-		int[] pk;
-		
-		xinc = dx;
-		x0 = xinc;
-		x1 = nx * xinc;
-		//if(selected){
-		//pk = currentFrame.getPeaks()[pk_select];// FIXME pk_select needs to be iniciated
+
+	double SpectTilt(int value, int freq) {// =================================
+		double x;
+		double y;
+		//System.out.println("Value " + value + " freq " + freq);
+		y = value * value * 2;
+
+		if (freq < 600) {
+			return (Math.sqrt(y / 2.5));
+		} else if (freq < 1050) {
+			x = 1.0 + ((1050.0 - freq) * 1.5) / 450.0;
+			return (Math.sqrt(y / x));
+		} else {
+			return (Math.sqrt(y));
+		}
 	}
-	
 
 	public JPanel getjPanelOfGraph() {
 		return filePanel;

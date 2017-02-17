@@ -84,7 +84,6 @@ public class Phoneme {
 					newFrame.frameLoader(inRead, file_format);
 				}
 				// TODO implement case when format is smth else
-
 				frameList.add(newFrame);
 			}
 			inStream.close();
