@@ -3,16 +3,28 @@ package dataStructure;
 //TODO JButton convert into graphic
 
 import java.awt.Color;
+
+import java.awt.event.ActionEvent;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+
+import javax.swing.BorderFactory;
+
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -23,87 +35,37 @@ import interfacePckg.MainWindow;
 
 public class Graph {
 
+	/**
+	 * @param args
+	 */
 	private JTabbedPane tabbedPaneGraphs;
 	private JPanel filePanel;
 
-	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
+	// mapButtons will collect for each button it own frame
+private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
+	private int sel_peak = 0;
+	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
+	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
 		filePanel = new JPanel();
 		filePanel.setToolTipText(fileName);
-
-		filePanel.setLayout(null);
-
-		// for correct order i use LinkedHashMap, because hashMap not guarantee
-		// the insertion order.
+		
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
 
-		// y - is needed for adding buttons in correct order
-		int y = 25;
+		filePanel.setLayout(null);
+		
+		ShowFrames (frameList, filePanel, mapPanels);
 
-		for (int i = 0; i < frameList.size(); i++) {
 
-			Frame currentFrame = frameList.get(i);
 
-			/*
-			 * JButton jButton = new JButton("" + i);
-			 * jButton.addActionListener(new ActionListener() { public void
-			 * actionPerformed(ActionEvent arg0) { loadFrame((JButton)
-			 * arg0.getSource()); } });
-			 * 
-			 * jButton.setBounds(10, y, 400, 25);
-			 */
-
-			JPanel keyframe = new Draw(currentFrame);
-			keyframe.setBounds(10, y, 900, 100);
-			keyframe.setBackground(Color.WHITE);
-			keyframe.setVisible(true);
-			y += 105;
-
-			keyframe.addMouseListener(new MouseListener() {
-				public void mouseClicked(MouseEvent e) {
-					loadFrame((JPanel) e.getSource());
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			filePanel.add(keyframe);
-			// filePanel.add(jButton);
-			mapPanels.put(keyframe, currentFrame);
-
-		}
-
-		loadFirstFrame();
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 
 	}
+
 
 	class Draw extends JPanel {
 		public Frame currentFrame;
@@ -223,6 +185,7 @@ public class Graph {
 		}
 	}
 
+
 	public JPanel getjPanelOfGraph() {
 		return filePanel;
 	}
@@ -230,7 +193,10 @@ public class Graph {
 	// to get first element in mapPanels
 	public void loadFirstFrame() {
 		// load first frame
-		Map.Entry<JPanel, Frame> entry = mapPanels.entrySet().iterator().next();
+		
+		Map.Entry<JPanel, Frame> entry = mapPanels.entrySet().iterator()
+				.next();
+		entry.getKey().requestFocus();
 		loadFrame(entry.getKey());
 	}
 
@@ -266,4 +232,270 @@ public class Graph {
 		// outputPhonemes();
 
 	}
+
+	
+	KeyListener keyListener = new KeyListener() {
+
+		@Override
+		public void keyPressed(KeyEvent ke) {
+			// TODO Auto-generated method stub
+			//System.out.println(ke.getKeyCode());
+			
+			int x_incr=0;
+			int y_incr=0;
+			final int[] incr_1 = {4,4,4,8,8,8,8,8,8};
+			final int[] incr_2 = {8,8,20,20,20,20,25,25,25};
+			
+			
+			JPanel prev = null, curr, next = null;
+			curr = (JPanel)ke.getSource();
+			
+			next = curr;
+			prev = curr;
+			
+			for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
+			    JPanel element = i.next();
+
+			   if(element.equals(curr))
+			   {
+				   if(i.hasNext())
+				   {
+					   next = i.next(); 
+				   }
+				   break;
+			   }
+			    prev = element;
+			    
+			}
+			
+			Frame frameToLoad = mapPanels.get(curr);
+			
+			
+			
+			
+			boolean shift = ke.isShiftDown();
+			boolean control = ke.isControlDown();
+			
+			
+			if(shift)
+			{
+				x_incr = incr_1[sel_peak];
+				y_incr = 0x20;
+			}
+			else
+			{
+				x_incr = incr_2[sel_peak];
+				y_incr = 0x80;
+			}
+			
+			
+			switch(ke.getKeyCode())
+			{
+				case KeyEvent.VK_RIGHT:
+				{
+					frameToLoad.peaks[sel_peak][0] += x_incr;
+					loadFrame(curr);
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_LEFT:
+				{
+					frameToLoad.peaks[sel_peak][0] -= x_incr;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_UP:
+				{
+					frameToLoad.peaks[sel_peak][1] += y_incr;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_DOWN:
+				{
+					frameToLoad.peaks[sel_peak][1] -= y_incr;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_PERIOD:
+				{
+					frameToLoad.peaks[sel_peak][2] += 5;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_COMMA:
+				{
+					frameToLoad.peaks[sel_peak][2] -= 5;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_SLASH:
+				{
+					int i = frameToLoad.peaks[sel_peak][2] + frameToLoad.peaks[sel_peak][3];
+					frameToLoad.peaks[sel_peak][2] = frameToLoad.peaks[sel_peak][3] = i/2;
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_PAGE_UP:
+				{
+					prev.requestFocus();
+					loadFrame(prev);
+					curr.validate();
+					curr.repaint();
+					break;
+				}
+				case KeyEvent.VK_PAGE_DOWN:
+				{
+					next.requestFocus();
+					loadFrame(next);
+					curr.revalidate();
+					break;
+				}
+				default:
+				{
+					if(ke.getKeyCode()>=0x30 && ke.getKeyCode()<=0x39)
+					{
+						sel_peak =  ke.getKeyCode()-48;
+					}
+					break;
+				}
+			}
+			
+			//control pressed down
+			if(control)
+			{
+				switch(ke.getKeyCode())
+				{
+					case KeyEvent.VK_A:
+					{
+						selectedFrames.clear();
+						selectedFrames = new ArrayList<Frame>(mapPanels.values());
+						
+						for(Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
+						    JPanel element = i.next();
+						    element.setBorder(BorderFactory.createLineBorder(Color.RED));
+						    mapPanels.get(element).selected = true;
+						}
+						break;
+					}
+					case KeyEvent.VK_C:
+					{
+						copyFrames.clear();
+						copyFrames = new ArrayList<Frame>(selectedFrames);
+						selectedFrames.clear();
+						break;
+					}
+					case KeyEvent.VK_V:
+					{		
+						if(!copyFrames.isEmpty())
+						{
+							ShowFrames(copyFrames,filePanel, mapPanels);
+						}
+						copyFrames.clear();
+						break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent ke) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent ke) {
+			// TODO Auto-generated method stub
+		}
+		
+	};
+	
+	public void ShowFrames (ArrayList<Frame> frames, JPanel filePanel, final Map<JPanel,Frame> mapPanels)
+	{
+		filePanel.removeAll();
+		mapPanels.clear();
+		
+		int y = 25;
+		for (int i = 0; i < frames.size(); i++) {
+
+			Frame currentFrame = frames.get(i);
+			currentFrame.selected = false;
+			
+			final JPanel keyframe = new Draw(currentFrame);
+			
+			
+			keyframe.setBounds(10, y, 900, 100);
+			keyframe.setBackground(Color.WHITE);
+			keyframe.setVisible(true);
+			y += 105;
+			keyframe.addKeyListener(keyListener);
+			
+			keyframe.addMouseListener(new MouseListener() {
+				public void mouseClicked(MouseEvent e) {
+					loadFrame((JPanel) e.getSource());
+					keyframe.requestFocus();
+							
+					if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)
+					{
+						Frame f = mapPanels.get(keyframe);
+						
+						if(!f.selected)
+						{
+							keyframe.setBorder(BorderFactory.createLineBorder(Color.RED));
+							f.selected = true;
+							selectedFrames.add(f);
+						}
+					}
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			
+			filePanel.add(keyframe);
+			mapPanels.put(keyframe, currentFrame);
+
+		}
+		filePanel.revalidate();
+		filePanel.repaint(); 
+		filePanel.addKeyListener(keyListener);
+
+		loadFirstFrame();
+	}
+	
 }
+
