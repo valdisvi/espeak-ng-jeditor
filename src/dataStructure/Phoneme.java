@@ -9,17 +9,14 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Phoneme {
-	// Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
-	public String type;
+	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
 	public int file_format;
 	public int name_length;
 	public int n;
 	public int amplitude;
 	public int max_y;
-
 	public String fileName;
 	public ArrayList<Frame> frameList;
-
 	private Graph graph;
 
 	public ArrayList<Frame> getFrameList() {
