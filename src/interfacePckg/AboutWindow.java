@@ -58,7 +58,6 @@ public class AboutWindow extends JFrame {
 				try {
 					rt.exec("firefox ./docs/index.html");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -78,7 +77,6 @@ public class AboutWindow extends JFrame {
 				try {
 					rt.exec("firefox http://espeak.sourceforge.net/license.html");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
