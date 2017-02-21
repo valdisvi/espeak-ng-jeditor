@@ -27,6 +27,8 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
@@ -122,8 +124,8 @@ public class Graph {
 
 			int[] x = new int[3];
 			int[] y = { keyframeHeight, 0, keyframeHeight };
-			int[][] points = new int[8][4];
-			for (int i = 0; i < 8; i++) {
+			int[][] points = new int[9][4];
+			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
 					points[i][0] = (int) (peaks[i][0] * scalex); // peak x value
 					points[i][1] = -(peaks[i][1] >> 6) / 3 + keyframeHeight; // peak
@@ -356,6 +358,8 @@ public class Graph {
 			int y_incr = 0;
 			final int[] incr_1 = { 4, 4, 4, 8, 8, 8, 8, 8, 8 };
 			final int[] incr_2 = { 8, 8, 20, 20, 20, 20, 25, 25, 25 };
+			
+			final int MAX_DISPLAY_FREQ = 9500;
 
 			JPanel prev = null, curr, next = null;
 			curr = (JPanel) ke.getSource();
@@ -390,31 +394,39 @@ public class Graph {
 				y_incr = 0x80;
 			}
 
-			switch (ke.getKeyCode()) {
+			switch (ke.getKeyCode()) { // frequency ++
 			case KeyEvent.VK_RIGHT: {
-				frameToLoad.peaks[sel_peak][0] += x_incr;
+				frameToLoad.peaks[sel_peak][0] +=  x_incr;
+				if(frameToLoad.peaks[sel_peak][0] >= MAX_DISPLAY_FREQ)
+				{
+					frameToLoad.peaks[sel_peak][0] = MAX_DISPLAY_FREQ;
+				}
+				adjustPeaks(frameToLoad, sel_peak, 1);
 				loadFrame(curr);
 				curr.repaint();
 				curr.validate();
 				break;
 			}
-			case KeyEvent.VK_LEFT: {
-				if ((mapPanels.get(curr).peaks[sel_peak][0] - x_incr) >= 0) {
-					frameToLoad.peaks[sel_peak][0] -= x_incr;
-					loadFrame(curr);
-					curr.validate();
-					curr.repaint();
+			case KeyEvent.VK_LEFT: { // frequency --
+				frameToLoad.peaks[sel_peak][0] -= x_incr;
+				if(frameToLoad.peaks[sel_peak][0] < 50)
+				{
+					frameToLoad.peaks[sel_peak][0] = 50;
 				}
+				adjustPeaks(frameToLoad, sel_peak, -1);
+				loadFrame(curr);
+				curr.validate();
+				curr.repaint();
 				break;
 			}
-			case KeyEvent.VK_UP: {
+			case KeyEvent.VK_UP: {//height ++
 				frameToLoad.peaks[sel_peak][1] += y_incr;
 				loadFrame(curr);
 				curr.validate();
 				curr.repaint();
 				break;
 			}
-			case KeyEvent.VK_DOWN: {
+			case KeyEvent.VK_DOWN: { //height --
 				if ((mapPanels.get(curr).peaks[sel_peak][0] - y_incr) >= 0) {
 					frameToLoad.peaks[sel_peak][1] -= y_incr;
 					loadFrame(curr);
@@ -423,23 +435,80 @@ public class Graph {
 				}
 				break;
 			}
-			case KeyEvent.VK_PERIOD: {
-				frameToLoad.peaks[sel_peak][2] += 5;
-				loadFrame(curr);
-				curr.validate();
-				curr.repaint();
-				break;
-			}
-			case KeyEvent.VK_COMMA: {
-				if ((mapPanels.get(curr).peaks[sel_peak][0] - 5) >= 0) {
-					frameToLoad.peaks[sel_peak][2] -= 5;
+			case KeyEvent.VK_PERIOD: { //++ witdth
+				if ((mapPanels.get(curr).peaks[sel_peak][0] - 5) < 0)
+				{
+					frameToLoad.peaks[sel_peak][2] = 0;
+				}
+				else
+				{
+					if(control)
+					{
+						frameToLoad.peaks[sel_peak][2] -= 5; // pkwidth
+						frameToLoad.peaks[sel_peak][3] += 5; // pkright
+					}
+					else
+					{
+						frameToLoad.peaks[sel_peak][3] += 10;
+						frameToLoad.peaks[sel_peak][2] += 10;
+					}
 					loadFrame(curr);
 					curr.validate();
 					curr.repaint();
 				}
 				break;
 			}
-			case KeyEvent.VK_SLASH: {
+			case KeyEvent.VK_COMMA: { //-- width
+				if ((mapPanels.get(curr).peaks[sel_peak][0] - 5) < 0)
+				{
+					frameToLoad.peaks[sel_peak][2] = 0;
+				}
+				else
+				{
+					if(control)
+					{
+						frameToLoad.peaks[sel_peak][2] += 5; // pkwidth
+						frameToLoad.peaks[sel_peak][3] -= 5; // pkright
+					}
+					else
+					{
+						frameToLoad.peaks[sel_peak][3] -= 10;
+						frameToLoad.peaks[sel_peak][2] -= 10;
+						if(frameToLoad.peaks[sel_peak][3] < 0)
+						{
+							frameToLoad.peaks[sel_peak][3] = 0;
+						}
+						if(frameToLoad.peaks[sel_peak][2] < 0)
+						{
+							frameToLoad.peaks[sel_peak][2] = 0;
+						}
+					}
+					loadFrame(curr);
+					curr.validate();
+					curr.repaint();
+				}
+				break;
+			}
+			
+			case KeyEvent.VK_OPEN_BRACKET:  {	// width--
+				frameToLoad.peaks[sel_peak][3] -= 10;
+				if(frameToLoad.peaks[sel_peak][3] < 0)
+				{
+					frameToLoad.peaks[sel_peak][3] = 0;	
+				}
+				loadFrame(curr);
+				curr.validate();
+				curr.repaint();
+				break;
+			}
+			case KeyEvent.VK_CLOSE_BRACKET:{   // width++
+				frameToLoad.peaks[sel_peak][3] += 10;
+				loadFrame(curr);
+				curr.validate();
+				curr.repaint();
+				break;
+			}
+			case KeyEvent.VK_SLASH: { // make peak symetrical
 				int i = frameToLoad.peaks[sel_peak][2]
 						+ frameToLoad.peaks[sel_peak][3];
 				frameToLoad.peaks[sel_peak][2] = frameToLoad.peaks[sel_peak][3] = i / 2;
@@ -448,7 +517,7 @@ public class Graph {
 				curr.repaint();
 				break;
 			}
-			case KeyEvent.VK_PAGE_UP: {
+			case KeyEvent.VK_PAGE_UP: { // previous frame
 				prev.requestFocus();
 				loadFrame(prev);
 				for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i
@@ -461,7 +530,7 @@ public class Graph {
 
 				break;
 			}
-			case KeyEvent.VK_PAGE_DOWN: {
+			case KeyEvent.VK_PAGE_DOWN: { // next frame
 				next.requestFocus();
 				loadFrame(next);
 
@@ -474,8 +543,26 @@ public class Graph {
 				}
 				break;
 			}
+			
+			case KeyEvent.VK_Z: // previous peak
+				if(sel_peak > 0)
+				{
+					sel_peak--;
+					curr.repaint();
+					curr.revalidate();
+				}
+				break;
+
+			case KeyEvent.VK_X: // next peak
+				if(sel_peak < 7)
+				{
+					sel_peak++;
+					curr.repaint();
+					curr.revalidate();
+				}
+				break;
 			default: {
-				if (ke.getKeyCode() >= 0x30 && ke.getKeyCode() <= 0x39) {
+				if (ke.getKeyCode() >= 0x30 && ke.getKeyCode() < 0x39) {
 					sel_peak = ke.getKeyCode() - 48;
 					curr.repaint();
 					curr.revalidate();
@@ -487,12 +574,11 @@ public class Graph {
 			// control pressed down
 			if (control) {
 				switch (ke.getKeyCode()) {
-				case KeyEvent.VK_A: {
+				case KeyEvent.VK_A: { // CTRL-A
 					selectedFrames.clear();
 					selectedFrames = new ArrayList<Frame>(mapPanels.values());
 
-					for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i
-							.hasNext();) {
+					for (Iterator<JPanel> i = mapPanels.keySet().iterator(); i.hasNext();) {
 						JPanel element = i.next();
 						element.setBorder(BorderFactory.createMatteBorder(1, 5,
 								1, 1, Color.red));
@@ -501,20 +587,74 @@ public class Graph {
 
 					break;
 				}
-				case KeyEvent.VK_C: {
+				case KeyEvent.VK_C: { // CTRL-C
 					copyFrames.clear();
 					copyFrames = new ArrayList<Frame>(selectedFrames);
 					selectedFrames.clear();
 					break;
 				}
-				case KeyEvent.VK_V: {
-					if (!copyFrames.isEmpty()) {
-						ShowFrames(copyFrames, filePanel, mapPanels);
+				case KeyEvent.VK_X: {   // CTRL-X
+					copyFrames.clear();
+					copyFrames.addAll(mapPanels.values());
+					copyFrames.removeAll(selectedFrames);
+					ArrayList<Frame> temp = new ArrayList<Frame>(selectedFrames);
+					ShowFrames(copyFrames, filePanel, mapPanels);
+					copyFrames.clear();
+					copyFrames.addAll(temp);
+					temp.clear();
+					break;
+				}
+				case KeyEvent.VK_V: {	// CTRL-V			
+					if (!copyFrames.isEmpty()) 
+					{
+						if(shift) // shift pressed down
+						{
+							selectedFrames = new ArrayList<Frame>(mapPanels.values());
+							selectedFrames.addAll(copyFrames);
+							copyFrames = new ArrayList<Frame>(selectedFrames);
+							ShowFrames(copyFrames, filePanel, mapPanels);
+						}
+						else
+						{
+							ShowFrames(copyFrames, filePanel, mapPanels);
+						}
 					}
 					copyFrames.clear();
 					break;
 				}
-				case KeyEvent.VK_S: {
+				case KeyEvent.VK_Z: { // CTRL-Z
+					for (int i=0; i<8; i++) 
+					{
+						frameToLoad.peaks[i][1] = 0;
+						curr.repaint();
+						curr.revalidate();
+					}
+					break;
+				}
+				case KeyEvent.VK_I: { // CTRL-Z
+					
+					if(curr == prev)
+					{
+						JOptionPane.showMessageDialog(curr, "No previous keyframe!");
+						break;
+					}
+					else if(curr == next)
+					{
+						JOptionPane.showMessageDialog(curr, "No subsequent keyframe!");
+						break;
+					}
+					else
+					{
+						interpolatePeaks(mapPanels.get(prev), mapPanels.get(curr), mapPanels.get(next));
+						loadFrame(curr);
+						curr.repaint();
+						curr.revalidate();
+						
+					}
+					break;
+				}
+				
+				case KeyEvent.VK_S: { // CTRL-S
 
 					// public String type; // Type-name of file
 					// (SPECTSEQ,SPECTSEK,SPECTSQ2)
@@ -559,113 +699,152 @@ public class Graph {
 		mapPanels.clear();
 
 		int y = 25;
-		for (int i = 0; i < frames.size(); i++) {
+		if(!frames.isEmpty())
+		{
+			for (int i = 0; i < frames.size(); i++) {
 
-			Frame currentFrame = frames.get(i);
-			currentFrame.selected = false;
+				Frame currentFrame = frames.get(i);
+				currentFrame.selected = false;
 
-			final JPanel keyframe = new Draw(currentFrame, keyframeWidth);
+				final JPanel keyframe = new Draw(currentFrame, keyframeWidth);
 
-			Border raisedbevel = BorderFactory.createRaisedBevelBorder();
-			Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-			keyframe.setBounds(10, y, keyframeWidth, keyframeHeight);
-			keyframe.setBackground(Color.WHITE);
-			keyframe.setBorder(BorderFactory.createCompoundBorder(raisedbevel,
-					loweredbevel));
-			keyframe.setVisible(true);
-			y += keyframeHeight + 5;
-			keyframe.addKeyListener(keyListener);
+				Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+				Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+				keyframe.setBounds(10, y, keyframeWidth, keyframeHeight);
+				keyframe.setBackground(Color.WHITE);
+				keyframe.setBorder(BorderFactory.createCompoundBorder(raisedbevel,
+						loweredbevel));
+				keyframe.setVisible(true);
+				y += keyframeHeight + 5;
+				keyframe.addKeyListener(keyListener);
 
-			keyframe.addMouseListener(new MouseListener() {
-				public void mouseClicked(MouseEvent e) {
+				keyframe.addMouseListener(new MouseListener() {
+					public void mouseClicked(MouseEvent e) {
 
-					if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-						Frame f = mapPanels.get(keyframe);
+						if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
+							Frame f = mapPanels.get(keyframe);
 
-						if (!f.selected) {
-							keyframe.setBorder(BorderFactory.createMatteBorder(
-									1, 5, 1, 1, Color.red));
-							f.selected = true;
-							selectedFrames.add(f);
-							System.out.println(selectedFrames);
+							if (!f.selected) {
+								keyframe.setBorder(BorderFactory.createMatteBorder(
+										1, 5, 1, 1, Color.red));
+								f.selected = true;
+								selectedFrames.add(f);
+							} else {
+								Border raisedbevel = BorderFactory
+										.createRaisedBevelBorder();
+								Border loweredbevel = BorderFactory
+										.createLoweredBevelBorder();
+								keyframe.setBorder(BorderFactory
+										.createCompoundBorder(raisedbevel,
+												loweredbevel));
+								selectedFrames.remove(f);
+								f.selected = false;
+							}
 						} else {
 							Border raisedbevel = BorderFactory
 									.createRaisedBevelBorder();
 							Border loweredbevel = BorderFactory
 									.createLoweredBevelBorder();
-							keyframe.setBorder(BorderFactory
-									.createCompoundBorder(raisedbevel,
-											loweredbevel));
-							selectedFrames.remove(f);
-							f.selected = false;
-							System.out.println(selectedFrames);
-						}
-					} else {
-						Border raisedbevel = BorderFactory
-								.createRaisedBevelBorder();
-						Border loweredbevel = BorderFactory
-								.createLoweredBevelBorder();
-						keyframe.setBorder(BorderFactory.createCompoundBorder(
-								raisedbevel, loweredbevel));
-						loadFrame((JPanel) e.getSource());
-						keyframe.requestFocus();
-					}
-
-					if (e.getSource().equals(filePanel)) {
-						selectedFrames.clear();
-
-						for (Map.Entry<JPanel, Frame> entry : mapPanels
-								.entrySet()) {
-
-							Border raisedbevel = BorderFactory
-									.createRaisedBevelBorder();
-							Border loweredbevel = BorderFactory
-									.createLoweredBevelBorder();
-							entry.getValue().selected = false;
-							entry.getKey().setBorder(
-									BorderFactory.createCompoundBorder(
-											raisedbevel, loweredbevel));
-							System.out.println(selectedFrames);
+							keyframe.setBorder(BorderFactory.createCompoundBorder(
+									raisedbevel, loweredbevel));
+							loadFrame((JPanel) e.getSource());
+							keyframe.requestFocus();
 						}
 
+						if (e.getSource().equals(filePanel)) {
+							selectedFrames.clear();
+
+							for (Map.Entry<JPanel, Frame> entry : mapPanels
+									.entrySet()) {
+
+								Border raisedbevel = BorderFactory
+										.createRaisedBevelBorder();
+								Border loweredbevel = BorderFactory
+										.createLoweredBevelBorder();
+								entry.getValue().selected = false;
+								entry.getKey().setBorder(
+										BorderFactory.createCompoundBorder(
+												raisedbevel, loweredbevel));
+								System.out.println(selectedFrames);
+							}
+
+						}
 					}
-				}
 
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+						// TODO Auto-generated method stub
 
-				}
+					}
 
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+						// TODO Auto-generated method stub
 
-				}
+					}
 
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+						// TODO Auto-generated method stub
 
-				}
+					}
 
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+						// TODO Auto-generated method stub
 
-				}
-			});
+					}
+				});
 
-			filePanel.add(keyframe);
-			mapPanels.put(keyframe, currentFrame);
+				filePanel.add(keyframe);
+				mapPanels.put(keyframe, currentFrame);
 
+			}
+			loadFirstFrame();
 		}
 		filePanel.revalidate();
 		filePanel.repaint();
 		filePanel.addKeyListener(keyListener);
-		filePanel.requestFocus();
-
-		loadFirstFrame();
+		//filePanel.requestFocus();
+		
 	}
-
+	//
+	public void adjustPeaks(Frame currentFrame, int curr_peak, int i)
+	{
+		if(i < 0)
+		{
+			for(int n=curr_peak-1; n>=0; n--)
+			{
+				if(currentFrame.peaks[n][0] > currentFrame.peaks[n+1][0] - 100)
+				{
+					currentFrame.peaks[n][0] = currentFrame.peaks[n+1][0] - 100;
+				}
+			}
+		}
+		if(i > 0)
+		{
+			for(int n=curr_peak+1; n<9; n++)
+			{
+				if(currentFrame.peaks[n][0] < currentFrame.peaks[n-1][0] + 100)
+				{
+					currentFrame.peaks[n][0] = currentFrame.peaks[n-1][0] + 100;
+				}
+			}
+		}
+	}
+	
+	public void interpolatePeaks(Frame prev, Frame curr, Frame next)
+	{
+		int inputValue;
+		float ratio;
+		inputValue = Integer.parseInt(JOptionPane.showInputDialog("Input interpolation percentage!"));
+		ratio = (float) (inputValue/100.0);
+		for(int n=0; n<9; n++)
+		{
+			curr.peaks[n][0] += ((next.peaks[n][0] - prev.peaks[n][0])*ratio);
+			curr.peaks[n][1] += ((next.peaks[n][1] - prev.peaks[n][1])*ratio);
+			curr.peaks[n][2] += ((next.peaks[n][2] - prev.peaks[n][2])*ratio);
+			curr.peaks[n][3] += ((next.peaks[n][3] - prev.peaks[n][3])*ratio);
+		}
+	}
 }

@@ -18,14 +18,15 @@ public class Frame {
 	// Not used in SPECTSEQ
 	public int[] klatt_param;
 	public int[] spect_data;
-	double max_y=0;
+	double max_y = 0;
 	int max_x = 3000;
 	static int default_freq[] = { 200, 500, 1200, 3000, 3500, 4000, 6900, 7800,
 			9000 };
 	static int default_width[] = { 750, 500, 550, 550, 600, 700, 700, 700, 700 };
 	static int default_klt_bw[] = { 89, 90, 140, 260, 260, 260, 500, 500, 500 };
-
+	
 	public boolean selected = false;
+	public static boolean bass_reduction = false;
 
 	public void frameLoader(ByteArrayInputStream inRead, int file_format) {
 		formants = new int[9][2];
@@ -47,34 +48,33 @@ public class Frame {
 		byte[] buffer = new byte[8];
 		inRead.read(buffer, 0, 8);
 		time = Phoneme.byteWrapper(buffer);
-	//	System.out.println("time "+time);
-		
+		// System.out.println("time "+time);
+
 		inRead.read(buffer, 0, 8);
 		pitch = Phoneme.byteWrapper(buffer);
-//		System.out.println("pitch "+pitch);
+		// System.out.println("pitch "+pitch);
 
 		inRead.read(buffer, 0, 8);
 		length = Phoneme.byteWrapper(buffer);
-//		System.out.println("length "+length);
+		// System.out.println("length "+length);
 
 		inRead.read(buffer, 0, 8);
 		dx = Phoneme.byteWrapper(buffer);
-//		System.out.println("dx "+dx);
+		// System.out.println("dx "+dx);
 		inRead.read(buffer, 0, 8);
 
-		
 		buffer = new byte[2];
 		inRead.read(buffer, 0, 2);
 		nx = Phoneme.byteWrapper(buffer);
-	//	System.out.println("nx "+nx);
+		// System.out.println("nx "+nx);
 
 		inRead.read(buffer, 0, 2);
 		primarkers = Phoneme.byteWrapper(buffer);
-	//	System.out.println("primarkers "+primarkers);
+		// System.out.println("primarkers "+primarkers);
 
 		inRead.read(buffer, 0, 2);
 		amp_adjust = Phoneme.byteWrapper(buffer);
-	//	System.out.println("amp_adjust "+amp_adjust+"\n");
+		// System.out.println("amp_adjust "+amp_adjust+"\n");
 
 		if (file_format == 2) {
 			inRead.read(buffer, 0, 2);
@@ -86,7 +86,7 @@ public class Frame {
 
 			inRead.read(buffer, 0, 2);
 			formants[i][0] = Phoneme.byteWrapper(buffer);
-			
+
 			inRead.read(buffer, 0, 2);
 			formants[i][1] = Phoneme.byteWrapper(buffer);
 
@@ -127,10 +127,10 @@ public class Frame {
 		for (int i = 0; i < nx; i++) {
 			inRead.read(buffer, 0, 2);
 			spect_data[i] = Phoneme.byteWrapper(buffer);
-			if(spect_data[i] > max_y)
+			if (spect_data[i] > max_y)
 				max_y = spect_data[i];
-			if(nx*dx>max_x)
-				max_x = (int)(nx*dx);
+			if (nx * dx > max_x)
+				max_x = (int) (nx * dx);
 		}
 		while (max_x > 100 || max_x < -100) {
 			max_x /= 10;
