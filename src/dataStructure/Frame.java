@@ -18,8 +18,8 @@ public class Frame {
 	// Not used in SPECTSEQ
 	public int[] klatt_param;
 	public int[] spect_data;
-	double max_y = 0;
-	int max_x = 3000;
+	static double max_y = 0;
+	static int max_x = 3000;
 	static int default_freq[] = { 200, 500, 1200, 3000, 3500, 4000, 6900, 7800,
 			9000 };
 	static int default_width[] = { 750, 500, 550, 550, 600, 700, 700, 700, 700 };
@@ -123,7 +123,9 @@ public class Frame {
 		}
 
 		spect_data = new int[nx];
-
+		while (dx > 10 || dx < -10) {
+			dx /= 10;
+		}
 		for (int i = 0; i < nx; i++) {
 			inRead.read(buffer, 0, 2);
 			spect_data[i] = Phoneme.byteWrapper(buffer);
@@ -135,9 +137,7 @@ public class Frame {
 		while (max_x > 100 || max_x < -100) {
 			max_x /= 10;
 		}
-		while (dx > 10 || dx < -10) {
-			dx /= 10;
-		}
+
 	}
 
 	public int[][] getPeaks() {

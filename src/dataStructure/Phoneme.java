@@ -24,6 +24,19 @@ public class Phoneme {
 	}
 	
 	
+	public Phoneme(String type, int file_format, int name_length, int n, int amplitude, int max_y, String fileName, ArrayList<Frame> frameList)
+	{
+		this.type = type;
+		this.file_format = file_format;
+		this.name_length = name_length;
+		this.n = n;
+		this.amplitude = amplitude;
+		this.max_y = max_y;
+		this.fileName = fileName;
+		this.frameList = frameList;
+	}
+	
+	
 
 	// TODO Add support for SPECSPC2 type phonemes
 	public Phoneme(File file) {
@@ -100,6 +113,12 @@ public class Phoneme {
 
 	public void loadFirstFrame() {
 		graph.loadFirstFrame();
+	}
+	public void doZoomIn(){
+		graph.zoom(1);
+	}
+	public void doZoomOut(){
+		graph.zoom(-1);
 	}
 
 	//Custom byte wrapping method e.g. ByteOrder.LITTLE_ENDIAN

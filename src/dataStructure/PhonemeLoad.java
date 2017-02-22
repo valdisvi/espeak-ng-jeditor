@@ -3,6 +3,7 @@ package dataStructure;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import interfacePckg.MainWindow;
 
@@ -20,10 +21,22 @@ public class PhonemeLoad {
 		phonemeList=new ArrayList<Phoneme>();
 	}
 	
-	public static void getPhoneme(JPanel jPanel){
+	public static void getPhoneme(JScrollPane jScrollPane){
+		for(Phoneme phoneme: phonemeList){
+			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane))
+				phoneme.loadFirstFrame();
+		}
+	}
+	public static void zoomIn(JScrollPane jPanel){
 		for(Phoneme phoneme: phonemeList){
 			if(phoneme.getGraph().getjPanelOfGraph().equals(jPanel))
-				phoneme.loadFirstFrame();
+				phoneme.doZoomIn();
+		}
+	}
+	public static void zoomOut(JScrollPane jScrollPane){
+		for(Phoneme phoneme: phonemeList){
+			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane))
+				phoneme.doZoomOut();
 		}
 	}
 	

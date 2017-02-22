@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;
 	
+	
 	//TODO grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
 	// menuBar group File
 	public JMenu mnFile;

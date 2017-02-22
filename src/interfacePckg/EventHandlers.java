@@ -10,7 +10,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
+import dataStructure.Graph;
 import dataStructure.PhonemeLoad;
 
 //FIXME try extending MainWindow class, should shorten the amount of code
@@ -18,16 +20,19 @@ public class EventHandlers {
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
+	private Graph gr;
+	
 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		fileChooser = new JFileChooser("./phsource/");
 	}
+	
 
 	ChangeListener getPhoneme = new ChangeListener() {
 		public void stateChanged(ChangeEvent arg0) {
 			setVisibleMenuItemsFile(mainW);
-			PhonemeLoad.getPhoneme((JPanel) mainW.tabbedPaneGraphs.getSelectedComponent());
+			PhonemeLoad.getPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 		}
 	};
 
@@ -52,9 +57,11 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmAbout) {
 				AboutWindow.OpenAboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
-				// TODO implement
+				
+				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				// TODO implement
+				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			}
 		}
 	};
