@@ -385,7 +385,8 @@ public class MainWindow extends JFrame {
 		// initiate keyframe sequence graph pane
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        
 		
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         // horizontal grouping of containers and components

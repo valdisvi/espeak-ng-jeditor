@@ -7,11 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-
 public class Language {
 	private static ArrayList<String> translation;
 

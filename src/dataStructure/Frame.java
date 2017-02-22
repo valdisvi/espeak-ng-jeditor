@@ -18,8 +18,8 @@ public class Frame {
 	// Not used in SPECTSEQ
 	public int[] klatt_param;
 	public int[] spect_data;
-	static double max_y = 0;
-	static int max_x = 3000;
+	double max_y = 0;
+	int max_x = 3000;
 	static int default_freq[] = { 200, 500, 1200, 3000, 3500, 4000, 6900, 7800,
 			9000 };
 	static int default_width[] = { 750, 500, 550, 550, 600, 700, 700, 700, 700 };

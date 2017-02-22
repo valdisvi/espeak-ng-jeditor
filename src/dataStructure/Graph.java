@@ -29,11 +29,11 @@ import javax.swing.border.Border;
 public class Graph {
 
 	private JTabbedPane tabbedPaneGraphs;
-	private static JScrollPane filePanel;
-	private static double zoomAdjust = 1.1;
-	private static Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
-	static int keyframeWidth = 600; // default frame width 1000
-	static int keyframeHeight = 150; // default frame width 150
+	private JScrollPane filePanel;
+	private double zoomAdjust = 1.1;
+	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
+	int keyframeWidth = 600; // default frame width 1000
+	int keyframeHeight = keyframeWidth/4; // default frame width 150
 	int pk_shape1[] = { 255, 254, 254, 254, 254, 254, 253, 253, 252, 251, 251,
 			250, 249, 248, 247, 246, 245, 244, 242, 241, 239, 238, 236, 234,
 			233, 231, 229, 227, 225, 223, 220, 218, 216, 213, 211, 209, 207,
@@ -54,19 +54,19 @@ public class Graph {
 	private int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
-	boolean zoomIn = false;
-	boolean zoomOut = false;
+	int max_x = 0;
+	double max_y = 0;
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
 		filePanel = new JScrollPane();
+		filePanel.setAutoscrolls(true);
 		filePanel.setHorizontalScrollBarPolicy(
 				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		filePanel.setVerticalScrollBarPolicy(
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
-		// filePanel.setToolTipText(fileName);
 		filePanel.setLayout(null);
 
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
@@ -77,6 +77,7 @@ public class Graph {
 		
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
+		filePanel.requestFocus();
 
 	}
 
@@ -168,8 +169,8 @@ public class Graph {
 					x1 = x0 + xinc;
 					y1 = keyframeHeight
 							- (int) (SpectTilt(spect[pt],
-									(int) ((pt * dx) * scaley),
-									Frame.bass_reduction));
+									(int) (pt * dx),
+									Frame.bass_reduction)* scaley);
 					// System.out.println("y1 " + y1 + " x1 " + x1);
 					g.drawLine(((int) x0), y0, ((int) x1), y1);
 					x0 = x1;
@@ -301,7 +302,9 @@ public class Graph {
 
 	public void loadFrame(JPanel currentPanel) {
 
+		
 		Frame frameToLoad = mapPanels.get(currentPanel);
+		currentPanel.requestFocus();
 		frameToLoad.selected = true;
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
@@ -708,15 +711,15 @@ public class Graph {
 		mapPanels.clear();
 
 		int y = 25;
-		//keyframeHeight += zoomAdjust;
-		//keyframeWidth += zoomAdjust;
-		System.out.println("keyframeHeight " + keyframeHeight);
 		if (!frames.isEmpty()) {
 			for (int i = 0; i < frames.size(); i++) {
 
 				Frame currentFrame = frames.get(i);
 				currentFrame.selected = false;
-
+				if(max_x < currentFrame.max_x)
+					max_x = currentFrame.max_x;
+				if(max_y < currentFrame.max_y)
+					max_y = currentFrame.max_y;
 				final JPanel keyframe = new Draw(currentFrame, keyframeWidth);
 
 				Border raisedbevel = BorderFactory.createRaisedBevelBorder();
@@ -858,13 +861,15 @@ public class Graph {
 		final ArrayList<Frame> tmp = new ArrayList<Frame>(mapPanels.values());
 		
 		if (flag < 0) {
-			keyframeWidth /= zoomAdjust;
-			keyframeHeight /= zoomAdjust;
-			ShowFrames(tmp, filePanel, mapPanels);
+			if(!(keyframeWidth/zoomAdjust < 335)){
+				keyframeWidth /= zoomAdjust;
+				keyframeHeight = keyframeWidth/4;
+				ShowFrames(tmp, filePanel, mapPanels);
+			}
 		}
 		if (flag > 0) {
 			keyframeWidth *= zoomAdjust;
-			keyframeHeight *= zoomAdjust;
+			keyframeHeight = keyframeWidth/4;
 			ShowFrames(tmp, filePanel, mapPanels);
 		}
 	}
