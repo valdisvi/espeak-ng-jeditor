@@ -1,0 +1,9 @@
+1. step - add native function definitions in java file e.g. YourJNI.java
+(!! It seems that "package" line should be commented out temporary)
+2. step - compile .class file
+	- in terminal cd to this folder
+	- javac YourJNI.java
+2. step - create header (.h) file
+	- in terminal cd to this folder
+	- then use javah command to create c/c++ header file
+	- javah -cp .  yourJavaClassFile
