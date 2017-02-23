@@ -8,6 +8,8 @@ public class Frame {
 	public double length;
 	public double dx;
 	public int nx;
+	boolean[] markers = new boolean[] { true, false, true, false, false,
+			false, false, false };
 	public int primarkers;
 	public int amp_adjust;
 	// [][0] freq [][1] bandw
@@ -24,7 +26,7 @@ public class Frame {
 			9000 };
 	static int default_width[] = { 750, 500, 550, 550, 600, 700, 700, 700, 700 };
 	static int default_klt_bw[] = { 89, 90, 140, 260, 260, 260, 500, 500, 500 };
-	
+
 	public boolean selected = false;
 	public static boolean bass_reduction = false;
 
@@ -46,11 +48,9 @@ public class Frame {
 		}
 
 		byte[] buffer = new byte[8];
-		inRead.read(buffer, 0, 5);
 		inRead.read(buffer, 0, 8);
 		time = Phoneme.byteWrapper(buffer);
 		// System.out.println("time "+time);
-		inRead.read(buffer, 0, 3);
 
 		inRead.read(buffer, 0, 8);
 		pitch = Phoneme.byteWrapper(buffer);
@@ -63,6 +63,7 @@ public class Frame {
 		inRead.read(buffer, 0, 8);
 		dx = Phoneme.byteWrapper(buffer);
 		// System.out.println("dx "+dx);
+		inRead.read(buffer, 0, 8);
 
 		buffer = new byte[2];
 		inRead.read(buffer, 0, 2);

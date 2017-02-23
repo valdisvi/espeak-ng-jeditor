@@ -61,7 +61,6 @@ public class Phoneme {
 			} else if (type.equals("SPECTSQ2")) {
 				file_format = 2;
 			} else {
-				// TODO case when format is smth else
 			}
 
 			// Reading 4 bytes to get the byte-length of file-name
@@ -99,7 +98,6 @@ public class Phoneme {
 				if ((file_format == 0) || (file_format == 1) || (file_format == 2)) {
 					newFrame.frameLoader(inRead, file_format);
 				}
-				// TODO implement case when format is smth else
 				frameList.add(newFrame);
 			}
 			inStream.close();

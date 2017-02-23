@@ -1,11 +1,9 @@
 package dataStructure;
 
-//TODO JButton convert into graphic
-
-
 import interfacePckg.MainWindow;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
@@ -32,8 +30,11 @@ public class Graph {
 	private JScrollPane filePanel;
 	private double zoomAdjust = 1.1;
 	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
+	Color[] colors = { new Color(255, 0, 0), new Color(255, 255, 255),
+			new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255),
+			new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255) };
 	int keyframeWidth = 600; // default frame width 1000
-	int keyframeHeight = keyframeWidth/4; // default frame width 150
+	int keyframeHeight = keyframeWidth / 4; // default frame width 150
 	int pk_shape1[] = { 255, 254, 254, 254, 254, 254, 253, 253, 252, 251, 251,
 			250, 249, 248, 247, 246, 245, 244, 242, 241, 239, 238, 236, 234,
 			233, 231, 229, 227, 225, 223, 220, 218, 216, 213, 211, 209, 207,
@@ -63,10 +64,10 @@ public class Graph {
 
 		filePanel = new JScrollPane();
 		filePanel.setAutoscrolls(true);
-		filePanel.setHorizontalScrollBarPolicy(
-				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		filePanel.setVerticalScrollBarPolicy(
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+		filePanel
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		filePanel
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		filePanel.setLayout(null);
 
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
@@ -74,7 +75,7 @@ public class Graph {
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
 		ShowFrames(frameList, filePanel, mapPanels);
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-		
+
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 		filePanel.requestFocus();
@@ -103,14 +104,13 @@ public class Graph {
 		public Draw(Frame currentFrame, int keyframeWidth) {
 			this.currentFrame = currentFrame;
 			// keyframeWidth =
-				
+
 			max_x = currentFrame.max_x;
 			frame_width = (int) (keyframeWidth * max_x) / 9500;
 			if (frame_width > keyframeWidth)
-			 frame_width = keyframeWidth;
-			
+				frame_width = keyframeWidth;
+
 			scalex = (double) (frame_width / max_x);
-			System.out.println("MAX_Y "+max_y);
 			scaley = keyframeHeight / currentFrame.max_y;
 			dx = currentFrame.dx;
 			nx = currentFrame.nx;
@@ -125,6 +125,13 @@ public class Graph {
 			int[] x = new int[3];
 			int[] y = { keyframeHeight, 0, keyframeHeight };
 			int[][] points = new int[9][4];
+			if (true) { // if gridEnable
+				g.setColor(new Color(235, 235, 235)); // light gry
+				for (int j = 1; j < 18; j++) {
+					g.drawLine(j * keyframeWidth / 18, 0, j * keyframeWidth
+							/ 18, keyframeHeight);
+				}
+			}
 			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
 					points[i][0] = (int) (peaks[i][0] * scalex); // peak x value
@@ -154,23 +161,34 @@ public class Graph {
 				drawFormants(g);
 				drawPeaks(peaks, g);
 				// draws increments
-				if(true){  // if gridEnable
-					g.setColor(new Color(235, 235, 235)); // light gray
-				for(int j =1; j<18; j++){
-					g.drawLine(j*keyframeWidth/18, 0, j*keyframeWidth/18, keyframeHeight);
-				}
-				}
-				g.setColor(Color.BLACK);
-				g.drawString((currentFrame.time)+" ms", keyframeWidth-100, keyframeHeight-100);
-				g.drawString((currentFrame.pitch)+" hz", keyframeWidth-100, keyframeHeight-70);
 
+				g.setColor(Color.BLACK);
+				g.setFont(new Font(g.getFont().getFontName(), g.getFont()
+						.getStyle(), keyframeHeight / 10 - 2));
+				g.drawString(((int) currentFrame.time) + " ms" + "  "
+						+ ((int) currentFrame.pitch) + " hz", keyframeWidth
+						- keyframeWidth / 5, keyframeHeight / 5);
+				int rectPosY = keyframeHeight / 10;
+				int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY-3;
+				
+				for (int j = 0; i < 8; i++) {
+					if (currentFrame.markers[i]) {
+						g.setColor(colors[i]);
+						g.fillRect(rectPosX, rectPosY, rectPosY,rectPosY);
+						// if zoom 
+						if((double)keyframeWidth/600>1.0){
+							g.setColor(Color.BLACK);
+							g.drawString(""+i, rectPosX+2, rectPosY+g.getFont().getSize()-2);
+						}
+						rectPosX -= rectPosY+3;
+					}
+				}
 			}
 		}
 
 		public void drawFormants(Graphics g) {
 			xinc = dx * scalex * 10; // FIXME This should work with just xinc =
 										// dx * scalex
-			// System.out.println("dx "+dx+" scalex "+scalex);
 			x0 = xinc;
 			x1 = nx * xinc;
 
@@ -180,10 +198,8 @@ public class Graph {
 				for (pt = 1; pt < nx; pt++) {
 					x1 = x0 + xinc;
 					y1 = keyframeHeight
-							- (int) (SpectTilt(spect[pt],
-									(int) (pt * dx),
-									Frame.bass_reduction)* scaley);
-					// System.out.println("y1 " + y1 + " x1 " + x1);
+							- (int) (SpectTilt(spect[pt], (int) (pt * dx),
+									Frame.bass_reduction) * scaley);
 					g.drawLine(((int) x0), y0, ((int) x1), y1);
 					x0 = x1;
 					y0 = y1;
@@ -211,7 +227,6 @@ public class Graph {
 			double scalex = (double) frame_width / max_x;
 
 			max_ix = (int) (9000 * scalex);
-			// System.out.println("max_x " + max_x + " scalex " + scalex);
 			Arrays.fill(buf, 0);
 
 			g.setColor(Color.GREEN);
@@ -254,9 +269,7 @@ public class Graph {
 
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
-			// System.out.println("max_ix " + max_ix);
 			for (ix = 1; ix < max_ix; ix++) {
-				// System.out.println("IN of FOR ");
 
 				yy = buf[ix] >> 12;
 				yy = yy * yy * 23;
@@ -265,8 +278,6 @@ public class Graph {
 				x2 = ix;
 				y2 = keyframeHeight - ((buf[ix] * keyframeHeight) >> 21);
 				// if(dc != NULL) dc->DrawLine(x1,y1,x2,y2);
-				// System.out.println("Draw peak\nx1: " + x1 + " x2: " + x2
-				// + " y1: " + y1 + " y2: " + y2);
 
 				g.drawLine(x1, y1, x2, y2);
 				x1 = x2;
@@ -284,7 +295,6 @@ public class Graph {
 	double SpectTilt(int value, int freq, boolean bass_reduction) {
 		double x;
 		double y;
-		// System.out.println("Value " + value + " freq " + freq);
 		if (bass_reduction)
 			return value;
 		y = value * value * 2;
@@ -314,7 +324,6 @@ public class Graph {
 
 	public void loadFrame(JPanel currentPanel) {
 
-		
 		Frame frameToLoad = mapPanels.get(currentPanel);
 		currentPanel.requestFocus();
 		frameToLoad.selected = true;
@@ -368,8 +377,6 @@ public class Graph {
 
 		@Override
 		public void keyPressed(KeyEvent ke) {
-			// System.out.println(ke.getKeyCode());
-
 			int x_incr = 0;
 			int y_incr = 0;
 			final int[] incr_1 = { 4, 4, 4, 8, 8, 8, 8, 8, 8 };
@@ -603,8 +610,7 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_V: { // CTRL-V
-					if (!copyFrames.isEmpty()) 
-					{
+					if (!copyFrames.isEmpty()) {
 						if (shift) // shift pressed down
 						{
 							selectedFrames = new ArrayList<Frame>(
@@ -706,19 +712,16 @@ public class Graph {
 
 		@Override
 		public void keyReleased(KeyEvent ke) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent ke) {
-			// TODO Auto-generated method stub
 		}
 
 	};
 
-	public void ShowFrames(ArrayList<Frame> frames, final JScrollPane filePanel2,
-			final Map<JPanel, Frame> mapPanels) {
+	public void ShowFrames(ArrayList<Frame> frames,
+			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
 
@@ -728,16 +731,19 @@ public class Graph {
 
 				Frame currentFrame = frames.get(i);
 				currentFrame.selected = false;
-				if(max_x < currentFrame.max_x)
+				if (max_x < currentFrame.max_x)
 					max_x = currentFrame.max_x;
-				if(max_y < currentFrame.max_y)
+				if (max_y < currentFrame.max_y)
 					max_y = currentFrame.max_y;
 				final JPanel keyframe = new Draw(currentFrame, keyframeWidth);
 
 				Border raisedbevel = BorderFactory.createRaisedBevelBorder();
 				Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 				keyframe.setBounds(10, y, keyframeWidth, keyframeHeight);
-				keyframe.setBackground(new Color(255, 253, 250)); // lighy yellow (creamy) colour
+				keyframe.setBackground(new Color(255, 253, 250)); // lighy
+																	// yellow
+																	// (creamy)
+																	// colour
 				keyframe.setBorder(BorderFactory.createCompoundBorder(
 						raisedbevel, loweredbevel));
 				keyframe.setVisible(true);
@@ -793,7 +799,6 @@ public class Graph {
 								entry.getKey().setBorder(
 										BorderFactory.createCompoundBorder(
 												raisedbevel, loweredbevel));
-								System.out.println(selectedFrames);
 							}
 
 						}
@@ -801,26 +806,18 @@ public class Graph {
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void mouseExited(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void mousePressed(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 
@@ -871,17 +868,17 @@ public class Graph {
 
 	public void zoom(int flag) {
 		final ArrayList<Frame> tmp = new ArrayList<Frame>(mapPanels.values());
-		
+
 		if (flag < 0) {
-			if(!(keyframeWidth/zoomAdjust < 335)){
+			if (!(keyframeWidth / zoomAdjust < 335)) {
 				keyframeWidth /= zoomAdjust;
-				keyframeHeight = keyframeWidth/4;
+				keyframeHeight = keyframeWidth / 4;
 				ShowFrames(tmp, filePanel, mapPanels);
 			}
 		}
 		if (flag > 0) {
 			keyframeWidth *= zoomAdjust;
-			keyframeHeight = keyframeWidth/4;
+			keyframeHeight = keyframeWidth / 4;
 			ShowFrames(tmp, filePanel, mapPanels);
 		}
 	}

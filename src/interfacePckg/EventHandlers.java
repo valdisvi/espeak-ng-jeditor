@@ -1,5 +1,6 @@
 package interfacePckg;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -9,10 +10,8 @@ import java.io.IOException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import dataStructure.Graph;
 import dataStructure.PhonemeLoad;
 
 //FIXME try extending MainWindow class, should shorten the amount of code
@@ -20,7 +19,6 @@ public class EventHandlers {
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
-	private Graph gr;
 	
 
 	public EventHandlers(MainWindow mainW) {
@@ -65,17 +63,51 @@ public class EventHandlers {
 			}
 		}
 	};
-
-	// TODO clear the text field and spinner values in this and in closeAllTab
+public void clearText(){
+	for (int i = 0; i < 7; i++) {
+		MainWindow.tfFreq.get(i).setText("");
+	}
+	for (int i = 0; i < 8; i++) {
+		MainWindow.tfHeight.get(i).setText("" );
+	}
+	for (int i = 0; i < 6; i++) {
+		MainWindow.tfWidth.get(i).setText("");
+	}
+	for (int i = 0; i < 3; i++) {
+		MainWindow.tfBw.get(i).setText("");
+	}
+	for (int i = 0; i < 6; i++) {
+		MainWindow.tfAp.get(i).setText("");
+	}
+	for (int i = 0; i < 6; i++) {
+		MainWindow.tfBp.get(i).setText("");
+	}
+}
+	//  clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.remove(mainW.tabbedPaneGraphs.getSelectedComponent());
+			// if this is the last one, then clear text fields
+			System.out.println("Component count "+mainW.tabbedPaneGraphs.getComponentCount());
+			boolean lastPhoneme = true;
+			// tabbedPaneGraphs contains more Components than phoneme files
+			for (Component comp : mainW.tabbedPaneGraphs.getComponents()){
+				if(comp.getClass().equals(JScrollPane.class)){
+					lastPhoneme = false;
+					break;
+				}
+			}
+				
+			if(lastPhoneme){
+				clearText();
+			}
 		}
 	};
 
 	ActionListener closeAllTab = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.removeAll();
+			clearText();
 		}
 	};
 
