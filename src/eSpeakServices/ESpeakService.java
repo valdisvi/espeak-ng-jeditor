@@ -27,13 +27,11 @@ public class ESpeakService {
 		
 		System.out.print("Amplitude:" + spect.amplitude + "\n");
 		
-		nativeGetSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a");
+		System.out.print("Returned with: " + nativeGetSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a") + "\n");
 		
 		System.out.print("Name:" + spect.name + "\n");
 		
-		System.out.print("Amplitude:" + spect.amplitude + "\n");
-		
-		System.out.print("Max_y:" + spect.max_y + "\n");
+		System.out.print("Frame 1 keyframe:" + spect.frames[1].amp_adjust + "\n");
 
 		System.out.print("Jei!\n");  
 	}

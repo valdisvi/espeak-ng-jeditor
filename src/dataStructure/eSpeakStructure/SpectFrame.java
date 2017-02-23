@@ -36,10 +36,16 @@ public class SpectFrame{
 	public int nx;
 	public short markers;
 	public int max_y;
-	public Integer spect; 	// using Integer because spect is a pointer to USHORT 
+	public int[] spect; 	// originally spect is a pointer to USHORT 
 							// which is just unsigned short
 	
-	public short[] klaat_param = new short[JeSpeak_Synthesize.N_KLATTP2];
-	public Formant_t[] formants = new Formant_t[JeSpeak_Synthesize.N_PEAKS];
-	public Peak_t[] peaks = new Peak_t[JeSpeak_Synthesize.N_PEAKS];
+	public short[] klaat_param;
+	public Formant_t[] formants;
+	public Peak_t[] peaks;
+	
+	SpectFrame(){
+		klaat_param = new short[JeSpeak_Synthesize.N_KLATTP2];
+		formants = new Formant_t[JeSpeak_Synthesize.N_PEAKS];
+		peaks = new Peak_t[JeSpeak_Synthesize.N_PEAKS];
+	}
 }
