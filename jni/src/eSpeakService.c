@@ -62,39 +62,53 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 
 	espeak_ng_STATUS status;
 
-	status = LoadSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a");
+	// create native C string ( char * ) from jstring
+	const char *nativeString = (*env)->GetStringUTFChars(env, jFileName, 0);
+
+	status = LoadSpectSeq(spect, nativeString);  // LoadSpecSeq is eSpeak function, that IS NOT in original eSpeak API
+
+	//release string after using it
+	(*env)->ReleaseStringUTFChars(env, jFileName, nativeString);
 
 	if (status != ENS_OK){
 		return status;
 	}
 
-	jclass jSpectClass = (*env)->GetObjectClass(env, jSpect); // get object class
+	jclass jSpectClass = (*env)->GetObjectClass(env, jSpect); // get pointer to object class
 
-	//set int numframes;
-	jfieldID fieldID = (*env)->GetFieldID(env, jSpectClass, "numframes", "I"); // I for int
-	(*env)->SetIntField(env, jSpect, fieldID, spect->numframes);
+	//set int numframes; These two JNI lines is like "jSpect.numframes = spect.numframes" in Java
+	jfieldID fieldID = (*env)->GetFieldID(env, jSpectClass, "numframes", "I"); // find field's "numframes" ID; "I" stands for int
+	(*env)->SetIntField(env, jSpect, fieldID, spect->numframes); // calling appropriate JNI Set<type>Field style function
+
 	//set short amplitude;
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "amplitude", "S"); // S for short
-	(*env)->SetShortField(env, jSpect, fieldID, spect->amplitude);
+	(*env)->SetShortField(env, jSpect, fieldID, spect->amplitude); //
+
 	//set int spare;
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "spare", "I"); // I for int
 	(*env)->SetIntField(env, jSpect, fieldID, spect->spare);
+
 	// set String name;
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "name", "Ljava/lang/String;"); // Ljava/lang/String; for String
 	jstring newString = (*env)->NewStringUTF(env, spect->name);
 	(*env)->SetObjectField(env, jSpect, fieldID, newString);
 
 	// set SpectFrame[] frames;
+	// as this is array of quite complex objects, creating them is not so straightforward
+
+	// get pointer to SpectFrame class
 	jclass jSpectFrameClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/SpectFrame");
 
+	// create array to store frames (afterwards it will be attached to jSpect object field "frames")
 	jobjectArray jFrames = (*env)->NewObjectArray(env, spect->numframes, jSpectFrameClass, NULL);
 
 	for (int i = 0; i < spect->numframes; i++){
 
 		// "<init>" is used to tell it is constructor
 		// ()V is signature for empty constructor
+		// find constructor
 		jmethodID constrSpectFrame = (*env)->GetMethodID(env, jSpectFrameClass, "<init>", "()V");
-
+		// use constructor
 		jobject jSpectFrame = (*env)->NewObjectA(env, jSpectFrameClass, constrSpectFrame, NULL);
 
 		SpectFrame *sframe = spect->frames[i];
@@ -102,46 +116,59 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 		//set int keyframe;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "keyframe", "I"); // I for int
 		(*env)->SetIntField(env, jSpectFrame, fieldID, sframe->keyframe);
+
 		//set short amp_adjust;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "amp_adjust", "S"); // S for short
 		(*env)->SetShortField(env, jSpectFrame, fieldID, sframe->amp_adjust);
-		//set float length_adjust; // Should we use double instead?
+
+		//set float length_adjust;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "length_adjust", "F"); // F for float
 		(*env)->SetFloatField(env, jSpectFrame, fieldID, sframe->length_adjust);
+
 		//set double rms;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "rms", "D"); // D for double
 		(*env)->SetDoubleField(env, jSpectFrame, fieldID, sframe->rms);
+
 		//set float time;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "time", "F"); // F for float
 		(*env)->SetFloatField(env, jSpectFrame, fieldID, sframe->time);
+
 		//set float pitch;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "pitch", "F"); // F for float
 		(*env)->SetFloatField(env, jSpectFrame, fieldID, sframe->pitch);
+
 		//set float length;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "length", "F"); // F for float
 		(*env)->SetFloatField(env, jSpectFrame, fieldID, sframe->length);
+
 		//set float dx;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "dx", "F"); // F for float
 		(*env)->SetFloatField(env, jSpectFrame, fieldID, sframe->dx);
+
 		//set int nx;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "nx", "I"); // I for int
 		(*env)->SetIntField(env, jSpectFrame, fieldID, sframe->nx);
+
 		//set short markers;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "markers", "S"); // S for short
 		(*env)->SetShortField(env, jSpectFrame, fieldID, sframe->markers);
+
 		//public int max_y;
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "max_y", "I"); // I for int
 		(*env)->SetIntField(env, jSpectFrame, fieldID, sframe->max_y);
+
 		//set int[] spect;
-		//jintArray frameSpect= (*env)->NewIntArray(env, sframe->nx);
+		jintArray frameSpect = (*env)->NewIntArray(env, sframe->nx); // create new java array
+		jint *arrayElems = (*env)->GetIntArrayElements(env, frameSpect, 0); // obtain a pointer to the elements of the array
+		for (int j = 0; j< sframe->nx; j++){
+			arrayElems[j] = sframe->spect[j];
+		}
 
-		// somehow not sure abaut this one
-		/*for (int j = 0; j< sframe->nx; j++){
-			(*env)->SetIntArrayRegion(env, frameSpect, 0, sframe->nx, sframe->spect);
-		}*/
+		(*env)->ReleaseIntArrayElements(env, frameSpect, arrayElems, 0);  // finished using the array, free memory
 
-		//fieldID = (*env)->GetFieldID(env, frameSpect, "spect", "[I"); // Ljava/lang/String; for String
-		//(*env)->SetObjectField(env, jSpectFrame, fieldID, frameSpect);
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "spect", "[I");
+
+		(*env)->SetObjectField(env, jSpectFrame, fieldID, frameSpect);
 
 
 		//public short[] klaat_param;
