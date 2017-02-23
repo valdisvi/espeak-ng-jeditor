@@ -46,9 +46,11 @@ public class Frame {
 		}
 
 		byte[] buffer = new byte[8];
+		inRead.read(buffer, 0, 5);
 		inRead.read(buffer, 0, 8);
 		time = Phoneme.byteWrapper(buffer);
 		// System.out.println("time "+time);
+		inRead.read(buffer, 0, 3);
 
 		inRead.read(buffer, 0, 8);
 		pitch = Phoneme.byteWrapper(buffer);
@@ -61,7 +63,6 @@ public class Frame {
 		inRead.read(buffer, 0, 8);
 		dx = Phoneme.byteWrapper(buffer);
 		// System.out.println("dx "+dx);
-		inRead.read(buffer, 0, 8);
 
 		buffer = new byte[2];
 		inRead.read(buffer, 0, 2);

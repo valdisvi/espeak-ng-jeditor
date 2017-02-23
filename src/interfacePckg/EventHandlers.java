@@ -289,5 +289,9 @@ public class EventHandlers {
 			}
 		}
 		
+		
 	};
+	public JFileChooser getFileChooser(){
+		return fileChooser;
+	}
 }

@@ -51,6 +51,7 @@ public class Phoneme {
 			inRead.read(buffer, 0, 8);
 
 			type = new String(buffer);
+			System.out.println("THIS TYPE IS "+type);
 			if (type.equals("SPECTSPC2")) {
 				// TODO implement support of old SPECTSPC2 files loading
 			} else if (type.equals("SPECTSEQ")) {
@@ -85,6 +86,9 @@ public class Phoneme {
 			// Reading 2 bytes max_y
 			inRead.read(buffer, 0, 2);
 			max_y = byteWrapper(buffer);
+			System.out.println("max_y "+max_y);
+			System.out.println("max_y "+max_y);
+
 
 			inRead.read(buffer, 0, 2);
 

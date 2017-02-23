@@ -4,7 +4,7 @@ public class ESpeakService {
 	
 	static {
 		try {
-			System.load("/home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so");
+			System.load("/home/student/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {
 			System.out.println("Native code library failed to load.\n" + e);
 		    System.exit(1);

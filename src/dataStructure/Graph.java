@@ -110,6 +110,7 @@ public class Graph {
 			 frame_width = keyframeWidth;
 			
 			scalex = (double) (frame_width / max_x);
+			System.out.println("MAX_Y "+max_y);
 			scaley = keyframeHeight / currentFrame.max_y;
 			dx = currentFrame.dx;
 			nx = currentFrame.nx;
@@ -152,6 +153,17 @@ public class Graph {
 				}
 				drawFormants(g);
 				drawPeaks(peaks, g);
+				// draws increments
+				if(true){  // if gridEnable
+					g.setColor(new Color(235, 235, 235)); // light gray
+				for(int j =1; j<18; j++){
+					g.drawLine(j*keyframeWidth/18, 0, j*keyframeWidth/18, keyframeHeight);
+				}
+				}
+				g.setColor(Color.BLACK);
+				g.drawString((currentFrame.time)+" ms", keyframeWidth-100, keyframeHeight-100);
+				g.drawString((currentFrame.pitch)+" hz", keyframeWidth-100, keyframeHeight-70);
+
 			}
 		}
 
@@ -725,7 +737,7 @@ public class Graph {
 				Border raisedbevel = BorderFactory.createRaisedBevelBorder();
 				Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 				keyframe.setBounds(10, y, keyframeWidth, keyframeHeight);
-				keyframe.setBackground(Color.WHITE);
+				keyframe.setBackground(new Color(255, 253, 250)); // lighy yellow (creamy) colour
 				keyframe.setBorder(BorderFactory.createCompoundBorder(
 						raisedbevel, loweredbevel));
 				keyframe.setVisible(true);
