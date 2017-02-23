@@ -33,7 +33,7 @@
 #include <src/libespeak-ng/synthesize.h>
 #include <src/libespeak-ng/spect.h>
 
-#include "/home/marcis/workspace/eSpeak-Jedit/jni/include/eSpeakServices_ESpeakService.h"
+#include "../include/eSpeakServices_ESpeakService.h"
 
 JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion(JNIEnv * env, jobject jobj){
 
