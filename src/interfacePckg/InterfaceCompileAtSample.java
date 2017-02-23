@@ -71,11 +71,6 @@ public class InterfaceCompileAtSample {
 		    {
 		        System.exit(0);
 		    }
-
-			public void actionPerformed1(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
 		});
 		frmResampleneedssox.getContentPane().add(btnNewButton_1);
 		

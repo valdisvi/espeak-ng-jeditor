@@ -6,19 +6,24 @@ public class ESpeakService {
 	
 	static {
 		try {
+<<<<<<< HEAD
+			System.load("/home/student/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so");
+=======
 			System.load(System.getProperty("user.dir") + "/jni/lib/libespeakservice.so");
+>>>>>>> 54c549350981066dc7c4d7c3ba511fc93cbf6c79
 		} catch (UnsatisfiedLinkError e) {
 			System.out.println("Native code library failed to load.\n" + e);
 		    System.exit(1);
 		}
     }
 	
-	public static native String nativeGetEspeakNgVersion();  
-
+	public static native String nativeGetEspeakNgVersion(); 
+	
 	public static native int nativeGetSpectSeq(SpectSeq spect, String fileName);
 
 	//for testing
 	public static void main(String[] args) {
+		
 		String s = nativeGetEspeakNgVersion();
 		System.out.print(s + "\n");	
 		
@@ -26,11 +31,13 @@ public class ESpeakService {
 		
 		System.out.print("Amplitude:" + spect.amplitude + "\n");
 		
-		System.out.print("Returned with: " + nativeGetSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a") + "\n");
+		nativeGetSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a");
 		
 		System.out.print("Name:" + spect.name + "\n");
 		
-		System.out.print("Frame 1 keyframe:" + spect.frames[1].amp_adjust + "\n");
+		System.out.print("Amplitude:" + spect.amplitude + "\n");
+		
+		System.out.print("Max_y:" + spect.max_y + "\n");
 
 		System.out.print("Jei!\n");  
 	}

@@ -55,6 +55,7 @@ public class Phoneme {
 			inRead.read(buffer, 0, 8);
 
 			type = new String(buffer);
+			System.out.println("THIS TYPE IS "+type);
 			if (type.equals("SPECTSPC2")) {
 				// TODO implement support of old SPECTSPC2 files loading
 			} else if (type.equals("SPECTSEQ")) {
@@ -64,12 +65,15 @@ public class Phoneme {
 			} else if (type.equals("SPECTSQ2")) {
 				file_format = 2;
 			} else {
+<<<<<<< HEAD
+=======
 				JFrame frame = new JFrame();
 				JOptionPane.showMessageDialog(frame,"This filetype is not supported!");
 				inStream.close();
 				return;
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 			}
-
+			
 			// Reading 4 bytes to get the byte-length of file-name
 			buffer = new byte[4];
 			inRead.read(buffer, 0, 4);
@@ -92,6 +96,9 @@ public class Phoneme {
 			// Reading 2 bytes max_y
 			inRead.read(buffer, 0, 2);
 			max_y = byteWrapper(buffer);
+			System.out.println("max_y "+max_y);
+			System.out.println("max_y "+max_y);
+
 
 			inRead.read(buffer, 0, 2);
 

@@ -1,7 +1,12 @@
 package dataStructure;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 import interfacePckg.MainWindow;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -18,21 +23,34 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.Border;
+import java.awt.Scrollbar;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.ScrollPaneConstants;
 
 public class Graph {
 
 	private JTabbedPane tabbedPaneGraphs;
-	private JScrollPane filePanel;
+	public JScrollPane filePanel;
 	private double zoomAdjust = 1.1;
+	private boolean gridEnable = true;
 	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
-	Color[] colors = { new Color(255, 0, 0), new Color(255, 128, 0),
-			new Color(255, 225, 0), new Color(0, 225, 0), new Color(0, 255, 255),
-			new Color(255, 0, 255), new Color(0, 0, 255), new Color(76, 0, 153) };
+	Color[] colors = { new Color(255, 0, 0), new Color(255, 255, 255),
+			new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255),
+			new Color(0, 0, 255), new Color(0, 0, 255), new Color(0, 0, 255) };
 	int keyframeWidth = 600; // default frame width 1000
 	int keyframeHeight = keyframeWidth / 4; // default frame width 150
 	int pk_shape1[] = { 255, 254, 254, 254, 254, 254, 253, 253, 252, 251, 251,
@@ -57,28 +75,39 @@ public class Graph {
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
 	int max_x = 0;
 	double max_y = 0;
-	boolean gridEnable = true;
+
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
-		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
 		filePanel = new JScrollPane();
+<<<<<<< HEAD
 		filePanel.setAutoscrolls(true);
 		filePanel
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		filePanel
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		filePanel.setLayout(null);
+=======
+		filePanel.setPreferredSize(new Dimension(200, 200));
+		filePanel.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		filePanel.setHorizontalScrollBarPolicy(
+				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		filePanel.setVerticalScrollBarPolicy(
+				   ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); 
+		
+		
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
-		
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
+<<<<<<< HEAD
 
+=======
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
-		//filePanel.requestFocus();
+		filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
 
 	}
@@ -126,7 +155,7 @@ public class Graph {
 			int[] x = new int[3];
 			int[] y = { keyframeHeight, 0, keyframeHeight };
 			int[][] points = new int[9][4];
-			if (gridEnable) {
+			if (true) { // if gridEnable
 				g.setColor(new Color(235, 235, 235)); // light gry
 				for (int j = 1; j < 18; j++) {
 					g.drawLine(j * keyframeWidth / 18, 0, j * keyframeWidth
@@ -161,6 +190,7 @@ public class Graph {
 				}
 				drawFormants(g);
 				drawPeaks(peaks, g);
+<<<<<<< HEAD
 				// draws increments
 
 				g.setColor(Color.BLACK);
@@ -178,17 +208,25 @@ public class Graph {
 						g.fillRect(rectPosX, rectPosY, rectPosY,rectPosY);
 						// if zoom 
 						if((double)keyframeWidth/600>1.0){
-							g.setColor(Color.WHITE);
+							g.setColor(Color.BLACK);
 							g.drawString(""+i, rectPosX+2, rectPosY+g.getFont().getSize()-2);
 						}
 						rectPosX -= rectPosY+3;
+=======
+				if(gridEnable)
+				{
+					g.setColor(new Color(235,235,235));
+					for(int j=1; j<18; j++){
+						g.drawLine(j*keyframeWidth/18,0,j*keyframeWidth/18, keyframeHeight);
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 					}
 				}
 			}
 		}
 
 		public void drawFormants(Graphics g) {
-			xinc = dx * scalex * 10; // FIXME This should work with just xinc = dx * scalex
+			xinc = dx * scalex * 10; // FIXME This should work with just xinc =
+										// dx * scalex
 			x0 = xinc;
 			x1 = nx * xinc;
 
@@ -324,9 +362,13 @@ public class Graph {
 
 	public void loadFrame(JPanel currentPanel) {
 
+<<<<<<< HEAD
+=======
+		//currentPanel.requestFocus();
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 		Frame frameToLoad = mapPanels.get(currentPanel);
-		currentPanel.requestFocus();
 		frameToLoad.selected = true;
+		//currentPanel.requestFocus();
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
 
@@ -340,9 +382,7 @@ public class Graph {
 								loweredbevel));
 			}
 		}
-		currentPanel.requestFocus();
-		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,
-				Color.red));
+		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,Color.red));
 
 		int[][] peaks = frameToLoad.getPeaks();
 		String value;
@@ -367,16 +407,17 @@ public class Graph {
 		for (int i = 0; i < 6; i++) {
 			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1][6]));
 		}
-
-		// MainWindow.spampF.setValue(frameToLoad.amp_adjust);
-		// outputPhonemes();
-
+		currentPanel.requestFocus();
 	}
 
 	KeyListener keyListener = new KeyListener() {
 
 		@Override
 		public void keyPressed(KeyEvent ke) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 			int x_incr = 0;
 			int y_incr = 0;
 			final int[] incr_1 = { 4, 4, 4, 8, 8, 8, 8, 8, 8 };
@@ -633,7 +674,6 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_I: { // CTRL-I
-
 					if (curr == prev) {
 						JOptionPane.showMessageDialog(curr,
 								"No previous keyframe!");
@@ -652,12 +692,10 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_B: { // CTRL-B
-
 					if (Frame.bass_reduction) {
 						Frame.bass_reduction = false;
 					} else {
 						Frame.bass_reduction = true;
-						;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -693,11 +731,11 @@ public class Graph {
 				}
 				case KeyEvent.VK_M: { // CTRL-M
 					
-					if(mapPanels.get(curr).markers[0]){
-						mapPanels.get(curr).markers[0] = false;
+					if(mapPanels.get(curr).markers[1]){
+						mapPanels.get(curr).markers[1] = false;
 					}
 					else{
-						mapPanels.get(curr).markers[0] = true;
+						mapPanels.get(curr).markers[1] = true;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -765,6 +803,7 @@ public class Graph {
 		filePanel2.removeAll();
 		mapPanels.clear();
 
+		
 		int y = 25;
 		if (!frames.isEmpty()) {
 			for (int i = 0; i < frames.size(); i++) {
@@ -840,12 +879,15 @@ public class Graph {
 										BorderFactory.createCompoundBorder(
 												raisedbevel, loweredbevel));
 							}
-
 						}
 					}
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> c014b92a0329c42b26a6dd635c996b396b73fc84
 					}
 
 					@Override
@@ -863,14 +905,12 @@ public class Graph {
 
 				filePanel2.add(keyframe);
 				mapPanels.put(keyframe, currentFrame);
-
 			}
 			loadFirstFrame();
 		}
 		filePanel2.revalidate();
 		filePanel2.repaint();
 		filePanel2.addKeyListener(keyListener);
-		// filePanel.requestFocus();
 
 	}
 
