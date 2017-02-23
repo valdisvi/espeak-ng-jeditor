@@ -1,9 +1,32 @@
 1. step - add native function definitions in java file e.g. YourJNI.java
-(!! It seems that "package" line should be commented out temporary)
 2. step - compile .class file
-	- in terminal cd to this folder
+	- in terminal cd class folder
 	- javac YourJNI.java
-2. step - create header (.h) file
-	- in terminal cd to this folder
+3. step - create header (.h) file
+	- go back to parent directory ( ... espeak-jedit/src )
 	- then use javah command to create c/c++ header file
-	- javah -cp .  yourJavaClassFile
+	- javah -jni eSpeakServices.ESpeakService
+4. step - create native library
+gcc -fPIC -lc -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -I/usr/include -I/usr/include/x86_64-linux-gnu -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/local/include -I/home/marcis/workspace-c/espeak-ng-fork -L/home/marcis/workspace/eSpeak-Jedit/jni/lib -lespeak-ng-fork /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.c -o /home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so 
+
+
+gcc -static -shared -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -I/usr/include -I/usr/include/x86_64-linux-gnu -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/local/include -I/home/marcis/workspace-c/espeak-ng-fork -L/home/marcis/workspace/eSpeak-Jedit/jni/lib -l:libespeak-ng.a /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.c -o /home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so 
+
+gcc -static -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -I/home/marcis/workspace-c/espeak-ng-fork -L/home/marcis/workspace/eSpeak-Jedit/jni/lib -lespeak /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.c -o /home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so 
+
+
+g++ -shared sample.o -o libSample.so -Wl,-whole-archive -lmylib1.a -lmylib2.a -Wl,-no-whole-archive
+
+
+gcc -shared -o /home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so  -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -I/home/marcis/workspace-c/espeak-ng-fork -Wl,-whole-archive -lespeak.a -Wl,-no-whole-archive  /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.c
+
+ gcc -Wall -fPIC -O -g abc1.c -c -o abc1.pic.o
+ gcc -Wall -fPIC -O -g abc2.c -c -o abc2.pic.o
+
+and you build libabc.so with
+
+gcc -shared  abc1.pic.o  abc2.pic.o -L/usr/local/lib -l123 -o libabc.so
+
+gcc -Wall -fPIC -O -g -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -I/usr/include -I/usr/include/x86_64-linux-gnu -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/local/include -I/home/marcis/workspace-c/espeak-ng-fork  /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.c -c -o /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.o
+
+gcc -shared /home/marcis/workspace/eSpeak-Jedit/jni/src/eSpeakService.o -L/home/marcis/workspace/eSpeak-Jedit/jni/lib -lespeak-ng-fork -o /home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so 

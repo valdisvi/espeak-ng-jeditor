@@ -2,7 +2,7 @@
  * eSpeakService.c
  *
  *  Created on: Feb 21, 2017
- *      Author: student
+ *      Author: Marcis Majors
  */
 
 #include <stdlib.h>
@@ -32,6 +32,21 @@
 
 #include <src/libespeak-ng/synthesize.h>
 #include <src/libespeak-ng/spect.h>
+
+#include "/home/marcis/workspace/eSpeak-Jedit/src/eSpeakServices_ESpeakService.h"
+
+JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion(JNIEnv * env, jobject jobj){
+
+	/* if function is static then jobject points to class rather than object */
+
+	const char* versionInfo = espeak_Info(NULL);
+
+	jstring newString = (*env)->NewStringUTF(env, versionInfo);
+
+	//jstring newString = (*env)->NewStringUTF(env, "Jeiiii!!!");
+
+	return newString;
+}
 
 int main(){
 

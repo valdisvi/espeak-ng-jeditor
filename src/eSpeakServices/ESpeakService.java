@@ -3,13 +3,20 @@ package eSpeakServices;
 public class ESpeakService {
 	
 	static {
-        System.loadLibrary("eSpeakService");
+		try {
+			System.load("/home/marcis/workspace/eSpeak-Jedit/jni/lib/libespeakservice.so");
+		} catch (UnsatisfiedLinkError e) {
+			System.out.println("Native code library failed to load.\n" + e);
+		    System.exit(1);
+		}
     }
 	
-	public native String getEspeakNgVersion();  
+	public static native String nativeGetEspeakNgVersion();  
 
 	//for testing
 	public static void main(String[] args) {
-	      System.out.print("Jei!\n");  // invoke the native method
+		String s = nativeGetEspeakNgVersion();
+		System.out.print(s);	
+		System.out.print("Jei!\n");  
 	}
 }
