@@ -35,20 +35,53 @@
 
 #include "../include/eSpeakServices_ESpeakService.h"
 
-JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion(JNIEnv * env, jobject jobj){
-
+/*
+ * Class:     eSpeakServices_ESpeakService
+ * Method:    nativeGetEspeakNgVersion
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion
+  (JNIEnv * env, jclass clazz){
 	/* if function is static then jobject points to class rather than object */
 
 	const char* versionInfo = espeak_Info(NULL);
-
 	jstring newString = (*env)->NewStringUTF(env, versionInfo);
+	return newString;
+
+}
+
+/*
+ * Class:     eSpeakServices_ESpeakService
+ * Method:    nativeGetSpectSeq
+ * Signature: (LdataStructure/eSpeakStructure/SpectSeq;Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
+  (JNIEnv * env, jclass clazz, jobject jSpect, jstring jFileName){
 
 	SpectSeq *spect = SpectSeqCreate();
 
-	//jstring newString = (*env)->NewStringUTF(env, "Jeiiii!!!");
+	espeak_ng_STATUS status;
 
-	return newString;
-}
+	status = LoadSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a");
+
+	if (status != ENS_OK){
+		return status;
+	}
+
+	jclass jSpectClass = (*env)->GetObjectClass(env, jSpect);
+
+	//set int numframes;
+	jfieldID fieldAmplitudeID = (*env)->GetFieldID(env, jSpectClass, "amplitude", "S"); // S for short
+	(*env)->SetShortField(env, jSpect, fieldAmplitudeID, spect->amplitude);
+
+	jfieldID fieldMaxYID = (*env)->GetFieldID(env, jSpectClass, "max_y", "S"); // S for short
+	(*env)->SetShortField(env, jSpect, fieldMaxYID, spect->max_y);
+
+	//spect->max_y;
+
+	return ENS_OK;
+
+};
 
 int main(){
 
