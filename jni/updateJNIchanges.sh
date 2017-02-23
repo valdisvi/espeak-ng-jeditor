@@ -1,15 +1,14 @@
 #!/bin/bash
-pathToEspeakDir=/home/marcis/workspace-c/espeak-ng-fork
-pathToJedit=/home/marcis/workspace/eSpeak-Jedit
+pathToEspeakDir=/home/student/workspace-c/espeak-ng
+pathToJedit=/home/student/workspace/eSpeak-Jedit
 pdir=$(pwd)
 cdir=$(dirname "$0")
 if [ $cdir != "." ]; then
   cd $cdir # change to current directory
 fi
-cd ../src/eSpeakServices
+cd ../src
 echo "Compiling ESpeakService.java.."
-javac ESpeakService.java
-cd ..
+javac eSpeakServices/ESpeakService.java
 echo "(Re)Generate eSpeakServices_ESpeakService.h in jni/include.."
 javah -jni -d ../jni/include eSpeakServices.ESpeakService
 echo "(Re)Compiling eSpeakService.c .."

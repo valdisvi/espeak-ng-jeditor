@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion
   (JNIEnv *, jclass);
 
+/*
+ * Class:     eSpeakServices_ESpeakService
+ * Method:    nativeGetSpectSeq
+ * Signature: (LdataStructure/eSpeakStructure/SpectSeq;Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
+  (JNIEnv *, jclass, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif
