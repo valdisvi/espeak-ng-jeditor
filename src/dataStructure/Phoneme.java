@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import interfacePckg.MainWindow;
+
 public class Phoneme {
 	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
 	public int file_format;
@@ -60,7 +65,10 @@ public class Phoneme {
 			} else if (type.equals("SPECTSQ2")) {
 				file_format = 2;
 			} else {
-				// TODO case when format is smth else
+				JFrame frame = new JFrame();
+				JOptionPane.showMessageDialog(frame,"This filetype is not supported!");
+				inStream.close();
+				return;
 			}
 
 			// Reading 4 bytes to get the byte-length of file-name

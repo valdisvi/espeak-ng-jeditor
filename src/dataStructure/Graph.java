@@ -20,17 +20,27 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.Border;
+import java.awt.Scrollbar;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.ScrollPaneConstants;
 
 public class Graph {
 
 	private JTabbedPane tabbedPaneGraphs;
-	private JScrollPane filePanel;
+	public JScrollPane filePanel;
 	private double zoomAdjust = 1.1;
+	private boolean gridEnable = true;
 	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 	int keyframeWidth = 600; // default frame width 1000
 	int keyframeHeight = keyframeWidth/4; // default frame width 150
@@ -59,25 +69,24 @@ public class Graph {
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
-		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
 		filePanel = new JScrollPane();
-		filePanel.setAutoscrolls(true);
+		filePanel.setPreferredSize(new Dimension(200, 200));
+		filePanel.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		filePanel.setHorizontalScrollBarPolicy(
 				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		filePanel.setVerticalScrollBarPolicy(
-				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
-		filePanel.setLayout(null);
+				   ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); 
+		
+		
 
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
-		ShowFrames(frameList, filePanel, mapPanels);
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-		
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 		filePanel.requestFocus();
+		ShowFrames(frameList, filePanel, mapPanels);
 
 	}
 
@@ -152,6 +161,13 @@ public class Graph {
 				}
 				drawFormants(g);
 				drawPeaks(peaks, g);
+				if(gridEnable)
+				{
+					g.setColor(new Color(235,235,235));
+					for(int j=1; j<18; j++){
+						g.drawLine(j*keyframeWidth/18,0,j*keyframeWidth/18, keyframeHeight);
+					}
+				}
 			}
 		}
 
@@ -302,10 +318,10 @@ public class Graph {
 
 	public void loadFrame(JPanel currentPanel) {
 
-		
+		//currentPanel.requestFocus();
 		Frame frameToLoad = mapPanels.get(currentPanel);
-		currentPanel.requestFocus();
 		frameToLoad.selected = true;
+		//currentPanel.requestFocus();
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
 
@@ -319,9 +335,7 @@ public class Graph {
 								loweredbevel));
 			}
 		}
-		currentPanel.requestFocus();
-		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,
-				Color.red));
+		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,Color.red));
 
 		int[][] peaks = frameToLoad.getPeaks();
 		String value;
@@ -346,17 +360,13 @@ public class Graph {
 		for (int i = 0; i < 6; i++) {
 			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1][6]));
 		}
-
-		// MainWindow.spampF.setValue(frameToLoad.amp_adjust);
-		// outputPhonemes();
-
+		currentPanel.requestFocus();
 	}
 
 	KeyListener keyListener = new KeyListener() {
 
 		@Override
 		public void keyPressed(KeyEvent ke) {
-			// System.out.println(ke.getKeyCode());
 
 			int x_incr = 0;
 			int y_incr = 0;
@@ -615,7 +625,6 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_I: { // CTRL-I
-
 					if (curr == prev) {
 						JOptionPane.showMessageDialog(curr,
 								"No previous keyframe!");
@@ -634,12 +643,21 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_B: { // CTRL-B
-
 					if (Frame.bass_reduction) {
 						Frame.bass_reduction = false;
 					} else {
 						Frame.bass_reduction = true;
-						;
+					}
+					loadFrame(curr);
+					curr.repaint();
+					curr.revalidate();
+					break;
+				}
+				case KeyEvent.VK_G: { // CTRL-G  toggle grid
+					if (gridEnable) {
+						gridEnable = false;
+					} else {
+						gridEnable = true;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -710,6 +728,7 @@ public class Graph {
 		filePanel2.removeAll();
 		mapPanels.clear();
 
+		
 		int y = 25;
 		if (!frames.isEmpty()) {
 			for (int i = 0; i < frames.size(); i++) {
@@ -781,9 +800,7 @@ public class Graph {
 								entry.getKey().setBorder(
 										BorderFactory.createCompoundBorder(
 												raisedbevel, loweredbevel));
-								System.out.println(selectedFrames);
 							}
-
 						}
 					}
 
@@ -814,14 +831,12 @@ public class Graph {
 
 				filePanel2.add(keyframe);
 				mapPanels.put(keyframe, currentFrame);
-
 			}
 			loadFirstFrame();
 		}
 		filePanel2.revalidate();
 		filePanel2.repaint();
 		filePanel2.addKeyListener(keyListener);
-		// filePanel.requestFocus();
 
 	}
 
