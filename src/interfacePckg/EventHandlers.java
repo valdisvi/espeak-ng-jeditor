@@ -60,13 +60,12 @@ public class EventHandlers {
 				
 				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
-				// TODO implement
 				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			}
 		}
 	};
 
-	// TODO clear the text field and spinner values in this and in closeAllTab
+	//clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.remove(mainW.tabbedPaneGraphs.getSelectedComponent());

@@ -1,6 +1,8 @@
 package dataStructure;
 
+
 import java.io.ByteArrayInputStream;
+import dataStructure.eSpeakStructure.SpectSeq;
 
 public class Frame {
 	public double time;
@@ -27,8 +29,11 @@ public class Frame {
 	
 	public boolean selected = false;
 	public static boolean bass_reduction = false;
+	public boolean[] markers =  {false,false,false,false,false,false,false,false};
 
 	public void frameLoader(ByteArrayInputStream inRead, int file_format) {
+
+
 		formants = new int[9][2];
 		// There are 7 elements in SPECTSQ2 files, only 4 in TSEQ and TSEK
 		peaks = new int[9][7];

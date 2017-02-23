@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import interfacePckg.MainWindow;
 
 public class Phoneme {
 	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
@@ -70,7 +69,7 @@ public class Phoneme {
 				inStream.close();
 				return;
 			}
-
+			
 			// Reading 4 bytes to get the byte-length of file-name
 			buffer = new byte[4];
 			inRead.read(buffer, 0, 4);

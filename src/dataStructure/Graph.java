@@ -1,10 +1,9 @@
 package dataStructure;
 
-//TODO JButton convert into graphic
-
 
 import interfacePckg.MainWindow;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -21,11 +20,14 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.Border;
 import java.awt.Scrollbar;
@@ -664,6 +666,35 @@ public class Graph {
 					curr.revalidate();
 					break;
 				}
+				case KeyEvent.VK_N: { // CTRL-N, put in new marker
+					
+					String[] possibleValues = {"0","1","2","3","4","5","6","7"};
+					int inputValue = Integer.parseInt((String) JOptionPane.showInputDialog(null,
+							"Marker", "Toggle marker", JOptionPane.PLAIN_MESSAGE, null,possibleValues, possibleValues[0]));
+					if(mapPanels.get(curr).markers[inputValue]){
+						mapPanels.get(curr).markers[inputValue] = false;
+					}
+					else{
+						mapPanels.get(curr).markers[inputValue] = true;
+					}
+					loadFrame(curr);
+					curr.repaint();
+					curr.revalidate();
+					break;
+				}
+				case KeyEvent.VK_M: { // CTRL-M
+					
+					if(mapPanels.get(curr).markers[1]){
+						mapPanels.get(curr).markers[1] = false;
+					}
+					else{
+						mapPanels.get(curr).markers[1] = true;
+					}
+					loadFrame(curr);
+					curr.repaint();
+					curr.revalidate();
+					break;
+				}
 				case KeyEvent.VK_S: { // CTRL-S
 
 					// public String type; // Type-name of file
@@ -712,13 +743,10 @@ public class Graph {
 
 		@Override
 		public void keyReleased(KeyEvent ke) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent ke) {
-			// TODO Auto-generated method stub
 		}
 
 	};
@@ -806,26 +834,19 @@ public class Graph {
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
-						// TODO Auto-generated method stub
 
 					}
 
 					@Override
 					public void mouseExited(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void mousePressed(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 
