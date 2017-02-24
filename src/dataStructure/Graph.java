@@ -176,8 +176,8 @@ public class Graph {
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
 			// before this rms needs to be calculated
-			g.drawString(currentFrame.rms+" rms", keyframeWidth
-					- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
+			//g.drawString(currentFrame.rms+" rms", keyframeWidth
+					//- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 
@@ -397,8 +397,8 @@ public class Graph {
 			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1].klt_bp));
 		}
 
-		// MainWindow.spampF.setValue(frameToLoad.amp_adjust);
-		// outputPhonemes();
+		MainWindow.tfmS.setText(String.valueOf((int)(frameToLoad.time*1000)));
+		MainWindow.spampF.setValue(frameToLoad.amp_adjust);
 
 	}
 

@@ -49,9 +49,9 @@ public class Frame {
 		length = frames.length;
 		dx = frames.dx;
 		nx = frames.nx;
-		// TODO check if marker logic is correct
-		for (int i = 0; i < 8; i++) {
-			if ((frames.markers & (1 << i)) == 1) {
+		//markers are stored in integer bits 1(true) & 0(false)
+		for (int i = 0; i < 8; i++) {		
+			if (((frames.markers >> i) & 1) == 1) {
 				markers[i] = true;
 			} else {
 				markers[i] = false;
