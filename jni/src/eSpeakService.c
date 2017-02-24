@@ -271,97 +271,26 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 	(*env)->SetShortField(env, jSpect, fieldID, spect->max_y);
 	//set int file_format;
 
-
-
+	// if everything was ok return 0
 	return ENS_OK;
 
 };
 
+/*
+ * Class:     eSpeakServices_ESpeakService
+ * Method:    nativeTextToPhonemes
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeTextToPhonemes
+  (JNIEnv * env, jclass clazz, jstring jTextToTranslate){
+
+	jstring newString = (*env)->NewStringUTF(env, "Sorry, not implemented");
+
+	return newString;
+}
+
+// main is only used for testing
 int main(){
-
-	/*
-	const char *data_path = NULL; //  use default path for espeak-data
-
-	int samplerate;
-
-	const char* versionInfo = espeak_Info(NULL);
-
-	printf("Espeak version: %s\n", versionInfo);
-
-	samplerate = espeak_Initialize(AUDIO_OUTPUT_PLAYBACK,0,data_path,0);
-
-	printf("%i \n", samplerate);
-
-
-
-	static char word[200] = "Hello World" ;
-	strcpy(word, "Hello!");
-
-	espeak_Synth( (char*) word, strlen(word)+1, 0, POS_CHARACTER, 0, espeakCHARS_AUTO, NULL, NULL);
-	espeak_Synchronize();
-
-	espeak_ERROR err = espeak_SetVoiceByName("latvian");
-
-	if (err == EE_OK){
-		printf("latvian voice selected\n");
-	}
-
-	espeak_Synth( (char*) word, strlen(word)+1, 0, POS_CHARACTER, 0, espeakCHARS_AUTO, NULL, NULL);
-	espeak_Synchronize();
-
-	const void **textptr;
-
-	const void *someText = "Zirgs iet. Ko nu tagad?";
-
-	printf("%s\n", (char*)someText);
-
-	textptr = &someText;
-
-	const char *phonemes = espeak_TextToPhonemes(textptr, espeakCHARS_AUTO, 0);
-
-	printf("%s\n", (char*)*textptr);
-
-	printf("%s\n", phonemes);
-
-	phonemes = espeak_TextToPhonemes(textptr, espeakCHARS_AUTO, 0);
-
-	printf("%s\n", (char*)*textptr);
-
-	printf("%s\n", phonemes);
-
-	*/
-
-	/*
-
-	SpectSeq *spect = SpectSeqCreate();
-
-	LoadSpectSeq(spect, "/home/student/workspace-c/espeak-ng/phsource/vowel/a");
-
-	printf("%s\n",spect->name);
-
-	printf("%i\n", spect->duration);
-
-	printf("%i\n",spect->numframes);
-
-	printf("%i\n", spect->amplitude);
-
-	SpectFrame *spectFrame;
-
-	spectFrame = spect->frames[2];
-
-	printf("%i\n", spectFrame->amp_adjust);
-
-	SpectSeqDestroy(spect);
-
-
-
-
-
-	espeak_Terminate();
-
-	printf("Jei!\n");
-
-	*/
 
 	return 0;
 }

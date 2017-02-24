@@ -109,8 +109,8 @@ public class MainWindow extends JFrame {
 	public static ArrayList<JTextField> tfBw;
 	public static ArrayList<JTextField> tfAp;
 	public static ArrayList<JTextField> tfBp;
-	public JTextField tfmS;
-	public JSpinner spampF;
+	public static JTextField tfmS;
+	public static JSpinner spampF;
 	public JButton btnZoom;
 	public JButton btnZoom_1;
 	public JTextArea textAreaIn;
