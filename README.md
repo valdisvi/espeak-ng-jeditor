@@ -131,14 +131,19 @@ Practical tasks
 - [x]	         2017.02.15 started implementing key commands for keyframe sequence operations
 - [x]	         2017.02.19 Green line of graph is accuratly displayed
 - [x]	         2017.02.22 Zoom function is working correctly
+- [x]          2017.02.22 Markers on graph are implemented
 - [x]	         2017.02.23 If filetype is not supported, program shows popup window that informs that this filetype is not supported and doesn't load it
 - [x]	         2017.02.23 We are able to call espeak-ng C code and use its loader to get proper values for graph creation
 - [x]	         2017.02.23 Various file format support
 - [x]	         2017.02.23 Black line of graph is accuratly displayed
+- [x]          2017.02.23 when last or all phoneme files are closed, all text windows are cleared
 - [x]	         2017.02.24 Blue formants in graph are accuratly displayed
 - [x]	         2017.02.24 *ms* and *hz* is accuratly displayed on graph
+
+###TODO
 - [ ]		 Need to calculate rms
 - [ ]		 Need to fill left panel's bottom part with correct values
 - [ ]		 "Amplitude frame" in bottom left corner still needs to be implemented
 - [ ]		 Scrollbar needs to be added to opened phonemes
+- [ ]   Implement listeners for all menu items and all buttons
 
