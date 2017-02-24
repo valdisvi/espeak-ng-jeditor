@@ -31,6 +31,7 @@
 									<listOptionValue builtIn="false" value="/usr/lib/jvm/java-8-openjdk-amd64/include"/>
 									<listOptionValue builtIn="false" value="/usr/lib/jvm/java-8-openjdk-amd64/include/linux"/>
 									<listOptionValue builtIn="false" value="/home/student/workspace-c/espeak-ng"/>
+									<listOptionValue builtIn="false" value="/home/marcis/workspace-c/espeak-ng-fork"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1128268833" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

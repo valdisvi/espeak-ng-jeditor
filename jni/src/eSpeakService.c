@@ -160,20 +160,83 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 		//set int[] spect;
 		jintArray frameSpect = (*env)->NewIntArray(env, sframe->nx); // create new java array
 		jint *arrayElems = (*env)->GetIntArrayElements(env, frameSpect, 0); // obtain a pointer to the elements of the array
+
 		for (int j = 0; j< sframe->nx; j++){
 			arrayElems[j] = sframe->spect[j];
 		}
 
 		(*env)->ReleaseIntArrayElements(env, frameSpect, arrayElems, 0);  // finished using the array, free memory
 
+		// add created spect array  to frame
 		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "spect", "[I");
-
 		(*env)->SetObjectField(env, jSpectFrame, fieldID, frameSpect);
 
 
 		//public short[] klaat_param;
-		//public Formant_t[] formants;
+
+		jshortArray klaatArray = (*env)->NewShortArray(env, N_KLATTP2);
+		jshort *klaatArrayElems = (*env)->GetShortArrayElements(env, klaatArray, 0);
+		for (int j=0; j<N_KLATTP2; j++){
+			klaatArrayElems[j] = sframe->klatt_param[j];
+		}
+
+		(*env)->ReleaseShortArrayElements(env, klaatArray, klaatArrayElems, 0);  // finished using the array, free memory
+
+		// add created klaat_param array  to frame
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "klaat_param", "[S");
+		(*env)->SetObjectField(env, jSpectFrame, fieldID, klaatArray);
+
+		//set Formant_t[] formants;
+
+		jclass jFormant_tClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/Formant_t");
+		jmethodID constrFormant = (*env)->GetMethodID(env, jFormant_tClass, "<init>", "(SS)V");
+		jobject jFormant;
+
+		jobjectArray jFormantArray = (*env)->NewObjectArray(env, N_PEAKS, jFormant_tClass, NULL);
+
+		for (int j = 0; j < N_PEAKS; j++){
+
+			// use constructor
+			jFormant = (*env)->NewObject(env, jFormant_tClass, constrFormant,
+											sframe->formants[j].freq,
+											sframe->formants[j].bandw
+										);
+
+			(*env)->SetObjectArrayElement( env, jFormantArray, j, jFormant);
+		}
+		// set formants
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "formants", "[LdataStructure/eSpeakStructure/Formant_t;"); // Ljava/lang/String; for String
+		(*env)->SetObjectField(env, jSpectFrame, fieldID, jFormantArray);
+
+
 		//public Peak_t[] peaks;
+
+		jclass jPeak_tClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/Peak_t");
+		jmethodID constrPeak = (*env)->GetMethodID(env, jPeak_tClass, "<init>", "(SSSSSSS)V");
+		jobject jPeak;
+
+		jobjectArray jPeakArray = (*env)->NewObjectArray(env, N_PEAKS, jPeak_tClass, NULL);
+
+		for (int j = 0; j < N_PEAKS; j++){
+
+			// use constructor (order of parameters is critical here)
+			jPeak = (*env)->NewObject(env, jPeak_tClass, constrPeak,
+											sframe->peaks[j].pkfreq,
+											sframe->peaks[j].pkheight,
+											sframe->peaks[j].pkwidth,
+											sframe->peaks[j].pkright,
+											sframe->peaks[j].klt_bw,
+											sframe->peaks[j].klt_ap,
+											sframe->peaks[j].klt_bp
+										);
+
+			(*env)->SetObjectArrayElement( env, jPeakArray, j, jPeak);
+		}
+		// set formants
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "peaks", "[LdataStructure/eSpeakStructure/Peak_t;"); // Ljava/lang/String; for String
+		(*env)->SetObjectField(env, jSpectFrame, fieldID, jPeakArray);
+
+
 
 		(*env)->SetObjectArrayElement( env, jFrames, i, jSpectFrame);
 
