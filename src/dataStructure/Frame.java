@@ -29,6 +29,7 @@ public class Frame {
 	public Peak_t[] peaks;
 
 	// Not used in SPECTSEQ
+	public int amplitude;
 	public short[] klatt_param;
 	public int[] spect_data;
 	double max_y = 0;
@@ -40,7 +41,8 @@ public class Frame {
 	public boolean selected = false;
 	public static boolean bass_reduction = true;
 
-	public void frameLoader(SpectFrame frames, int file_format, double max_y) {
+	public void frameLoader(SpectFrame frames, int file_format, double max_y, int  amplitude) {
+		this.amplitude =  amplitude;
 		this.file_format = file_format;
 		this.max_y = max_y;
 		rms = frames.rms;
