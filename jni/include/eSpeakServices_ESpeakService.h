@@ -23,6 +23,14 @@ JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVer
 JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
   (JNIEnv *, jclass, jobject, jstring);
 
+/*
+ * Class:     eSpeakServices_ESpeakService
+ * Method:    nativeTextToPhonemes
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeTextToPhonemes
+  (JNIEnv *, jclass, jstring);
+
 #ifdef __cplusplus
 }
 #endif
