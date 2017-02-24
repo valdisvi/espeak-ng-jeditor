@@ -3,7 +3,7 @@
 
 ##At the moment these things are implemented:
 
--###Interface: 
+###-Interface: 
 Design repeats the old espeak-edit project, no significant changes were done!
 
 ###-Opening and storing phonemes:
