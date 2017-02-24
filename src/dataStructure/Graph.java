@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
+import dataStructure.eSpeakStructure.Formant_t;
 import dataStructure.eSpeakStructure.Peak_t;
 
 public class Graph {
@@ -139,14 +140,16 @@ public class Graph {
 			}
 			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
-					points[i][0] = (int) (peaks[i].pkfreq * scalex); // peak x value
-					points[i][1] = -(peaks[i].pkheight >> 6) / 3 + keyframeHeight; // peak
-																				// y
-																				// value
+					points[i][0] = (int) (peaks[i].pkfreq * scalex); // peak x
+																		// value
+					points[i][1] = -(peaks[i].pkheight >> 6) / 3
+							+ keyframeHeight; // peak
+												// y
+												// value
 					points[i][2] = (int) (peaks[i].pkwidth * scalex * 0.44); // left
-																		// x
+					// x
 					points[i][3] = (int) (peaks[i].pkright * scalex * 0.44); // right
-																		// x
+					// x
 
 					if (y[1] < 5)
 						y[1] = 5;
@@ -172,11 +175,14 @@ public class Graph {
 			g.drawString(((int) currentFrame.time) + " ms" + "  "
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
+			// before this rms needs to be calculated
+			g.drawString(currentFrame.rms+" rms", keyframeWidth
+					- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 
 			for (int j = 0; j < 8; j++) {
-				if ((currentFrame.primarkers & 1 >> j) ==1) {
+				if (currentFrame.markers[j]) {
 					g.setColor(colors[j]);
 					g.fillRect(rectPosX, rectPosY, rectPosY, rectPosY);
 					// if zoom
@@ -191,10 +197,29 @@ public class Graph {
 		}
 
 		public void drawFormants(Graphics g) {
-			xinc = dx * scalex * 10; // FIXME This should work with just xinc =
-										// dx * scalex
+			xinc = dx * scalex;
 			x0 = xinc;
 			x1 = nx * xinc;
+			Formant_t[] formants = currentFrame.formants;
+			// draw the measured formants
+			g.setColor(Color.BLUE);
+			for (peak = 1; peak <= 5; peak++) {
+
+				if (formants[peak].freq != 0) {
+
+					// set height from linear interpolation of the adjacent
+					// points in the spectrum
+					pt = (int) (formants[peak].freq / dx);
+					y0 = spect[pt - 1];
+					y1 = spect[pt];
+					yf = (y1 - y0) * (formants[peak].freq - pt * dx) / dx;
+
+					y1 = keyframeHeight - (int) ((y0 + yf) * scaley);
+					x1 = formants[peak].freq * scalex;
+					g.drawLine((int) x1, keyframeHeight, (int) x1, y1);
+
+				}
+			}
 
 			g.setColor(Color.BLACK);
 			if (spect != null) {
@@ -222,7 +247,7 @@ public class Graph {
 			int pkright;
 			int pkwidth;
 			int[] buf = new int[4000];
-//			double rms;
+			// double rms;
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
@@ -267,9 +292,9 @@ public class Graph {
 				}
 			}
 
-//			rms = buf[0] >> 12;
-//			rms = rms * rms * 23;
-//			rms = rms * rms;
+			// rms = buf[0] >> 12;
+			// rms = rms * rms * 23;
+			// rms = rms * rms;
 
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
@@ -277,7 +302,7 @@ public class Graph {
 
 				yy = buf[ix] >> 12;
 				yy = yy * yy * 23;
-//				rms += (yy * yy);
+				// rms += (yy * yy);
 
 				x2 = ix;
 				y2 = keyframeHeight - ((buf[ix] * keyframeHeight) >> 21);
@@ -288,7 +313,7 @@ public class Graph {
 				y1 = y2;
 			}
 
-//			rms = Math.sqrt(rms) / 200000.0;
+			// rms = Math.sqrt(rms) / 200000.0;
 			// apply adjustment from spectseq amplitude
 			// rms = rms * seq_amplitude * currentFrame.amp_adjust / 10000.0;
 
@@ -350,11 +375,9 @@ public class Graph {
 
 		Peak_t[] peaks = frameToLoad.peaks;
 		String value;
+
 		for (int i = 0; i < 7; i++) {
-			System.out.println("peak["+i+"].pkfreq "+peaks[i].pkfreq);
-
 			MainWindow.tfFreq.get(i).setText("" + peaks[i].pkfreq);
-
 		}
 		for (int i = 0; i < 8; i++) {
 			MainWindow.tfHeight.get(i).setText("" + (peaks[i].pkheight >> 6));
@@ -689,10 +712,10 @@ public class Graph {
 							.showInputDialog(null, "Marker", "Toggle marker",
 									JOptionPane.PLAIN_MESSAGE, null,
 									possibleValues, possibleValues[0]));
-					if (mapPanels.get(curr).primarkers >> inputValue == 1) {
-						mapPanels.get(curr).primarkers -= 2^inputValue;
+					if (mapPanels.get(curr).markers[inputValue]) {
+						mapPanels.get(curr).markers[inputValue] = false;
 					} else {
-						mapPanels.get(curr).primarkers += 2^inputValue;
+						mapPanels.get(curr).markers[inputValue] = true;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -701,10 +724,10 @@ public class Graph {
 				}
 				case KeyEvent.VK_M: { // CTRL-M
 
-					if (mapPanels.get(curr).primarkers>>1 == 1) {
-						mapPanels.get(curr).primarkers -= 1;
+					if (mapPanels.get(curr).markers[0]) {
+						mapPanels.get(curr).markers[0] = false;
 					} else {
-						mapPanels.get(curr).primarkers += 1;
+						mapPanels.get(curr).markers[0] = true;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -780,17 +803,16 @@ public class Graph {
 				currentFrame.selected = false;
 				if (max_x < currentFrame.max_x)
 					max_x = currentFrame.max_x;
-				if (max_y < currentFrame.max_y)
-					max_y = currentFrame.max_y;
+				max_y = currentFrame.max_y;
 				final JPanel keyframe = new Draw(currentFrame, keyframeWidth);
 
 				Border raisedbevel = BorderFactory.createRaisedBevelBorder();
 				Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 				keyframe.setBounds(10, y, keyframeWidth, keyframeHeight);
-				keyframe.setBackground(new Color(255, 253, 250)); // lighy
+				keyframe.setBackground(new Color(255, 253, 250)); // light
 																	// yellow
 																	// (creamy)
-																	// colour
+																	// color
 				keyframe.setBorder(BorderFactory.createCompoundBorder(
 						raisedbevel, loweredbevel));
 				keyframe.setVisible(true);
