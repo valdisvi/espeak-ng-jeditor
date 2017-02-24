@@ -146,4 +146,7 @@ Practical tasks
 - [ ]		 "Amplitude frame" in bottom left corner still needs to be implemented
 - [ ]		 Scrollbar needs to be added to opened phonemes
 - [ ]   Implement listeners for all menu items and all buttons
+- [ ]   Implement espeak-ng API for translating and speaking
+- [ ]   Make Fourier in text panel
+- [ ]   Update phonem saving
 
