@@ -24,6 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
+import dataStructure.eSpeakStructure.Peak_t;
+
 public class Graph {
 
 	private JTabbedPane tabbedPaneGraphs;
@@ -31,8 +33,9 @@ public class Graph {
 	private double zoomAdjust = 1.1;
 	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 	Color[] colors = { new Color(255, 0, 0), new Color(255, 128, 0),
-			new Color(255, 225, 0), new Color(0, 225, 0), new Color(0, 255, 255),
-			new Color(255, 0, 255), new Color(0, 0, 255), new Color(76, 0, 153) };
+			new Color(255, 225, 0), new Color(0, 225, 0),
+			new Color(0, 255, 255), new Color(255, 0, 255),
+			new Color(0, 0, 255), new Color(76, 0, 153) };
 	int keyframeWidth = 600; // default frame width 1000
 	int keyframeHeight = keyframeWidth / 4; // default frame width 150
 	int pk_shape1[] = { 255, 254, 254, 254, 254, 254, 253, 253, 252, 251, 251,
@@ -58,6 +61,7 @@ public class Graph {
 	int max_x = 0;
 	double max_y = 0;
 	boolean gridEnable = true;
+
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
@@ -73,12 +77,12 @@ public class Graph {
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
-		
+
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
-		//filePanel.requestFocus();
+		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
 
 	}
@@ -115,19 +119,19 @@ public class Graph {
 			scaley = keyframeHeight / currentFrame.max_y;
 			dx = currentFrame.dx;
 			nx = currentFrame.nx;
-			spect = currentFrame.getSpect();
+			spect = currentFrame.spect_data;
 			bass_reduction = Frame.bass_reduction;
 
 		}
 
 		protected void paintComponent(Graphics g) {
-			int[][] peaks = currentFrame.getPeaks();
+			Peak_t[] peaks = currentFrame.peaks;
 			super.paintComponent(g);
 			int[] x = new int[3];
 			int[] y = { keyframeHeight, 0, keyframeHeight };
 			int[][] points = new int[9][4];
 			if (gridEnable) {
-				g.setColor(new Color(235, 235, 235)); // light gry
+				g.setColor(new Color(235, 235, 235)); // light gray
 				for (int j = 1; j < 18; j++) {
 					g.drawLine(j * keyframeWidth / 18, 0, j * keyframeWidth
 							/ 18, keyframeHeight);
@@ -135,13 +139,13 @@ public class Graph {
 			}
 			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
-					points[i][0] = (int) (peaks[i][0] * scalex); // peak x value
-					points[i][1] = -(peaks[i][1] >> 6) / 3 + keyframeHeight; // peak
+					points[i][0] = (int) (peaks[i].pkfreq * scalex); // peak x value
+					points[i][1] = -(peaks[i].pkheight >> 6) / 3 + keyframeHeight; // peak
 																				// y
 																				// value
-					points[i][2] = (int) (peaks[i][2] * scalex * 0.44); // left
+					points[i][2] = (int) (peaks[i].pkwidth * scalex * 0.44); // left
 																		// x
-					points[i][3] = (int) (peaks[i][3] * scalex * 0.44); // right
+					points[i][3] = (int) (peaks[i].pkright * scalex * 0.44); // right
 																		// x
 
 					if (y[1] < 5)
@@ -157,38 +161,38 @@ public class Graph {
 					g.fillPolygon(poly);
 					g.setColor(Color.RED);
 					g.drawPolygon(poly);
-
 				}
-				drawFormants(g);
-				drawPeaks(peaks, g);
-				// draws increments
+			}
+			drawFormants(g);
+			drawPeaks(peaks, g);
+			// draws increments
+			g.setColor(Color.BLACK);
+			g.setFont(new Font(g.getFont().getFontName(), g.getFont()
+					.getStyle(), keyframeHeight / 10 - 2));
+			g.drawString(((int) currentFrame.time) + " ms" + "  "
+					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
+					- keyframeWidth / 5, keyframeHeight / 5);
+			int rectPosY = keyframeHeight / 10;
+			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 
-				g.setColor(Color.BLACK);
-				g.setFont(new Font(g.getFont().getFontName(), g.getFont()
-						.getStyle(), keyframeHeight / 10 - 2));
-				g.drawString(((int) currentFrame.time) + " ms" + "  "
-						+ ((int) currentFrame.pitch) + " hz", keyframeWidth
-						- keyframeWidth / 5, keyframeHeight / 5);
-				int rectPosY = keyframeHeight / 10;
-				int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY-3;
-				
-				for (int j = 0; i < 8; i++) {
-					if (currentFrame.markers[i]) {
-						g.setColor(colors[i]);
-						g.fillRect(rectPosX, rectPosY, rectPosY,rectPosY);
-						// if zoom 
-						if((double)keyframeWidth/600>1.0){
-							g.setColor(Color.WHITE);
-							g.drawString(""+i, rectPosX+2, rectPosY+g.getFont().getSize()-2);
-						}
-						rectPosX -= rectPosY+3;
+			for (int j = 0; j < 8; j++) {
+				if ((currentFrame.primarkers & 1 >> j) ==1) {
+					g.setColor(colors[j]);
+					g.fillRect(rectPosX, rectPosY, rectPosY, rectPosY);
+					// if zoom
+					if ((double) keyframeWidth / 600 > 1.0) {
+						g.setColor(Color.WHITE);
+						g.drawString("" + j, rectPosX + 2, rectPosY
+								+ g.getFont().getSize() - 2);
 					}
+					rectPosX -= rectPosY + 3;
 				}
 			}
 		}
 
 		public void drawFormants(Graphics g) {
-			xinc = dx * scalex * 10; // FIXME This should work with just xinc = dx * scalex
+			xinc = dx * scalex * 10; // FIXME This should work with just xinc =
+										// dx * scalex
 			x0 = xinc;
 			x1 = nx * xinc;
 
@@ -208,7 +212,7 @@ public class Graph {
 
 		}
 
-		public void drawPeaks(int[][] peaks, Graphics g) {
+		public void drawPeaks(Peak_t[] peaks, Graphics g) {
 
 			int x1, x2, x3, width, ix;
 			int y1, y2;
@@ -218,7 +222,7 @@ public class Graph {
 			int pkright;
 			int pkwidth;
 			int[] buf = new int[4000];
-			double rms;
+//			double rms;
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
@@ -233,16 +237,16 @@ public class Graph {
 
 			for (peak = 0; peak < 9; peak++) {
 
-				if ((peaks[peak][0] == 0) || (peaks[peak][1] == 0))
+				if ((peaks[peak].pkfreq == 0) || (peaks[peak].pkheight == 0))
 					continue;
 
-				height = peaks[peak][1];
-				pkright = peaks[peak][2];
-				pkwidth = peaks[peak][3];
+				height = peaks[peak].pkheight;
+				pkright = peaks[peak].pkright;
+				pkwidth = peaks[peak].pkwidth;
 
-				x1 = (int) (peaks[peak][0] * scalex);
-				x2 = (int) ((peaks[peak][0] + pkright) * scalex);
-				x3 = (int) ((peaks[peak][0] - pkwidth) * scalex);
+				x1 = (int) (peaks[peak].pkfreq * scalex);
+				x2 = (int) ((peaks[peak].pkfreq + pkright) * scalex);
+				x3 = (int) ((peaks[peak].pkfreq - pkwidth) * scalex);
 
 				if (x3 >= keyframeWidth)
 					continue; // whole peak is off the scale
@@ -263,9 +267,9 @@ public class Graph {
 				}
 			}
 
-			rms = buf[0] >> 12;
-			rms = rms * rms * 23;
-			rms = rms * rms;
+//			rms = buf[0] >> 12;
+//			rms = rms * rms * 23;
+//			rms = rms * rms;
 
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
@@ -273,7 +277,7 @@ public class Graph {
 
 				yy = buf[ix] >> 12;
 				yy = yy * yy * 23;
-				rms += (yy * yy);
+//				rms += (yy * yy);
 
 				x2 = ix;
 				y2 = keyframeHeight - ((buf[ix] * keyframeHeight) >> 21);
@@ -284,7 +288,7 @@ public class Graph {
 				y1 = y2;
 			}
 
-			rms = Math.sqrt(rms) / 200000.0;
+//			rms = Math.sqrt(rms) / 200000.0;
 			// apply adjustment from spectseq amplitude
 			// rms = rms * seq_amplitude * currentFrame.amp_adjust / 10000.0;
 
@@ -344,28 +348,30 @@ public class Graph {
 		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,
 				Color.red));
 
-		int[][] peaks = frameToLoad.getPeaks();
+		Peak_t[] peaks = frameToLoad.peaks;
 		String value;
-
 		for (int i = 0; i < 7; i++) {
-			MainWindow.tfFreq.get(i).setText("" + peaks[i][0]);
+			System.out.println("peak["+i+"].pkfreq "+peaks[i].pkfreq);
+
+			MainWindow.tfFreq.get(i).setText("" + peaks[i].pkfreq);
+
 		}
 		for (int i = 0; i < 8; i++) {
-			MainWindow.tfHeight.get(i).setText("" + (peaks[i][1] >> 6));
+			MainWindow.tfHeight.get(i).setText("" + (peaks[i].pkheight >> 6));
 		}
 		for (int i = 0; i < 6; i++) {
-			value = (peaks[i][2] == peaks[i][3]) ? ("" + (peaks[i][2] / 2))
-					: ("" + (peaks[i][2] / 2) + "/" + (peaks[i][3] / 2));
+			value = (peaks[i].pkright == peaks[i].pkwidth) ? ("" + (peaks[i].pkright / 2))
+					: ("" + (peaks[i].pkright / 2) + "/" + (peaks[i].pkwidth / 2));
 			MainWindow.tfWidth.get(i).setText(value);
 		}
 		for (int i = 0; i < 3; i++) {
-			MainWindow.tfBw.get(i).setText("" + (peaks[i + 1][4]));
+			MainWindow.tfBw.get(i).setText("" + (peaks[i + 1].klt_bw));
 		}
 		for (int i = 0; i < 6; i++) {
-			MainWindow.tfAp.get(i).setText("" + (peaks[i][5]));
+			MainWindow.tfAp.get(i).setText("" + (peaks[i].klt_ap));
 		}
 		for (int i = 0; i < 6; i++) {
-			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1][6]));
+			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1].klt_bp));
 		}
 
 		// MainWindow.spampF.setValue(frameToLoad.amp_adjust);
@@ -419,9 +425,9 @@ public class Graph {
 
 			switch (ke.getKeyCode()) { // frequency ++
 			case KeyEvent.VK_RIGHT: {
-				frameToLoad.peaks[sel_peak][0] += x_incr;
-				if (frameToLoad.peaks[sel_peak][0] >= MAX_DISPLAY_FREQ) {
-					frameToLoad.peaks[sel_peak][0] = MAX_DISPLAY_FREQ;
+				frameToLoad.peaks[sel_peak].pkfreq += x_incr;
+				if (frameToLoad.peaks[sel_peak].pkfreq >= MAX_DISPLAY_FREQ) {
+					frameToLoad.peaks[sel_peak].pkfreq = MAX_DISPLAY_FREQ;
 				}
 				adjustPeaks(frameToLoad, sel_peak, 1);
 				loadFrame(curr);
@@ -430,9 +436,9 @@ public class Graph {
 				break;
 			}
 			case KeyEvent.VK_LEFT: { // frequency --
-				frameToLoad.peaks[sel_peak][0] -= x_incr;
-				if (frameToLoad.peaks[sel_peak][0] < 50) {
-					frameToLoad.peaks[sel_peak][0] = 50;
+				frameToLoad.peaks[sel_peak].pkfreq -= x_incr;
+				if (frameToLoad.peaks[sel_peak].pkfreq < 50) {
+					frameToLoad.peaks[sel_peak].pkfreq = 50;
 				}
 				adjustPeaks(frameToLoad, sel_peak, -1);
 				loadFrame(curr);
@@ -441,15 +447,15 @@ public class Graph {
 				break;
 			}
 			case KeyEvent.VK_UP: {// height ++
-				frameToLoad.peaks[sel_peak][1] += y_incr;
+				frameToLoad.peaks[sel_peak].pkheight += y_incr;
 				loadFrame(curr);
 				curr.validate();
 				curr.repaint();
 				break;
 			}
 			case KeyEvent.VK_DOWN: { // height --
-				if ((mapPanels.get(curr).peaks[sel_peak][0] - y_incr) >= 0) {
-					frameToLoad.peaks[sel_peak][1] -= y_incr;
+				if ((mapPanels.get(curr).peaks[sel_peak].pkfreq - y_incr) >= 0) {
+					frameToLoad.peaks[sel_peak].pkheight -= y_incr;
 					loadFrame(curr);
 					curr.validate();
 					curr.repaint();
@@ -457,15 +463,15 @@ public class Graph {
 				break;
 			}
 			case KeyEvent.VK_PERIOD: { // ++ witdth
-				if ((mapPanels.get(curr).peaks[sel_peak][0] - 5) < 0) {
-					frameToLoad.peaks[sel_peak][2] = 0;
+				if ((mapPanels.get(curr).peaks[sel_peak].pkfreq - 5) < 0) {
+					frameToLoad.peaks[sel_peak].pkright = 0;
 				} else {
 					if (control) {
-						frameToLoad.peaks[sel_peak][2] -= 5; // pkwidth
-						frameToLoad.peaks[sel_peak][3] += 5; // pkright
+						frameToLoad.peaks[sel_peak].pkright -= 5; // pkwidth
+						frameToLoad.peaks[sel_peak].pkwidth += 5; // pkright
 					} else {
-						frameToLoad.peaks[sel_peak][3] += 10;
-						frameToLoad.peaks[sel_peak][2] += 10;
+						frameToLoad.peaks[sel_peak].pkright += 10;
+						frameToLoad.peaks[sel_peak].pkwidth += 10;
 					}
 					loadFrame(curr);
 					curr.validate();
@@ -474,20 +480,20 @@ public class Graph {
 				break;
 			}
 			case KeyEvent.VK_COMMA: { // -- width
-				if ((mapPanels.get(curr).peaks[sel_peak][0] - 5) < 0) {
-					frameToLoad.peaks[sel_peak][2] = 0;
+				if ((mapPanels.get(curr).peaks[sel_peak].pkfreq - 5) < 0) {
+					frameToLoad.peaks[sel_peak].pkright = 0;
 				} else {
 					if (control) {
-						frameToLoad.peaks[sel_peak][2] += 5; // pkwidth
-						frameToLoad.peaks[sel_peak][3] -= 5; // pkright
+						frameToLoad.peaks[sel_peak].pkright += 5; // pkwidth
+						frameToLoad.peaks[sel_peak].pkwidth -= 5; // pkright
 					} else {
-						frameToLoad.peaks[sel_peak][3] -= 10;
-						frameToLoad.peaks[sel_peak][2] -= 10;
-						if (frameToLoad.peaks[sel_peak][3] < 0) {
-							frameToLoad.peaks[sel_peak][3] = 0;
+						frameToLoad.peaks[sel_peak].pkwidth -= 10;
+						frameToLoad.peaks[sel_peak].pkright -= 10;
+						if (frameToLoad.peaks[sel_peak].pkwidth < 0) {
+							frameToLoad.peaks[sel_peak].pkwidth = 0;
 						}
-						if (frameToLoad.peaks[sel_peak][2] < 0) {
-							frameToLoad.peaks[sel_peak][2] = 0;
+						if (frameToLoad.peaks[sel_peak].pkright < 0) {
+							frameToLoad.peaks[sel_peak].pkright = 0;
 						}
 					}
 					loadFrame(curr);
@@ -498,9 +504,9 @@ public class Graph {
 			}
 
 			case KeyEvent.VK_OPEN_BRACKET: { // width--
-				frameToLoad.peaks[sel_peak][3] -= 10;
-				if (frameToLoad.peaks[sel_peak][3] < 0) {
-					frameToLoad.peaks[sel_peak][3] = 0;
+				frameToLoad.peaks[sel_peak].pkwidth -= 10;
+				if (frameToLoad.peaks[sel_peak].pkwidth < 0) {
+					frameToLoad.peaks[sel_peak].pkwidth = 0;
 				}
 				loadFrame(curr);
 				curr.validate();
@@ -508,16 +514,16 @@ public class Graph {
 				break;
 			}
 			case KeyEvent.VK_CLOSE_BRACKET: { // width++
-				frameToLoad.peaks[sel_peak][3] += 10;
+				frameToLoad.peaks[sel_peak].pkwidth += 10;
 				loadFrame(curr);
 				curr.validate();
 				curr.repaint();
 				break;
 			}
 			case KeyEvent.VK_SLASH: { // make peak symetrical
-				int i = frameToLoad.peaks[sel_peak][2]
-						+ frameToLoad.peaks[sel_peak][3];
-				frameToLoad.peaks[sel_peak][2] = frameToLoad.peaks[sel_peak][3] = i / 2;
+				int i = frameToLoad.peaks[sel_peak].pkright
+						+ frameToLoad.peaks[sel_peak].pkwidth;
+				frameToLoad.peaks[sel_peak].pkright = frameToLoad.peaks[sel_peak].pkright = (short) (i / 2);
 				loadFrame(curr);
 				curr.validate();
 				curr.repaint();
@@ -626,7 +632,7 @@ public class Graph {
 				}
 				case KeyEvent.VK_Z: { // CTRL-Z
 					for (int i = 0; i < 8; i++) {
-						frameToLoad.peaks[i][1] = 0;
+						frameToLoad.peaks[i].pkheight = 0;
 						curr.repaint();
 						curr.revalidate();
 					}
@@ -664,7 +670,7 @@ public class Graph {
 					curr.revalidate();
 					break;
 				}
-				case KeyEvent.VK_G: { // CTRL-G  toggle grid
+				case KeyEvent.VK_G: { // CTRL-G toggle grid
 					if (gridEnable) {
 						gridEnable = false;
 					} else {
@@ -676,15 +682,17 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_N: { // CTRL-N, put in new marker
-					
-					String[] possibleValues = {"0","1","2","3","4","5","6","7"};
-					int inputValue = Integer.parseInt((String) JOptionPane.showInputDialog(null,
-							"Marker", "Toggle marker", JOptionPane.PLAIN_MESSAGE, null,possibleValues, possibleValues[0]));
-					if(mapPanels.get(curr).markers[inputValue]){
-						mapPanels.get(curr).markers[inputValue] = false;
-					}
-					else{
-						mapPanels.get(curr).markers[inputValue] = true;
+
+					String[] possibleValues = { "0", "1", "2", "3", "4", "5",
+							"6", "7" };
+					int inputValue = Integer.parseInt((String) JOptionPane
+							.showInputDialog(null, "Marker", "Toggle marker",
+									JOptionPane.PLAIN_MESSAGE, null,
+									possibleValues, possibleValues[0]));
+					if (mapPanels.get(curr).primarkers >> inputValue == 1) {
+						mapPanels.get(curr).primarkers -= 2^inputValue;
+					} else {
+						mapPanels.get(curr).primarkers += 2^inputValue;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -692,12 +700,11 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_M: { // CTRL-M
-					
-					if(mapPanels.get(curr).markers[0]){
-						mapPanels.get(curr).markers[0] = false;
-					}
-					else{
-						mapPanels.get(curr).markers[0] = true;
+
+					if (mapPanels.get(curr).primarkers>>1 == 1) {
+						mapPanels.get(curr).primarkers -= 1;
+					} else {
+						mapPanels.get(curr).primarkers += 1;
 					}
 					loadFrame(curr);
 					curr.repaint();
@@ -878,15 +885,15 @@ public class Graph {
 	public void adjustPeaks(Frame currentFrame, int curr_peak, int i) {
 		if (i < 0) {
 			for (int n = curr_peak - 1; n >= 0; n--) {
-				if (currentFrame.peaks[n][0] > currentFrame.peaks[n + 1][0] - 100) {
-					currentFrame.peaks[n][0] = currentFrame.peaks[n + 1][0] - 100;
+				if (currentFrame.peaks[n].pkfreq > currentFrame.peaks[n + 1].pkfreq - 100) {
+					currentFrame.peaks[n].pkfreq = (short) (currentFrame.peaks[n + 1].pkfreq - 100);
 				}
 			}
 		}
 		if (i > 0) {
 			for (int n = curr_peak + 1; n < 9; n++) {
-				if (currentFrame.peaks[n][0] < currentFrame.peaks[n - 1][0] + 100) {
-					currentFrame.peaks[n][0] = currentFrame.peaks[n - 1][0] + 100;
+				if (currentFrame.peaks[n].pkfreq < currentFrame.peaks[n - 1].pkfreq + 100) {
+					currentFrame.peaks[n].pkfreq = (short) (currentFrame.peaks[n - 1].pkfreq + 100);
 				}
 			}
 		}
@@ -899,10 +906,10 @@ public class Graph {
 				.showInputDialog("Input interpolation percentage!"));
 		ratio = (float) (inputValue / 100.0);
 		for (int n = 0; n < 9; n++) {
-			curr.peaks[n][0] += ((next.peaks[n][0] - prev.peaks[n][0]) * ratio);
-			curr.peaks[n][1] += ((next.peaks[n][1] - prev.peaks[n][1]) * ratio);
-			curr.peaks[n][2] += ((next.peaks[n][2] - prev.peaks[n][2]) * ratio);
-			curr.peaks[n][3] += ((next.peaks[n][3] - prev.peaks[n][3]) * ratio);
+			curr.peaks[n].pkfreq += ((next.peaks[n].pkfreq - prev.peaks[n].pkfreq) * ratio);
+			curr.peaks[n].pkheight += ((next.peaks[n].pkheight - prev.peaks[n].pkheight) * ratio);
+			curr.peaks[n].pkright += ((next.peaks[n].pkright - prev.peaks[n].pkright) * ratio);
+			curr.peaks[n].pkwidth += ((next.peaks[n].pkwidth - prev.peaks[n].pkwidth) * ratio);
 		}
 	}
 

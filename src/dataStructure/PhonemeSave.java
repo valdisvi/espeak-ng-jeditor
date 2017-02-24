@@ -103,41 +103,41 @@ public class PhonemeSave {
 			for (int i = 0; i < 9; i++) {
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.formants[i][0]).array();
+						.putShort((short) frame.formants[i].freq).array();
 				dos.write(temp);
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.formants[i][1]).array();
+						.putShort((short) frame.formants[i].bandw).array();
 				dos.write(temp);
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.peaks[i][0]).array();
+						.putShort((short) frame.peaks[i].pkfreq).array();
 				dos.write(temp);
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.peaks[i][1]).array();
+						.putShort((short) frame.peaks[i].pkheight).array();
 				dos.write(temp);
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.peaks[i][2]).array();
+						.putShort((short) frame.peaks[i].pkright).array();
 				dos.write(temp);
 
 
 				temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-						.putShort((short) frame.peaks[i][3]).array();
+						.putShort((short) frame.peaks[i].pkwidth).array();
 				dos.write(temp);
 
 				if (file_format == 2) {
 					temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-							.putShort((short) frame.peaks[i][4]).array();
+							.putShort((short) frame.peaks[i].klt_bw).array();
 					dos.write(temp);
 					
 					temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-							.putShort((short) frame.peaks[i][5]).array();
+							.putShort((short) frame.peaks[i].klt_ap).array();
 					dos.write(temp);
 
 					temp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-							.putShort((short) frame.peaks[i][6]).array();
+							.putShort((short) frame.peaks[i].klt_bp).array();
 					dos.write(temp);
 				}
 			}

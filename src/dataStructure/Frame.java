@@ -2,6 +2,10 @@ package dataStructure;
 
 
 import java.io.ByteArrayInputStream;
+
+import dataStructure.eSpeakStructure.Formant_t;
+import dataStructure.eSpeakStructure.Peak_t;
+import dataStructure.eSpeakStructure.SpectFrame;
 import dataStructure.eSpeakStructure.SpectSeq;
 
 public class Frame {
@@ -10,17 +14,21 @@ public class Frame {
 	public double length;
 	public double dx;
 	public int nx;
-	boolean[] markers = new boolean[] { false, false, false, false, false,
-			false, false, false };
+//	boolean[] markers = new boolean[] { false, false, false, false, false,
+//			false, false, false };
+
 	public int primarkers;
 	public int amp_adjust;
 	// [][0] freq [][1] bandw
-	public int[][] formants;
-	// [][0]pkfreq [][1]pkheight [][2]pkwidth [][3]pkright [][4]klt_bw
+//	public int[][] formants;
+	public Formant_t[] formants;
+	// [][0]pkfreq [][1]pkheight [][2]pkright [][3]pkwidth [][4]klt_bw
 	// [][5]klt_ap [][6]klt_bp
-	public int[][] peaks;
+//	public int[][] peaks;
+	public Peak_t[] peaks;
+
 	// Not used in SPECTSEQ
-	public int[] klatt_param;
+	public short[] klatt_param;
 	public int[] spect_data;
 	double max_y = 0;
 	int max_x = 3000;
@@ -30,7 +38,43 @@ public class Frame {
 	static int default_klt_bw[] = { 89, 90, 140, 260, 260, 260, 500, 500, 500 };
 	public boolean selected = false;
 	public static boolean bass_reduction = false;
-	public void frameLoader(ByteArrayInputStream inRead, int file_format) {
+	public void frameLoader(SpectFrame frames, int file_format) {
+		time = frames.time;
+		System.out.println("time "+time);
+		pitch = frames.pitch;
+		System.out.println("pitch "+pitch);
+
+		length = frames.length;
+		System.out.println("length "+length);
+		dx = frames.dx;
+		System.out.println("dx "+dx);
+		nx = frames.nx;
+		System.out.println("nx "+nx);
+		primarkers = frames.markers;
+		System.out.println("primarkers "+primarkers);
+		formants = frames.formants;
+		System.out.println("formants "+formants);
+		peaks = frames.peaks;
+		for(Peak_t peak : peaks){
+			System.out.println("peak.pkfreq "+peak.pkfreq);
+
+		}
+		klatt_param = frames.klaat_param;
+		System.out.println("klatt_param "+klatt_param);
+		spect_data = frames.spect;
+		System.out.println("spect_data "+spect_data);
+		max_y = frames.max_y;
+		System.out.println("max_y "+max_y);
+		for (int i = 0; i < nx; i++) {
+			if (spect_data[i] > max_y)
+				max_y = spect_data[i];
+			if (nx * dx > max_x)
+				max_x = (int) (nx * dx);
+		}
+		System.out.println("max_x "+max_x);
+		
+	}
+	/*	public void frameLoader(ByteArrayInputStream inRead, int file_format) {
 
 
 		formants = new int[9][2];
@@ -144,16 +188,16 @@ public class Frame {
 
 	}
 
-	public int[][] getPeaks() {
+	public Peak_t[] getPeaks() {
 		return peaks;
 	}
 
-	public int[][] getFormants() {
+	public Formant_t[] getFormants() {
 		return formants;
 	}
 
 	public int[] getSpect() {
 		return spect_data;
 	}
-
+*/
 }
