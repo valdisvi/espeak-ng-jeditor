@@ -73,7 +73,7 @@ Once it is installed make bash file outside espeak-ng directory which includes f
 ```
 then execute bash script
 
-### *REMEMBER TO CHANGE*  `   cd /home/your-folder/your-workspace/espeak-ng `  *TO YOUR PATH *
+### *REMEMBER TO CHANGE*  `   cd /home/your-folder/your-workspace/espeak-ng `  *TO YOUR PATH*
 
 Now you should be able to use it
 
