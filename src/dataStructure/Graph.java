@@ -172,7 +172,7 @@ public class Graph {
 			g.setColor(Color.BLACK);
 			g.setFont(new Font(g.getFont().getFontName(), g.getFont()
 					.getStyle(), keyframeHeight / 10 - 2));
-			g.drawString(((int) currentFrame.time) + " ms" + "  "
+			g.drawString(((int) (currentFrame.time * 1000)) + " ms" + "  "
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
 			// before this rms needs to be calculated

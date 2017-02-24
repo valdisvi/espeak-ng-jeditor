@@ -88,7 +88,7 @@ public class Phoneme {
 			Frame newFrame = new Frame();
 			// Call SPECTSEQ type load
 			if ((file_format == 0) || (file_format == 1) || (file_format == 2)) {
-				newFrame.frameLoader(spect.frames[i], file_format, max_y);
+				newFrame.frameLoader(spect.frames[i], file_format, max_y, amplitude);
 			}
 			frameList.add(newFrame);
 		}
