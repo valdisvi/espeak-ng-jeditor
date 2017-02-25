@@ -1,5 +1,5 @@
-#eSpeak-ng-jeditor
-##This is an attempt to re-do the espeak-edit project on Java.
+#eSpeak NG Java Editor
+##This is an espeak-edit project rewritten in Java.
 
 ##At the moment these things are implemented:
 
