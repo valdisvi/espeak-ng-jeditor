@@ -1,3 +1,5 @@
 bin/**
-*.orig
 *.class
+*.o
+*.orig
+*.so
