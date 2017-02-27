@@ -17,7 +17,7 @@ public class ESpeakServiceTest {
 	@Test
 	public void testGetSpectSeq() {
 		SpectSeq s = new SpectSeq();
-		ESpeakService.nativeGetSpectSeq(s, "phsource/b/b");
+		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/b/b");
 		System.out.println(s.name + ":" + s.amplitude);
 	}
 
