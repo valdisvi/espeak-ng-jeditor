@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.espeakng.jeditor.data.PhonemeLoad;
+
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
-import dataStructure.PhonemeLoad;
 
 //FIXME try extending MainWindow class, should shorten the amount of code
 public class EventHandlers {

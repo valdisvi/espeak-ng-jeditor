@@ -1,4 +1,4 @@
-package dataStructure;
+package org.espeakng.jeditor.data;
 
 import org.espeakng.jeditor.jni.Formant_t;
 import org.espeakng.jeditor.jni.Peak_t;

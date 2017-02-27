@@ -7,9 +7,7 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-
-
-import dataStructure.PhonemeLoad;
+import org.espeakng.jeditor.data.PhonemeLoad;
 
 public class MainWindow extends JFrame {
 

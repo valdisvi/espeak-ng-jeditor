@@ -1,4 +1,4 @@
-package dataStructure;
+package org.espeakng.jeditor.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
