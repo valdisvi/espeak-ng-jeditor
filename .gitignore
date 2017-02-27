@@ -1,4 +1,8 @@
 bin/**
+target/**
+.settings
+.classpath
+.project
 *.class
 *.o
 *.orig
