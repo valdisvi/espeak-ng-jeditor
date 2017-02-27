@@ -21,9 +21,4 @@ public class ESpeakService {
 	// TODO implement this in jni/src/eSpeakService.c
 	public static native String nativeTextToPhonemes(String textToTranslate);
 
-	//for testing
-	public static void main(String[] args) {
-		System.out.println(nativeGetEspeakNgVersion());
-
-	}
 }
