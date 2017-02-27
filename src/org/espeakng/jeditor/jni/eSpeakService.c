@@ -33,14 +33,15 @@
 #include <src/libespeak-ng/synthesize.h>
 #include <src/libespeak-ng/spect.h>
 
-#include "../include/eSpeakServices_ESpeakService.h"
+//#include "src/org/espeakng/jeditor/jni/org_espeakng_jeditor_jni_ESpeakService.h"
+#include "org_espeakng_jeditor_jni_ESpeakService.h"
 
 /*
- * Class:     eSpeakServices_ESpeakService
+ * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeGetEspeakNgVersion
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVersion
+JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetEspeakNgVersion
   (JNIEnv * env, jclass clazz){
 	/* if function is static then jobject points to class rather than object */
 
@@ -51,11 +52,11 @@ JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeGetEspeakNgVer
 }
 
 /*
- * Class:     eSpeakServices_ESpeakService
+ * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeGetSpectSeq
- * Signature: (LdataStructure/eSpeakStructure/SpectSeq;Ljava/lang/String;)I
+ * Signature: (Lorg/espeakng/jeditor/jni/SpectSeq;Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
+JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpectSeq
   (JNIEnv * env, jclass clazz, jobject jSpect, jstring jFileName){
 
 	SpectSeq *spect = SpectSeqCreate();
@@ -97,7 +98,7 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 	// as this is array of quite complex objects, creating them is not so straightforward
 
 	// get pointer to SpectFrame class
-	jclass jSpectFrameClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/SpectFrame");
+	jclass jSpectFrameClass = (*env)->FindClass(env, "org/espeakng/jeditor/jni/SpectFrame");
 
 	// create array to store frames (afterwards it will be attached to jSpect object field "frames")
 	jobjectArray jFrames = (*env)->NewObjectArray(env, spect->numframes, jSpectFrameClass, NULL);
@@ -188,7 +189,7 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 
 		//set Formant_t[] formants;
 
-		jclass jFormant_tClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/Formant_t");
+		jclass jFormant_tClass = (*env)->FindClass(env, "org/espeakng/jeditor/jni/Formant_t");
 		jmethodID constrFormant = (*env)->GetMethodID(env, jFormant_tClass, "<init>", "(SS)V");
 		jobject jFormant;
 
@@ -205,13 +206,13 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 			(*env)->SetObjectArrayElement( env, jFormantArray, j, jFormant);
 		}
 		// set formants
-		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "formants", "[LdataStructure/eSpeakStructure/Formant_t;"); // Ljava/lang/String; for String
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "formants", "[Lorg/espeakng/jeditor/jni/Formant_t;"); // Ljava/lang/String; for String
 		(*env)->SetObjectField(env, jSpectFrame, fieldID, jFormantArray);
 
 
 		//public Peak_t[] peaks;
 
-		jclass jPeak_tClass = (*env)->FindClass(env, "dataStructure/eSpeakStructure/Peak_t");
+		jclass jPeak_tClass = (*env)->FindClass(env, "org/espeakng/jeditor/jni/Peak_t");
 		jmethodID constrPeak = (*env)->GetMethodID(env, jPeak_tClass, "<init>", "(SSSSSSS)V");
 		jobject jPeak;
 
@@ -233,7 +234,7 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 			(*env)->SetObjectArrayElement( env, jPeakArray, j, jPeak);
 		}
 		// set formants
-		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "peaks", "[LdataStructure/eSpeakStructure/Peak_t;"); // Ljava/lang/String; for String
+		fieldID = (*env)->GetFieldID(env, jSpectFrameClass, "peaks", "[Lorg/espeakng/jeditor/jni/Peak_t;"); // Ljava/lang/String; for String
 		(*env)->SetObjectField(env, jSpectFrame, fieldID, jPeakArray);
 
 
@@ -242,7 +243,7 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 
 	}
 	// set frames
-	fieldID = (*env)->GetFieldID(env, jSpectClass, "frames", "[LdataStructure/eSpeakStructure/SpectFrame;"); // Ljava/lang/String; for String
+	fieldID = (*env)->GetFieldID(env, jSpectClass, "frames", "[Lorg/espeakng/jeditor/jni/SpectFrame;"); // Ljava/lang/String; for String
 	(*env)->SetObjectField(env, jSpect, fieldID, jFrames);
 
 	// set PitchEnvelope pitchenv;
@@ -277,11 +278,11 @@ JNIEXPORT jint JNICALL Java_eSpeakServices_ESpeakService_nativeGetSpectSeq
 };
 
 /*
- * Class:     eSpeakServices_ESpeakService
+ * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeTextToPhonemes
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_eSpeakServices_ESpeakService_nativeTextToPhonemes
+JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeTextToPhonemes
   (JNIEnv * env, jclass clazz, jstring jTextToTranslate){
 
 	jstring newString = (*env)->NewStringUTF(env, "Sorry, not implemented");

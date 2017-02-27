@@ -1,4 +1,4 @@
-package dataStructure.eSpeakStructure;
+package org.espeakng.jeditor.jni;
 
 /*	C structure:
  * 

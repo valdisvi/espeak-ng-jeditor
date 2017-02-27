@@ -1,4 +1,4 @@
-package dataStructure.eSpeakStructure;
+package org.espeakng.jeditor.jni;
 
 	/*	Java class for eSpeak-ng synthesize.h
 	 */

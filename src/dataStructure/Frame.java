@@ -1,11 +1,8 @@
 package dataStructure;
 
-import java.io.ByteArrayInputStream;
-
-import dataStructure.eSpeakStructure.Formant_t;
-import dataStructure.eSpeakStructure.Peak_t;
-import dataStructure.eSpeakStructure.SpectFrame;
-import dataStructure.eSpeakStructure.SpectSeq;
+import org.espeakng.jeditor.jni.Formant_t;
+import org.espeakng.jeditor.jni.Peak_t;
+import org.espeakng.jeditor.jni.SpectFrame;
 
 public class Frame {
 	public double time;

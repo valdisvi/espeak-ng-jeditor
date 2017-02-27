@@ -23,9 +23,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
-
-import dataStructure.eSpeakStructure.Formant_t;
-import dataStructure.eSpeakStructure.Peak_t;
+import org.espeakng.jeditor.jni.Formant_t;
+import org.espeakng.jeditor.jni.Peak_t;
 
 public class Graph {
 

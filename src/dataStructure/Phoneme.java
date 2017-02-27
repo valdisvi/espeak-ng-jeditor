@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import dataStructure.eSpeakStructure.SpectSeq;
-
-import eSpeakServices.ESpeakService;
+import org.espeakng.jeditor.jni.ESpeakService;
+import org.espeakng.jeditor.jni.SpectSeq;
 
 public class Phoneme {
 	SpectSeq spect = new SpectSeq();
