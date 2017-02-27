@@ -1,7 +1,5 @@
 package dataStructure;
 
-import interfacePckg.MainWindow;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -23,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
+
+import org.espeakng.jeditor.gui.MainWindow;
 
 import dataStructure.eSpeakStructure.Formant_t;
 import dataStructure.eSpeakStructure.Peak_t;

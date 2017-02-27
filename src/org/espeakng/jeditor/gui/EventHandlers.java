@@ -1,4 +1,4 @@
-package interfacePckg;
+package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

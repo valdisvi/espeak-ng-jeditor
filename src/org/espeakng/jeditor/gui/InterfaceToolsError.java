@@ -1,14 +1,17 @@
-package interfacePckg;
+package org.espeakng.jeditor.gui;
 
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class InterfaceCompileError {
+import javax.swing.SwingConstants;
+
+public class InterfaceToolsError {
 
 	private JFrame frmEspeakeditorError;
 
@@ -19,7 +22,7 @@ public class InterfaceCompileError {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfaceCompileError window = new InterfaceCompileError();
+					InterfaceToolsError window = new InterfaceToolsError();
 					window.frmEspeakeditorError.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,7 +34,7 @@ public class InterfaceCompileError {
 	/**
 	 * Create the application.
 	 */
-	public InterfaceCompileError() {
+	public InterfaceToolsError() {
 		initialize();
 	}
 
@@ -40,13 +43,13 @@ public class InterfaceCompileError {
 	 */
 	private void initialize() {
 		frmEspeakeditorError = new JFrame();
-		frmEspeakeditorError.setTitle("Espeakeditor Error");
-		frmEspeakeditorError.setBounds(100, 100, 170, 124);
+		frmEspeakeditorError.setTitle("Espeakeditor error");
+		frmEspeakeditorError.setBounds(100, 100, 310, 147);
 		frmEspeakeditorError.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmEspeakeditorError.getContentPane().setLayout(null);
 		
 		JButton btnNewButton = new JButton("OK");
-		btnNewButton.setBounds(63, 57, 85, 25);
+		btnNewButton.setBounds(203, 80, 80, 25);
 		btnNewButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
@@ -55,8 +58,10 @@ public class InterfaceCompileError {
 		});
 		frmEspeakeditorError.getContentPane().add(btnNewButton);
 		
-		JLabel lblNewLabel = new JLabel("Can't read:");
-		lblNewLabel.setBounds(70, 10, 80, 20);
+		JLabel lblNewLabel = new JLabel("Can't read compile_prog_log;");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblNewLabel.setBounds(62, 12, 234, 38);
 		frmEspeakeditorError.getContentPane().add(lblNewLabel);
 	}
 

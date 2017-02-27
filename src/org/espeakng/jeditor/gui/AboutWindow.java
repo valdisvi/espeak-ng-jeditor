@@ -1,4 +1,4 @@
-package interfacePckg;
+package org.espeakng.jeditor.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

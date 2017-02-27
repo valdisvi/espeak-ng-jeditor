@@ -1,11 +1,11 @@
 package dataStructure;
 
-import interfacePckg.MainWindow;
-
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
+
+import org.espeakng.jeditor.gui.MainWindow;
 
 public class PhonemeLoad {
 	private static ArrayList <Phoneme> phonemeList;

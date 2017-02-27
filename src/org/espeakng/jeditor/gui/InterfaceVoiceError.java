@@ -1,4 +1,4 @@
-package interfacePckg;
+package org.espeakng.jeditor.gui;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;

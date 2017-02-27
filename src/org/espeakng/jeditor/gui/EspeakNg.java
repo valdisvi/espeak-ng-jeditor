@@ -1,4 +1,4 @@
-package interfacePckg;
+package org.espeakng.jeditor.gui;
 
 import java.io.BufferedReader;
 import java.io.File;
