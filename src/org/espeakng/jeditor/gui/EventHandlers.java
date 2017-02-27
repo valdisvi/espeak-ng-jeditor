@@ -46,11 +46,11 @@ public class EventHandlers {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
-				Language.initLanguage(new File("./languages/english.txt"), mainW);
+				Language.initLanguage(new File("./src/resources/english.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmLatvian) {
-				Language.initLanguage(new File("./languages/latvian.txt"), mainW);
+				Language.initLanguage(new File("./src/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
-				Language.initLanguage(new File("./languages/russian.txt"), mainW);
+				Language.initLanguage(new File("./src/resources/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
