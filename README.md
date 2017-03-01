@@ -1,6 +1,14 @@
 # eSpeak NG Java Editor
 __This is an eSpeakNG Editor rewritten in Java.__
 
+* [Building](#building)
+  * [espeak-ng](#espeak-ng)
+  * [espeak-ng-jeditor](#espeak-ng-jeditor)
+* [Running](#running)
+* [Documentation](#documentation)
+* [Licence](#licence)
+* [TODOs](#todos)
+
 ![Screenshot](/docs/images/screenshot.png)
 
 This editor is not production ready yet!
@@ -42,6 +50,11 @@ To rebuild Java classes, run Maven task:
 ```
 mvn compile
 ```
+
+## Running
+* In IDE: select **MainWindow.java** class in **org.espeakng.jeditor.gui** package and run it as Java application.
+* In terminal ececute command: `java -cp target/classes org.espeakng.jeditor.gui.MainWindow`
+
 ## Documentation
 
 * [General Editor info](docs/editor.md)
@@ -58,6 +71,7 @@ This software is licenced under [GNU Lesser General Public License](https://spdx
 - [ ] implement JNI to espeak-ng API to translate text and show speech intonation
 - [ ] Set up `pom.xml` file for Maven to allow building single, executable *.jar file with included *.so (shared library) file.
 - [ ] Improve support for different GUI languages using Java *.properties files
+- [ ] Improved coverage of automated unit tests
 
 **Editor GUI**
 
