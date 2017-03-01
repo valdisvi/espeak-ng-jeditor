@@ -5,7 +5,39 @@
 USER INTERFACE - FORMANT EDITOR
 -------------------------------
 
-------------------------------------------------------------------------
+##Working button shortcuts for eSpeakNG Java Editor
+
+- **0-8** select peaks in keyframe
+- **UP-arrowkey** - increase peaks height
+- **DOWN-arrowkey** - decrease peaks height
+- **LEFT-arrowkey** - increase peaks frequency
+- **RIGHT-arrowkey** - decrease peaks frequency
+- **[** - decrease peaks width from left side 
+- **]** - increase peaks width from left side 
+- **<** - decrease peaks width
+- **>** - increase peaks width
+- **/** - make selected peak symetrical
+- **X** - select next peak
+- **Z** - select previous peak
+- **PageUp** - select previous keyframe
+- **PageDown** - select next keyframe
+
+- **CTRL-A** - select all keyframes
+- **CTRL-B** - toggle bass reduction
+- **CTRL-C** - copy selected keyframes
+- **CTRL-G** - toggle grid
+- **CTRL-I** - interpolate adjacent keyframes
+- **CTRL-N** - add new marker
+- **CTRL-M** - toggle first marker
+- **CTRL-V** - paste copied keyframes
+- **CTRL-Z** - zero all peaks in selected keyframe
+
+- **CTRL-C** - copy selected keyframes
+- **CTRL-N** - add new marker
+- **CTRL-M** - toggle first marker
+- **CTRL-SHIFT-V** - paste copied keyframes after existing keyframes
+- **CTRL-Z** - zero all peaks in selected keyframe
+
 
 ### Frame Sequence Display
 
