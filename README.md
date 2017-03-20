@@ -15,7 +15,7 @@ This editor is not production ready yet!
 For latest development news look at [commits](https://github.com/valdisvi/espeak-ng-jeditor/commits/master) and [changelog](CHANGELOG.md). 
 For production purposes you can use older snapshot of [espeak-ng-editor](https://github.com/valdisvi/espeak-ng-espeakedit)!
 
-##Building
+## Building
 
 ### espeak-ng
 _eSpeakNG Java Editor relies on libraries of eSpeakNG, which have to be recompiled with custom settings._
@@ -80,5 +80,6 @@ This software is licenced under [GNU Lesser General Public License](https://spdx
 - [ ] Implement "Amplitude frame" in bottom left corner
 - [ ] Implement scrollbar for list of phoneme frames
 - [ ] Implement listeners for all menu items and all buttons
+- [ ] Implement exporting of phoneme graphs
 - [ ] Make Fourier in text panel
 
