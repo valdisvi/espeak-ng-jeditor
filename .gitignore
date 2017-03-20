@@ -4,6 +4,4 @@ target/**
 .classpath
 .project
 *.class
-*.o
 *.orig
-*.so
