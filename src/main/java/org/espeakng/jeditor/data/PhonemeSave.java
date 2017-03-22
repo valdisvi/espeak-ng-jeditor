@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class PhonemeSave {
 	//TODO implement calling of this method on File->Save and File->Save as buttons
-	//TODO implement saving of SPECSPC2 phonemes (currently should work for SPECTSEQ, SPETSEK and SPECTSQ2)
 	public static void saveToDirectory(Phoneme phoneme, File file) {
 		byte[] temp;
 		try {
@@ -161,6 +160,6 @@ public class PhonemeSave {
 	}
 
 	public static void saveToCustomDirectory(Phoneme phoneme, Path path) {
-
+		
 	}
 }

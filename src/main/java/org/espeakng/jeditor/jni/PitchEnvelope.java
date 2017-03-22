@@ -11,5 +11,5 @@ package org.espeakng.jeditor.jni;
 public class PitchEnvelope{
 	public int pitch1;  // to be on safe side use int for unsigned short
 	public int pitch2;	
-	public short[] env = new short[128];	
+	public short[] env = new short[128];
 }
