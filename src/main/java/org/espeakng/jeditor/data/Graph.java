@@ -1,7 +1,6 @@
 package org.espeakng.jeditor.data;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -25,27 +24,13 @@ import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
 import org.espeakng.jeditor.jni.Formant_t;
-import org.espeakng.jeditor.jni.Peak_t;
+import org.espeakng.jeditor.jni.Peak_t;import javax.swing.JScrollBar;
+import java.awt.Scrollbar;
 import org.espeakng.jeditor.jni.Wavegen_peaks_t;
 
 public class Graph {
-	
-	
+
 	static int harm_sqrt_n = 0;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	private JTabbedPane tabbedPaneGraphs;
 	private JScrollPane filePanel;
@@ -86,6 +71,12 @@ public class Graph {
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
 		filePanel = new JScrollPane();
+		filePanel.setAutoscrolls(true);
+		filePanel
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		filePanel
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		filePanel.setLayout(null);
 
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
@@ -95,28 +86,12 @@ public class Graph {
 
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
+		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	class Draw extends JPanel {
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		public Frame currentFrame;
 		int frame_width;
 		double scalex;
@@ -204,8 +179,8 @@ public class Graph {
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
 			// before this rms needs to be calculated
-			// g.drawString(currentFrame.rms+" rms", keyframeWidth
-			// - keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
+			//g.drawString(currentFrame.rms+" rms", keyframeWidth
+					//- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 
@@ -264,188 +239,7 @@ public class Graph {
 			}
 
 		}
-		
-		
-		
-		
-		
-	/*	
-		
-		
-		public double getRms(int seqAmplitude){
-			double rms;
-			int h;
-			float total=0;
-			int maxh;
-			int height;
-			int[] htab = new int[400];
-			Wavegen_peaks_t[] wpeaks = new Wavegen_peaks_t[9];
 
-			for(h=0; h<9; h++)
-			{
-				height = (currentFrame.peaks[h].pkheight * seqAmplitude * currentFrame.amp_adjust)/10000;
-				wpeaks[h].height = height << 8;
-
-				wpeaks[h].freq = currentFrame.peaks[h].pkfreq << 16;
-				wpeaks[h].left = currentFrame.peaks[h].pkwidth << 16;
-				wpeaks[h].right = currentFrame.peaks[h].pkright << 16;
-			}
-			
-			maxh = PeaksToHarmspect(wpeaks,90<<16,htab,0);
-			for(h=1; h<maxh; h++)
-			{
-				total += ((htab[h] * htab[h]) >> 10);
-			}
-			rms = Math.sqrt(total) / 7.25;
-//			DrawPeaks(NULL,0,0,amp);
-		return(rms);
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-		int PeaksToHarmspect(Wavegen_peaks_t[] peaks, int pitch, int[] htab, int control)
-		{//============================================================================
-		// Calculate the amplitude of each  harmonics from the formants
-		// Only for formants 0 to 5
-
-		// control 0=initial call, 1=every 64 cycles
-
-		   // pitch and freqs are Hz<<16
-
-			int f;
-			Wavegen_peaks_t p;
-			int fp;   // centre freq of peak
-			int fhi;  // high freq of peak
-			int h;    // harmonic number
-			int pk;
-			int hmax;
-			int hmax_samplerate;      // highest harmonic allowed for the samplerate
-			int x;
-			int ix;
-			int h1;
-
-
-			if(harm_sqrt_n > 0)
-				return(HarmToHarmspect(pitch,htab));
-
-
-			// initialise as much of *out as we will need
-			if(wvoice == NULL)
-				return(1);
-			hmax = (peaks[wvoice->n_harmonic_peaks].freq + peaks[wvoice->n_harmonic_peaks].right)/pitch;
-			if(hmax >= MAX_HARMONIC)
-				hmax = MAX_HARMONIC-1;
-			
-			// restrict highest harmonic to half the samplerate
-			hmax_samplerate = (((samplerate * 19)/40) << 16)/pitch;   // only 95% of Nyquist freq
-//			hmax_samplerate = (samplerate << 16)/(pitch*2);
-
-			if(hmax > hmax_samplerate)
-				hmax = hmax_samplerate;
-
-			for(h=0;h<=hmax;h++)
-				htab[h]=0;
-
-			h=0;
-			for(pk=0; pk<=wvoice->n_harmonic_peaks; pk++)
-			{
-				p = &peaks[pk];
-				if((p->height == 0) || (fp = p->freq)==0)
-					continue;
-
-				fhi = p->freq + p->right;
-				h = ((p->freq - p->left) / pitch) + 1;
-				if(h <= 0) h = 1;
-
-				for(f=pitch*h; f < fp; f+=pitch)
-				{
-					htab[h++] += pk_shape[(fp-f)/(p->left>>8)] * p->height;
-				}
-				for(; f < fhi; f+=pitch)
-				{
-					htab[h++] += pk_shape[(f-fp)/(p->right>>8)] * p->height;
-				}
-			}
-
-		{
-		int y;
-		int h2;
-			// increase bass
-			y = peaks[1].height * 10;   // addition as a multiple of 1/256s
-			h2 = (1000<<16)/pitch;       // decrease until 1000Hz
-			if(h2 > 0)
-			{
-				x = y/h2;
-				h = 1;
-				while(y > 0)
-				{
-					htab[h++] += y;
-					y -= x;
-				}
-			}
-		}
-
-			// find the nearest harmonic for HF peaks where we don't use shape
-			for(; pk<N_PEAKS; pk++)
-			{
-				x = peaks[pk].height >> 14;
-				peak_height[pk] = (x * x * 5)/2;
-
-				// find the nearest harmonic for HF peaks where we don't use shape
-				if(control == 0)
-				{
-					// set this initially, but make changes only at the quiet point
-					peak_harmonic[pk] = peaks[pk].freq / pitch;
-				}
-				// only use harmonics up to half the samplerate
-				if(peak_harmonic[pk] >= hmax_samplerate)
-					peak_height[pk] = 0;
-			}
-
-			// convert from the square-rooted values
-			f = 0;
-			for(h=0; h<=hmax; h++, f+=pitch)
-			{
-				x = htab[h] >> 15;
-				htab[h] = (x * x) >> 8;
-
-				if((ix = (f >> 19)) < N_TONE_ADJUST)
-				{
-					htab[h] = (htab[h] * wvoice->tone_adjust[ix]) >> 13;  // index tone_adjust with Hz/8
-				}
-			}
-
-			// adjust the amplitude of the first harmonic, affects tonal quality
-			h1 = htab[1] * option_harmonic1;
-			htab[1] = h1/8;
-
-
-			// calc intermediate increments of LF harmonics
-			if(control & 1)
-			{
-				for(h=1; h<N_LOWHARM; h++)
-				{
-					harm_inc[h] = (htab[h] - harmspect[h]) >> 3;
-				}
-			}
-
-			return(hmax);  // highest harmonic number
-		} 
-		
-		
-		
-		
-		*/
-		
-		
-		
-		
-		
 		public void drawPeaks(Peak_t[] peaks, Graphics g) {
 
 			int x1, x2, x3, width, ix;
@@ -456,6 +250,7 @@ public class Graph {
 			int pkright;
 			int pkwidth;
 			int[] buf = new int[4000];
+			// double rms;
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
@@ -605,14 +400,14 @@ public class Graph {
 			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1].klt_bp));
 		}
 
-		MainWindow.tfmS
-				.setText(String.valueOf((int) (frameToLoad.time * 1000)));
+		MainWindow.tfmS.setText(String.valueOf((int)(frameToLoad.time*1000)));
 		MainWindow.spampF.setValue(frameToLoad.amp_adjust);
 
 	}
 
 	KeyListener keyListener = new KeyListener() {
 
+		@Override
 		public void keyPressed(KeyEvent ke) {
 			int x_incr = 0;
 			int y_incr = 0;
@@ -988,9 +783,11 @@ public class Graph {
 			}
 		}
 
+		@Override
 		public void keyReleased(KeyEvent ke) {
 		}
 
+		@Override
 		public void keyTyped(KeyEvent ke) {
 		}
 
@@ -1000,7 +797,6 @@ public class Graph {
 			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
-		filePanel2.setPreferredSize(new Dimension(0, 165 * frames.size()));         // PANEL RESIZING DEPENDING ON GRAPH COUNT
 
 		int y = 25;
 		if (!frames.isEmpty()) {
@@ -1080,15 +876,19 @@ public class Graph {
 						}
 					}
 
+					@Override
 					public void mouseEntered(MouseEvent arg0) {
 					}
 
+					@Override
 					public void mouseExited(MouseEvent arg0) {
 					}
 
+					@Override
 					public void mousePressed(MouseEvent arg0) {
 					}
 
+					@Override
 					public void mouseReleased(MouseEvent arg0) {
 					}
 				});

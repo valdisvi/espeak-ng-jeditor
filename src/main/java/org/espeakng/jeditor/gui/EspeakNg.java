@@ -18,6 +18,9 @@ public class EspeakNg {
 	private File fileInput;
 	private File fileOutput;
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public EspeakNg(MainWindow mainW) {
 		this.mainW = mainW;
 	}
