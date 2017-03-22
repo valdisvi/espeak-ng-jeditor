@@ -7,7 +7,7 @@ import javax.swing.JScrollPane;
 
 import org.espeakng.jeditor.gui.MainWindow;
 
-public class PhonemeLoad {
+public class PhonemeLoad {	
 	private static ArrayList <Phoneme> phonemeList;
 	
 	public static void phonemeOpen(File file, MainWindow mainW){

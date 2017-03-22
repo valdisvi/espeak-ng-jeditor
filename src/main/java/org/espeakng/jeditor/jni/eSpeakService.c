@@ -47,6 +47,7 @@ JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetE
 
 	const char* versionInfo = espeak_Info(NULL);
 	jstring newString = (*env)->NewStringUTF(env, versionInfo);
+
 	return newString;
 
 }
@@ -247,7 +248,29 @@ JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpec
 	(*env)->SetObjectField(env, jSpect, fieldID, jFrames);
 
 	// set PitchEnvelope pitchenv;
-	// TODO code this a bit later :)
+	jclass jPitchEnvelopeClass = (*env)-> FindClass(env, "org/espeakng/jeditor/jni/PitchEnvelope");
+	jmethodID constrPitchEnvelope = (*env)->GetMethodID(env, jPitchEnvelopeClass, "<init>", "()V");
+	jobject jPitch;
+	//set int pitch1 for PitchEnvelope
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "pitch1", "I"); // I for int
+	(*env)->SetIntField(env, jPitch, fieldID, spect->pitchenv.pitch1);
+	//set int pitch2 for PitchEnvelope
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "pitch2", "I"); // I for int
+	(*env)->SetIntField(env, jPitch, fieldID, spect->pitchenv.pitch2);
+
+	jshortArray envArray = (*env)->NewIntArray(env, 128); // create new java array
+	jshort *envElems = (*env)->GetIntArrayElements(env, envArray, 0);
+	for (int i = 0; i < 128; i ++){
+		envElems[i] = spect->pitchenv.env[i];
+	}
+	//set created array as PitchEnvelope field
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "env", "[I");
+	(*env)->SetObjectField(env, jPitch, fieldID, envArray);
+
+	(*env)->ReleaseIntArrayElements(env, envArray, envElems, 0); //finished using array, free memory
+	//set jPitch as SpectSeq field
+	fieldID = (*env)->GetFieldID(env, jSpectClass, "pitchenv", "Lorg/espeakng/jeditor/jni/PitchEnvelope");
+	(*env)->SetObjectField(env, jSpect, fieldID, jPitch);
 
 	//set int pitch1;
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "pitch1", "I"); // I for int
@@ -280,14 +303,75 @@ JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpec
 /*
  * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeTextToPhonemes
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeTextToPhonemes
   (JNIEnv * env, jclass clazz, jstring jTextToTranslate){
 
-	jstring newString = (*env)->NewStringUTF(env, "Sorry, not implemented");
+	espeak_Initialize(AUDIO_OUTPUT_PLAYBACK,0,NULL,0);
 
-	return newString;
+		const char* cLanguage = (*env)->GetStringUTFChars(env, language, NULL);
+
+		espeak_SetVoiceByName(cLanguage);
+
+		(*env)->ReleaseStringUTFChars(env, language, cLanguage);
+
+		// get c string from jstring ( this c string is created by JVM )
+		const char* cTextToTranslate = jTextToTranslate ? (*env)->GetStringUTFChars(env, jTextToTranslate, NULL) : NULL;
+
+		// copy this c string because otherwise espeak_TextToPhonemes will change where it points and JVM won't like that
+		char * copyOfTextToTranslate = malloc(strlen(cTextToTranslate) + 1); // +1 because of '\0' at the end
+
+		strcpy(copyOfTextToTranslate, cTextToTranslate); // JVM don't have to worry about copyOfTextToTranslate
+
+		// FIXME translate text to get array size and then translate it again to get phonemes is bad
+		// but i am quite tired now and it should work. So, do something smarter - e.g. use arrayList or
+		// cache translated phonemes
+
+		const void **textptr = (void*) &copyOfTextToTranslate;
+
+		int i = 0;
+
+		while (*textptr != NULL){
+
+			espeak_TextToPhonemes( textptr, espeakCHARS_AUTO, 0);
+
+			i++;
+		}
+
+		// FIXME i hope espeak_TextToPhonemes takes care of memory for "reduced" part, find out reality
+
+		// copy second time, because it was already spent to get array size (i)
+		copyOfTextToTranslate = malloc(strlen(cTextToTranslate) + 1); // +1 because of '\0' at the end
+
+		strcpy(copyOfTextToTranslate, cTextToTranslate);
+
+		textptr = (void*) &copyOfTextToTranslate;
+
+		// no can release cTextToTranslate so JVM garbage collector can collect it
+		if (cTextToTranslate) (*env)->ReleaseStringUTFChars(env, jTextToTranslate, cTextToTranslate);
+
+		const char* phonemes;
+
+		jstring phonemesString;
+
+		// create java string array to store translated phonemes
+		jobjectArray phonemesArray = (*env)->NewObjectArray(env,i,(*env)->FindClass(env,"java/lang/String"),0);
+
+		for (int j=0; j<i; j++){
+
+				phonemes = espeak_TextToPhonemes( textptr, espeakCHARS_AUTO, 0);
+
+				phonemesString = (*env)->NewStringUTF(env, phonemes);
+
+				(*env)->SetObjectArrayElement(env,phonemesArray,j,phonemesString);
+
+		}
+
+
+		espeak_Terminate();
+
+	return phonemesArray;
 }
 
 // main is only used for testing
