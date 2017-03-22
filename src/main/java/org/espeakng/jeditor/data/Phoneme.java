@@ -97,6 +97,12 @@ public class Phoneme {
 		// } catch (IOException e) {
 		// e.printStackTrace();
 		// }
+		
+		
+/* */	if (!file.exists())
+			assert false : "From Phoneme class. File doesn't exist.";
+		
+		
 		graph = new Graph(file.getName(), frameList);
 	}
 

@@ -79,7 +79,7 @@ public class Graph {
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
 
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
+		
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 		// filePanel.requestFocus();
