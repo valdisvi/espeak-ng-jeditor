@@ -18,7 +18,12 @@ public class ESpeakService {
 	// function returns 0 if was succesful, otherwise it returns non 0 value
 	public static native int nativeGetSpectSeq(SpectSeq spect, String fileName);
 
-	// TODO implement this in jni/src/eSpeakService.c
-	public static native String nativeTextToPhonemes(String textToTranslate);
+	public static native String[] nativeTextToPhonemes(String textToTranslate, String language);
 
+	/**
+	 * Language defaults to "en"
+	 */
+	public static String[] nativeTextToPhonemes(String textToTranslate) {
+		return nativeTextToPhonemes(textToTranslate, "en");
+	}
 }
