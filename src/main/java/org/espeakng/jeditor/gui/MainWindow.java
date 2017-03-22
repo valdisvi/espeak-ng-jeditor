@@ -385,31 +385,30 @@ public class MainWindow extends JFrame {
 		// initiate keyframe sequence graph pane
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+        		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
 		
         GroupLayout groupLayout = new GroupLayout(getContentPane());
-        // horizontal grouping of containers and components
         groupLayout.setHorizontalGroup(
-            groupLayout.createParallelGroup(Alignment.LEADING)
-                .addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
-                .addGroup(groupLayout.createSequentialGroup()
-                    //.addGap(12)
-                    .addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
-                    .addContainerGap())
+        	groupLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(groupLayout.createSequentialGroup()
+        			.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+        			.addGap(35))
+        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
         );
-        // vertical grouping of containers and components
         groupLayout.setVerticalGroup(
-            groupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(groupLayout.createSequentialGroup()
-                    .addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
-                        .addComponent(tabbedPane))
-                    .addGap(0))
+        	groupLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(groupLayout.createSequentialGroup()
+        			.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+        				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 
+        						GroupLayout.PREFERRED_SIZE))
+        			.addGap(0))
         );
 
         // keyframe sequence ("Spect") tab
