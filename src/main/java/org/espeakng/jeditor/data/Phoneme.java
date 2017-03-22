@@ -43,7 +43,6 @@ public class Phoneme {
 		this.frameList = frameList;
 	}
 
-	// TODO Add support for SPECSPC2 type phonemes
 	public Phoneme(File file) {
 		ESpeakService.nativeGetSpectSeq(spect, file.getAbsolutePath());
 		file_format = spect.file_format;
@@ -58,7 +57,7 @@ public class Phoneme {
 		 * ByteArrayInputStream inRead = new ByteArrayInputStream(data); byte[]
 		 * buffer = new byte[8]; inRead.read(buffer, 0, 8);
 		 * 
-		 * type = new String(buffer); if (type.equals("SPECTSPC2")) { // TODO
+		 * type = new String(buffer); if (type.equals("SPECTSPC2")) {
 		 * implement support of old SPECTSPC2 files loading } else if
 		 * (type.equals("SPECTSEQ")) { file_format = 0; } else if
 		 * (type.equals("SPECTSEK")) { file_format = 1; } else if

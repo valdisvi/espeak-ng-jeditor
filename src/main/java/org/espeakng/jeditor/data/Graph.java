@@ -757,7 +757,7 @@ public class Graph {
 					// ArrayList<Frame>(mapPanels.values());
 					//
 					// if(type.equals("SPECTSPC2")) {
-					// // TODO implement support of old SPECTSPC2 files loading
+					// // implement support of old SPECTSPC2 files loading
 					// } else if (type.equals("SPECTSEQ")) {
 					// file_format = 0;
 					// } else if (type.equals("SPECTSEK")) {

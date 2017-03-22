@@ -47,6 +47,7 @@ JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetE
 
 	const char* versionInfo = espeak_Info(NULL);
 	jstring newString = (*env)->NewStringUTF(env, versionInfo);
+
 	return newString;
 
 }
@@ -247,7 +248,29 @@ JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpec
 	(*env)->SetObjectField(env, jSpect, fieldID, jFrames);
 
 	// set PitchEnvelope pitchenv;
-	// TODO code this a bit later :)
+	jclass jPitchEnvelopeClass = (*env)-> FindClass(env, "org/espeakng/jeditor/jni/PitchEnvelope");
+	jmethodID constrPitchEnvelope = (*env)->GetMethodID(env, jPitchEnvelopeClass, "<init>", "()V");
+	jobject jPitch;
+	//set int pitch1 for PitchEnvelope
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "pitch1", "I"); // I for int
+	(*env)->SetIntField(env, jPitch, fieldID, spect->pitchenv.pitch1);
+	//set int pitch2 for PitchEnvelope
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "pitch2", "I"); // I for int
+	(*env)->SetIntField(env, jPitch, fieldID, spect->pitchenv.pitch2);
+
+	jshortArray envArray = (*env)->NewIntArray(env, 128); // create new java array
+	jshort *envElems = (*env)->GetIntArrayElements(env, envArray, 0);
+	for (int i = 0; i < 128; i ++){
+		envElems[i] = spect->pitchenv.env[i];
+	}
+	//set created array as PitchEnvelope field
+	fieldID = (*env)->GetFieldID(env, jPitchEnvelopeClass, "env", "[I");
+	(*env)->SetObjectField(env, jPitch, fieldID, envArray);
+
+	(*env)->ReleaseIntArrayElements(env, envArray, envElems, 0); //finished using array, free memory
+	//set jPitch as SpectSeq field
+	fieldID = (*env)->GetFieldID(env, jSpectClass, "pitchenv", "Lorg/espeakng/jeditor/jni/PitchEnvelope");
+	(*env)->SetObjectField(env, jSpect, fieldID, jPitch);
 
 	//set int pitch1;
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "pitch1", "I"); // I for int
