@@ -7,6 +7,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -20,11 +22,13 @@ public class EventHandlers {
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
-	
+	private Preferences prefs;
 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
-		fileChooser = new JFileChooser("./phsource/");
+		prefs = Preferences.userRoot().node(getClass().getName());
+		fileChooser = new JFileChooser(prefs.get("a",
+			    new File(".").getAbsolutePath()));
 	}
 	
 
@@ -41,6 +45,7 @@ public class EventHandlers {
 			if (e.getSource() == mainW.mntmOpen) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
+					 prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
 			} else if (e.getSource() == mainW.mntmQuit) {
 				mainW.setVisible(false);
