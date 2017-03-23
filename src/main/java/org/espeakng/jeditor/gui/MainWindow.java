@@ -11,7 +11,7 @@ import org.espeakng.jeditor.data.PhonemeLoad;
 
 public class MainWindow extends JFrame {
 
-	// some containers
+	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;
 	
