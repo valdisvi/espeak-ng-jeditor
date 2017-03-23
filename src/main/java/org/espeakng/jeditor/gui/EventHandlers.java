@@ -113,6 +113,10 @@ public void clearText(){
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.removeAll();
 			clearText();
+			mainW.mntmSave.setVisible(false);
+			mainW.mntmSaveAs.setVisible(false);
+			mainW.mntmClose.setVisible(false);
+			mainW.mntmCloseAll.setVisible(false);
 		}
 	};
 
