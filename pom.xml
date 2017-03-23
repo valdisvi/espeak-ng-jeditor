@@ -1,91 +1,115 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.espeakng.jeditor</groupId>
-  <artifactId>espeakng-jeditor</artifactId>
-  <version>1.0</version>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.espeakng.jeditor</groupId>
+	<artifactId>espeakng-jeditor</artifactId>
+	<version>1.0</version>
 
-  <name>eSpeakNG Java Editor</name>
-  <url>http://github.com/valdisvi/espeak-ng-jeditor/</url>
+	<name>eSpeakNG Java Editor</name>
+	<url>http://github.com/valdisvi/espeak-ng-jeditor/</url>
 
-  <!-- Allow local jar files to be included in lib folder -->
-  <repositories>
-    <repository>
-      <id>lib</id>
-      <url>file://${basedir}/lib</url>
-    </repository>
-  </repositories>
+	<!-- Allow local jar files to be included in lib folder -->
+	<repositories>
+		<repository>
+			<id>lib</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+	</repositories>
 
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>org.espeakng.jeditor.gui.MainWindow</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase> 
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build> 
-  
-  <dependencies>
-    <!-- Junit -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- Logger -->
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-    </dependency>
-    <!-- Native libs 
-    <dependency>
-      <groupId>lib</groupId>
-      <artifactId>lib</artifactId>
-      <version>1.0</version>
-    </dependency>
-    -->
-  </dependencies>
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<!-- Filter settings to not change binary files -->
+							<nonFilteredFileExtensions>
+								<nonFilteredFileExtension>so</nonFilteredFileExtension>
+							</nonFilteredFileExtensions>
+							<outputDirectory>${basedir}/target/classes/lib</outputDirectory>
+							<resources>
+								<resource>
+									<directory>lib/</directory>
+									<include>**/*.so</include>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.espeakng.jeditor.gui.MainWindow</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- Junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Logger -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<!-- Native libs <dependency> <groupId>lib</groupId> <artifactId>lib</artifactId> 
+			<version>1.0</version> </dependency> -->
+	</dependencies>
 
 </project>

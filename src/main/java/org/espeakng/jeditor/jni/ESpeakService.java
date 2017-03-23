@@ -4,7 +4,8 @@ public class ESpeakService {
 
 	static {
 		try {
-			System.load(System.getProperty("user.dir") + "/lib/libespeakservice.so");
+			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");
+//			System.load(System.getProperty("user.dir") + "/src/main/resources/eSpeakService.o");
 			// System.out.println(System.getProperty("user.dir") +
 			// "/lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {

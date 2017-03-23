@@ -2,6 +2,11 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -142,7 +147,40 @@ public class MainWindow extends JFrame {
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
+		mainW.setUp();
 	}
+	
+	/*Method copy libespeakservice.so file to hiden folder where the executable jar runs
+	for passing all tests in maven is needed to have hiden lib folder containing that file*/
+	
+	public void setUp() {
+		
+		
+		if(!(new File("/.lib/libespeakservice.so").exists())){
+			new File(".lib").mkdir();
+			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
+			try {
+				this.setFile(input, ".lib/libespeakservice.so");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					input.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+	public void setFile(InputStream io, String fileName)
+			  throws IOException {
+				FileOutputStream fos = new FileOutputStream(fileName);
+				
+				int read;
+				while ((read = io.read()) != -1) {
+					fos.write(read);
+				}
+			    fos.close();
+			  }
 
 	private void menuBarInit() {
 		menuBar = new JMenuBar();
