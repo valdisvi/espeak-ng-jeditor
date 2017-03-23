@@ -1,4 +1,5 @@
-bin/**
+﻿bin/**
+logs/**
 target/**
 .settings
 .classpath
