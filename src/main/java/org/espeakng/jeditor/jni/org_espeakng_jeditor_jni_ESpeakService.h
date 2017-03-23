@@ -26,10 +26,10 @@ JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpec
 /*
  * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeTextToPhonemes
- * Signature: (Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeTextToPhonemes
-  (JNIEnv *, jclass, jstring, jstring);
+JNIEXPORT jstring JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeTextToPhonemes
+  (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
 }

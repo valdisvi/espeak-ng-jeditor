@@ -51,11 +51,11 @@ public class EventHandlers {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
-				Language.initLanguage(new File("./src/resources/english.txt"), mainW);
+				Language.initLanguage(new File("./src/main/resources/english.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmLatvian) {
-				Language.initLanguage(new File("./src/resources/latvian.txt"), mainW);
+				Language.initLanguage(new File("./src/main/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
-				Language.initLanguage(new File("./src/resources/russian.txt"), mainW);
+				Language.initLanguage(new File("./src/main/resources/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
@@ -113,6 +113,10 @@ public void clearText(){
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.removeAll();
 			clearText();
+			mainW.mntmSave.setVisible(false);
+			mainW.mntmSaveAs.setVisible(false);
+			mainW.mntmClose.setVisible(false);
+			mainW.mntmCloseAll.setVisible(false);
 		}
 	};
 

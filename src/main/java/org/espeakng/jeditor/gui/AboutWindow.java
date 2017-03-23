@@ -56,7 +56,7 @@ public class AboutWindow extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				Runtime rt = Runtime.getRuntime();
 				try {
-					rt.exec("firefox ./docs/index.html");
+					rt.exec("firefox http://espeak.sourceforge.net/");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
