@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
 
-public class Phoneme {
+public class Phoneme{
 	SpectSeq spect = new SpectSeq();
 	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
 	public int file_format;
@@ -25,7 +26,7 @@ public class Phoneme {
 	public String fileName;
 	public ArrayList<Frame> frameList;
 	private Graph graph;
-
+	public String path;
 	public ArrayList<Frame> getFrameList() {
 		return frameList;
 	}
@@ -44,13 +45,15 @@ public class Phoneme {
 	}
 
 	public Phoneme(File file) {
-		ESpeakService.nativeGetSpectSeq(spect, file.getAbsolutePath());
+		path = file.getAbsolutePath();
+		ESpeakService.nativeGetSpectSeq(spect, path);
 		file_format = spect.file_format;
 		fileName = spect.name;
 		n = spect.numframes;
 		amplitude = spect.amplitude;
 		max_y = spect.max_y;
 		frameList = new ArrayList<Frame>();
+		name_length = spect.name.length();
 		/*
 		 * byte[] data = new byte[(int) file.length()]; try { FileInputStream
 		 * inStream = new FileInputStream(file); inStream.read(data);

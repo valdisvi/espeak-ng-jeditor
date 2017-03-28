@@ -12,7 +12,9 @@ import java.util.prefs.Preferences;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
+import org.espeakng.jeditor.data.PhonemeSave;
 
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
@@ -108,7 +110,21 @@ public void clearText(){
 			}
 		}
 	};
-
+	ActionListener saveTab = new ActionListener(){
+		public void actionPerformed(ActionEvent arg0){
+			Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane)mainW.tabbedPaneGraphs.getSelectedComponent());
+			PhonemeSave.saveToDirectory(temp, new File(temp.path));
+		}
+	};
+	ActionListener saveAsTab = new ActionListener(){
+		public void actionPerformed(ActionEvent arg0){
+			Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane)mainW.tabbedPaneGraphs.getSelectedComponent());
+			if(fileChooser.showSaveDialog(mainW)==JFileChooser.APPROVE_OPTION){
+				PhonemeSave.saveToCustomDirectory(temp, fileChooser.getSelectedFile().getAbsolutePath());
+			}
+			
+		}
+	};
 	ActionListener closeAllTab = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			mainW.tabbedPaneGraphs.removeAll();
@@ -197,8 +213,8 @@ public void clearText(){
 		
 		mainW.mntmOpen.addActionListener(event);
 		// mainW.mntmOpen2.addActionListener();
-		// mainW.mntmSave.addActionListener();
-		// mainW.mntmSaveAs.addActionListener();
+		// mainW.mntmSave.addActionListener(saveTab); //uncomment when PhonemeSave is fixed
+		//mainW.mntmSaveAs.addActionListener(saveAsTab); //uncomment when PhonemeSave is fixed
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);

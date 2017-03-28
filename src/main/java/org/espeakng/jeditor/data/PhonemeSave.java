@@ -8,18 +8,36 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.espeakng.jeditor.jni.ESpeakService;
+import org.espeakng.jeditor.jni.SpectSeq;
 
 public class PhonemeSave {
-	//TODO implement calling of this method on File->Save and File->Save as buttons
+	/*FIXME this class and it's methods are used by calling  File->Save and File->SaveAs buttons,
+	but action listeners are commented out for them, because it is not complete
+	known issues: 1. (at current stage of JNI implementation) file_format is always 0, so that affects how the file
+	is written; 2. espeak at one point of loading file reads 10 bytes for reading double (time, pitch, lenght and dx)
+	and java uses just 8 bytes for doubles; 3. also this is not confirmed but there might be problems with unsigned
+	types, because in signed variables, first byte is used to determine if its positive or negative number,
+	could not find a way to write unsigned variables in DataStream
+	*/
 	public static void saveToDirectory(Phoneme phoneme, File file) {
 		byte[] temp;
-		try {
+		try (FileOutputStream fos = new FileOutputStream(file,false); DataOutputStream dos = new DataOutputStream(fos)){
 			
-			FileOutputStream fos = new FileOutputStream(file);
-			DataOutputStream dos = new DataOutputStream(fos);
-			
-			temp = phoneme.type.getBytes();
+			temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(1128616019).array();
 			dos.write(temp);
+			
+			if(phoneme.file_format == 0){
+				temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(1363497812).array();
+			}else if(phoneme.file_format == 1){
+				temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(1262834516).array();
+			}else{
+				temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(844190548).array();
+			}
+			dos.write(temp);
+			
 			temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(phoneme.name_length).array();
 			dos.write(temp);
 			
@@ -50,7 +68,6 @@ public class PhonemeSave {
 				}
 			}
 
-			dos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -158,8 +175,44 @@ public class PhonemeSave {
 			e.printStackTrace();
 		}
 	}
-
-	public static void saveToCustomDirectory(Phoneme phoneme, Path path) {
+//	public static void writeFrame(Frame frame, DataOutputStream dos,
+//			int file_format){
+//		
+//	}
+	
+	public static void saveToCustomDirectory(Phoneme phoneme, String path) {
+		saveToDirectory(phoneme, new File(path));
+	}
+	/**
+	 * Main method for testing purposes.
+	 */
+	public static void main(String[] args){
+//		SpectSeq s = new SpectSeq();
+//		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/b/b");
+//		System.out.println(s.name + ":" + s.amplitude);
 		
+//		File loadedFile = new File("../espeak-ng/phsource/vowel/o");
+//		Phoneme loadedPhoneme = new Phoneme(loadedFile);
+//		SpectSeq loadedSpectSeq = loadedPhoneme.spect;
+		
+		SpectSeq s = new SpectSeq();
+//		ESpeakService.nativeGetSpectSeq(s, "../savedPhonems/i");
+		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/vowel/0");
+		
+		System.out.println("namelenght " + s.name.length());
+		System.out.println("SpectSeq [numframes=" + s.numframes + ", amplitude=" + 
+		s.amplitude + ", spare=" + s.spare + ", name=" + s.name
+				+ ", frames=" + s.frames.length + "\n, pitchenv=" + 
+		s.pitchenv + ", pitch1=" + s.pitch1 + ", pitch2="
+				+ s.pitch2 + "\n, duration=" + s.duration + ", grid=" + s.grid + 
+				"\n, bass_reduction=" + s.bass_reduction
+				+ ", max_x=" + s.max_x + ", max_y=" + s.max_y + "\n, file_format=" 
+				+ s.file_format + "]");
+		
+		
+//		System.out.println("Phoneme:\n" +loadedPhoneme.type +"\n" + loadedPhoneme.file_format+"\n"
+//				+ loadedPhoneme.name_length+"\n" + loadedPhoneme.n
+//				+"\n" + loadedPhoneme.amplitude +"\n" + loadedPhoneme.max_y
+//				+"\n" + loadedPhoneme.fileName+"\n");
 	}
 }

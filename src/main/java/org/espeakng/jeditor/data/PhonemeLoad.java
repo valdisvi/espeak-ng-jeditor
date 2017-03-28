@@ -14,13 +14,19 @@ public class PhonemeLoad {
 		
 		Phoneme newPhoneme=new Phoneme(file);
 		phonemeList.add(newPhoneme);
-		//outputPhonemes();
 	}
 	
 	public static void phonemeListInit(){
 		phonemeList=new ArrayList<Phoneme>();
 	}
-	
+	public static Phoneme getSelectedPhoneme(JScrollPane jPanel){
+		for(Phoneme phoneme: phonemeList){
+			if(phoneme.getGraph().getjPanelOfGraph().equals(jPanel)){
+				return phoneme;
+			}
+		}
+		return null;
+	}
 	public static void getPhoneme(JScrollPane jPanel){
 		for(Phoneme phoneme: phonemeList){
 			if(phoneme.getGraph().getjPanelOfGraph().equals(jPanel))
@@ -39,10 +45,4 @@ public class PhonemeLoad {
 				phoneme.doZoomOut();
 		}
 	}
-
-	
-//	public static void outputPhonemes(){
-//		System.out.println(phonemeList.size());
-//	}
-	
 }
