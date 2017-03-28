@@ -65,6 +65,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					 <finalName>eSpeakNG-jEditor</finalName>
+					 <appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
 							<mainClass>org.espeakng.jeditor.gui.MainWindow</mainClass>
@@ -88,6 +90,7 @@
 					<execution>
 						<id>default-jar</id>
 						<phase>none</phase>
+						
 					</execution>
 				</executions>
 			</plugin>
