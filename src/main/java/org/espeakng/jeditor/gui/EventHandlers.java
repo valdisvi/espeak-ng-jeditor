@@ -23,13 +23,17 @@ import javax.swing.JScrollPane;
 public class EventHandlers {
 
 	private MainWindow mainW;
-	private JFileChooser fileChooser;
-	private Preferences prefs;
+	private JFileChooser fileChooser, fileChooser2;
+	private Preferences prefs, prefs2;
 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		prefs = Preferences.userRoot().node(getClass().getName());
 		fileChooser = new JFileChooser(prefs.get("a",
+			    new File(".").getAbsolutePath()));
+		
+		prefs2 = Preferences.userRoot().node(getClass().getName());
+		fileChooser2 = new JFileChooser(prefs2.get("a",
 			    new File(".").getAbsolutePath()));
 	}
 	
@@ -49,7 +53,12 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					 prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			}else if(e.getSource() == mainW.mntmOpen2){
+				if (fileChooser2.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					PhonemeLoad.phonemeOpen(fileChooser2.getSelectedFile(), mainW);
+					 prefs2.put("a", fileChooser2.getSelectedFile().getParent());
+				}
+			}else if (e.getSource() == mainW.mntmQuit) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -212,9 +221,9 @@ public void clearText(){
 		// File
 		
 		mainW.mntmOpen.addActionListener(event);
-		// mainW.mntmOpen2.addActionListener();
-		// mainW.mntmSave.addActionListener(saveTab); //uncomment when PhonemeSave is fixed
-		//mainW.mntmSaveAs.addActionListener(saveAsTab); //uncomment when PhonemeSave is fixed
+		mainW.mntmOpen2.addActionListener(event);
+		// mainW.mntmSave.addActionListener(saveTab); //TODO uncomment when PhonemeSave is fixed
+		//mainW.mntmSaveAs.addActionListener(saveAsTab); //TODO uncomment when PhonemeSave is fixed or for testing
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
