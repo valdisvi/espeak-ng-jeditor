@@ -12,12 +12,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+/**
+ * 
+ * This class constructs window called by Help->About on main menu bar. The
+ * window shows general information about the program (version, author, link to
+ * program documentation).
+ *
+ */
+
 public class AboutWindow extends JFrame {
 
 	private JPanel contentPane;
-	/**
-	 * Create the frame.
-	 */
+	
+	/** Create the frame. */
 	public static void OpenAboutWindow() {
 		AboutWindow ab = new AboutWindow();
 	}
