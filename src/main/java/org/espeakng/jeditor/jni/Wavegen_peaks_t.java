@@ -1,5 +1,8 @@
 package org.espeakng.jeditor.jni;
 
+/**
+ * This class is not implemented anywhere yet
+*/
 public class Wavegen_peaks_t {
 	
 public	int freq;     
@@ -14,9 +17,4 @@ public	double freq_inc;
 public	double height_inc;
 public	double left_inc;
 public	double right_inc;
-
-	public Wavegen_peaks_t() {
-		// TODO Auto-generated constructor stub
-	}
-
 }

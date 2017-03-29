@@ -1,5 +1,9 @@
 package org.espeakng.jeditor.jni;
 
+
+/**
+ * This class is not implemented anywhere yet
+*/
 public class Voice_t {
 
 	char[] v_name = new char[40];

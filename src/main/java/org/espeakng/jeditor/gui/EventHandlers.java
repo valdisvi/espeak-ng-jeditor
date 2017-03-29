@@ -3,6 +3,7 @@ package org.espeakng.jeditor.gui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.prefs.Preferences;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
@@ -299,6 +301,8 @@ public void clearText(){
 		mainW.btnSpeak.addActionListener(speak);
 		mainW.btnShowRules.addActionListener(showRules);
 		mainW.btnShowIPA.addActionListener(showIpa);
+		
+		mainW.panel_Spect.addFocusListener(tfSave);
 	}
 
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
@@ -311,16 +315,15 @@ public void clearText(){
 	}
 	
 	//TODO Implement FocusListener for changing values in text fields
-	FocusListener tfSave=new FocusListener(){
+	
+	FocusListener tfSave=new FocusAdapter(){
 		
-		//Not needed
-		public void focusGained(FocusEvent e) {
-		}
-
+		
 		public void focusLost(FocusEvent e) {
+			Frame frame = mainW.focusedFrame;
 			for (int i=0;i<MainWindow.tfFreq.size();i++){
 				if (e.getSource()==MainWindow.tfFreq.get(i)){
-					
+					frame.peaks[i].pkfreq = Short.parseShort(MainWindow.tfFreq.get(i).getText().toString());
 				}
 			}
 			
