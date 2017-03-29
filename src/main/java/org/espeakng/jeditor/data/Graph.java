@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,9 +24,7 @@ import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
 import org.espeakng.jeditor.jni.Formant_t;
-import org.espeakng.jeditor.jni.Peak_t;import javax.swing.JScrollBar;
-import java.awt.Scrollbar;
-import org.espeakng.jeditor.jni.Wavegen_peaks_t;
+import org.espeakng.jeditor.jni.Peak_t;
 
 public class Graph {
 
@@ -356,10 +353,12 @@ public class Graph {
 	}
 
 	public void loadFrame(JPanel currentPanel) {
-
+		
 		Frame frameToLoad = mapPanels.get(currentPanel);
 		currentPanel.requestFocus();
 		frameToLoad.selected = true;
+		MainWindow mainW = MainWindow.getMainWindow();
+		mainW.focusedFrame = frameToLoad;
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
 

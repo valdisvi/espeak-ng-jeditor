@@ -12,7 +12,10 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /**
  * This class is an entry point for the program.
@@ -128,11 +131,24 @@ public class MainWindow extends JFrame {
 	public JButton btnSpeak;
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
+	public JPanel panel_Spect;
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
-
-	public MainWindow() {
+	
+	//Frame currently being focused
+	public Frame focusedFrame;
+	
+	//Singleton design pattern, also easier to access main window from anywhere in code.
+	private static MainWindow instance = new MainWindow();
+	public static MainWindow getMainWindow(){return instance;}
+	private  MainWindow() {
+		tfFreq = new ArrayList<JTextField>();
+		tfHeight = new ArrayList<JTextField>();
+		tfWidth = new ArrayList<JTextField>();
+		tfBw = new ArrayList<JTextField>();
+		tfAp = new ArrayList<JTextField>();
+		tfBp = new ArrayList<JTextField>();
 		frameInit();
 		menuBarInit();
 		bodyInit();
@@ -142,13 +158,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		tfFreq = new ArrayList<JTextField>();
-		tfHeight = new ArrayList<JTextField>();
-		tfWidth = new ArrayList<JTextField>();
-		tfBw = new ArrayList<JTextField>();
-		tfAp = new ArrayList<JTextField>();
-		tfBp = new ArrayList<JTextField>();
-		MainWindow mainW = new MainWindow();
+		
+		MainWindow mainW = MainWindow.getMainWindow();
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
@@ -507,7 +518,7 @@ public class MainWindow extends JFrame {
         //////// Spect Tab ////////
         ///////////////////////////
         
-		JPanel panel_Spect = new JPanel();
+		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
 //		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
