@@ -178,17 +178,7 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	public void setFile(InputStream io, String fileName)
-			  throws IOException {
-				FileOutputStream fos = new FileOutputStream(fileName);
-				
-				int read;
-				while ((read = io.read()) != -1) {
-					fos.write(read);
-				}
-			    fos.close();
-			  }
-
+	
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
 	 * contents of hidden file passed as stream (first parameter) to the file
