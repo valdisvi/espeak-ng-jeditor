@@ -6,9 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
@@ -175,25 +173,15 @@ public class PhonemeSave {
 			e.printStackTrace();
 		}
 	}
-//	public static void writeFrame(Frame frame, DataOutputStream dos,
-//			int file_format){
-//		
-//	}
 	
 	public static void saveToCustomDirectory(Phoneme phoneme, String path) {
 		saveToDirectory(phoneme, new File(path));
 	}
+	
 	/**
 	 * Main method for testing purposes.
 	 */
 	public static void main(String[] args){
-//		SpectSeq s = new SpectSeq();
-//		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/b/b");
-//		System.out.println(s.name + ":" + s.amplitude);
-		
-//		File loadedFile = new File("../espeak-ng/phsource/vowel/o");
-//		Phoneme loadedPhoneme = new Phoneme(loadedFile);
-//		SpectSeq loadedSpectSeq = loadedPhoneme.spect;
 		
 		SpectSeq s = new SpectSeq();
 //		ESpeakService.nativeGetSpectSeq(s, "../savedPhonems/i");
@@ -209,10 +197,5 @@ public class PhonemeSave {
 				+ ", max_x=" + s.max_x + ", max_y=" + s.max_y + "\n, file_format=" 
 				+ s.file_format + "]");
 		
-		
-//		System.out.println("Phoneme:\n" +loadedPhoneme.type +"\n" + loadedPhoneme.file_format+"\n"
-//				+ loadedPhoneme.name_length+"\n" + loadedPhoneme.n
-//				+"\n" + loadedPhoneme.amplitude +"\n" + loadedPhoneme.max_y
-//				+"\n" + loadedPhoneme.fileName+"\n");
 	}
 }
