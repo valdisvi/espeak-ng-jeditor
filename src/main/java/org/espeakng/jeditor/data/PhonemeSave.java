@@ -23,10 +23,24 @@ public class PhonemeSave {
 	types, because in signed variables, first byte is used to determine if its positive or negative number,
 	could not find a way to write unsigned variables in DataStream
 	*/
+	/**
+	 * This class is reverse engineered from espeak-ng function LoadSpecSeq(), which does use many custom made methods
+	 * for reading this binary file, hence many problems reversing it.
+	 * It uses Little Endian byte order, but there many issues that are mentioned in comment above.
+	 *
+	 * @param phoneme - Phoneme object, whose data is extracted from, to save to a file
+	 * @param file - file which is used to open data stream
+	 */
 	public static void saveToDirectory(Phoneme phoneme, File file) {
-		byte[] temp;
+		byte[] temp; //temporary byte buffer that is used to write data
 		try (FileOutputStream fos = new FileOutputStream(file,false); DataOutputStream dos = new DataOutputStream(fos)){
+			//if file already exists, it will overwrite it
 			
+			/* 
+			 * To understand what is happening here, look for espeak-ng LoadSpectSeq() function,
+			 * that is located in spect.c file , that function is used for loading SpectSeq into program,
+			 * but espeak-ng does not have function for saving SpectSeq, so loading has to be reverse engineered
+			*/
 			temp = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(1128616019).array();
 			dos.write(temp);
 			
@@ -73,7 +87,12 @@ public class PhonemeSave {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Extension of saveToDirectory() method, which calls this method to write data of frame to DataOutputStream
+	 * @param frame - Frame object whose data will be written to stream
+	 * @param dos - DataOutputStream that is used to write data into specific path
+	 * @param file_format - number representation of file format type
+	 */
 	public static void writeFrame(Frame frame, DataOutputStream dos,
 			int file_format) {
 
@@ -176,7 +195,12 @@ public class PhonemeSave {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Method to be used to save to custom directory, which just creates file from given path
+	 * and calls saveToDirectory()
+	 * @param phoneme - phoneme to be saved
+	 * @param path - string value, that contains path where it will be saved
+	 */
 	public static void saveToCustomDirectory(Phoneme phoneme, String path) {
 		saveToDirectory(phoneme, new File(path));
 	}
