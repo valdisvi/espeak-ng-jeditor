@@ -13,14 +13,19 @@ import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
-
-//FIXME try extending MainWindow class, should shorten the amount of code
+/**
+ * This class is for setting up event handlers
+ */
 public class EventHandlers {
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser, fileChooser2;
 	private Preferences prefs, prefs2;
-
+/**
+ * Constructor initializes 2 fileChoosers so that they 
+ * would both remember different directory 
+ * @param mainW
+ */
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		prefs = Preferences.userRoot().node(getClass().getName());
@@ -74,6 +79,9 @@ public class EventHandlers {
 			}
 		}
 	};
+	/**
+	 * This method clears JTextFields that represent values of peaks
+	 */
 public void clearText(){
 	for (int i = 0; i < 7; i++) {
 		MainWindow.tfFreq.get(i).setText("");
@@ -140,8 +148,6 @@ public void clearText(){
 		}
 	};
 
-	
-	//requires espeak-ng library
 	//requires espeak-ng library
 	ActionListener translate = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -175,8 +181,6 @@ public void clearText(){
 		}
 	};
 	
-
-	//requires espeak-ng library
 	//requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
 	ActionListener speakPunctuation = new ActionListener() {
@@ -186,8 +190,6 @@ public void clearText(){
 		}
 	};
 	
-	//requires espeak-ng library
-
 	//requires espeak-ng library
 	// splits word and spell it by symbol
 	ActionListener speakBySymbol = new ActionListener() {
@@ -208,7 +210,9 @@ public void clearText(){
 			}
 		}
 	};
-
+/**
+ * This method is called for to add created listeners to GUI elements
+ */
 	public void initHandlers() {
 
 		mainW.tabbedPaneGraphs.addChangeListener(getPhoneme);
@@ -298,6 +302,14 @@ public void clearText(){
 		addTFListeners();
 	}
 
+	/**
+	 * Method that is called to set visible following menu items:
+	 * "Save, Save As, Close. Close All"
+	 * @param mainW
+	 * mainW (main window) was used in early stages of code, when singleton pattern was not implemented,
+	 * so it is passed as parameter in many places.
+	 */
+	
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
 
 		boolean toSetVisible = (mainW.tabbedPaneGraphs.getTabCount() == 0) ? false : true;
@@ -307,7 +319,12 @@ public void clearText(){
 		mainW.mntmCloseAll.setVisible(toSetVisible);
 	}
 	
-	//Listeners for text fields that represent data of Peaks
+	/**
+	 * This method should be (and is) called from initHandlers(), to add listeners to
+	 * JTextFields that represent values of peaks
+	 * 
+	 * Could not do it in a for loop, that is why it is so long
+	 */
 	
 	public void addTFListeners(){
 		//These listeners works on ENTER button
@@ -696,6 +713,11 @@ public void clearText(){
 		});
 		
 	}
+	/** 
+	 * Get method for file chooser
+	 * 
+	 * @return file chooser
+	 */
 	public JFileChooser getFileChooser(){
 		return fileChooser;
 	}

@@ -6,10 +6,20 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * This class is used to set or change the language of the program.
+ */
 public class Language {
 	private static ArrayList<String> translation;
 
+	/**
+	 * This method is called to change language. It loads a file (formatted in specific way),
+	 * containing all the names for buttons. And adds them to an ArrayList.
+	 * Then calls initTranslation()
+	 * 
+	 * @param file - file, formatted in specific way, that contains correct values for names
+	 * @param mainW - Main Window
+	 */
 	public static void initLanguage(File file, MainWindow mainW){
 		BufferedReader br;
 		translation=new ArrayList<String>();
@@ -28,6 +38,11 @@ public class Language {
 	}
 	
 
+	/**
+	 * This method uses ArrayList, containing names for buttons and tabs, 
+	 * to set names for them.
+	 * @param mainW - Main Window
+	 */
 	public static void initTranslation(MainWindow mainW){
 		//There might exist a better way of processing different languages, for example separate ArrayLists
 		//for JMenu objects and JMenuItem objects.

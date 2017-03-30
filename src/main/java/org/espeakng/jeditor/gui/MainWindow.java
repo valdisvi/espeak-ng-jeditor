@@ -478,8 +478,7 @@ public class MainWindow extends JFrame {
 
 	public void bodyInit() {
 		
-		// TODO #1 Implement "Amplitude frame" in bottom left corner.
-		// TODO #2 Implement scroll bar for graph pane. 
+		// TODO Implement "Amplitude frame" in bottom left corner.
 		
 		
 		// initiate keyframe sequence/prosody tab pane:

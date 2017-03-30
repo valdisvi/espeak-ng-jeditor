@@ -8,10 +8,20 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+/**
+ * 
+ * This class builds window with a spinner (opened Options->Speed...), used
+ * to adjust the speed of pronounced text. The speed value is further used as 
+ * parameter for espeak-ng program run in terminal.
+ *
+ */
+
 public class OptionsSpeedWindow extends JFrame {
 
 	private JSpinner spinner;
-	//if user want to cancel his choice
+	
+	/* If user wants to cancel his choice, spinner is set
+		to the previously chosen value (which is stored here). */
 	private Object oldValue;
 
 	/**
@@ -29,7 +39,6 @@ public class OptionsSpeedWindow extends JFrame {
 		getContentPane().add(btnButtonCancel);
 		btnButtonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				spinner.setValue(oldValue);
 				dispose();
 			}
@@ -51,12 +60,21 @@ public class OptionsSpeedWindow extends JFrame {
 
 	}
 
-	
+	/**
+	 * This method returns spinner value, used to set the speed of speech. It is
+	 * invoked from EspeakNg class. The value it returns is passed as a parameter
+	 * for espeak-ng program which is run on terminal.
+	 * 
+	 */
 	public int getSpinnerValue() {
 		Integer result = (Integer) spinner.getValue();
 		return result.intValue();
 	}
 
+	/**
+	 * This method displays "Speed" window with spinner to adjust the speed of
+	 * speech. It is invoked from EventHandlers class.
+	 */
 	public void showOptionsSpeed() {
 		oldValue = spinner.getValue();
 		setVisible(true);
