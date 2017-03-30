@@ -33,6 +33,24 @@ import org.espeakng.jeditor.jni.Peak_t;
 This is the class which responds for graphical displaying of opened phoneme.
 */
 
+/*
+
+               /   \
+        (\/)   \ _ /   (\/)
+          \    (o_o)    /
+           \    | |    /
+          \ \__J   L__/ /
+           \___J   L___/
+            ___J   L___
+           / __J___L__ \
+          / /         \ \
+           /           \
+          /             \
+
+
+
+*/
+
 public class Graph {
 
 	static int harm_sqrt_n = 0;
@@ -64,15 +82,26 @@ public class Graph {
 			9, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 3, 3,
 			3, 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0 };
-	private static int sel_peak = 0;
+	private int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
 	int max_x = 0;
 	double max_y = 0;
 	boolean gridEnable = true;
 
+	
+	/**
+	 * 
+	 * draws graphs in tabbedPaneGraphs in MainWindow
+	 * 
+	 * @param fileName
+	 * @param frameList
+	 */
+	
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 		repaintActive();
+		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
+
 		filePanel = new JScrollPane();
 		filePanel.setAutoscrolls(true);
 		filePanel
@@ -80,14 +109,18 @@ public class Graph {
 		filePanel
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		filePanel.setLayout(null);
+
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
+
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
+
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
+
 	}
 
 	class Draw extends JPanel {
@@ -763,7 +796,7 @@ public class Graph {
  	FIXME The scroll in this method cant be added, because all keyframes are added not inside scrollbar, 
  	but nearby it. Thats why it show all graphs, but not scrolling inside the tab pane. 
 	*/
-	
+
 	public void ShowFrames(ArrayList<Frame> frames,
 			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
