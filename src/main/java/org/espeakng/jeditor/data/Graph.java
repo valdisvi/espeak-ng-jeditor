@@ -1,6 +1,7 @@
 package org.espeakng.jeditor.data;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -16,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -183,7 +185,6 @@ public class Graph {
 					//- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
-
 			for (int j = 0; j < 8; j++) {
 				if (currentFrame.markers[j]) {
 					g.setColor(colors[j]);
@@ -797,8 +798,9 @@ public class Graph {
 			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
-
-		int y = 25;
+		Box box = Box.createVerticalBox();
+		Dimension size = new Dimension();
+		int y = 5;
 		if (!frames.isEmpty()) {
 			for (int i = 0; i < frames.size(); i++) {
 
@@ -894,11 +896,13 @@ public class Graph {
 				});
 
 				filePanel2.add(keyframe);
+				size = new Dimension(keyframe.getWidth()+15, y+5);
 				mapPanels.put(keyframe, currentFrame);
-
+				
 			}
 			loadFirstFrame();
 		}
+		filePanel2.setPreferredSize(size);
 		filePanel2.revalidate();
 		filePanel2.repaint();
 		filePanel2.addKeyListener(keyListener);
