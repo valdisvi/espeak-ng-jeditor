@@ -25,7 +25,12 @@ import java.awt.event.FocusEvent;
  */
 
 public class MainWindow extends JFrame {
-    // This is mine!!!
+	
+	/*
+	 * TODO See bodyInit() method for exact tasks to do.
+	 * 
+	 */
+	
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;	
