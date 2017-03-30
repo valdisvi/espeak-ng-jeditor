@@ -26,9 +26,7 @@ import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
 import org.espeakng.jeditor.jni.Formant_t;
-import org.espeakng.jeditor.jni.Peak_t;import javax.swing.JScrollBar;
-import java.awt.Scrollbar;
-import org.espeakng.jeditor.jni.Wavegen_peaks_t;
+import org.espeakng.jeditor.jni.Peak_t;
 
 public class Graph {
 
@@ -356,10 +354,13 @@ public class Graph {
 	}
 
 	public void loadFrame(JPanel currentPanel) {
-
+		
 		Frame frameToLoad = mapPanels.get(currentPanel);
 		currentPanel.requestFocus();
 		frameToLoad.selected = true;
+		MainWindow mainW = MainWindow.getMainWindow();
+		mainW.focusedFrame = frameToLoad;
+		mainW.focusedPanel = currentPanel;
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
 
@@ -739,46 +740,9 @@ public class Graph {
 					break;
 				}
 				case KeyEvent.VK_S: { // CTRL-S
-
-					// public String type; // Type-name of file
-					// (SPECTSEQ,SPECTSEK,SPECTSQ2)
-					// public int file_format;
-					// public int name_length;
-					// public int n;
-					// public int amplitude;
-					// public int max_y;
-					// public String fileName;
-					// public ArrayList<Frame> frameList;
-					// private Graph graph;
-					//
-					// String type frameToLoad.;
-					// int file_format;
-					// int name_length;
-					// int n;
-					// int amplitude = frameToLoad.amp_adjust;
-					// int max_y = frameToLoad.max_y;
-					// String fileName = filePanel.getName();
-					// ArrayList<Frame> frameList = new
-					// ArrayList<Frame>(mapPanels.values());
-					//
-					// if(type.equals("SPECTSPC2")) {
-					// // TODO implement support of old SPECTSPC2 files loading
-					// } else if (type.equals("SPECTSEQ")) {
-					// file_format = 0;
-					// } else if (type.equals("SPECTSEK")) {
-					// file_format = 1;
-					// } else if (type.equals("SPECTSQ2")) {
-					// file_format = 2;
-					// }
-					//
-
-					// p.amplitude =
-					// p.frameList = new ArrayList<Frame>(mapPanels.values());
-					// p.max_y =
-					// p.file_format = 1;
-					// p.fileName = filePanel.getName();
-
-					// saveToDirectory(p, file);
+					// TODO Uncomment when PhonemeSave class is fixed
+//					Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane)MainWindow.tabbedPaneGraphs.getSelectedComponent());
+//					PhonemeSave.saveToDirectory(temp, new File(temp.path));
 				}
 				}
 			}

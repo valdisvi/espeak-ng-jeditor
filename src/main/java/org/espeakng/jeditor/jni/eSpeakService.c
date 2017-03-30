@@ -300,7 +300,8 @@ JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetSpec
 	fieldID = (*env)->GetFieldID(env, jSpectClass, "max_y", "S"); // S for short
 	(*env)->SetShortField(env, jSpect, fieldID, spect->max_y);
 	//set int file_format;
-
+	fieldID = (*env)->GetFieldID(env, jSpectClass, "file_format", "I"); // I for int
+	(*env)->SetIntField(env, jSpect, fieldID, spect->file_format);
 	// if everything was ok return 0
 	return ENS_OK;
 

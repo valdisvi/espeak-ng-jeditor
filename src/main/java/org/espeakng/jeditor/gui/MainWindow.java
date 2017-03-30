@@ -12,16 +12,30 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
+/**
+ * This class is an entry point for the program.
+ * It does all the initial preparations for the program to start,
+ * builds the main window interface.
+ *
+ */
 
 public class MainWindow extends JFrame {
-
+	
+	/*
+	 * TODO See bodyInit() method for exact tasks to do.
+	 * 
+	 */
+	
 	// some containers.
 	public JMenuBar menuBar;
-	public static JTabbedPane tabbedPaneGraphs;
+	public static JTabbedPane tabbedPaneGraphs;	
 	
-	
-	//Grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
+	// Grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
 	// menuBar group File
 	public JMenu mnFile;
 	public JMenuItem mntmOpen;
@@ -122,11 +136,24 @@ public class MainWindow extends JFrame {
 	public JButton btnSpeak;
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
+	public JPanel panel_Spect;
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
-
-	public MainWindow() {
+	
+	//Frame currently being focused
+	public Frame focusedFrame;
+	public JPanel focusedPanel;
+	//Singleton design pattern, also easier to access main window from anywhere in code.
+	private static MainWindow instance = new MainWindow();
+	public static MainWindow getMainWindow(){return instance;}
+	private  MainWindow() {
+		tfFreq = new ArrayList<JTextField>();
+		tfHeight = new ArrayList<JTextField>();
+		tfWidth = new ArrayList<JTextField>();
+		tfBw = new ArrayList<JTextField>();
+		tfAp = new ArrayList<JTextField>();
+		tfBp = new ArrayList<JTextField>();
 		frameInit();
 		menuBarInit();
 		bodyInit();
@@ -136,13 +163,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		tfFreq = new ArrayList<JTextField>();
-		tfHeight = new ArrayList<JTextField>();
-		tfWidth = new ArrayList<JTextField>();
-		tfBw = new ArrayList<JTextField>();
-		tfAp = new ArrayList<JTextField>();
-		tfBp = new ArrayList<JTextField>();
-		MainWindow mainW = new MainWindow();
+		
+		MainWindow mainW = MainWindow.getMainWindow();
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
@@ -150,13 +172,14 @@ public class MainWindow extends JFrame {
 		mainW.setUp();
 	}
 	
-	/*Method copy libespeakservice.so file to hiden folder where the executable jar runs
-	for passing all tests in maven is needed to have hiden lib folder containing that file*/
-	
+	/**
+	 * This method copies libespeakservice.so file to hidden folder where the
+	 * executable jar runs for passing all tests in Maven. It is required to have hidden
+	 * lib folder containing that file.
+	 */
+
 	public void setUp() {
-		
-		
-		if(!(new File("/.lib/libespeakservice.so").exists())){
+		if (!(new File("/.lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
 			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
@@ -171,24 +194,42 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	public void setFile(InputStream io, String fileName)
-			  throws IOException {
-				FileOutputStream fos = new FileOutputStream(fileName);
-				
-				int read;
-				while ((read = io.read()) != -1) {
-					fos.write(read);
-				}
-			    fos.close();
-			  }
+	
+	/**
+	 * This is an auxiliary method employed by setUp() method. It copies the
+	 * contents of hidden file passed as stream (first parameter) to the file
+	 * witch path is specified as String (second parameter).
+	 * 
+	 * @param io
+	 * @param fileName
+	 * @throws IOException
+	 */
 
+	public void setFile(InputStream io, String fileName) throws IOException {
+		FileOutputStream fos = new FileOutputStream(fileName);
+		int read;
+		while ((read = io.read()) != -1) {
+			fos.write(read);
+		}
+		fos.close();
+	}
+	
+	/**
+	 * This method creates menu bar which contain
+	 * following menus: File, Speak, Voice, Options, Tools,
+	 * Compile and Help. All necessary menu items and
+	 * separators for each of mentioned menus are created as well.
+	 */
+	
 	private void menuBarInit() {
 		menuBar = new JMenuBar();
-
-		// Group File
+		
+		////////////////
+		// File group //
+		////////////////
+		
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-
 
 		mntmOpen = new JMenuItem("Open...");
 		mnFile.add(mntmOpen);
@@ -214,8 +255,11 @@ public class MainWindow extends JFrame {
 
 		mntmQuit = new JMenuItem("Quit");
 		mnFile.add(mntmQuit);
-
-		// Group Speak
+		
+		/////////////////
+		// Speak group //
+		/////////////////
+		
 		mnSpeak = new JMenu("Speak");
 		menuBar.add(mnSpeak);
 
@@ -242,8 +286,11 @@ public class MainWindow extends JFrame {
 
 		mntmStop = new JMenuItem("Stop");
 		mnSpeak.add(mntmStop);
-
-		// Group Voice
+		
+		/////////////////
+		// Voice group //
+		/////////////////
+		
 		mnVoice = new JMenu("Voice");
 		menuBar.add(mnVoice);
 
@@ -277,8 +324,11 @@ public class MainWindow extends JFrame {
 		groupOfVoices.add(rdbtnmntmRussian);
 		groupOfVoices.add(rdbtnmntmLatvian);
 		groupOfVoices.add(rdbtnmntmPolish);
-
-		// Group Options
+		
+		///////////////////
+		// Options group //
+		///////////////////
+		
 		mnOptions = new JMenu("Options");
 		menuBar.add(mnOptions);
 
@@ -330,8 +380,11 @@ public class MainWindow extends JFrame {
 
 		mntmSpeakCharacterName = new JMenuItem("Speak character name");
 		mnOptions.add(mntmSpeakCharacterName);
-
-		// Group Tools
+		
+		/////////////////
+		// Tools group //
+		/////////////////
+		
 		mnTools = new JMenu("Tools");
 		menuBar.add(mnTools);
 
@@ -367,8 +420,11 @@ public class MainWindow extends JFrame {
 
 		mntmTesttemporary = new JMenuItem("Test (temporary)");
 		mnTools.add(mntmTesttemporary);
-
-		// Group Compile
+		
+		///////////////////
+		// Compile group //
+		///////////////////
+		
 		mnCompile = new JMenu("Compile");
 		menuBar.add(mnCompile);
 
@@ -401,8 +457,11 @@ public class MainWindow extends JFrame {
 
 		mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
 		mnCompile.add(mntmSortrulesFile);
-
-		// Group Help
+		
+		////////////////
+		// Help group //
+		////////////////
+		
 		mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 
@@ -414,19 +473,30 @@ public class MainWindow extends JFrame {
 
 	}
 
-	// Initiate frame body
+	/**
+	 * This method initiates frame body. Creates "Spect" and "Text" tabs on
+	 * tabbed pane with all the necessary text fields and labels, as well as
+	 * tabbed pane for graphs.
+	 */
+
 	public void bodyInit() {
-		// initiate keyframe sequence/prosody tab pane
+		
+		// TODO #1 Implement "Amplitude frame" in bottom left corner.
+		// TODO #2 Implement scroll bar for graph pane. 
+		
+		
+		// initiate keyframe sequence/prosody tab pane:
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 //		tabbedPane.setToolTipText("");
 		
-		// initiate keyframe sequence graph pane
+		// initiate keyframe sequence graph pane:
+		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
-		
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
@@ -449,13 +519,18 @@ public class MainWindow extends JFrame {
         			.addGap(0))
         );
 
-        // keyframe sequence ("Spect") tab
-		JPanel panel_Spect = new JPanel();
+        ///////////////////////////
+        //////// Spect Tab ////////
+        ///////////////////////////
+        
+		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
 //		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 		
-		// formant parameter text fields with labels
+		///////////////////////////////////////////////
+		// formant parameter text fields with labels //
+		///////////////////////////////////////////////
 		
 		JLabel lblFreq = new JLabel("Frequency");
 		lblFreq.setBounds(3, 6, 100, labelHeight);
@@ -653,8 +728,10 @@ public class MainWindow extends JFrame {
 		tfWidth5.setColumns(10);
 		tfWidth.add(tfWidth5);
 		panel_Spect.add(tfWidth5);
-
-		// Klatt synthesis text fields with labels
+		
+		/////////////////////////////////////////////
+		// Klatt synthesis text fields with labels //
+		/////////////////////////////////////////////
 		
 		JLabel lblBw = new JLabel("Bw");
 		lblBw.setBounds(196, 31, 21, labelHeight);
@@ -776,7 +853,8 @@ public class MainWindow extends JFrame {
 		tfBp.add(tfBp6);
 		panel_Spect.add(tfBp6);
 
-		// mS text field & label
+		// mS text field & label //
+		
 		tfmS = new JTextField();
 		tfmS.setBounds(tfx0, tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		tfmS.setHorizontalAlignment(SwingConstants.CENTER);
@@ -787,7 +865,11 @@ public class MainWindow extends JFrame {
 		lblMsTf.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 21, labelHeight);
 		panel_Spect.add(lblMsTf);
 		
-		// additional parameter spinners with labels
+		///////////////////////////////////////////////
+		// Additional parameter spinners with labels //
+		// (AV, Tilt, Avp, kopen, FNZ, Aspr...).	 //
+		///////////////////////////////////////////////
+		
 		spampF = new JSpinner();
 		spampF.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		spampF.setModel(new SpinnerNumberModel(0, 0, 500, 1));
@@ -852,7 +934,7 @@ public class MainWindow extends JFrame {
 		lblAv.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAv);
 
-		
+
 		JLabel lblTilt = new JLabel("Tilt");
 		lblTilt.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 22, labelHeight);
 		lblTilt.setHorizontalAlignment(SwingConstants.LEFT);
@@ -898,7 +980,8 @@ public class MainWindow extends JFrame {
 		lblFricbp.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
 		panel_Spect.add(lblFricbp);
 		
-		// zoom buttons
+		// Zoom buttons //
+		
 		btnZoom = new JButton("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
@@ -906,8 +989,10 @@ public class MainWindow extends JFrame {
 		btnZoom_1 = new JButton("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
-
-		// more parameters
+		
+		
+		// % amp - Sequence parameter at the bottom //
+		
 		JSpinner spampS = new JSpinner();
 		spampS.setModel(new SpinnerNumberModel(0, 0, 596, 1));
 		spampS.setBounds(tfx0, 450, compWidth, compHeight);
@@ -918,37 +1003,45 @@ public class MainWindow extends JFrame {
 		lblAmpS.setBounds(tfx0 + tfxgap + compWidth, 450, 139, labelHeight);
 		panel_Spect.add(lblAmpS);
 		
+		// A Label that obviously relates to "Amplitude frame", //
+		// witch is not implemented.							//
+		
 		JLabel lblMs = new JLabel("mS");
 		lblMs.setBounds(tfx0 + tfxgap + compWidth, 477, 21, labelHeight);
 		panel_Spect.add(lblMs);
 
-
-		// Translation ("Text") tab
+		//////////////////////////
+		//////// Text Tab ////////
+		//////////////////////////
+		
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 //		panel_text.setToolTipText("Text");
 		tabbedPane.addTab("Text", null, panel_text, null);
 
-
-		// input text area
+		// Input text area:
+		
 		textAreaIn = new JTextArea();
 		textAreaIn.setLineWrap(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-		// output text area
+		// Output text area:
+		
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-		// command buttons
+		// Command buttons:
+		
 		btnTranslate = new JButton("Translate");
 		btnSpeak = new JButton("Speak");
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
-		// Translation ("Text") tab horizontal grouping
+		// Text tab horizontal grouping
+		
 		GroupLayout gl_panel_text = new GroupLayout(panel_text);
 		gl_panel_text.setHorizontalGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_text
 				.createSequentialGroup().addContainerGap()
@@ -966,7 +1059,8 @@ public class MainWindow extends JFrame {
 										.addComponent(btnShowIPA, Alignment.LEADING))))
 				.addContainerGap()));
 
-		// Translation ("Text") tab vertical grouping
+		// Text tab vertical grouping.
+		
 		gl_panel_text.setVerticalGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_text.createSequentialGroup().addContainerGap()
 						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
