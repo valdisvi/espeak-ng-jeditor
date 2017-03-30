@@ -12,11 +12,14 @@ import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
 
 public class PhonemeSave {
-	/*FIXME this class and it's methods are used by calling  File->Save and File->SaveAs buttons,
+	/*- FIXME this class and it's methods are used by calling  File->Save and File->SaveAs buttons,
 	but action listeners are commented out for them, because it is not complete
-	known issues: 1. (at current stage of JNI implementation) file_format is always 0, so that affects how the file
-	is written; 2. espeak at one point of loading file reads 10 bytes for reading double (time, pitch, lenght and dx)
-	and java uses just 8 bytes for doubles; 3. also this is not confirmed but there might be problems with unsigned
+	known issues:
+	1. (at current stage of JNI implementation) file_format is always 0, so that affects how the file
+	is written;
+	2. espeak at one point of loading file reads 10 bytes for reading double (time, pitch, lenght and dx)
+	and java uses just 8 bytes for doubles;
+	3. also this is not confirmed but there might be problems with unsigned
 	types, because in signed variables, first byte is used to determine if its positive or negative number,
 	could not find a way to write unsigned variables in DataStream
 	*/

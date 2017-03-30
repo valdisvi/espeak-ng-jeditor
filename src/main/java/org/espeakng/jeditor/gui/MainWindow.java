@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -14,8 +13,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 /**
  * This class is an entry point for the program.
@@ -141,9 +138,9 @@ public class MainWindow extends JFrame {
 	// eventHandler object
 	public EventHandlers eventHandlers;
 	
-	//Frame currently being focused
+	//Frame and panel currently being focused
 	public Frame focusedFrame;
-	
+	public JPanel focusedPanel;
 	//Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
 	public static MainWindow getMainWindow(){return instance;}

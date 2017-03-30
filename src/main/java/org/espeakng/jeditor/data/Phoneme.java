@@ -3,10 +3,13 @@ package org.espeakng.jeditor.data;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
-
+	/**
+	 * This class is the main object that program works on, contains loaded SpectSeq, and some fields
+	 * with the same values of this SpectSeq, and generated frames and graphs for this SpectSeq, etc
+	 * 
+	 */
 public class Phoneme{
 	SpectSeq spect = new SpectSeq();
 	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
@@ -23,19 +26,12 @@ public class Phoneme{
 		return frameList;
 	}
 
-	public Phoneme(String type, int file_format, int name_length, int n,
-			int amplitude, int max_y, String fileName,
-			ArrayList<Frame> frameList) {
-		this.type = type;
-		this.file_format = file_format;
-		this.name_length = name_length;
-		this.n = n;
-		this.amplitude = amplitude;
-		this.max_y = max_y;
-		this.fileName = fileName;
-		this.frameList = frameList;
-	}
-
+	/**
+	 * Constructor for Phoneme, it loads SpectSeq, from given file using JNI implementation,
+	 * then uses that data to create frames and graph, etc.
+	 * 
+	 * @param file - phoneme file to be loaded
+	 */
 	public Phoneme(File file) {
 		path = file.getAbsolutePath();
 		ESpeakService.nativeGetSpectSeq(spect, path);
@@ -47,38 +43,6 @@ public class Phoneme{
 		frameList = new ArrayList<Frame>();
 		name_length = spect.name.length();
 		
-		/* This is outdated code that one of the teams before used to load phoneme,
-		 * it has not been deleted yet for "reasons"
-		 * 
-		 * byte[] data = new byte[(int) file.length()]; try { FileInputStream
-		 * inStream = new FileInputStream(file); inStream.read(data);
-		 * ByteArrayInputStream inRead = new ByteArrayInputStream(data); byte[]
-		 * buffer = new byte[8]; inRead.read(buffer, 0, 8);
-		 * 
-		 * type = new String(buffer); if (type.equals("SPECTSPC2")) {
-		 * implement support of old SPECTSPC2 files loading } else if
-		 * (type.equals("SPECTSEQ")) { file_format = 0; } else if
-		 * (type.equals("SPECTSEK")) { file_format = 1; } else if
-		 * (type.equals("SPECTSQ2")) { file_format = 2; } else { JFrame frame =
-		 * new JFrame(); JOptionPane.showMessageDialog(frame,
-		 * "This filetype is not supported!"); inStream.close(); return; }
-		 * 
-		 * // Reading 4 bytes to get the byte-length of file-name buffer = new
-		 * byte[4]; inRead.read(buffer, 0, 4); // Wrapping bytes e.g. by default
-		 * (01 00 00 00) after wrapping (00 // 00 00 01) name_length =
-		 * byteWrapper(buffer); // Reading %name_length% bytes for file-name
-		 * buffer = new byte[name_length]; inRead.read(buffer, 0, name_length);
-		 * fileName = new String(buffer);
-		 * 
-		 * // Reading 2 bytes n buffer = new byte[2]; inRead.read(buffer, 0, 2);
-		 * n = byteWrapper(buffer);
-		 * 
-		 * // Reading 2 bytes amplitude inRead.read(buffer, 0, 2); amplitude =
-		 * byteWrapper(buffer); // Reading 2 bytes max_y inRead.read(buffer, 0,
-		 * 2); max_y = byteWrapper(buffer);
-		 * 
-		 * inRead.read(buffer, 0, 2);
-		 */
 		for (int i = 0; i < n; i++) {
 			// SpectFrame *frame = new SpectFrame;
 			Frame newFrame = new Frame();
@@ -88,38 +52,43 @@ public class Phoneme{
 			}
 			frameList.add(newFrame);
 		}
-		// inStream.close();
-		// } catch (FileNotFoundException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		
-		
-/* */	if (!file.exists())
+		if (!file.exists())
 			assert false : "From Phoneme class. File doesn't exist.";
-		
 		
 		graph = new Graph(file.getName(), frameList);
 	}
-
+	/**
+	 * Getter for graph
+	 * 
+	 * @return graph
+	 */
 	public Graph getGraph() {
 		return graph;
 	}
-
+	/**
+	 * Calls graph method of the same name, to load first frame
+	 */
 	public void loadFirstFrame() {
 		graph.loadFirstFrame();
 	}
-
+	/**
+	 * Calls graph method passing 1 as argument to zoom in
+	 */
 	public void doZoomIn() {
 		graph.zoom(1);
 	}
-
+	/**
+	 * Calls graph method passing -1 as argument to zoom out
+	 */
 	public void doZoomOut() {
 		graph.zoom(-1);
 	}
 
-	// Custom byte wrapping method e.g. ByteOrder.LITTLE_ENDIAN
+	/**
+	 * Custom byte wrapping method e.g. ByteOrder.LITTLE_ENDIAN
+	 * @param inc
+	 * @return
+	 */
 	public static int byteWrapper(byte[] inc) {
 		int value = 0;
 		byte[] wrpd = new byte[inc.length];
