@@ -173,6 +173,8 @@ public class MainWindow extends JFrame {
 	 * This method copies libespeakservice.so file to hidden folder where the
 	 * executable jar runs for passing all tests in Maven. It is required to have hidden
 	 * lib folder containing that file.
+	 * For proper work with code just create hiden .lib folder nearby Your project src folder
+	 * and copy libespeakservice.so from lib folder.
 	 */
 
 	public void setUp() {

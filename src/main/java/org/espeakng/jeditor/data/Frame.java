@@ -4,6 +4,9 @@ import org.espeakng.jeditor.jni.Formant_t;
 import org.espeakng.jeditor.jni.Peak_t;
 import org.espeakng.jeditor.jni.SpectFrame;
 
+//This class responds for getting information from phoneme file and prepare it for 
+//use in GUI
+
 public class Frame {
 	public double time;
 	public double pitch;

@@ -22,11 +22,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
 import org.espeakng.jeditor.jni.Formant_t;
 import org.espeakng.jeditor.jni.Peak_t;
+
+/*
+This is the class which responds for graphical displaying of opened phoneme.
+*/
 
 public class Graph {
 
@@ -59,7 +64,7 @@ public class Graph {
 			9, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 3, 3,
 			3, 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0 };
-	private int sel_peak = 0;
+	private static int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
 	int max_x = 0;
@@ -67,9 +72,7 @@ public class Graph {
 	boolean gridEnable = true;
 
 	public Graph(String fileName, ArrayList<Frame> frameList) {
-
-		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
+		repaintActive();
 		filePanel = new JScrollPane();
 		filePanel.setAutoscrolls(true);
 		filePanel
@@ -77,18 +80,14 @@ public class Graph {
 		filePanel
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		filePanel.setLayout(null);
-
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
-
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
 		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
 		tabbedPaneGraphs.setSelectedComponent(filePanel);
 		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
-
 	}
 
 	class Draw extends JPanel {
@@ -589,6 +588,8 @@ public class Graph {
 					sel_peak--;
 					curr.repaint();
 					curr.revalidate();
+					repaintActive();
+					
 				}
 				break;
 
@@ -597,6 +598,7 @@ public class Graph {
 					sel_peak++;
 					curr.repaint();
 					curr.revalidate();
+					repaintActive();
 				}
 				break;
 			default: {
@@ -757,7 +759,11 @@ public class Graph {
 		}
 
 	};
-
+	/*
+ 	FIXME The scroll in this method cant be added, because all keyframes are added not inside scrollbar, 
+ 	but nearby it. Thats why it show all graphs, but not scrolling inside the tab pane. 
+	*/
+	
 	public void ShowFrames(ArrayList<Frame> frames,
 			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
@@ -920,6 +926,26 @@ public class Graph {
 			keyframeWidth *= zoomAdjust;
 			keyframeHeight = keyframeWidth / 4;
 			ShowFrames(tmp, filePanel, mapPanels);
+		}
+	}
+	
+//	This method repaint borders of active textFields in MainWindow to indicate which peak is active.
+	
+	public void repaintActive(){
+		for(int i = 0; i < 8; i++){
+			JTextField tfFreq0 = new JTextField();
+			Border default1 = tfFreq0.getBorder();
+			
+			if(sel_peak==i){
+				if(i<7)MainWindow.tfFreq.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+				if(i<8)MainWindow.tfHeight.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+				if(i<6)MainWindow.tfWidth.get(i).setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+				continue;
+			}
+			if(i<7)MainWindow.tfFreq.get(i).setBorder(default1);
+			if(i<8)MainWindow.tfHeight.get(i).setBorder(default1);
+			if(i<6)MainWindow.tfWidth.get(i).setBorder(default1);
+			
 		}
 	}
 }
