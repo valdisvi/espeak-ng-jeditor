@@ -359,6 +359,7 @@ public class Graph {
 		frameToLoad.selected = true;
 		MainWindow mainW = MainWindow.getMainWindow();
 		mainW.focusedFrame = frameToLoad;
+		mainW.focusedPanel = currentPanel;
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
 

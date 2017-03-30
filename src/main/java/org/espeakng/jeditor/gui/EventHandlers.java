@@ -17,9 +17,11 @@ import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
+import org.espeakng.jeditor.jni.Peak_t;
 
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 //FIXME try extending MainWindow class, should shorten the amount of code
 public class EventHandlers {
@@ -302,7 +304,7 @@ public void clearText(){
 		mainW.btnShowRules.addActionListener(showRules);
 		mainW.btnShowIPA.addActionListener(showIpa);
 		
-		mainW.panel_Spect.addFocusListener(tfSave);
+		addTFListeners();
 	}
 
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
@@ -315,6 +317,383 @@ public void clearText(){
 	}
 	
 	//TODO Implement FocusListener for changing values in text fields
+	
+	public void addTFListeners(){
+		//These listeners works on ENTER button
+		
+		//Frequency text fields
+		MainWindow.tfFreq.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[0].pkfreq = Short.parseShort(MainWindow.tfFreq.get(0).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfFreq.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[1].pkfreq = Short.parseShort(MainWindow.tfFreq.get(1).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+				
+			}
+		});
+		MainWindow.tfFreq.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[2].pkfreq = Short.parseShort(MainWindow.tfFreq.get(2).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+				
+			}
+		});
+		MainWindow.tfFreq.get(3).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[3].pkfreq = Short.parseShort(MainWindow.tfFreq.get(3).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfFreq.get(4).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[4].pkfreq = Short.parseShort(MainWindow.tfFreq.get(4).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfFreq.get(5).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[5].pkfreq = Short.parseShort(MainWindow.tfFreq.get(5).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfFreq.get(6).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try{
+					mainW.focusedFrame.peaks[6].pkfreq = Short.parseShort(MainWindow.tfFreq.get(6).getText().toString());
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+		// Height text fields
+		
+		MainWindow.tfHeight.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(0).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[0].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(1).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[1].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(2).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[2].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(3).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(3).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[3].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(4).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(4).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[4].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(5).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(5).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[5].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(6).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(6).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[6].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfHeight.get(7).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					short value = Short.parseShort(MainWindow.tfHeight.get(7).getText().toString());
+					value = (short)(value << 6);
+					mainW.focusedFrame.peaks[7].pkheight = value;
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		// TODO width text fields
+		
+		MainWindow.tfWidth.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(0).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[0].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[0].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[0].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[0].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfWidth.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(1).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[1].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[1].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[1].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[1].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfWidth.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(2).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[2].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[2].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[2].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[2].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfWidth.get(3).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(3).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[3].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[3].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[3].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[3].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfWidth.get(4).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(4).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[4].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[4].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[4].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[4].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfWidth.get(5).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					String[] text = MainWindow.tfWidth.get(5).getText().toString().split("/");
+					if(text.length == 1){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[5].pkwidth = (short)(value * 2);
+						mainW.focusedFrame.peaks[5].pkright = (short)(value * 2);
+					}else if (text.length == 2){
+						short value = Short.parseShort(text[0]);
+						mainW.focusedFrame.peaks[5].pkright = (short)(value * 2);
+						value = Short.parseShort(text[1]);
+						mainW.focusedFrame.peaks[5].pkwidth = (short)(value * 2);
+					}
+					mainW.focusedPanel.repaint();
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+		// klt_bw text fields
+		
+		MainWindow.tfBw.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[1].klt_bw = Short.parseShort(MainWindow.tfBw.get(0).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBw.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[2].klt_bw = Short.parseShort(MainWindow.tfBw.get(1).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+		MainWindow.tfBw.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[3].klt_bw = Short.parseShort(MainWindow.tfBw.get(2).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+		// klt_ap text fields
+		
+		MainWindow.tfAp.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[0].klt_ap = Short.parseShort(MainWindow.tfAp.get(0).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfAp.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[1].klt_ap = Short.parseShort(MainWindow.tfAp.get(1).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfAp.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[2].klt_ap = Short.parseShort(MainWindow.tfAp.get(2).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfAp.get(3).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[3].klt_ap = Short.parseShort(MainWindow.tfAp.get(3).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfAp.get(4).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[4].klt_ap = Short.parseShort(MainWindow.tfAp.get(4).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfAp.get(5).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[5].klt_ap = Short.parseShort(MainWindow.tfAp.get(5).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+		// klt_bp text fields
+		
+		MainWindow.tfBp.get(0).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[1].klt_bp = Short.parseShort(MainWindow.tfBp.get(0).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBp.get(1).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[2].klt_bp = Short.parseShort(MainWindow.tfBp.get(1).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBp.get(2).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[3].klt_bp = Short.parseShort(MainWindow.tfBp.get(2).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBp.get(3).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[4].klt_bp = Short.parseShort(MainWindow.tfBp.get(3).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBp.get(4).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[5].klt_bp = Short.parseShort(MainWindow.tfBp.get(4).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		MainWindow.tfBp.get(5).addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try{
+					mainW.focusedFrame.peaks[6].klt_bp = Short.parseShort(MainWindow.tfBp.get(5).getText().toString());
+				}catch(NumberFormatException ex){}
+			}
+		});
+		
+	}
+	
+	
+	
+	
 	
 	FocusListener tfSave=new FocusAdapter(){
 		

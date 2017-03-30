@@ -138,7 +138,7 @@ public class MainWindow extends JFrame {
 	
 	//Frame currently being focused
 	public Frame focusedFrame;
-	
+	public JPanel focusedPanel;
 	//Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
 	public static MainWindow getMainWindow(){return instance;}
