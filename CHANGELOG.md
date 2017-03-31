@@ -1,5 +1,17 @@
 # Changelog
 
+## 2017-03
+GUI improvements, documented almost every class, added UML diagrams,
+frames now could be changed using text fields, bugfixes, refactoring. 
+Developed by:
+- Aivars Liepa
+- Viktors Spakovs
+- Oleksandr Melnychenko
+- Maksims Kotovs
+- Vladislavs Reinfelds
+
+
+
 ## 2017-02
 GUI improvements to show phoneme frames with frequency graphs and
 data loading with JNI calls to espeak-ng libraries was developed by:
