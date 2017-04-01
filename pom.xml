@@ -34,6 +34,10 @@
 				<version>3.0.2</version>
 				<executions>
 					<execution>
+					<!-- for copying any other files into JAR
+					add new  <execution> and copy-paste code from here and 
+					use other <id> for example <id>other-id</id> for it
+					and change settings for Your task -->
 						<id>copy-resources</id>
 						<phase>validate</phase>
 						<goals>

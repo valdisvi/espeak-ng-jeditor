@@ -3,8 +3,11 @@ package org.espeakng.jeditor.gui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.prefs.Preferences;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -62,11 +65,31 @@ public class EventHandlers {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
-				Language.initLanguage(new File("./src/main/resources/english.txt"), mainW);
+				File file = new File("./src/main/resources/english.txt");
+				if(!file.exists()){
+					InputStream in = getClass().getResourceAsStream("/english.txt");
+					BufferedReader input = new BufferedReader(new InputStreamReader(in));
+					Language.initLanguage(input, mainW);
+				}
+				Language.initLanguage(file, mainW);
 			} else if (e.getSource() == mainW.mntmLatvian) {
-				Language.initLanguage(new File("./src/main/resources/latvian.txt"), mainW);
+				File file = new File("./src/main/resources/latvian.txt");
+				if(!file.exists()){
+					InputStream in = getClass().getResourceAsStream("/latvian.txt");
+					BufferedReader input = new BufferedReader(new InputStreamReader(in));
+					Language.initLanguage(input, mainW);
+				}
+				Language.initLanguage(file, mainW);
+//				Language.initLanguage(new File("./src/main/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
-				Language.initLanguage(new File("./src/main/resources/russian.txt"), mainW);
+				File file = new File("./src/main/resources/russian.txt");
+				if(!file.exists()){
+					InputStream in = getClass().getResourceAsStream("/russian.txt");
+					BufferedReader input = new BufferedReader(new InputStreamReader(in));
+					Language.initLanguage(input, mainW);
+				}
+				Language.initLanguage(file, mainW);
+//				Language.initLanguage(new File("./src/main/resources/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {

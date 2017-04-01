@@ -37,6 +37,21 @@ public class Language {
 		initTranslation(mainW);
 	}
 	
+	
+	public static void initLanguage(BufferedReader br, MainWindow mainW){
+		translation=new ArrayList<String>();
+		try {
+			String line;
+		    while ((line = br.readLine()) != null) {
+			       translation.add(line);
+			    }
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		initTranslation(mainW);
+	}
 
 	/**
 	 * This method uses ArrayList, containing names for buttons and tabs, 
