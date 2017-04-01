@@ -71,7 +71,7 @@ public class EventHandlers {
 					BufferedReader input = new BufferedReader(new InputStreamReader(in));
 					Language.initLanguage(input, mainW);
 				}
-				Language.initLanguage(file, mainW);
+				else{Language.initLanguage(file, mainW);}
 			} else if (e.getSource() == mainW.mntmLatvian) {
 				File file = new File("./src/main/resources/latvian.txt");
 				if(!file.exists()){
@@ -79,7 +79,7 @@ public class EventHandlers {
 					BufferedReader input = new BufferedReader(new InputStreamReader(in));
 					Language.initLanguage(input, mainW);
 				}
-				Language.initLanguage(file, mainW);
+				else{Language.initLanguage(file, mainW);}
 //				Language.initLanguage(new File("./src/main/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
 				File file = new File("./src/main/resources/russian.txt");
@@ -88,7 +88,7 @@ public class EventHandlers {
 					BufferedReader input = new BufferedReader(new InputStreamReader(in));
 					Language.initLanguage(input, mainW);
 				}
-				Language.initLanguage(file, mainW);
+				else{Language.initLanguage(file, mainW);}
 //				Language.initLanguage(new File("./src/main/resources/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
