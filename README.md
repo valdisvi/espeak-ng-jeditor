@@ -17,7 +17,11 @@ For production purposes you can use older snapshot of [espeak-ng-editor](https:/
 
 ## Building
 
-### espeak-ng
+### Building espeak-ng (optional)
+
+_There library built in this project already, which is located in [lib](../../tree/master/lib) folder.
+Following is description how to build library from eSpeakNG source files:_
+
 _eSpeakNG Java Editor relies on libraries of eSpeakNG, which have to be recompiled with custom settings._
 Clone [eSpeakNG](https://github.com/espeak-ng/espeak-ng/) project and [solve dependencies](https://github.com/espeak-ng/espeak-ng/#dependencies):
 
