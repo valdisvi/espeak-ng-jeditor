@@ -7,7 +7,7 @@ package org.espeakng.jeditor.jni;
  *  	is written "by hand". 
  * 		
  * 		If this class is changed there should be according changes made to /jni/src/eSpeakService.c and
- * 		libespeakservice.so should be recompiled. To ease this task there is bash script /jni/updateJNIchanges.sh
+ * 		libespeakservice.so should be recompiled. To ease this task there is bash script updateJNIchanges.sh
  * 		Before executing this script for the first time there should be path variables updated in it. It is normal 
  * 		if it shows some warnings for EspeakNG code part (.. espeak-ng/src/libespeak-ng/event.h:66:28: warning: ..).  
  * 
@@ -37,7 +37,7 @@ package org.espeakng.jeditor.jni;
  *		}
  *		#pragma GCC visibility pop			// this line should be added to stop exposing to public API
  *		===============================================
- *		After changes have been made, EspeakNG should be rebuild ( just rerun espeak-ng-rebuild-script.sh script ). 
+ *		After changes have been made, EspeakNG should be rebuild ( just rerun updateJNIchanges.sh script ). 
  * 		
  * */
 public class ESpeakService {
