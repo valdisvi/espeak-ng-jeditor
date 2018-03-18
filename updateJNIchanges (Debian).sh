@@ -5,7 +5,7 @@ cdir=$(dirname "$0")
 cd $cdir # change to script directory
 cdir=$(pwd)
 echo $cdir
-pathToJavaLib=/usr/lib/jvm/java-8-oracle
+pathToJavaLib=/usr/lib/jvm/java-8-openjdk-amd64
 espeakDir=${cdir}/../espeak-ng
 if [ ! -d ${espeakDir} ]; then
  echo "eSpeak NG directory was not found!"
