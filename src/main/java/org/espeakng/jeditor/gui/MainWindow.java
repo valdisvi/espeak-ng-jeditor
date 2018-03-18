@@ -178,7 +178,7 @@ public class MainWindow extends JFrame {
 	 */
 
 	public void setUp() {
-		if (!(new File("/.lib/libespeakservice.so").exists())) {
+		if (!(new File(".lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
 			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
