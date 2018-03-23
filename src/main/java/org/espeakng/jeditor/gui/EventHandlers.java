@@ -1,6 +1,6 @@
 package org.espeakng.jeditor.gui;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.prefs.Preferences;
+import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.espeakng.jeditor.data.Phoneme;
@@ -106,6 +107,8 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
+			} else if (e.getSource() == mainW.mntmExportGraph) {
+				exportGraphImage();
 			}
 		}
 	};
@@ -251,11 +254,13 @@ public void clearText(){
 		
 		mainW.mntmOpen.addActionListener(event);
 		mainW.mntmOpen2.addActionListener(event);
+		mainW.mntmExportGraph.addActionListener(event);
 		// mainW.mntmSave.addActionListener(saveTab); //TODO uncomment when PhonemeSave is fixed
 		//mainW.mntmSaveAs.addActionListener(saveAsTab); //TODO uncomment when PhonemeSave is fixed or for testing
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
+
 
 
 		// Speak
@@ -315,10 +320,10 @@ public void clearText(){
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		        
-				
+
+
 			}
-			 
+
 		 });
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
@@ -768,12 +773,28 @@ public void clearText(){
 		});
 		
 	}
-	/** 
+	/**
 	 * Get method for file chooser
 	 * 
 	 * @return file chooser
 	 */
 	public JFileChooser getFileChooser(){
 		return fileChooser;
+	}
+
+	private void exportGraphImage() {
+//		mainW.tabbedPaneGraphs.setSize
+//		setSize(getPreferredSize());
+		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(), MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = image.createGraphics();
+		MainWindow.tabbedPaneGraphs.printAll(g);
+		g.dispose();
+		try {
+			File file = new File("graph.png");
+			System.out.println("Exported graphs: " + file.getAbsolutePath());
+			ImageIO.write(image, "png", file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
