@@ -1,12 +1,16 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -167,6 +171,7 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
 		mainW.setUp();
+		
 	}
 	
 	/**
@@ -525,6 +530,7 @@ public class MainWindow extends JFrame {
 		panel_Spect.setLayout(null);
 //		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
+		
 		
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //

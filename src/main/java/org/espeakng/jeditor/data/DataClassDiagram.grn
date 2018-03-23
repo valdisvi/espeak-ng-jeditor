@@ -43,15 +43,15 @@
       <y="709"/>
    </type>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
-      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Phoneme.java[Phoneme"/>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph[Draw"/>
       <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Frame.java[Frame"/>
       <bendpoints>
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph[Draw"/>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Phoneme.java[Phoneme"/>
       <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Frame.java[Frame"/>
       <bendpoints>
       </bendpoints>

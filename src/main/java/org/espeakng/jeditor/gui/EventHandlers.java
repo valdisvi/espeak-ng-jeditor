@@ -1,8 +1,10 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +16,12 @@ import javax.swing.event.ChangeListener;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 /**
  * This class is for setting up event handlers
@@ -286,8 +293,33 @@ public void clearText(){
 
 		// Tools
 
-		// mainW.mntmFromCompiledPhoneme.addActionListener();
 		// mainW.mntmFromDirectoryVowelFiles.addActionListener();
+		 mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				BufferedImage img;
+				try {
+					img = ImageIO.read(new File("/home/student/code/espeak-ng/phsource/vowelcharts/af.png"));
+					ImageIcon icon=new ImageIcon(img);
+			        JFrame frame=new JFrame();
+			        frame.setLayout(new FlowLayout());
+			        frame.setSize(200,300);
+			        JLabel lbl=new JLabel();
+			        lbl.setIcon(icon);
+			        frame.add(lbl);
+			        frame.setVisible(true);
+			        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        
+				
+			}
+			 
+		 });
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
