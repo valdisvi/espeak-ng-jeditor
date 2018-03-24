@@ -45,6 +45,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmSaveAs;
 	public JMenuItem mntmClose;
 	public JMenuItem mntmCloseAll;
+	public JMenuItem mntmExportGraph;
 	public JMenuItem mntmQuit;
 	// menuBar group Speak
 	public JMenu mnSpeak;
@@ -240,6 +241,10 @@ public class MainWindow extends JFrame {
 
 		mntmOpen2 = new JMenuItem("Open2...");
 		mnFile.add(mntmOpen2);
+		
+
+		mntmExportGraph = new JMenuItem("Export graph");
+		mnFile.add(mntmExportGraph);
 
 		mntmSave = new JMenuItem("Save");
 		mntmSave.setVisible(false);

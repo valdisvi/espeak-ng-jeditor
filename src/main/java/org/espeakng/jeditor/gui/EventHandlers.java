@@ -2,6 +2,7 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -16,6 +17,7 @@ import javax.swing.event.ChangeListener;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
+import org.espeakng.jeditor.data.VowelChart;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -106,7 +108,8 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			}
+			} else if (e.getSource() == mainW.mntmExportGraph) {
+								exportGraphImage();}
 		}
 	};
 	/**
@@ -256,7 +259,7 @@ public void clearText(){
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-
+		mainW.mntmExportGraph.addActionListener(event);
 
 		// Speak
 		
@@ -299,22 +302,9 @@ public void clearText(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				BufferedImage img;
-				try {
-					img = ImageIO.read(new File("/home/student/code/espeak-ng/phsource/vowelcharts/af.png"));
-					ImageIcon icon=new ImageIcon(img);
-			        JFrame frame=new JFrame();
-			        frame.setLayout(new FlowLayout());
-			        frame.setSize(200,300);
-			        JLabel lbl=new JLabel();
-			        lbl.setIcon(icon);
-			        frame.add(lbl);
-			        frame.setVisible(true);
-			        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+			
+				mainW.tabbedPaneGraphs.addTab("vowelChart", new VowelChart("/home/student/code/espeak-ng/phsource/vowelcharts/en"));
+
 		        
 				
 			}
@@ -776,4 +766,21 @@ public void clearText(){
 	public JFileChooser getFileChooser(){
 		return fileChooser;
 	}
+	
+	
+		private void exportGraphImage() {
+	//		mainW.tabbedPaneGraphs.setSize
+	//		setSize(getPreferredSize());
+			BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(), MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = image.createGraphics();
+			MainWindow.tabbedPaneGraphs.printAll(g);
+			g.dispose();
+			try {
+				File file = new File("graph.png");
+				System.out.println("Exported graphs: " + file.getAbsolutePath());
+				ImageIO.write(image, "png", file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 }
