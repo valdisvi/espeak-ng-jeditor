@@ -1,31 +1,22 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.prefs.Preferences;
-import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
-import org.espeakng.jeditor.data.VowelChart;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 /**
  * This class is for setting up event handlers
  */
@@ -109,8 +100,7 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
-								exportGraphImage();}
+			}
 		}
 	};
 	/**
@@ -232,66 +222,6 @@ public void clearText(){
 			espeakNg.makeAction("speakBySymbol");
 		}
 	};
-	
-	ActionListener compileDictionary = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == mainW.mntmCompileDictionary){
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception){
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
-	
-	ActionListener compileDictionaryDebug = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()== mainW.mntmCompileDictionarydebug){
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception){
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
-	
-	ActionListener compilePhonemeData = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()== mainW.mntmCompilePhonemeData){
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception){
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
-	
-	ActionListener compileAtSample = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()== mainW.mntmCompileAtSample){
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception){
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
 
 	//Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
@@ -315,13 +245,12 @@ public void clearText(){
 		
 		mainW.mntmOpen.addActionListener(event);
 		mainW.mntmOpen2.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
 		// mainW.mntmSave.addActionListener(saveTab); //TODO uncomment when PhonemeSave is fixed
 		//mainW.mntmSaveAs.addActionListener(saveAsTab); //TODO uncomment when PhonemeSave is fixed or for testing
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
+
 
 		// Speak
 		
@@ -358,20 +287,8 @@ public void clearText(){
 
 		// Tools
 
+		// mainW.mntmFromCompiledPhoneme.addActionListener();
 		// mainW.mntmFromDirectoryVowelFiles.addActionListener();
-		 mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-			
-				mainW.tabbedPaneGraphs.addTab("vowelChart", new VowelChart("/home/student/code/espeak-ng/phsource/vowelcharts/en"));
-
-		        
-				
-			}
-			 
-		 });
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
@@ -382,10 +299,10 @@ public void clearText(){
 		
 		// Compile
 		
-		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
-		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
-		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
-		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
+		// mainW.mntmCompileDictionary.addActionListener();
+		// mainW.mntmCompileDictionarydebug.addActionListener();
+		// mainW.mntmCompilePhonemeData.addActionListener();
+		// mainW.mntmCompileAtSample.addActionListener();
 		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
 		// mainW.mntmCompileIntonationData.addActionListener();
 		// mainW.mntmLayoutrulesFile.addActionListener();
@@ -827,21 +744,5 @@ public void clearText(){
 	 */
 	public JFileChooser getFileChooser(){
 		return fileChooser;
-	}
-
-	private void exportGraphImage() {
-//		mainW.tabbedPaneGraphs.setSize
-//		setSize(getPreferredSize());
-		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(), MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		MainWindow.tabbedPaneGraphs.printAll(g);
-		g.dispose();
-		try {
-			File file = new File("graph.png");
-			System.out.println("Exported graphs: " + file.getAbsolutePath());
-			ImageIO.write(image, "png", file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

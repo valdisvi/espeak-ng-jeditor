@@ -1,16 +1,12 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -34,7 +30,7 @@ public class MainWindow extends JFrame {
 	
 	// some containers.
 	public JMenuBar menuBar;
-	public static JTabbedPane tabbedPaneGraphs;	
+	public static JTabbedPane tabbedPaneGraphs;
 	
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
 	// menuBar group File
@@ -45,7 +41,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmSaveAs;
 	public JMenuItem mntmClose;
 	public JMenuItem mntmCloseAll;
-	public JMenuItem mntmExportGraph;
 	public JMenuItem mntmQuit;
 	// menuBar group Speak
 	public JMenu mnSpeak;
@@ -172,7 +167,6 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
 		mainW.setUp();
-		
 	}
 	
 	/**
@@ -241,13 +235,6 @@ public class MainWindow extends JFrame {
 
 		mntmOpen2 = new JMenuItem("Open2...");
 		mnFile.add(mntmOpen2);
-		
-
-		mntmExportGraph = new JMenuItem("Export graph");
-		mnFile.add(mntmExportGraph);
-
-		mntmExportGraph = new JMenuItem("Export graph");
-		mnFile.add(mntmExportGraph);
 
 		mntmSave = new JMenuItem("Save");
 		mntmSave.setVisible(false);
@@ -505,28 +492,30 @@ public class MainWindow extends JFrame {
 		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
-        		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
+        JPanel filePanel ;
+        JScrollPane scrollPane ;
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
         		.addGroup(groupLayout.createSequentialGroup()
         			.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-        			.addGap(35))
-        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+        			.addGap(18)
+        			.addComponent(tabbedPaneGraphs, GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+        			.addGap(23))
+        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
         );
         groupLayout.setVerticalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
         		.addGroup(groupLayout.createSequentialGroup()
         			.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
         			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-        				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-        			.addGap(0))
+        			.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(groupLayout.createSequentialGroup()
+        					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+        					.addGap(0))
+        				.addGroup(groupLayout.createSequentialGroup()
+        					.addComponent(tabbedPaneGraphs, GroupLayout.PREFERRED_SIZE, 447, GroupLayout.PREFERRED_SIZE)
+        					.addContainerGap())))
         );
 
         ///////////////////////////
@@ -537,7 +526,6 @@ public class MainWindow extends JFrame {
 		panel_Spect.setLayout(null);
 //		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
-		
 		
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
