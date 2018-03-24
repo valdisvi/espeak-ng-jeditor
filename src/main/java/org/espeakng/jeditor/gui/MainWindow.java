@@ -501,9 +501,9 @@ public class MainWindow extends JFrame {
         		.addGroup(groupLayout.createSequentialGroup()
         			.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
         			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+        			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         			.addGap(35))
-        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
         );
         groupLayout.setVerticalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
@@ -511,9 +511,8 @@ public class MainWindow extends JFrame {
         			.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
         			.addPreferredGap(ComponentPlacement.RELATED)
         			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
-        				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 
-        						GroupLayout.PREFERRED_SIZE))
+        				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+        				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         			.addGap(0))
         );
 

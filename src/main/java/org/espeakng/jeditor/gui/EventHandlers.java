@@ -221,6 +221,66 @@ public void clearText(){
 			espeakNg.makeAction("speakBySymbol");
 		}
 	};
+	
+	ActionListener compileDictionary = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == mainW.mntmCompileDictionary){
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					Runtime rt = Runtime.getRuntime();
+					try {
+						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
+					} catch (Exception exception){
+						exception.printStackTrace();
+					}
+				}
+			}
+		}
+	};
+	
+	ActionListener compileDictionaryDebug = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource()== mainW.mntmCompileDictionarydebug){
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					Runtime rt = Runtime.getRuntime();
+					try {
+						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
+					} catch (Exception exception){
+						exception.printStackTrace();
+					}
+				}
+			}
+		}
+	};
+	
+	ActionListener compilePhonemeData = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource()== mainW.mntmCompilePhonemeData){
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					Runtime rt = Runtime.getRuntime();
+					try {
+						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
+					} catch (Exception exception){
+						exception.printStackTrace();
+					}
+				}
+			}
+		}
+	};
+	
+	ActionListener compileAtSample = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource()== mainW.mntmCompileAtSample){
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					Runtime rt = Runtime.getRuntime();
+					try {
+						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
+					} catch (Exception exception){
+						exception.printStackTrace();
+					}
+				}
+			}
+		}
+	};
 
 	//Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
@@ -298,10 +358,10 @@ public void clearText(){
 		
 		// Compile
 		
-		// mainW.mntmCompileDictionary.addActionListener();
-		// mainW.mntmCompileDictionarydebug.addActionListener();
-		// mainW.mntmCompilePhonemeData.addActionListener();
-		// mainW.mntmCompileAtSample.addActionListener();
+		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
+		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
+		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
+		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
 		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
 		// mainW.mntmCompileIntonationData.addActionListener();
 		// mainW.mntmLayoutrulesFile.addActionListener();
