@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
@@ -56,7 +58,8 @@ public class Graph {
 	static int harm_sqrt_n = 0;
 
 	private JTabbedPane tabbedPaneGraphs;
-	private JScrollPane filePanel;
+	private JPanel filePanel;
+	private JScrollPane scrollPane;
 	private double zoomAdjust = 1.1;
 	private Map<JPanel, Frame> mapPanels; // each JPanel corresponds to a Frame
 	Color[] colors = { new Color(255, 0, 0), new Color(255, 128, 0),
@@ -102,22 +105,28 @@ public class Graph {
 		repaintActive();
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
-		filePanel = new JScrollPane();
-		filePanel.setAutoscrolls(true);
-		filePanel
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		filePanel
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		filePanel = new JPanel();
+		scrollPane = new JScrollPane(filePanel);
+		MainWindow.getMainWindow().add(scrollPane);
 		filePanel.setLayout(null);
-
+		filePanel.setAutoscrolls(true);
+		
+		scrollPane.setAutoscrolls(true);
+		scrollPane.setPreferredSize(filePanel.getPreferredSize());
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVisible(true);
+		MainWindow.getMainWindow().repaint();
+		
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
 
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
-		tabbedPaneGraphs.addTab(fileName, null, filePanel, null);
-		tabbedPaneGraphs.setSelectedComponent(filePanel);
+		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
+		tabbedPaneGraphs.setSelectedComponent(scrollPane);
+		
 		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
 
@@ -373,7 +382,7 @@ public class Graph {
 	}
 
 	public JScrollPane getjPanelOfGraph() {
-		return filePanel;
+		return scrollPane;
 	}
 
 	// to get first element in mapPanels
@@ -395,6 +404,7 @@ public class Graph {
 		mainW.focusedPanel = currentPanel;
 		selectedFrames.clear();
 		selectedFrames.add(frameToLoad);
+		
 
 		for (Map.Entry<JPanel, Frame> entry : mapPanels.entrySet()) {
 			if (!entry.getValue().equals(frameToLoad)) {
@@ -798,7 +808,7 @@ public class Graph {
 	*/
 
 	public void ShowFrames(ArrayList<Frame> frames,
-			final JScrollPane filePanel2, final Map<JPanel, Frame> mapPanels) {
+			final JPanel filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
 		Box box = Box.createVerticalBox();
@@ -952,7 +962,7 @@ public class Graph {
 			if (!(keyframeWidth / zoomAdjust < 335)) {
 				keyframeWidth /= zoomAdjust;
 				keyframeHeight = keyframeWidth / 4;
-				ShowFrames(tmp, filePanel, mapPanels);
+				ShowFrames(tmp,filePanel, mapPanels);
 			}
 		}
 		if (flag > 0) {
