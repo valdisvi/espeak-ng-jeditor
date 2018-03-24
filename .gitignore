@@ -1,6 +1,7 @@
 ﻿bin/**
 logs/**
 target/**
+./log
 .settings
 .classpath
 .project

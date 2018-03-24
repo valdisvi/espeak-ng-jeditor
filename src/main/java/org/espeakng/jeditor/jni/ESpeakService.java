@@ -1,43 +1,24 @@
 package org.espeakng.jeditor.jni;
 
 /*-
- * 	EspeakService class is used to call native EspeakNG functions
- * 		EspeakService loads libespeakservice.so library witch calls EspeakNG public library functions and 
- *  	use JNI to return values back to this Java class. At this stage libespeakservice.so library
- *  	is written "by hand". 
- * 		
- * 		If this class is changed there should be according changes made to /jni/src/eSpeakService.c and
- * 		libespeakservice.so should be recompiled. To ease this task there is bash script updateJNIchanges.sh
- * 		Before executing this script for the first time there should be path variables updated in it. It is normal 
- * 		if it shows some warnings for EspeakNG code part (.. espeak-ng/src/libespeak-ng/event.h:66:28: warning: ..).  
+ * EspeakService class is used to call native EspeakNG functions
+ * EspeakService loads libespeakservice.so library witch calls EspeakNG public library functions and 
+ * use JNI to return values back to this Java class. At this stage libespeakservice.so library
+ * is written "by hand". 
  * 
- * 		IMPORTANT! 
- * 		As EspeakNG LoadSpectSeq function was not in its public API ( and there are some other useful functions missing there), 
- * 		to be able to call this function, changes was made to original EspeakNG code ( LoadSpectSeq function was added to its 
- * 		public API). If EspeakNG was cloned from its original repo, those changes should be added:
- * 		in espeak-ng/src/libespeak-ng/spect.c  
- * 		============================================
- * 		...
- * 		#pragma GCC visibility push(default) // this line should be added to expose functions to public API
- * 		SpectSeq *SpectSeqCreate() 
- * 		{
- * 			...
- * 		}
- * 		
- * 		void SpectSeqDestroy(SpectSeq *spect)
- * 		{
- * 			...
- * 		}
- *		#pragma GCC visibility pop 			// this line should be added to stop exposing to public API 
- *		...
- *		#pragma GCC visibility push(default) //this line should be added to expose functions to public API
- *		espeak_ng_STATUS LoadSpectSeq(SpectSeq *spect, const char *filename)
- *		{
- *			...
- *		}
- *		#pragma GCC visibility pop			// this line should be added to stop exposing to public API
- *		===============================================
- *		After changes have been made, EspeakNG should be rebuild ( just rerun updateJNIchanges.sh script ). 
+ * If this class is changed there should be according changes made to /jni/src/eSpeakService.c and
+ * libespeakservice.so should be recompiled. To ease this task there is bash script updateJNIchanges.sh
+ * Before executing this script for the first time there should be path variables updated in it. It is normal 
+ * if it shows some warnings for EspeakNG code part (.. espeak-ng/src/libespeak-ng/event.h... warning: ..).  
+ * 
+ * If some of necessary functions are not exposed in espeak-ng, check *.h file and add in *.c file lines: 
+ *     ...
+ *     #pragma GCC visibility push(default) // expose following function to public API
+ *     exposedFuction() 
+ *     ...
+ *     #pragma GCC visibility pop 			// stop exposing to public API
+ *     ...
+ * and rerun updateJNIchanges.sh script.
  * 		
  */
 public class ESpeakService {

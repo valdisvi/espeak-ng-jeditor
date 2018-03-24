@@ -109,10 +109,12 @@ public class EspeakNg {
 		case "showRules":
 			runTimeCommand = "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
 					+ fileInput.getAbsolutePath();
+					 
 			break;
 		case "showIpa":
 			runTimeCommand = "espeak-ng -q --ipa --phonout=" + fileOutput.getAbsolutePath() + " -f "
 					+ fileInput.getAbsolutePath();
+			
 			break;
 		case "speakPunctuation":
 			// --punct='<characters>' ,where <characters> is
