@@ -7,12 +7,12 @@ public class Vowel {
 	private int b;
 	private int Xb;
 	private int Yb;
-	private int max1;
+	private double max1;
 	private int Xe;
 	private int Ye;
-	private int max2;
+	private double max2;
 		
-	public Vowel(String name, int b, int y0, int x0, int max1, int y1, int x1, int max2 ){
+	public Vowel(String name, int b, int y0, int x0, double max1, int y1, int x1, double max2 ){
 		this.name = name;
 		this.b = b;
 		Xb = x0;
@@ -61,5 +61,29 @@ public class Vowel {
 
 	public void setYe(int ye) {
 		Ye = ye;
+	}
+
+	public int getB() {
+		return b;
+	}
+
+	public void setB(int b) {
+		this.b = b;
+	}
+
+	public double getMax1() {
+		return max1;
+	}
+
+	public void setMax1(double max1) {
+		this.max1 = max1;
+	}
+
+	public double getMax2() {
+		return max2;
+	}
+
+	public void setMax2(double max2) {
+		this.max2 = max2;
 	}
 }
