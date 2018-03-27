@@ -238,7 +238,7 @@ public class EspeakNg {
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
 	 * 
 	 */
-	private String getVoiceFromSelection() {
+	public String getVoiceFromSelection() {
 
 		String text = "";
 
