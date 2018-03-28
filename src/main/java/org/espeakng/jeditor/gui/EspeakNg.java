@@ -7,8 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.espeakng.jeditor.utils.*;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -104,7 +106,8 @@ public class EspeakNg {
 					+ fileInput.getAbsolutePath();
 			break;
 		case "speak":
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -f " + fileInput.getAbsolutePath();
+			String terminalCommand = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout -f " + fileInput.getAbsolutePath()+ " |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
 			break;
 		case "showRules":
 			runTimeCommand = "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
@@ -121,9 +124,13 @@ public class EspeakNg {
 			// symbols which espeaker won't ignore
 			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
 					+ mainW.textAreaIn.getText() + "\"";
+			System.out.println(runTimeCommand);
 			break;
 		case "speakBySymbol":
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -g 12 -f " + fileInput.getAbsolutePath();
+			System.out.println(getText("speakBySymbol"));
+			String terminalCommand1 = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand1);
+			//runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -g 12 -f " + fileInput.getAbsolutePath();
 			break;
 		default:
 			break;
@@ -238,7 +245,7 @@ public class EspeakNg {
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
 	 * 
 	 */
-	private String getVoiceFromSelection() {
+	public String getVoiceFromSelection() {
 
 		String text = "";
 
