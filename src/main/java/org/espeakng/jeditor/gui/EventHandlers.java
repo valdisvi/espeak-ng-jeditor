@@ -330,10 +330,8 @@ public class EventHandlers {
 		mainW.mntmOpen.addActionListener(event);
 		mainW.mntmOpen2.addActionListener(event);
 		mainW.mntmExportGraph.addActionListener(event);
-		// mainW.mntmSave.addActionListener(saveTab); //TODO uncomment when
-		// PhonemeSave is fixed
-		// mainW.mntmSaveAs.addActionListener(saveAsTab); //TODO uncomment when
-		// PhonemeSave is fixed or for testing
+		 mainW.mntmSave.addActionListener(saveTab);
+		 mainW.mntmSaveAs.addActionListener(saveAsTab); 
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
