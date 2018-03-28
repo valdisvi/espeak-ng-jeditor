@@ -11,15 +11,15 @@
       <name="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph"/>
       <height="469"/>
       <width="603"/>
-      <x="10"/>
-      <y="600"/>
+      <x="11"/>
+      <y="471"/>
    </type>
    <type>
       <name="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph[Draw"/>
       <height="-1"/>
       <width="-1"/>
-      <x="547"/>
-      <y="673"/>
+      <x="646"/>
+      <y="532"/>
    </type>
    <type>
       <name="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Phoneme.java[Phoneme"/>
@@ -43,9 +43,9 @@
       <y="709"/>
    </type>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
-      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph[Draw"/>
-      <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Frame.java[Frame"/>
+      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
+      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Phoneme.java[Phoneme"/>
+      <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -57,9 +57,9 @@
       </bendpoints>
    </relationship>
    <relationship>
-      <class="edu.buffalo.cse.green.relationship.composition.CompositionPart"/>
-      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Phoneme.java[Phoneme"/>
-      <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph"/>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Graph.java[Graph[Draw"/>
+      <targetType="=espeak-ng-jeditor/src\/main\/java<org.espeakng.jeditor.data{Frame.java[Frame"/>
       <bendpoints>
       </bendpoints>
    </relationship>

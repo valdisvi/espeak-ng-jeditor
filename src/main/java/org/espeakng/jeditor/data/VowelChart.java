@@ -266,7 +266,7 @@ public class VowelChart extends JPanel {
 	public static void createAndShowGui(String path, MainWindow mainW) {
 
 		VowelChart vc = new VowelChart(createFromFile(path));
-		tabbedPaneGraphs.addTab(path, new JScrollPane(new JPanel().add(vc)));
+		tabbedPaneGraphs.addTab("Vowel Chart", new JScrollPane(new JPanel().add(vc)));
 
 	}
 
@@ -275,16 +275,6 @@ public class VowelChart extends JPanel {
 		createAndShowGui(path, mainW);
 	}
 
-	public static List<Vowel> checkElements(List<Vowel> vowelsList) {
-		String text = MainWindow.getMainWindow().textAreaOut.getText();
-		List<Vowel> vowelsInText = null;
-		for (int i = 0; i < vowelsList.size(); i++) {
-			if (text.indexOf(vowelsList.get(i).getName()) != -1) {
-				vowelsInText.add(vowelsList.get(i));
-			}
-		}
-		return vowelsInText;
-	}
 
 	// get the max value of frequency from the given list of Vowels objects
 	public static double getMaxFrequency() {
