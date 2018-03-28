@@ -2,27 +2,24 @@ package org.espeakng.jeditor.data;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.Window;
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import org.espeakng.jeditor.gui.MainWindow;
 
+//this class uses espeak-ng/phsource/vowelcharts folder for creating vowel charts
 public class VowelChart extends JPanel {
 	private int width = 1500;
 	private int heigth = 750;
@@ -30,18 +27,14 @@ public class VowelChart extends JPanel {
 	private int labelPadding = 25; // padding of labels from the borders
 	private static Color lineColor = new Color(44, 102, 230, 180); // color of
 																	// the lines
-	private Color pointColor = new Color(100, 100, 100, 180); // color of points
 	private Color gridColor = new Color(200, 200, 200, 200); // color of checks
-	private static final Stroke GRAPH_STROKE = new BasicStroke(2f); // width of
+	private static final Stroke GRAPH_STROKE = new BasicStroke(1f); // width of
 																	// lines
 	private static int pointWidth = 8;
 	private int numberYDivisions; // amount of divisions for F1 [y-axis]
 	private int numberXDivisions;
-	private static double minFrequency, maxFrequency; // the 3rd column values
 
 	private static JTabbedPane tabbedPaneGraphs;
-	private JPanel filePanel;
-	private static JScrollPane scrollPane;
 
 	// list of Vowel objects
 	protected static List<Vowel> vowelsList;
@@ -53,10 +46,9 @@ public class VowelChart extends JPanel {
 	// values into vowelsList
 	public VowelChart(List<Vowel> list) {
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-//		vowelsList = createFromFile(fileName);
-		vowelsList = list;
-		xValues = getXvalues(vowelsList);
-		yValues = getYvalues(vowelsList);
+		this.vowelsList = list;
+		this.xValues = getXvalues(vowelsList);
+		this.yValues = getYvalues(vowelsList);
 
 	}
 
@@ -104,9 +96,9 @@ public class VowelChart extends JPanel {
 			if (vowelsList.size() > 1) {
 				int x0 = i * (getWidth() - padding * 2 - labelPadding) / numberXDivisions + padding + labelPadding;
 				int x1 = x0;
-				int y0 = padding + labelPadding;
 
 				g2.setColor(gridColor);
+				g2.setStroke(GRAPH_STROKE);
 				g2.drawLine(x0, getHeight() - pointWidth, x1, 0);
 				g2.setColor(Color.BLACK);
 				String xLabel = ((getMaxValueX() + (100 - getMaxValueX() % 100)) - i * 100) + "";
@@ -117,11 +109,36 @@ public class VowelChart extends JPanel {
 				}
 			}
 		}
-		minFrequency = getMinFrequency();
-		maxFrequency = getMaxFrequency();
+		
+		//get the text from MainWindow textAreaOut
+		String text = MainWindow.getMainWindow().textAreaOut.getText();
+		//if the text is not empty, show the vowelchart according to the phonemes the text field contains
+		if (text.isEmpty()!=true){
+			int i = 0;
+			for (Vowel vowel : vowelsList) {
+				String name = vowel.getName();
+				System.out.println("Name:" + name + " i:" + i);
+				if (text.contains(name)) {
+					System.out.println("Text: " + text + " contains Name:" + name + " i:" + i);
+					
+					int x0 = (int) (((getMaxValueX() - (getMaxValueX() % 100)) - vowel.getXb() - labelPadding)
+							* xScale + padding - labelPadding);
+					int y0 = (int) ((vowel.getYb() - (getMinValueY() - (getMinValueY() % 100)) - labelPadding)
+							* yScale + padding + labelPadding);
 
-		vowelsInText = checkElements(vowelsList);
-		for (int i = 0; i < vowelsList.size(); i++) {
+					int x1 = (int) (((getMaxValueX() - (getMaxValueX() % 100)) - vowel.getXe() - labelPadding)
+							* xScale + padding - labelPadding);
+					int y1 = (int) ((vowel.getYe() - (getMinValueY() - (getMinValueY() % 100)) - labelPadding)
+							* yScale + padding + labelPadding);
+					drawPoint(vowel.getName(), x0, y0, x1, y1, vowel.getMax1(), g2);
+				}
+				else
+					System.err.println("Text: " + text + " doesnt contain Name:" + name + " i:" + i);
+				i++;
+			}
+		} 
+		//else show the whole chart
+		else {for (int i = 0; i < vowelsList.size(); i++) {
 			int x0 = (int) (((getMaxValueX() - (getMaxValueX() % 100)) - vowelsList.get(i).getXb() - labelPadding)
 					* xScale + padding - labelPadding);
 			int y0 = (int) ((vowelsList.get(i).getYb() - (getMinValueY() - (getMinValueY() % 100)) - labelPadding)
@@ -132,24 +149,11 @@ public class VowelChart extends JPanel {
 					* yScale + padding + labelPadding);
 			drawPoint(vowelsList.get(i).getName(), x0, y0, x1, y1, vowelsList.get(i).getMax1(), g2);
 		}
+		
+		g.drawString(text, 100, 250);
+			
+		}
 
-		// for (int i = 0; i < vowelsInText.size(); i++) {
-		// int x0 = (int) (((getMaxValueX() - (getMaxValueX() % 100)) -
-		// vowelsInText.get(i).getXb() - labelPadding)
-		// * xScale + padding - labelPadding);
-		// int y0 = (int) ((vowelsInText.get(i).getYb() - (getMinValueY() -
-		// (getMinValueY() % 100)) - labelPadding)
-		// * yScale + padding + labelPadding);
-		// int x1 = (int) (((getMaxValueX() - (getMaxValueX() % 100)) -
-		// vowelsInText.get(i).getXe() - labelPadding)
-		// * xScale + padding - labelPadding);
-		// int y1 = (int) ((vowelsInText.get(i).getYe() - (getMinValueY() -
-		// (getMinValueY() % 100)) - labelPadding)
-		// * yScale + padding + labelPadding);
-		// drawPoint(vowelsInText.get(i).getName(), x0, y0, x1, y1, g2);
-		// }
-
-		g.drawString(getMaxValueY() + "", 200, 200);
 	}
 
 	public static void drawPoint(String s, int x0, int y0, int x1, int y1, double max, Graphics g) {
@@ -158,7 +162,7 @@ public class VowelChart extends JPanel {
 		g.drawLine(x0, y0, x1, y1);
 		g.setColor(Color.DARK_GRAY);
 		g.drawString(s, x0, y0);
-		g.setColor(forColor(freqCoeff(minFrequency, maxFrequency, max)));
+		g.setColor(forColor(freqCoeff(getMinFrequency(), getMaxFrequency(), max)));
 		g.fillOval(x0 - pointWidth, y0 - pointWidth, pointWidth, pointWidth);
 	}
 
@@ -262,9 +266,8 @@ public class VowelChart extends JPanel {
 	public static void createAndShowGui(String path, MainWindow mainW) {
 
 		VowelChart vc = new VowelChart(createFromFile(path));
-		tabbedPaneGraphs.addTab(path,new JScrollPane(new JPanel().add(vc)));
-//		tabbedPaneGraphs.setSelectedComponent(vc);
-	
+		tabbedPaneGraphs.addTab(path, new JScrollPane(new JPanel().add(vc)));
+
 	}
 
 	public static void vowelOpen(File file, MainWindow mainW) {
@@ -282,8 +285,8 @@ public class VowelChart extends JPanel {
 		}
 		return vowelsInText;
 	}
-	
-	//get the max value of frequency from the given list of Vowels objects
+
+	// get the max value of frequency from the given list of Vowels objects
 	public static double getMaxFrequency() {
 		double maxValue = Integer.MIN_VALUE;
 		for (int i = 0; i < vowelsList.size(); i++) {
@@ -292,7 +295,8 @@ public class VowelChart extends JPanel {
 		return maxValue;
 
 	}
-	//get the max value of frequency from the given list of Vowels objects
+
+	// get the max value of frequency from the given list of Vowels objects
 	public static double getMinFrequency() {
 		double minValue = Integer.MAX_VALUE;
 		for (int i = 0; i < vowelsList.size(); i++) {

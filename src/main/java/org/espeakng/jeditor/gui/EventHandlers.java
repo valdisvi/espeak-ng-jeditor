@@ -380,7 +380,7 @@ public class EventHandlers {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (fileChooser3.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					prefs.put("a", fileChooser3.getSelectedFile().getParent());
+					prefs3.put("a", fileChooser3.getSelectedFile().getParent());
 					VowelChart.vowelOpen(fileChooser3.getSelectedFile(), mainW);
 				}
 			}
