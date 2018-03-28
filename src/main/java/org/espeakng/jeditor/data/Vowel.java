@@ -24,7 +24,7 @@ public class Vowel {
 	}
 
 	public String getName() {
-		return name;
+		return name.replaceAll("\t", "");
 	}
 
 	public void setName(String name) {
