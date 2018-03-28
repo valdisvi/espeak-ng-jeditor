@@ -79,7 +79,7 @@ public class Language {
 		mainW.mntmStop.setText(translation.get(14));
 		// menuBar group Voice
 		mainW.mnVoice.setText(translation.get(15));
-		mainW.mntmSelectVoice.setText(translation.get(16));
+		//mainW.mntmSelectVoice.setText(translation.get(16));
 		mainW.mntmSelectVoiceVariant.setText(translation.get(17));
 		mainW.mnSelectVoice.setText(translation.get(18));
 		mainW.rdbtnmntmEnglish.setText(translation.get(19));

@@ -91,7 +91,7 @@ public class EspeakNg {
 	 * @param command ("translate", "speak", "showRules" etc.)
 	 * @return command for espeak-ng. 
 	 */
-	private String getRunTimeCommand(String command) {
+	public String getRunTimeCommand(String command) {
 
 		String runTimeCommand = "";
 		// Get pronunciation rules:
@@ -104,10 +104,6 @@ public class EspeakNg {
 		case "translate":
 			runTimeCommand = "espeak-ng -q -v" + voice + " -x --phonout=" + fileOutput.getAbsolutePath() + " -f "
 					+ fileInput.getAbsolutePath();
-			break;
-		case "speak":
-			String terminalCommand = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout -f " + fileInput.getAbsolutePath()+ " |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
 			break;
 		case "showRules":
 			runTimeCommand = "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
@@ -125,12 +121,6 @@ public class EspeakNg {
 			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
 					+ mainW.textAreaIn.getText() + "\"";
 			System.out.println(runTimeCommand);
-			break;
-		case "speakBySymbol":
-			System.out.println(getText("speakBySymbol"));
-			String terminalCommand1 = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand1);
-			//runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -g 12 -f " + fileInput.getAbsolutePath();
 			break;
 		default:
 			break;
@@ -222,7 +212,7 @@ public class EspeakNg {
 	 * @param command
 	 * @return String text
 	 */
-	private String getText(String command) {
+	public String getText(String command) {
 
 		String text = "";
 		// speakBySymbol - it means that we need to pronounce each word by

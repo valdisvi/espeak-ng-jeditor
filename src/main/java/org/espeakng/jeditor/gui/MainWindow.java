@@ -58,7 +58,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmStop;
 	// menuBar group Voice
 	public JMenu mnVoice;
-	public JMenuItem mntmSelectVoice;
+	//public JMenuItem mntmSelectVoice;
 	public JMenuItem mntmSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
@@ -306,8 +306,8 @@ public class MainWindow extends JFrame {
 		mnVoice = new JMenu("Voice");
 		menuBar.add(mnVoice);
 
-		mntmSelectVoice = new JMenuItem("Select Voice...");
-		mnVoice.add(mntmSelectVoice);
+		//mntmSelectVoice = new JMenuItem("Select Voice...");
+		//mnVoice.add(mntmSelectVoice);
 
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
 		mnVoice.add(mntmSelectVoiceVariant);
@@ -1033,6 +1033,7 @@ public class MainWindow extends JFrame {
 		// Input text area:
 		
 		textAreaIn = new JTextArea();
+		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

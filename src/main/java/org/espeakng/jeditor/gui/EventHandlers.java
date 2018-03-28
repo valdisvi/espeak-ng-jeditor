@@ -203,6 +203,7 @@ public class EventHandlers {
 
 		}
 	};
+	
 
 	// requires espeak-ng library
 	ActionListener showRules = new ActionListener() {
@@ -224,7 +225,11 @@ public class EventHandlers {
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speak");
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
+			//espeakNg.makeAction("speak");
 		}
 	};
 
@@ -242,7 +247,11 @@ public class EventHandlers {
 	ActionListener speakBySymbol = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speakBySymbol");
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
+			//espeakNg.makeAction("speakBySymbol");
 		}
 	};
 
