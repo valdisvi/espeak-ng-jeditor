@@ -246,9 +246,6 @@ public class MainWindow extends JFrame {
 		mntmExportGraph = new JMenuItem("Export graph");
 		mnFile.add(mntmExportGraph);
 
-		mntmExportGraph = new JMenuItem("Export graph");
-		mnFile.add(mntmExportGraph);
-
 		mntmSave = new JMenuItem("Save");
 		mntmSave.setVisible(false);
 		mnFile.add(mntmSave);

@@ -17,11 +17,13 @@ public class PhonemeSave {
 	known issues:
 	1. (at current stage of JNI implementation) file_format is always 0, so that affects how the file
 	is written;
-	2. espeak at one point of loading file reads 10 bytes for reading double (time, pitch, lenght and dx)
+	2.NONISSUE espeak at one point of loading file reads 10 bytes for reading double (time, pitch, lenght and dx)
 	and java uses just 8 bytes for doubles;
-	3. also this is not confirmed but there might be problems with unsigned
+	3.NONISSUE also this is not confirmed but there might be problems with unsigned
 	types, because in signed variables, first byte is used to determine if its positive or negative number,
-	could not find a way to write unsigned variables in DataStream
+	could not find a way to write unsigned variables in DataStream 
+	
+	
 	*/
 	/**
 	 * This class is reverse engineered from espeak-ng function LoadSpecSeq(), which does use many custom made methods
@@ -214,7 +216,7 @@ public class PhonemeSave {
 //		ESpeakService.nativeGetSpectSeq(s, "../savedPhonems/i");
 		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/vowel/0");
 		
-		System.out.println("namelenght " + s.name.length());
+		System.out.println("namelength " + s.name.length());//TYPO FIX
 		System.out.println("SpectSeq [numframes=" + s.numframes + ", amplitude=" + 
 		s.amplitude + ", spare=" + s.spare + ", name=" + s.name
 				+ ", frames=" + s.frames.length + "\n, pitchenv=" + 

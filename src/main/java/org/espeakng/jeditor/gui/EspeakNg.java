@@ -236,7 +236,6 @@ public class EspeakNg {
 	 * 
 	 */
 	public String getVoiceFromSelection() {
-
 		String text = "";
 
 		// Get voice from selection
@@ -259,5 +258,6 @@ public class EspeakNg {
 
 		return voice;
 	}
+	
 
 }

@@ -34,9 +34,9 @@ import javax.swing.SwingUtilities;
 public class EventHandlers {
 
 	private MainWindow mainW;
-	private JFileChooser fileChooser, fileChooser2, fileChooser3;
-	private Preferences prefs, prefs2, prefs3;
-
+	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
+	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
+    private File file1, file2, file3, file4, file5;
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -54,6 +54,14 @@ public class EventHandlers {
 		prefs3 = Preferences.userRoot().node(getClass().getName());
 		fileChooser3 = new JFileChooser(
 				prefs3.get("a", new File("../espeak-ng/phonemes/vowelcharts").getAbsolutePath()));
+		
+		prefs4 = Preferences.userRoot().node(getClass().getName());
+        fileChooser4 = new JFileChooser(
+                prefs4.get("", new File("../espeak-ng/espeak-ng-data/lang").getAbsolutePath()));
+       
+        prefs5 = Preferences.userRoot().node(getClass().getName());
+        fileChooser5 = new JFileChooser(
+                prefs5.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
 	}
 
 	ChangeListener getPhoneme = new ChangeListener() {
@@ -233,6 +241,95 @@ public class EventHandlers {
 		}
 	};
 
+	ActionListener selectVoice = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			// EspeakNg espeakNg = new EspeakNg(mainW);
+			// String file8 = "en";
+			if (fileChooser4.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				prefs4.put("", fileChooser4.getSelectedFile().getParent());
+				// espeakNg.setVoice(fileChooser4.getName(fileChooser4.getSelectedFile()))
+				// ;
+				System.out.println(fileChooser4.getName(fileChooser4.getSelectedFile()));
+			}
+		}
+	};
+
+	ActionListener selectVoiceVariant = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			// EspeakNg espeakNg = new EspeakNg(mainW);
+			// String file8 = "en";
+			if (fileChooser5.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				prefs5.put("", fileChooser5.getSelectedFile().getParent());
+				// espeakNg.setVoice(fileChooser5.getName(fileChooser5.getSelectedFile()))
+				// ;
+				System.out.println(fileChooser5.getName(fileChooser5.getSelectedFile()));
+			}
+		}
+	};
+
+	ActionListener masterPhonemesFile = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			JFileChooser chooser = new JFileChooser(file1);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showDialog(mainW, "Select");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file1 = chooser.getSelectedFile();
+				System.out.println(file1.getAbsolutePath() + " " + file1.isDirectory());
+			}
+		}
+	};
+
+	ActionListener phonemeDataSource = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			JFileChooser chooser = new JFileChooser(file2);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showDialog(mainW, "Select");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file2 = chooser.getSelectedFile();
+				System.out.println(file2);
+				// .getAbsolutePath() + " " + file2.isDirectory());
+			}
+		}
+	};
+
+	ActionListener dictionaryDataSource = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			JFileChooser chooser = new JFileChooser(file3);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showDialog(mainW, "Select");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file3 = chooser.getSelectedFile();
+				System.out.println(file3.getAbsolutePath() + " " + file3.isDirectory());
+
+			}
+		}
+	};
+
+	ActionListener synthesizedSoundWAVFile = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			JFileChooser chooser = new JFileChooser(file4);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showDialog(mainW, "Select");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file4 = chooser.getSelectedFile();
+				System.out.println(file4.getAbsolutePath() + " " + file4.isDirectory());
+			}
+		}
+
+	};
+
+	ActionListener voiceFileToModifyFormantPeaks = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			JFileChooser chooser = new JFileChooser(file5);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showDialog(mainW, "Select");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file5 = chooser.getSelectedFile();
+				System.out.println(file5.getAbsolutePath() + " " + file5.isDirectory());
+			}
+		}
+	};
+
 	// requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
 	ActionListener speakPunctuation = new ActionListener() {
@@ -339,10 +436,8 @@ public class EventHandlers {
 		mainW.mntmOpen.addActionListener(event);
 		mainW.mntmOpen2.addActionListener(event);
 		mainW.mntmExportGraph.addActionListener(event);
-		// mainW.mntmSave.addActionListener(saveTab); //TODO uncomment when
-		// PhonemeSave is fixed
-		// mainW.mntmSaveAs.addActionListener(saveAsTab); //TODO uncomment when
-		// PhonemeSave is fixed or for testing
+		mainW.mntmSave.addActionListener(saveTab);
+		mainW.mntmSaveAs.addActionListener(saveAsTab);
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
@@ -359,6 +454,8 @@ public class EventHandlers {
 		// mainW.mntmStop.addActionListener();
 
 		// Voice
+		mainW.mntmSelectVoice.addActionListener(selectVoice);
+		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
 		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
@@ -373,6 +470,11 @@ public class EventHandlers {
 		// mainW.mntmDictionaryDataSource.addActionListener();
 		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
 		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
+		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
+		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
+		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(synthesizedSoundWAVFile);
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(voiceFileToModifyFormantPeaks);
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
