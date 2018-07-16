@@ -454,8 +454,8 @@ public class EventHandlers {
 		// mainW.mntmStop.addActionListener();
 
 		// Voice
-		mainW.mntmSelectVoice.addActionListener(selectVoice);
-		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
+		//mainW.mntmSelectVoice.addActionListener(selectVoice);
+		//mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
 		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
