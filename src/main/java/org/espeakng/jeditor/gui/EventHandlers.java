@@ -235,7 +235,7 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
 			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
 			//espeakNg.makeAction("speak");
 		}
@@ -346,7 +346,7 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand1 = "/usr/local/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
 			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
 			//espeakNg.makeAction("speakBySymbol");
 		}
