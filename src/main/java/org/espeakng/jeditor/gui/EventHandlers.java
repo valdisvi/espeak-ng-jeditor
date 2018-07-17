@@ -247,8 +247,11 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " --stdout \"" + "hello master" + "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.main(null, terminalCommand);
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
+				CommandUtilities.main(null, terminalCommand);
+			}
 		}
 	};
 	
