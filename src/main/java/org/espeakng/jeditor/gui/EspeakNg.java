@@ -264,7 +264,6 @@ public class EspeakNg {
 
 		if(!voiceVariant.equals(""))
 			voice +="+"+voiceVariant;
-		System.out.println(voice);
 		return voice;
 	}
 
