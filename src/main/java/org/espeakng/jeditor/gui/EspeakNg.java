@@ -45,6 +45,12 @@ public class EspeakNg {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	
+	/*
+	 * Saves chosen voice variant
+	 */
+	private static String voiceVariant = "";
+	
 	public EspeakNg(MainWindow mainW) {
 		this.mainW = mainW;
 	}
@@ -256,7 +262,17 @@ public class EspeakNg {
 		if (text.equals("Polish"))
 			voice = "pl";
 
+		if(!voiceVariant.equals(""))
+			voice +="+"+voiceVariant;
 		return voice;
+	}
+
+	public String getVoiceVariant() {
+		return voiceVariant;
+	}
+
+	public void setVoiceVariant(String voiceVariant) {
+		this.voiceVariant = voiceVariant;
 	}
 	
 

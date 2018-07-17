@@ -1,0 +1,3 @@
+export ESPEAK_DATA_PATH=~/code/espeak-ng  # change to your folder
+export LD_LIBRARY_PATH=~/code/espeak-ng/src  # change to your folder
+alias   e='echo ${ESPEAK_DATA_PATH:18}; $LD_LIBRARY_PATH/espeak-ng --phonout=$(tty) -s220 -vlv -X'
