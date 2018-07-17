@@ -361,12 +361,11 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
+					String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
+							" cd " + fileChooser.getSelectedFile().getParent() +
+							" && ../src/espeak-ng --compile=" + 
+							fileChooser.getSelectedFile().getName().split("_")[0];
+					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 				}
 			}
 		}
@@ -401,7 +400,7 @@ public class EventHandlers {
 			}
 		}
 	};
-
+ 
 	ActionListener compileAtSample = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileAtSample) {
