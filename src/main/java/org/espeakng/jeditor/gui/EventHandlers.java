@@ -36,7 +36,7 @@ public class EventHandlers {
 	private MainWindow mainW;
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
 	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
-    private File file1, file2, file3, file4, file5;
+    private File file1, file2, file3, file4, file5, voiceFile;
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -236,6 +236,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			
 			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
 			//espeakNg.makeAction("speak");
 		}
@@ -256,13 +257,17 @@ public class EventHandlers {
 
 	ActionListener selectVoiceVariant = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			// EspeakNg espeakNg = new EspeakNg(mainW);
+			
+			 EspeakNg espeakNg = new EspeakNg(mainW);
 			// String file8 = "en";
+			
+			JFileChooser chooser = new JFileChooser(voiceFile);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			if (fileChooser5.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs5.put("", fileChooser5.getSelectedFile().getParent());
-				// espeakNg.setVoice(fileChooser5.getName(fileChooser5.getSelectedFile()))
-				// ;
-				System.out.println(fileChooser5.getName(fileChooser5.getSelectedFile()));
+				if(fileChooser5.getName(fileChooser5.getSelectedFile()).matches("[A-Za-z0-9]+"))
+					espeakNg.setVoiceVariant(fileChooser5.getName(fileChooser5.getSelectedFile()));
+				
 			}
 		}
 	};
@@ -455,7 +460,7 @@ public class EventHandlers {
 
 		// Voice
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
-		//mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
+		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
 		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
