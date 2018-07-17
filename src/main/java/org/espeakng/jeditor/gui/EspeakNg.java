@@ -84,10 +84,14 @@ public class EspeakNg {
 		// No need for source file any more:
 		fileInput.delete();
 		
-		// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
+		// Read the espeak-ng written text field, and write this text to lower text area on "Text" tab:
 		if (!(command.equals("speakPunctuation") || command.equals("speakBySymbol") || command.equals("speak"))) {
 			readOutputFile();
 		}
+	}
+	
+	public void makeAction(String command, String[] params) {
+		
 	}
 
 	/**
@@ -124,9 +128,8 @@ public class EspeakNg {
 		case "speakPunctuation":
 			// --punct='<characters>' ,where <characters> is
 			// symbols which espeaker won't ignore
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
+			runTimeCommand = "espeak-ng -v " + voice + " -s " + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
 					+ mainW.textAreaIn.getText() + "\"";
-			System.out.println(runTimeCommand);
 			break;
 		default:
 			break;
