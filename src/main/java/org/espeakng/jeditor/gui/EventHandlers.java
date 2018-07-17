@@ -132,6 +132,7 @@ public class EventHandlers {
 	public void clearText() {
 		for (int i = 0; i < 7; i++) {
 			MainWindow.tfFreq.get(i).setText("");
+		
 		}
 		for (int i = 0; i < 8; i++) {
 			MainWindow.tfHeight.get(i).setText("");
@@ -200,7 +201,6 @@ public class EventHandlers {
 	ActionListener translate = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			espeakNg.makeAction("translate");
-
 		}
 	};
 	
@@ -259,13 +259,7 @@ public class EventHandlers {
 
 	ActionListener phonemeDataSource = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = fileChooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file = fileChooser.getSelectedFile();
-				System.out.println(file);
-				// .getAbsolutePath() + " " + file.isDirectory());
-			}
+			usingFileChooser();
 		}
 	};
 
@@ -541,17 +535,26 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfFreq.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint(index);
+					try {
+						mainW.focusedFrame.peaks[index].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText().toString());
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
 		// Height text fields
-
 		for(int i=0; i<MainWindow.tfHeight.size();i++){
 			final int index =i;
 			MainWindow.tfHeight.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint_2(index);
+					try {
+						short value = Short.parseShort(MainWindow.tfHeight.get(index).getText().toString());
+						value = (short) (value << 6);
+						mainW.focusedFrame.peaks[index].pkheight = value;
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
@@ -561,7 +564,21 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfWidth.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint_3(index);
+					try {
+						String[] text = MainWindow.tfWidth.get(index).getText().toString().split("/");
+						if (text.length == 1) {
+							short value = Short.parseShort(text[0]);
+							mainW.focusedFrame.peaks[index].pkwidth = (short) (value * 2);
+							mainW.focusedFrame.peaks[index].pkright = (short) (value * 2);
+						} else if (text.length == 2) {
+							short value = Short.parseShort(text[0]);
+							mainW.focusedFrame.peaks[index].pkright = (short) (value * 2);
+							value = Short.parseShort(text[1]);
+							mainW.focusedFrame.peaks[index].pkwidth = (short) (value * 2);
+						}
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
@@ -571,7 +588,11 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfBw.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint_4(index);
+					try {
+						mainW.focusedFrame.peaks[index+1].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText().toString());
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
@@ -583,7 +604,11 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfAp.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint_5(index);
+					try {
+						mainW.focusedFrame.peaks[index].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText().toString());
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
@@ -594,72 +619,15 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfBp.get(i).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					repaint_6(index);
+					try {
+						mainW.focusedFrame.peaks[index+1].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText().toString());
+						mainW.focusedPanel.repaint();
+					} catch (NumberFormatException ex) {
+					}
 				}
 			});
 		}
-		
-
 	}
-	private void repaint(int i) {
-		// TODO Auto-generated method stub
-		try {
-			mainW.focusedFrame.peaks[i].klt_bp = Short.parseShort(MainWindow.tfBp.get(i).getText().toString());
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-	}
-	private void repaint_2(int i){
-		try {
-			short value = Short.parseShort(MainWindow.tfHeight.get(i).getText().toString());
-			value = (short) (value << 6);
-			mainW.focusedFrame.peaks[i].pkheight = value;
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-	}
-
-	private void repaint_3(int i){
-		try {
-			String[] text = MainWindow.tfWidth.get(i).getText().toString().split("/");
-			if (text.length == 1) {
-				short value = Short.parseShort(text[0]);
-				mainW.focusedFrame.peaks[i].pkwidth = (short) (value * 2);
-				mainW.focusedFrame.peaks[i].pkright = (short) (value * 2);
-			} else if (text.length == 2) {
-				short value = Short.parseShort(text[0]);
-				mainW.focusedFrame.peaks[i].pkright = (short) (value * 2);
-				value = Short.parseShort(text[1]);
-				mainW.focusedFrame.peaks[i].pkwidth = (short) (value * 2);
-			}
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-	}
-	private void repaint_4(int i){
-		try {
-			mainW.focusedFrame.peaks[i+1].klt_ap = Short.parseShort(MainWindow.tfAp.get(i).getText().toString());
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-	}
-	
-	private void repaint_5(int i){
-		try {
-			mainW.focusedFrame.peaks[i].klt_ap = Short.parseShort(MainWindow.tfAp.get(i).getText().toString());
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-	}
-	private void repaint_6(int i){
-		try {
-			mainW.focusedFrame.peaks[i+1].klt_bp = Short.parseShort(MainWindow.tfBp.get(i).getText().toString());
-			mainW.focusedPanel.repaint();
-		} catch (NumberFormatException ex) {
-		}
-		
-	}
-
 	/**
 	 * Get method for file chooser
 	 * 
