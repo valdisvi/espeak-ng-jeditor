@@ -19,6 +19,7 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.utils.CommandUtilities;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -242,6 +243,19 @@ public class EventHandlers {
 		}
 	};
 
+	ActionListener speakFile = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
+				CommandUtilities.main(null, terminalCommand);
+			}
+		}
+	};
+	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
 			// EspeakNg espeakNg = new EspeakNg(mainW);
@@ -453,7 +467,7 @@ public class EventHandlers {
 		mainW.mntmShowRules.addActionListener(showRules);
 		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
-		// mainW.mntmSpeakfile.addActionListener();
+		 mainW.mntmSpeakfile.addActionListener(speakFile);
 		// mainW.mntmPause.addActionListener();
 		// mainW.mntmStop.addActionListener();
 

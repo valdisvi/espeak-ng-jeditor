@@ -193,7 +193,8 @@ public class MainWindow extends JFrame {
 				e.printStackTrace();
 			} finally {
 				try {
-					input.close();
+					if (input != null)
+						input.close();
 				} catch (IOException e) {
 				}
 			}
