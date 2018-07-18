@@ -122,7 +122,7 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
-				AboutWindow.OpenAboutWindow();
+				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
 
 				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());

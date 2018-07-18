@@ -21,35 +21,35 @@ public class Language {
 	 * @param mainW - Main Window
 	 */
 	public static void initLanguage(File file, MainWindow mainW){
-		BufferedReader br;
-		translation=new ArrayList<String>();
-		try {
-			String line;
-			br = new BufferedReader(new FileReader(file));
-		    while ((line = br.readLine()) != null) {
-			       translation.add(line);
-			    }
+		translation = new ArrayList<>();
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			initLanguage(br, mainW);
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		initTranslation(mainW);
 	}
 	
 	
 	public static void initLanguage(BufferedReader br, MainWindow mainW){
-		translation=new ArrayList<String>();
+		translation = new ArrayList<>();
+		
+		String line;
+	    
 		try {
-			String line;
-		    while ((line = br.readLine()) != null) {
-			       translation.add(line);
-			    }
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			while ((line = br.readLine()) != null)
+			   translation.add(line);
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 		initTranslation(mainW);
 	}
 
@@ -68,6 +68,7 @@ public class Language {
 		mainW.mntmSaveAs.setText(translation.get(4));;
 		mainW.mntmClose.setText(translation.get(5));;
 		mainW.mntmQuit.setText(translation.get(6));
+		
 		// menuBar group Speak
 		mainW.mnSpeak.setText(translation.get(7));
 		mainW.mntmTranslate.setText(translation.get(8));
@@ -77,8 +78,10 @@ public class Language {
 		mainW.mntmSpeakfile.setText(translation.get(12));
 		mainW.mntmPause.setText(translation.get(13));
 		mainW.mntmStop.setText(translation.get(14));
+		
 		// menuBar group Voice
 		mainW.mnVoice.setText(translation.get(15));
+		
 		//mainW.mntmSelectVoice.setText(translation.get(16));
 		mainW.mntmSelectVoiceVariant.setText(translation.get(17));
 		mainW.mnSelectVoice.setText(translation.get(18));
@@ -86,6 +89,7 @@ public class Language {
 		mainW.rdbtnmntmRussian.setText(translation.get(20));
 		mainW.rdbtnmntmLatvian.setText(translation.get(21));
 		mainW.rdbtnmntmPolish.setText(translation.get(22));
+		
 		// menuBar group Options
 		mainW.mnOptions.setText(translation.get(23));
 		mainW.mnSetPaths.setText(translation.get(24));
@@ -102,6 +106,7 @@ public class Language {
 		mainW.mntmSpeakPunctuation.setText(translation.get(35));
 		mainW.mntmSpeakCharacters.setText(translation.get(36));
 		mainW.mntmSpeakCharacterName.setText(translation.get(37));
+		
 		// menuBar group Tools
 		mainW.mnTools.setText(translation.get(38));
 		mainW.mnMakeVowelsChart.setText(translation.get(39));
@@ -115,6 +120,7 @@ public class Language {
 		mainW.mntmConvertFileUTF8.setText(translation.get(47));
 		mainW.mntmCountWordFrequencies.setText(translation.get(48));
 		mainW.mntmTesttemporary.setText(translation.get(49));
+		
 		// menuBar group Compile
 		mainW.mnCompile.setText(translation.get(50));
 		mainW.mntmCompileDictionary.setText(translation.get(51));
@@ -125,6 +131,7 @@ public class Language {
 		mainW.mntmCompileIntonationData.setText(translation.get(56));
 		mainW.mntmLayoutrulesFile.setText(translation.get(57));
 		mainW.mntmSortrulesFile.setText(translation.get(58));
+		
 		// menuBar group Help
 		mainW.mnHelp.setText(translation.get(59));
 		mainW.mntmEspeakDocumentation.setText(translation.get(60));

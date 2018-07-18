@@ -2,10 +2,10 @@ package org.espeakng.jeditor.utils;
 
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import java.lang.Process;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class CommandUtilities {
 
@@ -41,18 +41,24 @@ public class CommandUtilities {
         public static String handleError(Throwable e) {
                 String message = "\n" + e.getClass().getName();
                 String msg = e.getMessage();
+                
                 if (msg != null)
                         message += ", message: " + e.getMessage();
+                
                 Throwable cause = e.getCause();
                 while (cause != null) {
                         message = message + "\ncause: " + cause.getClass().getName();
                         msg = cause.getMessage();
+                        
                         if (msg != null)
                                 message += ", message: " + msg;
+                        
                         cause = cause.getCause();
                 }
+                
                 message = message + "\nStack trace:\n" + stackTraceToString(e);
-                logger.log(Level.SEVERE, message);
+                logger.log(Level.FATAL, message);
+                
                 return message;
         }
 
@@ -65,6 +71,11 @@ public class CommandUtilities {
                 return Arrays.toString(t.getStackTrace()).replaceAll(", ", "\n");
         }
         
+	     /**
+	      * Get logger instance.
+	      * 
+	      * @return Logger
+	      */
         public static Logger getLogger() {
         	return logger;
         }
@@ -75,11 +86,13 @@ public class CommandUtilities {
          * @return string gathered from the process output
          */
         public static String getOutput(Process process) {
-                // See
-                // http://web.archive.org/web/20140531042945/ https://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
-                try (Scanner s = new Scanner(process.getInputStream()).useDelimiter("\\A")) {
-                        return s.hasNext() ? s.next() : "";
-                }
+            // See
+            // http://web.archive.org/web/20140531042945/https://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
+    		try (Scanner s = new Scanner(process.getInputStream())) {
+				s.useDelimiter("\\A");
+				
+                return s.hasNext() ? s.next() : "";
+            }
         }
 
         /**
@@ -88,9 +101,11 @@ public class CommandUtilities {
          * @return string gathered from the process error output
          */
         public static String getError(Process process) {
-                try (Scanner s = new Scanner(process.getErrorStream()).useDelimiter("\\A")) {
-                        return s.hasNext() ? s.next() : "";
-                }
+            try (Scanner s = new Scanner(process.getErrorStream())) {
+                s.useDelimiter("\\A");
+                
+            	return s.hasNext() ? s.next() : "";
+            }
         }
 }
 
