@@ -1,6 +1,10 @@
 package org.espeakng.jeditor.utils;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+//import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class ProcessThread implements Runnable {
 
@@ -18,20 +22,20 @@ public class ProcessThread implements Runnable {
 			pb.waitFor();
 			
 			// FIXME in log Task
-			/*
+			
 			String output = CommandUtilities.getOutput(pb);
 			String error = CommandUtilities.getError(pb);
 	        
 			Logger logger = CommandUtilities.getLogger();
 			
 			if (!(output.equals("")))
-                logger.log(Level.FINE, "executeCmd(" + Arrays.toString(command) + ")\nOutput message: " + output);
+                logger.info("executeCmd(" + Arrays.toString(command) + ")\nOutput message: " + output);
 	        else
-	                logger.log(Level.FINE, "executeCmd(" + Arrays.toString(command) + ") executed successfully");
+	                logger.info("executeCmd(" + Arrays.toString(command) + ") executed successfully");
 	
 	        if (error != "")
-	                logger.log(Level.SEVERE, error);
-			 */
+	                logger.fatal(error);
+			 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
