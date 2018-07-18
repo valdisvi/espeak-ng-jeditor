@@ -7,13 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.espeakng.jeditor.utils.*;
 
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 
 /**
  * The class utilizes functionality of espeak-ng program (which is run on
@@ -46,7 +43,7 @@ public class EspeakNg {
 	 * @wbp.parser.entryPoint
 	 */
 	
-	/*
+	/**
 	 * Saves chosen voice variant
 	 */
 	private static String voiceVariant = "";
@@ -81,6 +78,7 @@ public class EspeakNg {
 		
 		// Command for espeak-ng is constructed as required and executed on terminal:
 		makeRunTimeAction(getRunTimeCommand(command));
+		
 		// No need for source file any more:
 		fileInput.delete();
 		
@@ -310,7 +308,7 @@ public class EspeakNg {
 	}
 
 	public void setVoiceVariant(String voiceVariant) {
-		this.voiceVariant = voiceVariant;
+		EspeakNg.voiceVariant = voiceVariant;
 	}
 	
 

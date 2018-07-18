@@ -1,11 +1,6 @@
 package org.espeakng.jeditor.utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProcessThread implements Runnable {
 
@@ -22,6 +17,8 @@ public class ProcessThread implements Runnable {
 			Process pb = Runtime.getRuntime().exec(command);
 			pb.waitFor();
 			
+			// FIXME in log Task
+			/*
 			String output = CommandUtilities.getOutput(pb);
 			String error = CommandUtilities.getError(pb);
 	        
@@ -34,6 +31,7 @@ public class ProcessThread implements Runnable {
 	
 	        if (error != "")
 	                logger.log(Level.SEVERE, error);
+			 */
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {

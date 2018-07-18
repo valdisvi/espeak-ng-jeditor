@@ -22,12 +22,8 @@ import java.io.IOException;
 
 public class AboutWindow extends JFrame {
 
+	private static final long serialVersionUID = -6382834025393046240L;
 	private JPanel contentPane;
-	
-	/** Create the frame. */
-	public static void OpenAboutWindow() {
-		AboutWindow ab = new AboutWindow();
-	}
 	
 	public AboutWindow() {
 		

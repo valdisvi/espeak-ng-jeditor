@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -24,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
@@ -133,6 +131,8 @@ public class Graph {
 	}
 
 	class Draw extends JPanel {
+		private static final long serialVersionUID = 8024106473514135068L;
+		
 		public Frame currentFrame;
 		int frame_width;
 		double scalex;
@@ -811,7 +811,7 @@ public class Graph {
 			final JPanel filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
-		Box box = Box.createVerticalBox();
+		Box.createVerticalBox();
 		Dimension size = new Dimension();
 		int y = 5;
 		if (!frames.isEmpty()) {

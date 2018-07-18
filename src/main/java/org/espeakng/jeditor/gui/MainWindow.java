@@ -1,16 +1,13 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -31,6 +28,8 @@ public class MainWindow extends JFrame {
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
 	 */
+	
+	private static final long serialVersionUID = 6548939748883665055L;
 	
 	// some containers.
 	public JMenuBar menuBar;
@@ -142,12 +141,15 @@ public class MainWindow extends JFrame {
 	// eventHandler object
 	public EventHandlers eventHandlers;
 	
-	//Frame and panel currently being focused
+	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
-	//Singleton design pattern, also easier to access main window from anywhere in code.
+	
+	// Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
+	
 	public static MainWindow getMainWindow(){return instance;}
+	
 	private  MainWindow() {
 		tfFreq = new ArrayList<JTextField>();
 		tfHeight = new ArrayList<JTextField>();
@@ -155,17 +157,19 @@ public class MainWindow extends JFrame {
 		tfBw = new ArrayList<JTextField>();
 		tfAp = new ArrayList<JTextField>();
 		tfBp = new ArrayList<JTextField>();
+		
 		frameInit();
 		menuBarInit();
 		bodyInit();
 		PhonemeLoad.phonemeListInit();
+		
 		eventHandlers = new EventHandlers(this);
 		eventHandlers.initHandlers();
 	}
 
 	public static void main(String[] args) {
-		
 		MainWindow mainW = MainWindow.getMainWindow();
+		
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
@@ -175,6 +179,7 @@ public class MainWindow extends JFrame {
 	}
 	
 	/**
+	 * FIXME
 	 * This method copies libespeakservice.so file to hidden folder where the
 	 * executable jar runs for passing all tests in Maven. It is required to have hidden
 	 * lib folder containing that file.
@@ -185,9 +190,11 @@ public class MainWindow extends JFrame {
 	public void setUp() {
 		if (!(new File(".lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
+			
 			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
 				this.setFile(input, ".lib/libespeakservice.so");
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
@@ -212,10 +219,12 @@ public class MainWindow extends JFrame {
 
 	public void setFile(InputStream io, String fileName) throws IOException {
 		FileOutputStream fos = new FileOutputStream(fileName);
+		
 		int read;
 		while ((read = io.read()) != -1) {
 			fos.write(read);
 		}
+		
 		fos.close();
 	}
 	
@@ -284,8 +293,7 @@ public class MainWindow extends JFrame {
 		mntmSpeak = new JMenuItem("Speak");
 		mnSpeak.add(mntmSpeak);
 
-		JSeparator separator = new JSeparator();
-		mnSpeak.add(separator);
+		mnSpeak.add(new JSeparator());
 
 		mntmSpeakfile = new JMenuItem("Speak file...");
 		mnSpeak.add(mntmSpeakfile);
@@ -309,8 +317,7 @@ public class MainWindow extends JFrame {
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
 		mnVoice.add(mntmSelectVoiceVariant);
 
-		JSeparator separator_5 = new JSeparator();
-		mnVoice.add(separator_5);
+		mnVoice.add(new JSeparator());
 
 		mnSelectVoice = new JMenu("Select Voice ");
 		mnVoice.add(mnSelectVoice);
@@ -356,8 +363,7 @@ public class MainWindow extends JFrame {
 		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
 		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
 
-		JSeparator separator_1 = new JSeparator();
-		mnSetPaths.add(separator_1);
+		mnSetPaths.add(new JSeparator());
 
 		mntmVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
 		mnSetPaths.add(mntmVoiceFileToModifyFormantPeaks);
@@ -378,8 +384,7 @@ public class MainWindow extends JFrame {
 		mnOptions.add(mntmSpeed);
 		optionsSpeed = new OptionsSpeedWindow();
 
-		JSeparator separator_2 = new JSeparator();
-		mnOptions.add(separator_2);
+		mnOptions.add(new JSeparator());
 
 		mntmSpeakPunctuation = new JMenuItem("Speak punctuation");
 		mnOptions.add(mntmSpeakPunctuation);
@@ -446,17 +451,15 @@ public class MainWindow extends JFrame {
 		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
 		mnCompile.add(mntmCompilePhonemeData);
 
-		JSeparator separator_3 = new JSeparator();
-		mnCompile.add(separator_3);
+		mnCompile.add(new JSeparator());
 
-		mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+    mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
 		mnCompile.add(mntmCompileIntonationData);
 
-		JSeparator separator_4 = new JSeparator();
-		mnCompile.add(separator_4);
+		mnCompile.add(new JSeparator());
 
 		mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
 		mnCompile.add(mntmLayoutrulesFile);
@@ -493,7 +496,6 @@ public class MainWindow extends JFrame {
 		// initiate keyframe sequence/prosody tab pane:
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-//		tabbedPane.setToolTipText("");
 		
 		// initiate keyframe sequence graph pane:
 		
@@ -529,7 +531,6 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-//		panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 		
 		
@@ -1021,7 +1022,6 @@ public class MainWindow extends JFrame {
 		
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
-//		panel_text.setToolTipText("Text");
 		tabbedPane.addTab("Text", null, panel_text, null);
 
 		// Input text area:
