@@ -128,8 +128,6 @@ public class Language {
 		mainW.mntmCompilePhonemeData.setText(translation.get(53));
 		mainW.mntmCompileMbrolaPhonemes.setText(translation.get(55));
 		mainW.mntmCompileIntonationData.setText(translation.get(56));
-		mainW.mntmLayoutrulesFile.setText(translation.get(57));
-		mainW.mntmSortrulesFile.setText(translation.get(58));
 		
 		// menuBar group Help
 		mainW.mnHelp.setText(translation.get(59));

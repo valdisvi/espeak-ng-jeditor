@@ -588,8 +588,6 @@ public class EventHandlers {
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
 		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
 		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
-		//mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
-		//mainW.mntmSortrulesFile.addActionListener(sortRulesFile);
 
 		// Help
 
