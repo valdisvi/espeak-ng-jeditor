@@ -375,11 +375,13 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
-							" cd " + fileChooser.getSelectedFile().getParent() +
-							" && ../src/espeak-ng --compile=" + 
-							fileChooser.getSelectedFile().getName().split("_")[0];
-					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					if (fileChooser.getSelectedFile().getParentFile().getName().equals("dictsource")) {
+						String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
+								" cd " + fileChooser.getSelectedFile().getParent() +
+								" && ../src/espeak-ng --compile=" + 
+								fileChooser.getSelectedFile().getName().split("_")[0];
+						org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					}
 				}
 			}
 		}
@@ -389,11 +391,12 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
+					if (fileChooser.getSelectedFile().getParentFile().getName().equals("dictsource")) {
+						String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
+								" cd " + fileChooser.getSelectedFile().getParent() +
+								" && ../src/espeak-ng --compile-debug=" + 
+								fileChooser.getSelectedFile().getName().split("_")[0];
+						org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 					}
 				}
 			}
@@ -403,14 +406,9 @@ public class EventHandlers {
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
+				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
+						+ "; espeak-ng --compile-phonemes" ;
+				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 			}
 		}
 	};
