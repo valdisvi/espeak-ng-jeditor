@@ -120,7 +120,6 @@ public class Language {
 		mainW.mntmCompileDictionary.setText(translation.get(51));
 		mainW.mntmCompileDictionarydebug.setText(translation.get(52));
 		mainW.mntmCompilePhonemeData.setText(translation.get(53));
-		mainW.mntmCompileAtSample.setText(translation.get(54));
 		mainW.mntmCompileMbrolaPhonemes.setText(translation.get(55));
 		mainW.mntmCompileIntonationData.setText(translation.get(56));
 		mainW.mntmLayoutrulesFile.setText(translation.get(57));
