@@ -15,6 +15,8 @@ import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
@@ -26,10 +28,14 @@ import javax.swing.JFileChooser;
 
 import javax.swing.JScrollPane;
 
+
 /**
  * This class is for setting up event handlers
  */
 public class EventHandlers {
+	
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
@@ -425,7 +431,7 @@ public class EventHandlers {
 			try {
 				rt.exec("firefox ./docs/docindex.html");
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn(e);
 			}
 		}
 	};
