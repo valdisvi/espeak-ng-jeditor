@@ -366,7 +366,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakPunc")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
+			CommandUtilities.executeCmd(terminalCommand1);
 			//espeakNg.makeAction("speakPunc");
 		}
 	};
@@ -390,7 +390,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
+			CommandUtilities.executeCmd(terminalCommand1);
 			//espeakNg.makeAction("SpeakCharName");
 		}
 	};

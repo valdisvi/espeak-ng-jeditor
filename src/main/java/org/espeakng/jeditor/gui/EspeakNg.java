@@ -198,7 +198,6 @@ public class EspeakNg {
 	private void createFileInput(String text) {
 
 		try {
-
 			fileInput = new File("MyFile.txt");
 			FileWriter fileWriter = new FileWriter(fileInput);
 			fileWriter.write(text);
@@ -238,45 +237,43 @@ public class EspeakNg {
 			text = m.replaceAll("").replaceAll(".(?!$)", "$0 ");
 			return text;
 		} 
-		else if (command.equals("speakCharName")) {
-            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
-		    int lenght = text.length();
-		    StringBuilder c = new StringBuilder();//Create another String Builder
-		    for(int i =0; i<lenght;i++){
-		        text=sbnew.charAt(i)+"";
-		        //text matches vowels and next character is not space then put space
-		        if(text.matches("[AEIOUYaeiouy]+")&&(sbnew.charAt(i+1)!=' ')){
-		            c.append(text+' ');
-		            System.out.println(c.toString());
-		          //printing out result in console
-		           
-		        }else{
-		            c.append(text);
+		
+		if (command.equals("speakCharName")) {
+			StringBuilder c = new StringBuilder();
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		        String character = String.valueOf(text.charAt(i));
+		    	
+		        // if text matches vowels and next character is not space then put space
+		        if (character.matches("[AEIOUYaeiouy]+") && (text.charAt(i+1) != ' ')) {
+		            c.append(text.charAt(i)+' ');
+		        } else {
+		            c.append(text.charAt(i));
 		        }
-		       
 		    }
+		    
 		    return c.toString();
-		    //text = sbnew.toString();
 		}
-		else if (command.equals("speakPunc")) {
-            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
-		    int lenght = text.length();
-		    StringBuilder temp = new StringBuilder();//Create another String Builder
-		    for(int i=0; i<lenght;i++){
-		        text=sbnew.charAt(i)+"";
-		        if(text.matches("[a-zA-Z]+")){
-		            temp.append(' ');
-		            System.out.println(temp.toString());
-		            //printing out result in console
-		           
-		        }else{
-		            temp.append(text);
+		
+		if (command.equals("speakPunc")) {
+		    StringBuilder sb = new StringBuilder();
+		    String character;
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		    	character = String.valueOf(text.charAt(i));
+		    	
+		        if (character.matches("[a-zA-Z]+")) {
+		            sb.append(' ');
+		        } else {
+		            sb.append(character);
 		        }
 		    }
-		    return temp.toString();
+		    
+		    return sb.toString();
 		}
+		
 		return text;
-		}
+	}
 	/**
 	 * This method sets pronunciation rules depending on chosen voice (Voice ->
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
