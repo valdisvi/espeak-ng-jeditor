@@ -100,7 +100,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmCompileDictionary;
 	public JMenuItem mntmCompileDictionarydebug;
 	public JMenuItem mntmCompilePhonemeData;
-	public JMenuItem mntmCompileAtSample;
 	public JMenuItem mntmCompileMbrolaPhonemes;
 	public JMenuItem mntmCompileIntonationData;
 	public JMenuItem mntmLayoutrulesFile;
@@ -452,12 +451,9 @@ public class MainWindow extends JFrame {
 		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
 		mnCompile.add(mntmCompilePhonemeData);
 
-		mntmCompileAtSample = new JMenuItem("Compile at sample rate");
-		mnCompile.add(mntmCompileAtSample);
-
 		mnCompile.add(new JSeparator());
 
-		mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+    mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
