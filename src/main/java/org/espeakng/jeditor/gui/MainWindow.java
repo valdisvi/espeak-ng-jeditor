@@ -1,42 +1,43 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
+import org.espeakng.jeditor.data.RMSGraph;
+
+import java.awt.Color;
 
 /**
- * This class is an entry point for the program.
- * It does all the initial preparations for the program to start,
- * builds the main window interface.
+ * This class is an entry point for the program. It does all the initial
+ * preparations for the program to start, builds the main window interface.
  *
  */
 
 public class MainWindow extends JFrame {
-	
+
 	/*
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
 	 */
-	
+
 	// some containers.
 	public JMenuBar menuBar;
-	public static JTabbedPane tabbedPaneGraphs;	
-	
-	// Grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
+	public static JTabbedPane tabbedPaneGraphs;
+
+	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
+	// Language.java
 	// menuBar group File
 	public JMenu mnFile;
 	public JMenuItem mntmOpen;
@@ -58,7 +59,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmStop;
 	// menuBar group Voice
 	public JMenu mnVoice;
-	//public JMenuItem mntmSelectVoice;
+	// public JMenuItem mntmSelectVoice;
 	public JMenuItem mntmSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
@@ -110,7 +111,7 @@ public class MainWindow extends JFrame {
 	public JMenu mnHelp;
 	public JMenuItem mntmEspeakDocumentation;
 	public JMenuItem mntmAbout;
-	
+
 	// positions & dimensions of components
 	public int labelHeight = 15;
 	public int tfx0 = 20; // horizontal starting position
@@ -119,8 +120,9 @@ public class MainWindow extends JFrame {
 	public int tfygap = 1; // vertical interval
 	public int compWidth = 56;
 	public int compHeight = 23;
-	public int labelyOffset = compHeight / 4; // vertical offset from the top of the text field/spinner
-	
+	public int labelyOffset = compHeight / 4; // vertical offset from the top of
+												// the text field/spinner
+
 	// some components
 	public static ArrayList<JTextField> tfFreq;
 	public static ArrayList<JTextField> tfHeight;
@@ -139,17 +141,25 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
-	
+
+	// Data for rms graph
+	public static double[][] rmsArray = new double[2][7];
+
 	// eventHandler object
 	public EventHandlers eventHandlers;
-	
-	//Frame and panel currently being focused
+
+	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
-	//Singleton design pattern, also easier to access main window from anywhere in code.
+	// Singleton design pattern, also easier to access main window from anywhere
+	// in code.
 	private static MainWindow instance = new MainWindow();
-	public static MainWindow getMainWindow(){return instance;}
-	private  MainWindow() {
+
+	public static MainWindow getMainWindow() {
+		return instance;
+	}
+
+	private MainWindow() {
 		tfFreq = new ArrayList<JTextField>();
 		tfHeight = new ArrayList<JTextField>();
 		tfWidth = new ArrayList<JTextField>();
@@ -165,22 +175,22 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
+
 		MainWindow mainW = MainWindow.getMainWindow();
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
-		mainW.setSize(new Dimension(1000, 600));
+		mainW.setSize(new Dimension(1000, 810));// was 600
 		mainW.setVisible(true);
 		mainW.setUp();
-		
+
 	}
-	
+
 	/**
 	 * This method copies libespeakservice.so file to hidden folder where the
-	 * executable jar runs for passing all tests in Maven. It is required to have hidden
-	 * lib folder containing that file.
-	 * For proper work with code just create hiden .lib folder nearby Your project src folder
-	 * and copy libespeakservice.so from lib folder.
+	 * executable jar runs for passing all tests in Maven. It is required to
+	 * have hidden lib folder containing that file. For proper work with code
+	 * just create hiden .lib folder nearby Your project src folder and copy
+	 * libespeakservice.so from lib folder.
 	 */
 
 	public void setUp() {
@@ -199,7 +209,7 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
 	 * contents of hidden file passed as stream (first parameter) to the file
@@ -218,21 +228,20 @@ public class MainWindow extends JFrame {
 		}
 		fos.close();
 	}
-	
+
 	/**
-	 * This method creates menu bar which contain
-	 * following menus: File, Speak, Voice, Options, Tools,
-	 * Compile and Help. All necessary menu items and
+	 * This method creates menu bar which contain following menus: File, Speak,
+	 * Voice, Options, Tools, Compile and Help. All necessary menu items and
 	 * separators for each of mentioned menus are created as well.
 	 */
-	
+
 	private void menuBarInit() {
 		menuBar = new JMenuBar();
-		
+
 		////////////////
 		// File group //
 		////////////////
-		
+
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
@@ -241,7 +250,6 @@ public class MainWindow extends JFrame {
 
 		mntmOpen2 = new JMenuItem("Open2...");
 		mnFile.add(mntmOpen2);
-		
 
 		mntmExportGraph = new JMenuItem("Export graph");
 		mnFile.add(mntmExportGraph);
@@ -257,18 +265,18 @@ public class MainWindow extends JFrame {
 		mntmClose = new JMenuItem("Close");
 		mntmClose.setVisible(false);
 		mnFile.add(mntmClose);
-		
+
 		mntmCloseAll = new JMenuItem("Close all");
 		mntmCloseAll.setVisible(false);
 		mnFile.add(mntmCloseAll);
 
 		mntmQuit = new JMenuItem("Quit");
 		mnFile.add(mntmQuit);
-		
+
 		/////////////////
 		// Speak group //
 		/////////////////
-		
+
 		mnSpeak = new JMenu("Speak");
 		menuBar.add(mnSpeak);
 
@@ -295,16 +303,16 @@ public class MainWindow extends JFrame {
 
 		mntmStop = new JMenuItem("Stop");
 		mnSpeak.add(mntmStop);
-		
+
 		/////////////////
 		// Voice group //
 		/////////////////
-		
+
 		mnVoice = new JMenu("Voice");
 		menuBar.add(mnVoice);
 
-		//mntmSelectVoice = new JMenuItem("Select Voice...");
-		//mnVoice.add(mntmSelectVoice);
+		// mntmSelectVoice = new JMenuItem("Select Voice...");
+		// mnVoice.add(mntmSelectVoice);
 
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
 		mnVoice.add(mntmSelectVoiceVariant);
@@ -333,11 +341,11 @@ public class MainWindow extends JFrame {
 		groupOfVoices.add(rdbtnmntmRussian);
 		groupOfVoices.add(rdbtnmntmLatvian);
 		groupOfVoices.add(rdbtnmntmPolish);
-		
+
 		///////////////////
 		// Options group //
 		///////////////////
-		
+
 		mnOptions = new JMenu("Options");
 		menuBar.add(mnOptions);
 
@@ -389,11 +397,11 @@ public class MainWindow extends JFrame {
 
 		mntmSpeakCharacterName = new JMenuItem("Speak character name");
 		mnOptions.add(mntmSpeakCharacterName);
-		
+
 		/////////////////
 		// Tools group //
 		/////////////////
-		
+
 		mnTools = new JMenu("Tools");
 		menuBar.add(mnTools);
 
@@ -429,11 +437,11 @@ public class MainWindow extends JFrame {
 
 		mntmTesttemporary = new JMenuItem("Test (temporary)");
 		mnTools.add(mntmTesttemporary);
-		
+
 		///////////////////
 		// Compile group //
 		///////////////////
-		
+
 		mnCompile = new JMenu("Compile");
 		menuBar.add(mnCompile);
 
@@ -466,11 +474,11 @@ public class MainWindow extends JFrame {
 
 		mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
 		mnCompile.add(mntmSortrulesFile);
-		
+
 		////////////////
 		// Help group //
 		////////////////
-		
+
 		mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 
@@ -487,59 +495,73 @@ public class MainWindow extends JFrame {
 	 * tabbed pane with all the necessary text fields and labels, as well as
 	 * tabbed pane for graphs.
 	 */
+	public static void getRMSData() {
+		if ((!tfHeight.isEmpty()) && (!tfFreq.isEmpty())) {
+			int maxHeight = 0;
+			for (JTextField h : tfHeight) {
+				int currentValue = (!h.getText().equals("")) ? Integer.parseInt(h.getText()) : 0;
+				if (currentValue > maxHeight)
+					maxHeight = currentValue;
+			}
+			if (maxHeight != 0) {
+				for (int j = 0; j < 7; j++) {
+					rmsArray[0][j] = (double) ((!tfFreq.get(j).getText().equals(""))
+							? Integer.parseInt(tfFreq.get(j).getText()) : 0);
+					rmsArray[1][j] = (double) Integer.parseInt(tfHeight.get(j).getText()) / maxHeight;
+				}
+			}
+		}
+		// panel_Spect.RMSGraph.repaint();
+	}
 
 	public void bodyInit() {
-		
-		// TODO Implement "Amplitude frame" in bottom left corner.
-		
-		
-		// initiate keyframe sequence/prosody tab pane:
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-//		tabbedPane.setToolTipText("");
-		
-		// initiate keyframe sequence graph pane:
-		
-		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
-        		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
-        GroupLayout groupLayout = new GroupLayout(getContentPane());
-        groupLayout.setHorizontalGroup(
-        	groupLayout.createParallelGroup(Alignment.LEADING)
-        		.addGroup(groupLayout.createSequentialGroup()
-        			.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-        			.addGap(35))
-        		.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-        );
-        groupLayout.setVerticalGroup(
-        	groupLayout.createParallelGroup(Alignment.LEADING)
-        		.addGroup(groupLayout.createSequentialGroup()
-        			.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-        				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-        			.addGap(0))
-        );
 
-        ///////////////////////////
-        //////// Spect Tab ////////
-        ///////////////////////////
-        
+		// TODO Implement "Amplitude frame" in bottom left corner.
+		// see getRMSData;
+
+		// initiate keyframe sequence/prosody tab pane:
+
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		// tabbedPane.setToolTipText("");
+
+		// initiate keyframe sequence graph pane:
+
+		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE).addGap(10))
+				.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
+				.createSequentialGroup()
+				.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE).addGap(0))
+						.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+								.addContainerGap()))));
+
+		///////////////////////////
+		//////// Spect Tab ////////
+		///////////////////////////
+
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-//		panel_Spect.setToolTipText("Spect");
+		// panel_Spect.setToolTipText("Spect");
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
-		
-		
+
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
-		
+
 		JLabel lblFreq = new JLabel("Frequency");
 		lblFreq.setBounds(3, 6, 100, labelHeight);
 		lblFreq.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -549,311 +571,311 @@ public class MainWindow extends JFrame {
 		lblHt.setBounds(80, 6, 50, labelHeight);
 		lblHt.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblHt);
-		
+
 		JLabel lblWidth = new JLabel("Width");
 		lblWidth.setBounds(135, 6, 42, labelHeight);
 		panel_Spect.add(lblWidth);
-		
+
 		JLabel lblklatt = new JLabel("(Klatt)");
 		lblklatt.setBounds(231, 6, 44, labelHeight);
 		panel_Spect.add(lblklatt);
-		
+
 		JLabel label_0 = new JLabel("0");
 		label_0.setBounds(6, 31, 8, labelHeight);
 		panel_Spect.add(label_0);
-		
+
 		JLabel label_1 = new JLabel("1");
 		label_1.setBounds(6, 53, 8, labelHeight);
 		panel_Spect.add(label_1);
-		
+
 		JLabel label_2 = new JLabel("2");
 		label_2.setBounds(6, 75, 8, labelHeight);
 		panel_Spect.add(label_2);
-		
+
 		JLabel label_3 = new JLabel("3");
 		label_3.setBounds(6, 97, 8, labelHeight);
 		panel_Spect.add(label_3);
-		
+
 		JLabel label_4 = new JLabel("4");
 		label_4.setBounds(6, 119, 8, labelHeight);
 		panel_Spect.add(label_4);
-		
+
 		JLabel label_5 = new JLabel("5");
 		label_5.setBounds(6, 141, 8, labelHeight);
 		panel_Spect.add(label_5);
-		
+
 		JLabel label_6 = new JLabel("6");
 		label_6.setBounds(6, 163, 8, labelHeight);
 		panel_Spect.add(label_6);
-		
+
 		JLabel label_7 = new JLabel("7");
 		label_7.setBounds(6, 185, 8, labelHeight);
 		panel_Spect.add(label_7);
-		
+
 		JTextField tfFreq0 = new JTextField();
 		tfFreq0.setBounds(tfx0, tfy0, compWidth, compHeight);
 		tfFreq0.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq0.setColumns(10);
 		tfFreq.add(tfFreq0);
 		panel_Spect.add(tfFreq0);
-		
+
 		JTextField tfFreq1 = new JTextField();
 		tfFreq1.setBounds(tfx0, tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfFreq1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq1.setColumns(10);
 		tfFreq.add(tfFreq1);
 		panel_Spect.add(tfFreq1);
-		
+
 		JTextField tfFreq2 = new JTextField();
 		tfFreq2.setBounds(tfx0, tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfFreq2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq2.setColumns(10);
 		tfFreq.add(tfFreq2);
 		panel_Spect.add(tfFreq2);
-		
+
 		JTextField tfFreq3 = new JTextField();
 		tfFreq3.setBounds(tfx0, tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfFreq3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq3.setColumns(10);
 		tfFreq.add(tfFreq3);
 		panel_Spect.add(tfFreq3);
-		
+
 		JTextField tfFreq4 = new JTextField();
 		tfFreq4.setBounds(tfx0, tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
 		tfFreq4.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq4.setColumns(10);
 		tfFreq.add(tfFreq4);
 		panel_Spect.add(tfFreq4);
-		
+
 		JTextField tfFreq5 = new JTextField();
 		tfFreq5.setBounds(tfx0, tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
 		tfFreq5.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq5.setColumns(10);
 		tfFreq.add(tfFreq5);
 		panel_Spect.add(tfFreq5);
-		
+
 		JTextField tfFreq6 = new JTextField();
 		tfFreq6.setBounds(tfx0, tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
 		tfFreq6.setHorizontalAlignment(SwingConstants.CENTER);
 		tfFreq6.setColumns(10);
 		tfFreq.add(tfFreq6);
 		panel_Spect.add(tfFreq6);
-		
+
 		JTextField tfHeight0 = new JTextField();
 		tfHeight0.setBounds(tfx0 + tfxgap + compWidth, tfy0, compWidth, compHeight);
 		tfHeight0.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight0.setColumns(10);
 		tfHeight.add(tfHeight0);
 		panel_Spect.add(tfHeight0);
-		
+
 		JTextField tfHeight1 = new JTextField();
 		tfHeight1.setBounds(tfx0 + tfxgap + compWidth, tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfHeight1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight1.setColumns(10);
 		tfHeight.add(tfHeight1);
 		panel_Spect.add(tfHeight1);
-		
+
 		JTextField tfHeight2 = new JTextField();
 		tfHeight2.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight2.setColumns(10);
 		tfHeight.add(tfHeight2);
 		panel_Spect.add(tfHeight2);
-		
+
 		JTextField tfHeight3 = new JTextField();
 		tfHeight3.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight3.setColumns(10);
 		tfHeight.add(tfHeight3);
 		panel_Spect.add(tfHeight3);
-		
+
 		JTextField tfHeight4 = new JTextField();
 		tfHeight4.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight4.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight4.setColumns(10);
 		tfHeight.add(tfHeight4);
 		panel_Spect.add(tfHeight4);
-		
+
 		JTextField tfHeight5 = new JTextField();
 		tfHeight5.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight5.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight5.setColumns(10);
 		tfHeight.add(tfHeight5);
 		panel_Spect.add(tfHeight5);
-		
+
 		JTextField tfHeight6 = new JTextField();
 		tfHeight6.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight6.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight6.setColumns(10);
 		tfHeight.add(tfHeight6);
 		panel_Spect.add(tfHeight6);
-		
+
 		JTextField tfHeight7 = new JTextField();
 		tfHeight7.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 7 * (compHeight + tfygap), compWidth, compHeight);
 		tfHeight7.setHorizontalAlignment(SwingConstants.CENTER);
 		tfHeight7.setColumns(10);
 		tfHeight.add(tfHeight7);
 		panel_Spect.add(tfHeight7);
-		
+
 		JTextField tfWidth0 = new JTextField();
 		tfWidth0.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0, compWidth, compHeight);
 		tfWidth0.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth0.setColumns(10);
 		tfWidth.add(tfWidth0);
 		panel_Spect.add(tfWidth0);
-		
+
 		JTextField tfWidth1 = new JTextField();
 		tfWidth1.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfWidth1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth1.setColumns(10);
 		tfWidth.add(tfWidth1);
 		panel_Spect.add(tfWidth1);
-		
+
 		JTextField tfWidth2 = new JTextField();
 		tfWidth2.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfWidth2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth2.setColumns(10);
 		tfWidth.add(tfWidth2);
 		panel_Spect.add(tfWidth2);
-		
+
 		JTextField tfWidth3 = new JTextField();
 		tfWidth3.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfWidth3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth3.setColumns(10);
 		tfWidth.add(tfWidth3);
 		panel_Spect.add(tfWidth3);
-		
+
 		JTextField tfWidth4 = new JTextField();
 		tfWidth4.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
 		tfWidth4.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth4.setColumns(10);
 		tfWidth.add(tfWidth4);
 		panel_Spect.add(tfWidth4);
-		
+
 		JTextField tfWidth5 = new JTextField();
 		tfWidth5.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
 		tfWidth5.setHorizontalAlignment(SwingConstants.CENTER);
 		tfWidth5.setColumns(10);
 		tfWidth.add(tfWidth5);
 		panel_Spect.add(tfWidth5);
-		
+
 		/////////////////////////////////////////////
 		// Klatt synthesis text fields with labels //
 		/////////////////////////////////////////////
-		
+
 		JLabel lblBw = new JLabel("Bw");
 		lblBw.setBounds(196, 31, 21, labelHeight);
 		lblBw.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblBw);
-		
+
 		JLabel lblAp = new JLabel("Ap");
 		lblAp.setBounds(247, 31, 18, labelHeight);
 		lblAp.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblAp);
-		
+
 		JLabel lblBp = new JLabel("Bp");
 		lblBp.setBounds(304, 31, 18, labelHeight);
 		lblBp.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblBp);
-		
+
 		JTextField tfBw1 = new JTextField();
 		tfBw1.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfBw1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBw1.setColumns(10);
 		tfBw.add(tfBw1);
 		panel_Spect.add(tfBw1);
-		
+
 		JTextField tfBw2 = new JTextField();
 		tfBw2.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfBw2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBw2.setColumns(10);
 		tfBw.add(tfBw2);
 		panel_Spect.add(tfBw2);
-		
+
 		JTextField tfBw3 = new JTextField();
 		tfBw3.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfBw3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBw3.setColumns(10);
 		tfBw.add(tfBw3);
 		panel_Spect.add(tfBw3);
-		
+
 		JTextField tfAp1 = new JTextField();
 		tfAp1.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfAp1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp1.setColumns(10);
 		tfAp.add(tfAp1);
 		panel_Spect.add(tfAp1);
-		
+
 		JTextField tfAp2 = new JTextField();
 		tfAp2.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfAp2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp2.setColumns(10);
 		tfAp.add(tfAp2);
 		panel_Spect.add(tfAp2);
-		
+
 		JTextField tfAp3 = new JTextField();
 		tfAp3.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfAp3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp3.setColumns(10);
 		tfAp.add(tfAp3);
 		panel_Spect.add(tfAp3);
-		
+
 		JTextField tfAp4 = new JTextField();
 		tfAp4.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
 		tfAp4.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp4.setColumns(10);
 		tfAp.add(tfAp4);
 		panel_Spect.add(tfAp4);
-		
+
 		JTextField tfAp5 = new JTextField();
 		tfAp5.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
 		tfAp5.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp5.setColumns(10);
 		tfAp.add(tfAp5);
 		panel_Spect.add(tfAp5);
-		
+
 		JTextField tfAp6 = new JTextField();
 		tfAp6.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
 		tfAp6.setHorizontalAlignment(SwingConstants.CENTER);
 		tfAp6.setColumns(10);
 		tfAp.add(tfAp6);
 		panel_Spect.add(tfAp6);
-		
+
 		JTextField tfBp1 = new JTextField();
 		tfBp1.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
 		tfBp1.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBp1.setColumns(10);
 		tfBp.add(tfBp1);
 		panel_Spect.add(tfBp1);
-		
+
 		JTextField tfBp2 = new JTextField();
 		tfBp2.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
 		tfBp2.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBp2.setColumns(10);
 		tfBp.add(tfBp2);
 		panel_Spect.add(tfBp2);
-		
+
 		JTextField tfBp3 = new JTextField();
 		tfBp3.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
 		tfBp3.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBp3.setColumns(10);
 		tfBp.add(tfBp3);
 		panel_Spect.add(tfBp3);
-		
+
 		JTextField tfBp4 = new JTextField();
 		tfBp4.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
 		tfBp4.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBp4.setColumns(10);
 		tfBp.add(tfBp4);
 		panel_Spect.add(tfBp4);
-		
+
 		JTextField tfBp5 = new JTextField();
 		tfBp5.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
 		tfBp5.setHorizontalAlignment(SwingConstants.CENTER);
 		tfBp5.setColumns(10);
 		tfBp.add(tfBp5);
 		panel_Spect.add(tfBp5);
-		
+
 		JTextField tfBp6 = new JTextField();
 		tfBp6.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
 		tfBp6.setHorizontalAlignment(SwingConstants.CENTER);
@@ -862,62 +884,62 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(tfBp6);
 
 		// mS text field & label //
-		
+
 		tfmS = new JTextField();
 		tfmS.setBounds(tfx0, tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		tfmS.setHorizontalAlignment(SwingConstants.CENTER);
 		tfmS.setColumns(10);
 		panel_Spect.add(tfmS);
-		
+
 		JLabel lblMsTf = new JLabel("mS");
 		lblMsTf.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 21, labelHeight);
 		panel_Spect.add(lblMsTf);
-		
+
 		///////////////////////////////////////////////
 		// Additional parameter spinners with labels //
-		// (AV, Tilt, Avp, kopen, FNZ, Aspr...).	 //
+		// (AV, Tilt, Avp, kopen, FNZ, Aspr...). //
 		///////////////////////////////////////////////
-		
+
 		spampF = new JSpinner();
 		spampF.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		spampF.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spampF);
-		
+
 		JSpinner spAV = new JSpinner();
 		spAV.setBounds(tfx0, tfy0 + 10 * (compHeight + tfygap), compWidth, compHeight);
 		spAV.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAV);
-		
+
 		JSpinner spFNZ = new JSpinner();
 		spFNZ.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap), compWidth, compHeight);
 		spFNZ.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spFNZ);
-		
+
 		JSpinner spTilt = new JSpinner();
 		spTilt.setBounds(tfx0, tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spTilt.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spTilt);
-		
+
 		JSpinner spAspr = new JSpinner();
 		spAspr.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spAspr.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAspr);
-		
+
 		JSpinner spSkew = new JSpinner();
 		spSkew.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spSkew.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spSkew);
-		
+
 		JSpinner spAVp = new JSpinner();
 		spAVp.setBounds(tfx0, tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spAVp.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAVp);
-		
+
 		JSpinner spFric = new JSpinner();
 		spFric.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spFric.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spFric);
-		
+
 		JSpinner spFricBP = new JSpinner();
 		spFricBP.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spFricBP.setModel(new SpinnerNumberModel(0, 0, 500, 1));
@@ -927,108 +949,127 @@ public class MainWindow extends JFrame {
 		spkopen.setBounds(tfx0, tfy0 + 13 * (compHeight + tfygap), compWidth, compHeight);
 		spkopen.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spkopen);
-		
+
 		JSpinner spTurb = new JSpinner();
 		spTurb.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap), compWidth, compHeight);
 		spTurb.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spTurb);
-		
+
 		JLabel lblAmpF = new JLabel("% amp - Frame");
-		lblAmpF.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 103, labelHeight);
+		lblAmpF.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 103,
+				labelHeight);
 		panel_Spect.add(lblAmpF);
-		
+
 		JLabel lblAv = new JLabel("AV");
 		lblAv.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
 		lblAv.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAv);
 
-
 		JLabel lblTilt = new JLabel("Tilt");
 		lblTilt.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 22, labelHeight);
 		lblTilt.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblTilt);
-		
+
 		JLabel lblAvp = new JLabel("AVp");
 		lblAvp.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 27, labelHeight);
 		lblAvp.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAvp);
-		
+
 		JLabel lblKopen = new JLabel("kopen");
-		lblKopen.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblKopen.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		lblKopen.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblKopen);
-		
+
 		JLabel lblFnz = new JLabel("FNZ");
 		lblFnz.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFnz.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFnz.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFnz);
-		
+
 		JLabel lblAspr = new JLabel("Aspr");
 		lblAspr.setHorizontalAlignment(SwingConstants.LEFT);
-		lblAspr.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblAspr.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblAspr);
-		
+
 		JLabel lblFric = new JLabel("Fric");
 		lblFric.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFric.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFric.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFric);
-		
+
 		JLabel lblTurb = new JLabel("Turb");
 		lblTurb.setHorizontalAlignment(SwingConstants.LEFT);
-		lblTurb.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblTurb.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblTurb);
-		
+
 		JLabel lblSkew = new JLabel("Skew");
 		lblSkew.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSkew.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblSkew.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblSkew);
-		
+
 		JLabel lblFricbp = new JLabel("FricBP");
 		lblFricbp.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFricbp.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFricbp.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFricbp);
-		
+
 		// Zoom buttons //
-		
+
 		btnZoom = new JButton("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
-		
+
 		btnZoom_1 = new JButton("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
-		
-		
-		// % amp - Sequence parameter at the bottom //
-		
-		JSpinner spampS = new JSpinner();
-		spampS.setModel(new SpinnerNumberModel(0, 0, 596, 1));
-		spampS.setBounds(tfx0, 450, compWidth, compHeight);
-		panel_Spect.add(spampS);
-		
+
 		JLabel lblAmpS = new JLabel("% amp - Sequence");
 		lblAmpS.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAmpS.setBounds(tfx0 + tfxgap + compWidth, 450, 139, labelHeight);
 		panel_Spect.add(lblAmpS);
-		
+
 		// A Label that obviously relates to "Amplitude frame", //
-		// witch is not implemented.							//
-		
-		JLabel lblMs = new JLabel("mS");
-		lblMs.setBounds(tfx0 + tfxgap + compWidth, 477, 21, labelHeight);
+		// witch is not implemented. - done //
+
+		JLabel lblMs = new JLabel("% mS - Sequence");
+		lblMs.setBounds(80, 477, 137, 23);
 		panel_Spect.add(lblMs);
+
+		// % amp - Sequence parameter at the bottom //
+
+		JSpinner spampS = new JSpinner();
+		spampS.setModel(new SpinnerNumberModel(0, 0, 596, 1));
+		spampS.setBounds(20, 446, compWidth, compHeight);
+		panel_Spect.add(spampS);
+
+		// % mS - Sequence parameter at the bottom //
+
+		JSpinner spms = new JSpinner();
+		spms.setModel(new SpinnerNumberModel(0, 0, 596, 1));
+		spms.setBounds(20, 481, compWidth, compHeight);
+		panel_Spect.add(spms);
+		// graph pane for RMS
+
+		JPanel panelRmsGraph = new RMSGraph();
+		panelRmsGraph.setBounds(3, 511, 364, 200);
+		panel_Spect.add(panelRmsGraph);
+		panelRmsGraph.setBackground(new Color(238, 238, 238));
 
 		//////////////////////////
 		//////// Text Tab ////////
 		//////////////////////////
-		
+
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
-//		panel_text.setToolTipText("Text");
+		// panel_text.setToolTipText("Text");
 		tabbedPane.addTab("Text", null, panel_text, null);
 
 		// Input text area:
-		
+
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
@@ -1036,21 +1077,21 @@ public class MainWindow extends JFrame {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Output text area:
-		
+
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Command buttons:
-		
+
 		btnTranslate = new JButton("Translate");
 		btnSpeak = new JButton("Speak");
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
 		// Text tab horizontal grouping
-		
+
 		GroupLayout gl_panel_text = new GroupLayout(panel_text);
 		gl_panel_text.setHorizontalGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_text
 				.createSequentialGroup().addContainerGap()
@@ -1069,7 +1110,7 @@ public class MainWindow extends JFrame {
 				.addContainerGap()));
 
 		// Text tab vertical grouping.
-		
+
 		gl_panel_text.setVerticalGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_text.createSequentialGroup().addContainerGap()
 						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
