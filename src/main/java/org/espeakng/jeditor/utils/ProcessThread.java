@@ -3,10 +3,12 @@ package org.espeakng.jeditor.utils;
 import java.io.IOException;
 import java.util.Arrays;
 
-//import org.apache.log4j.Level;
+
 import org.apache.log4j.Logger;
 
 public class ProcessThread implements Runnable {
+
+    private static Logger logger = Logger.getLogger(ProcessThread.class.getName());
 
 	private String[] command;
 	public static boolean stop = false;
@@ -37,9 +39,9 @@ public class ProcessThread implements Runnable {
 	                logger.fatal(error);
 			 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		return;
 	}

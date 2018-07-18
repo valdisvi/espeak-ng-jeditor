@@ -6,10 +6,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
 /**
  * This class is used to set or change the language of the program.
  */
 public class Language {
+	
+	private static Logger logger = Logger.getLogger(Language.class.getName());
+
+	
 	private static ArrayList<String> translation;
 
 	/**
@@ -21,15 +27,18 @@ public class Language {
 	 * @param mainW - Main Window
 	 */
 	public static void initLanguage(File file, MainWindow mainW){
+		
+		
+		
 		translation = new ArrayList<>();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			initLanguage(br, mainW);
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		
 		initTranslation(mainW);
@@ -46,7 +55,7 @@ public class Language {
 			   translation.add(line);
 		
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		
 		

@@ -15,7 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
-import org.espeakng.jeditor.utils.CommandUtilities;
+
 
 /**
  * This class is an entry point for the program.

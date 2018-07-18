@@ -17,10 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.gui.MainWindow;
 
 //this class uses espeak-ng/phsource/vowelcharts folder for creating vowel charts
 public class VowelChart extends JPanel {
+	
+    private static Logger logger = Logger.getLogger(VowelChart.class.getName());
+
 	
 	private static final long serialVersionUID = 5668493458379304247L;
 	
@@ -190,7 +194,7 @@ public class VowelChart extends JPanel {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		
 		return vowelList;

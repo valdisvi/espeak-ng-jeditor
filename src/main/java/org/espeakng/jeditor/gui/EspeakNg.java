@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 
+import org.apache.log4j.Logger;
+
 /**
  * The class utilizes functionality of espeak-ng program (which is run on
  * terminal) to either sound the text typed in the upper text area on "Text"
@@ -27,7 +29,7 @@ import javax.swing.AbstractButton;
  */
 
 public class EspeakNg {
-
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 	private MainWindow mainW;
 
 	/** This file will hold the text typed in "Text" tab upper text area. */
@@ -158,9 +160,9 @@ public class EspeakNg {
 			bufferedReader.close();
 			fileOutput.delete();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.warn(e);;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 
@@ -180,9 +182,9 @@ public class EspeakNg {
 			Process p = rt.exec(runTimeCommand);
 			p.waitFor();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 	}
@@ -202,7 +204,7 @@ public class EspeakNg {
 			fileWriter.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 	}

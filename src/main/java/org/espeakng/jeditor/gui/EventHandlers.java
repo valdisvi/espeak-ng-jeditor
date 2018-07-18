@@ -1,7 +1,6 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,24 +14,26 @@ import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
 import org.espeakng.jeditor.utils.CommandUtilities;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+
 
 /**
  * This class is for setting up event handlers
  */
 public class EventHandlers {
+	
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+
 
 	private MainWindow mainW;
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
@@ -471,7 +472,7 @@ public class EventHandlers {
 			try {
 				rt.exec("firefox ./docs/docindex.html");
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn(e);
 			}
 		}
 	};
