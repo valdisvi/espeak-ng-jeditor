@@ -227,6 +227,10 @@ public class EventHandlers {
 		}
 	};
 
+	
+	private boolean isPaused = false;
+	private Thread lastThread;
+	
 	// requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -234,8 +238,10 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
-			
 			CommandUtilities.executeCmd(terminalCommand);
+			lastThread = CommandUtilities.getLastThread();
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
 		}
 	};
 
@@ -248,17 +254,63 @@ public class EventHandlers {
 				File selectedFile = fileChooser.getSelectedFile();
 				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
 				CommandUtilities.executeCmd(terminalCommand);
+				lastThread = CommandUtilities.getLastThread();
+				Thread tMonitor = createMonitorThread();
+				tMonitor.start();
 			}
 		}
 	};
 	
+	private Thread createMonitorThread() {
+		Thread tMonitor = new Thread() {
+			@Override
+			public void run() {
+				mainW.mntmSpeak.setEnabled(false);
+				mainW.mntmSpeakfile.setEnabled(false);
+				mainW.btnSpeak.setEnabled(false);
+				mainW.mntmPause.setEnabled(true);
+				mainW.mntmStop.setEnabled(true);
+				try {
+					while (lastThread.isAlive()) {
+						Thread.sleep(50);
+					}
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				mainW.mntmSpeak.setEnabled(true);
+				mainW.mntmSpeakfile.setEnabled(true);
+				mainW.btnSpeak.setEnabled(true);
+				mainW.mntmPause.setEnabled(false);
+				mainW.mntmStop.setEnabled(false);
+			}
+		};
+		return tMonitor;
+	}
+	
+	ActionListener pauseFile = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (!isPaused) {
+				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
+				isPaused = true;
+				mainW.mntmPause.setText("Unpause");
+			}
+			else {
+				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
+				isPaused = false;
+				mainW.mntmPause.setText("Pause");
+			}
+		}
+	};
+	
+	
 	ActionListener stopFile = new ActionListener() {
-		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			CommandUtilities.executeCmd("pkill -9 -f aplay");
+			isPaused = false;
+			mainW.mntmPause.setText("Pause");
 		}
-		
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
@@ -462,7 +514,7 @@ public class EventHandlers {
 		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
 		mainW.mntmSpeakfile.addActionListener(speakFile);
-//  mainW.mntmPause.addActionListener();
+		mainW.mntmPause.addActionListener(pauseFile);
 		mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice

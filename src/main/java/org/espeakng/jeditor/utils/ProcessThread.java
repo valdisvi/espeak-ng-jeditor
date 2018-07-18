@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 
 public class ProcessThread implements Runnable {
 
-    private static Logger logger = Logger.getLogger(ProcessThread.class.getName());
-
 	private String[] command;
 	public static boolean stop = false;
 	
@@ -22,8 +20,6 @@ public class ProcessThread implements Runnable {
 		try {
 			Process pb = Runtime.getRuntime().exec(command);
 			pb.waitFor();
-			
-			// FIXME in log Task
 			
 			String output = CommandUtilities.getOutput(pb);
 			String error = CommandUtilities.getError(pb);

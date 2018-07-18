@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 public class CommandUtilities {
 
         private static Logger logger = Logger.getLogger(CommandUtilities.class.getName());
-        
+        private static Thread lastThread;
         /**
          * Executes external process with bash interpreter synchronously
          * 
@@ -28,9 +28,15 @@ public class CommandUtilities {
                 ProcessThread pt = new ProcessThread(cmd);
                 
                 Thread t = new Thread(pt);
+                lastThread = t;
                 t.start();
+                
         }
-
+        
+        public static Thread getLastThread() {
+        	return lastThread;
+        }
+        
         /**
          * Handles test without failing it
          * 
