@@ -417,17 +417,6 @@ public class EventHandlers {
 		}
 	};
 	
-	// TODO: Finish compileAtSample
-	ActionListener compileAtSample = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileAtSample) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					
-				}
-			}
-		}
-	};
-	
 	ActionListener compileMbrolaPhonemes = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
@@ -456,9 +445,19 @@ public class EventHandlers {
 	ActionListener layoutRulesFile = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmLayoutrulesFile) {
-				String cmd = "export ESPEAK_DATA_PATH=" + dataPath
-						+ "; " + dataPath + "/src/espeak-ng placeholder";
-				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				//String cmd = "export ESPEAK_DATA_PATH=" + dataPath
+				//		+ "; " + dataPath + "/src/espeak-ng placeholder";
+				//org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				System.out.println("TODO");
+			}
+		}
+	};
+	
+	// TODO: Finish sortRulesFile
+	ActionListener sortRulesFile = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmSortrulesFile) {
+				System.out.println("TODO");
 			}
 		}
 	};
@@ -500,7 +499,7 @@ public class EventHandlers {
 		mainW.mntmShowRules.addActionListener(showRules);
 		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
-		 mainW.mntmSpeakfile.addActionListener(speakFile);
+		mainW.mntmSpeakfile.addActionListener(speakFile);
 		// mainW.mntmPause.addActionListener();
 		// mainW.mntmStop.addActionListener();
 
@@ -587,11 +586,10 @@ public class EventHandlers {
 		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
 		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
-		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
 		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
 		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
 		mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
-		// mainW.mntmSortrulesFile.addActionListener();
+		mainW.mntmSortrulesFile.addActionListener(sortRulesFile);
 
 		// Help
 
