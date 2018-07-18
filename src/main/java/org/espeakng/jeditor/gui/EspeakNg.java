@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 
+import org.apache.log4j.Logger;
+
 /**
  * The class utilizes functionality of espeak-ng program (which is run on
  * terminal) to either sound the text typed in the upper text area on "Text"
@@ -27,7 +29,7 @@ import javax.swing.AbstractButton;
  */
 
 public class EspeakNg {
-
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 	private MainWindow mainW;
 
 	/** This file will hold the text typed in "Text" tab upper text area. */
@@ -87,6 +89,10 @@ public class EspeakNg {
 			readOutputFile();
 		}
 	}
+	
+	public void makeAction(String command, String[] params) {
+		
+	}
 
 	/**
 	 * This method constructs the command string for espeak-ng program (this
@@ -132,7 +138,6 @@ public class EspeakNg {
 		case "speakBySymbol":
 			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
 					+ mainW.textAreaIn.getText() + "\"";
-			System.out.println(runTimeCommand);
 			break;
 		default:
 			break;
@@ -158,9 +163,9 @@ public class EspeakNg {
 			bufferedReader.close();
 			fileOutput.delete();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.warn(e);;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 
@@ -180,9 +185,9 @@ public class EspeakNg {
 			Process p = rt.exec(runTimeCommand);
 			p.waitFor();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 	}
@@ -202,7 +207,7 @@ public class EspeakNg {
 			fileWriter.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 	}
@@ -238,17 +243,18 @@ public class EspeakNg {
 		
 		if (command.equals("speakCharName")) {
 			StringBuilder c = new StringBuilder();
-		    
 		    for (int i = 0; i < text.length(); i++) {
 		        String character = String.valueOf(text.charAt(i));
 		    	
 		        // if text matches vowels and next character is not space then put space
-		        if (character.matches("[AEIOUYaeiouy]+") && (text.charAt(i+1) != ' ')) {
-		            c.append(text.charAt(i)+' ');
+		        if (character.matches("[AEIOUYaeiouy]+") && (i + 1 < text.length()) && (text.charAt(i+1) != ' ')) {
+		            c.append(text.charAt(i)+" ");
 		        } else {
-		            c.append(text.charAt(i));
+		            c.append(String.valueOf(text.charAt(i)));
 		        }
 		    }
+		    
+		    System.out.println(c.toString());
 		    
 		    return c.toString();
 		}

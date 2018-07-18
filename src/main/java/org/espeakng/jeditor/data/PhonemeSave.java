@@ -8,10 +8,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
 
 public class PhonemeSave {
+	
+    private static Logger logger = Logger.getLogger(PhonemeSave.class.getName());
+
 	/*- FIXME this class and it's methods are used by calling  File->Save and File->SaveAs buttons,
 	but action listeners are commented out for them, because it is not complete
 	known issues:
@@ -86,7 +90,7 @@ public class PhonemeSave {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 	/**
@@ -194,7 +198,7 @@ public class PhonemeSave {
 				dos.write(temp);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 	/**

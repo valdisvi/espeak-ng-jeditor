@@ -5,6 +5,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import org.apache.log4j.Logger;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +24,7 @@ import java.io.IOException;
  */
 
 public class AboutWindow extends JFrame {
-
+	private static Logger logger = Logger.getLogger(AboutWindow.class.getName());
 	private static final long serialVersionUID = -6382834025393046240L;
 	private JPanel contentPane;
 	
@@ -61,7 +64,7 @@ public class AboutWindow extends JFrame {
 				try {
 					rt.exec("firefox http://espeak.sourceforge.net/");
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		});
@@ -80,7 +83,7 @@ public class AboutWindow extends JFrame {
 				try {
 					rt.exec("firefox http://espeak.sourceforge.net/license.html");
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		});

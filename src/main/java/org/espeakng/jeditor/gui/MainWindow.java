@@ -12,8 +12,10 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
+
 
 /**
  * This class is an entry point for the program.
@@ -23,7 +25,8 @@ import org.espeakng.jeditor.data.PhonemeLoad;
  */
 
 public class MainWindow extends JFrame {
-	
+    private static Logger logger = Logger.getLogger(MainWindow.class.getName());
+
 	/*
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
@@ -194,12 +197,13 @@ public class MainWindow extends JFrame {
 				this.setFile(input, ".lib/libespeakservice.so");
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn(e);
 			} finally {
 				try {
 					if (input != null)
 						input.close();
 				} catch (IOException e) {
+					logger.warn(e);
 				}
 			}
 		}
@@ -219,9 +223,15 @@ public class MainWindow extends JFrame {
 		FileOutputStream fos = new FileOutputStream(fileName);
 		
 		int read;
-		while ((read = io.read()) != -1) {
-			fos.write(read);
+		try{
+			while ((read = io.read()) != -1) {
+				fos.write(read);
+			}
+		} catch(NullPointerException e){
+			logger.warn("There is no libespeakservice.so file in .lib folder!");
+			logger.warn(e);
 		}
+		
 		
 		fos.close();
 	}
