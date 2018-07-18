@@ -21,8 +21,9 @@ import org.espeakng.jeditor.gui.MainWindow;
 
 //this class uses espeak-ng/phsource/vowelcharts folder for creating vowel charts
 public class VowelChart extends JPanel {
-	private int width = 1500;
-	private int heigth = 750;
+	
+	private static final long serialVersionUID = 5668493458379304247L;
+	
 	private static int padding = 25; // padding from the borders
 	private int labelPadding = 25; // padding of labels from the borders
 	private static Color lineColor = new Color(44, 102, 230, 180); // color of
@@ -46,9 +47,9 @@ public class VowelChart extends JPanel {
 	// values into vowelsList
 	public VowelChart(List<Vowel> list) {
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-		this.vowelsList = list;
-		this.xValues = getXvalues(vowelsList);
-		this.yValues = getYvalues(vowelsList);
+		VowelChart.vowelsList = list;
+		VowelChart.xValues = getXvalues(vowelsList);
+		VowelChart.yValues = getYvalues(vowelsList);
 
 	}
 
@@ -173,10 +174,9 @@ public class VowelChart extends JPanel {
 	 */
 	public static List<Vowel> createFromFile(String fileName) {
 		List<Vowel> vowelList = new ArrayList<>(); // list of
+		File vowelChart = new File(fileName);
 
-		try {
-			File vowelChart = new File(fileName);
-			Scanner sc = new Scanner(vowelChart);
+		try (Scanner sc = new Scanner(vowelChart)) {
 			String line;
 			while (sc.hasNextLine()) {
 				line = sc.nextLine();
@@ -192,6 +192,7 @@ public class VowelChart extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return vowelList;
 	}
 
@@ -258,7 +259,7 @@ public class VowelChart extends JPanel {
 	}
 
 	public void setOtherVowels(String fileName) {
-		this.vowelsList = createFromFile(fileName);
+		VowelChart.vowelsList = createFromFile(fileName);
 		invalidate();
 		this.repaint();
 	}

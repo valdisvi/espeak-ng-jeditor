@@ -18,6 +18,8 @@ import javax.swing.SpinnerNumberModel;
 
 public class OptionsSpeedWindow extends JFrame {
 
+	private static final long serialVersionUID = 6781488050526787847L;
+
 	private JSpinner spinner;
 	
 	/* If user wants to cancel his choice, spinner is set
