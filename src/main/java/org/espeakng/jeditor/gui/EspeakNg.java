@@ -241,17 +241,18 @@ public class EspeakNg {
 		
 		if (command.equals("speakCharName")) {
 			StringBuilder c = new StringBuilder();
-		    
 		    for (int i = 0; i < text.length(); i++) {
 		        String character = String.valueOf(text.charAt(i));
 		    	
 		        // if text matches vowels and next character is not space then put space
 		        if (character.matches("[AEIOUYaeiouy]+") && (i + 1 < text.length()) && (text.charAt(i+1) != ' ')) {
-		            c.append(text.charAt(i)+' ');
+		            c.append(text.charAt(i)+" ");
 		        } else {
-		            c.append(text.charAt(i));
+		            c.append(String.valueOf(text.charAt(i)));
 		        }
 		    }
+		    
+		    System.out.println(c.toString());
 		    
 		    return c.toString();
 		}
