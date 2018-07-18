@@ -1,11 +1,10 @@
 package org.espeakng.jeditor.jni;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.apache.log4j.*;
-
 
 public class ESpeakServiceTest {
-	static Logger log = Logger.getLogger(ESpeakServiceTest.class);
+	static Logger log = Logger.getLogger(ESpeakServiceTest.class.getName());
 
 	@Test
 	public void testNativeGetEspeakNgVersion() {

@@ -19,6 +19,7 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.utils.CommandUtilities;
 
 
 import javax.swing.JFileChooser;
@@ -36,6 +37,7 @@ public class EventHandlers {
     private File file;
     private EspeakNg espeakNg;
     private Runtime rt;
+    private String dataPath = new File("../espeak-ng").getAbsolutePath();
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -46,7 +48,7 @@ public class EventHandlers {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
 		prefs = Preferences.userRoot().node(getClass().getName());
-		
+		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
 		//fileChooser1 = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
 		//fileChooser2 = new JFileChooser(
 		//		prefs.get("a", new File("../espeak-ng/phonemes/vowelcharts").getAbsolutePath()));
@@ -114,7 +116,7 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
-				AboutWindow.OpenAboutWindow();
+				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
 
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
@@ -222,13 +224,37 @@ public class EventHandlers {
 	// requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			String terminalCommand = "/usr/bin/espeak-ng -v" +espeakNg.getVoiceFromSelection()+ 
-					" -s" +mainW.optionsSpeed.getSpinnerValue()+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
-			//espeakNg.makeAction("speak");
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			
+			CommandUtilities.executeCmd(terminalCommand);
 		}
 	};
 
+	ActionListener speakFile = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
+				CommandUtilities.executeCmd(terminalCommand);
+			}
+		}
+	};
+	
+	ActionListener stopFile = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			CommandUtilities.executeCmd("pkill -9 -f aplay");
+		}
+		
+	};
+	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
 			// String file8 = "en";
@@ -292,9 +318,14 @@ public class EventHandlers {
 
 	// requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
-	ActionListener speakPunctuation = new ActionListener() {
+	ActionListener speakPunc = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			espeakNg.makeAction("speakPunctuation");
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakPunc")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+			//espeakNg.makeAction("speakPunc");
 		}
 	};
 
@@ -302,10 +333,21 @@ public class EventHandlers {
 	// splits word and spell it by symbol
 	ActionListener speakBySymbol = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +espeakNg.getVoiceFromSelection()+
-					" -s" +mainW.optionsSpeed.getSpinnerValue()+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
-			//espeakNg.makeAction("speakBySymbol");
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+		}
+	};
+	
+	ActionListener speakCharName = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
 		}
 	};
 	
@@ -323,7 +365,14 @@ public class EventHandlers {
 	ActionListener compileDictionary = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
-				 openDialog();
+				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
+  				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+  					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+  							"; cd " + fileChooser.getSelectedFile().getParent() +
+  							" && " + dataPath + "/src/espeak-ng --compile=" + 
+  							fileChooser.getSelectedFile().getName().split("_")[0];
+  					CommandUtilities.executeCmd(cmd);
+  				}
 			}
 		}
 	};
@@ -344,15 +393,31 @@ public class EventHandlers {
 			}
 		}
 	};
-
-	ActionListener compileAtSample = new ActionListener() {
+	
+	ActionListener compileMbrolaPhonemes = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileAtSample) {
-				 openDialog();
+			if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
+				fileChooser.setCurrentDirectory(new File(dataPath + "/phsource/mbrola/"));
+  				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+  					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+					CommandUtilities.executeCmd(cmd);
+  				}
 			}
 		}
 	};
-
+	
+	ActionListener compileIntonationData = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmCompileIntonationData) {
+				String cmd = "export ESPEAK_DATA_PATH=" + dataPath
+						+ "; " + dataPath + "/src/espeak-ng --compile-intonations";
+				CommandUtilities.executeCmd(cmd);
+			}
+		}
+	};
+	
 	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -390,9 +455,9 @@ public class EventHandlers {
 		mainW.mntmShowRules.addActionListener(showRules);
 		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
-		// mainW.mntmSpeakfile.addActionListener();
-		// mainW.mntmPause.addActionListener();
-		// mainW.mntmStop.addActionListener();
+		mainW.mntmSpeakfile.addActionListener(speakFile);
+//  mainW.mntmPause.addActionListener();
+		mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
@@ -420,9 +485,9 @@ public class EventHandlers {
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
+		mainW.mntmSpeakPunctuation.addActionListener(speakPunc);
 		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		// mainW.mntmSpeakCharacterName.addActionListener();
+		mainW.mntmSpeakCharacterName.addActionListener(speakCharName);
 
 		// Tools
 
@@ -430,10 +495,13 @@ public class EventHandlers {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					prefs.put("a", fileChooser.getSelectedFile().getParent());
-					VowelChart.vowelOpen(fileChooser.getSelectedFile(), mainW);
+				if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
+					if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+						String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+								"; cd " + fileChooser.getSelectedFile().getParent() +
+								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+						CommandUtilities.executeCmd(cmd);
+					}
 				}
 			}
 		});
@@ -442,7 +510,6 @@ public class EventHandlers {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				EspeakNg ng = new EspeakNg(mainW);
 				String lang = ng.getVoiceFromSelection();
 				String path = "";
@@ -477,11 +544,10 @@ public class EventHandlers {
 		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
 		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
-		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
-		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
-		// mainW.mntmCompileIntonationData.addActionListener();
-		// mainW.mntmLayoutrulesFile.addActionListener();
-		// mainW.mntmSortrulesFile.addActionListener();
+		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
+		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
+		//mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
+		//mainW.mntmSortrulesFile.addActionListener(sortRulesFile);
 
 		// Help
 

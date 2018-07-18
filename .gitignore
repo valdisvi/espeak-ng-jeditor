@@ -1,5 +1,4 @@
-﻿.lib/libespeakservice.so
-bin/**
+﻿bin/**
 logs/**
 target/**
 ./log
