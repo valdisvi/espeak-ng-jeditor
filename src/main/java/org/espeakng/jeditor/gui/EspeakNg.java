@@ -253,9 +253,7 @@ public class EspeakNg {
 		            c.append(String.valueOf(text.charAt(i)));
 		        }
 		    }
-		    
-		    System.out.println(c.toString());
-		    
+
 		    return c.toString();
 		}
 		
