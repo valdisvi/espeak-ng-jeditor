@@ -87,6 +87,10 @@ public class EspeakNg {
 			readOutputFile();
 		}
 	}
+	
+	public void makeAction(String command, String[] params) {
+		
+	}
 
 	/**
 	 * This method constructs the command string for espeak-ng program (this
@@ -132,7 +136,6 @@ public class EspeakNg {
 		case "speakBySymbol":
 			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
 					+ mainW.textAreaIn.getText() + "\"";
-			System.out.println(runTimeCommand);
 			break;
 		default:
 			break;
@@ -243,7 +246,7 @@ public class EspeakNg {
 		        String character = String.valueOf(text.charAt(i));
 		    	
 		        // if text matches vowels and next character is not space then put space
-		        if (character.matches("[AEIOUYaeiouy]+") && (text.charAt(i+1) != ' ')) {
+		        if (character.matches("[AEIOUYaeiouy]+") && (i + 1 < text.length()) && (text.charAt(i+1) != ' ')) {
 		            c.append(text.charAt(i)+' ');
 		        } else {
 		            c.append(text.charAt(i));
