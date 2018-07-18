@@ -38,7 +38,6 @@ public class EventHandlers {
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
 	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
     private File file1, file2, file3, file4, file5, voiceFile;
-    private int spokenFileIndex;
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -252,9 +251,18 @@ public class EventHandlers {
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
-				spokenFileIndex = CommandUtilities.executeCmd(terminalCommand);
+				CommandUtilities.executeCmd(terminalCommand);
 			}
 		}
+	};
+	
+	ActionListener stopFile = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			CommandUtilities.executeCmd("pkill -9 -f aplay");
+		}
+		
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
@@ -471,7 +479,7 @@ public class EventHandlers {
 		mainW.mntmSpeak.addActionListener(speak);
 		 mainW.mntmSpeakfile.addActionListener(speakFile);
 //		 mainW.mntmPause.addActionListener();
-//		 mainW.mntmStop.addActionListener();
+		 mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);

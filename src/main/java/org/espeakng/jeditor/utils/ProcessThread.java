@@ -39,7 +39,7 @@ public class ProcessThread implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+		return;
 	}
 
 }
