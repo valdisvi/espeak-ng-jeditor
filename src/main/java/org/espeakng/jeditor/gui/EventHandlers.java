@@ -367,8 +367,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
-			//espeakNg.makeAction("speakBySymbol");
+			CommandUtilities.executeCmd(terminalCommand1);
 		}
 	};
 
@@ -381,7 +380,7 @@ public class EventHandlers {
 							"; cd " + fileChooser.getSelectedFile().getParent() +
 							" && " + dataPath + "/src/espeak-ng --compile=" + 
 							fileChooser.getSelectedFile().getName().split("_")[0];
-					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					CommandUtilities.executeCmd(cmd);
 				}
 			}
 		}
@@ -396,7 +395,7 @@ public class EventHandlers {
 							"; cd " + fileChooser.getSelectedFile().getParent() +
 							" && " + dataPath + "/src/espeak-ng --compile-debug=" + 
 							fileChooser.getSelectedFile().getName().split("_")[0];
-					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					CommandUtilities.executeCmd(cmd);
 				}
 			}
 		}
@@ -411,7 +410,7 @@ public class EventHandlers {
 							"; cd " + fileChooser.getSelectedFile().getParentFile().getParent() +
 							" && " + dataPath + "/src/espeak-ng --compile-phonemes=" +
 							fileChooser.getSelectedFile().getParentFile().getName();
-					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					CommandUtilities.executeCmd(cmd);
 				}
 			}
 		}
@@ -425,7 +424,7 @@ public class EventHandlers {
 					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
 							"; cd " + fileChooser.getSelectedFile().getParent() +
 							" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
-					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+					CommandUtilities.executeCmd(cmd);
 				}
 			}
 		}
@@ -436,32 +435,11 @@ public class EventHandlers {
 			if (e.getSource() == mainW.mntmCompileIntonationData) {
 				String cmd = "export ESPEAK_DATA_PATH=" + dataPath
 						+ "; " + dataPath + "/src/espeak-ng --compile-intonations";
-				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				CommandUtilities.executeCmd(cmd);
 			}
 		}
 	};
 	
-	// TODO: Finish layoutRulesFile
-	ActionListener layoutRulesFile = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmLayoutrulesFile) {
-				//String cmd = "export ESPEAK_DATA_PATH=" + dataPath
-				//		+ "; " + dataPath + "/src/espeak-ng placeholder";
-				//org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
-				System.out.println("TODO");
-			}
-		}
-	};
-	
-	// TODO: Finish sortRulesFile
-	ActionListener sortRulesFile = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmSortrulesFile) {
-				System.out.println("TODO");
-			}
-		}
-	};
-
 	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -588,8 +566,8 @@ public class EventHandlers {
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
 		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
 		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
-		mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
-		mainW.mntmSortrulesFile.addActionListener(sortRulesFile);
+		//mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
+		//mainW.mntmSortrulesFile.addActionListener(sortRulesFile);
 
 		// Help
 
