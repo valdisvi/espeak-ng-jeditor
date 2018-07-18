@@ -360,10 +360,14 @@ public class EventHandlers {
 
 	// requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
-	ActionListener speakPunctuation = new ActionListener() {
+	ActionListener speakPunc = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speakPunctuation");
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakPunc")+ "\" |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
+			//espeakNg.makeAction("speakPunc");
 		}
 	};
 
@@ -377,6 +381,17 @@ public class EventHandlers {
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
 			//espeakNg.makeAction("speakBySymbol");
+		}
+	};
+	
+	ActionListener speakCharName = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
+			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
+			//espeakNg.makeAction("SpeakCharName");
 		}
 	};
 
@@ -507,9 +522,9 @@ public class EventHandlers {
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
+		mainW.mntmSpeakPunctuation.addActionListener(speakPunc);
 		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		// mainW.mntmSpeakCharacterName.addActionListener();
+		mainW.mntmSpeakCharacterName.addActionListener(speakCharName);
 
 		// Tools
 
