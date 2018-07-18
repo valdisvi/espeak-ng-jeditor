@@ -246,7 +246,7 @@ public class EspeakNg {
 		        String character = String.valueOf(text.charAt(i));
 		    	
 		        // if text matches vowels and next character is not space then put space
-		        if (character.matches("[AEIOUYaeiouy]+") && (text.charAt(i+1) != ' ')) {
+		        if (character.matches("[AEIOUYaeiouy]+") && (i + 1 < text.length()) && (text.charAt(i+1) != ' ')) {
 		            c.append(text.charAt(i)+' ');
 		        } else {
 		            c.append(text.charAt(i));
