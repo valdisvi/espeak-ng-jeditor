@@ -38,6 +38,7 @@ public class EventHandlers {
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
 	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
     private File file1, file2, file3, file4, file5, voiceFile;
+    private String dataPath = new File("../espeak-ng").getAbsolutePath();
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -374,14 +375,13 @@ public class EventHandlers {
 	ActionListener compileDictionary = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
+				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					if (fileChooser.getSelectedFile().getParentFile().getName().equals("dictsource")) {
-						String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
-								" cd " + fileChooser.getSelectedFile().getParent() +
-								" && ../src/espeak-ng --compile=" + 
-								fileChooser.getSelectedFile().getName().split("_")[0];
-						org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
-					}
+					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile=" + 
+							fileChooser.getSelectedFile().getName().split("_")[0];
+					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 				}
 			}
 		}
@@ -390,14 +390,13 @@ public class EventHandlers {
 	ActionListener compileDictionaryDebug = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
+				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					if (fileChooser.getSelectedFile().getParentFile().getName().equals("dictsource")) {
-						String cmd = "export ESPEAK_DATA_PATH="+ fileChooser.getSelectedFile().getParentFile().getParent() + ";" +
-								" cd " + fileChooser.getSelectedFile().getParent() +
-								" && ../src/espeak-ng --compile-debug=" + 
-								fileChooser.getSelectedFile().getName().split("_")[0];
-						org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
-					}
+					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile-debug=" + 
+							fileChooser.getSelectedFile().getName().split("_")[0];
+					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 				}
 			}
 		}
@@ -406,24 +405,60 @@ public class EventHandlers {
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
-						+ "; espeak-ng --compile-phonemes" ;
-				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				fileChooser.setSelectedFile(new File(dataPath + "/phsource/phonemes"));
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParentFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile-phonemes=" +
+							fileChooser.getSelectedFile().getParentFile().getName();
+					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				}
 			}
 		}
 	};
- 
+	
+	// TODO: Finish compileAtSample
 	ActionListener compileAtSample = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileAtSample) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
+					
 				}
+			}
+		}
+	};
+	
+	ActionListener compileMbrolaPhonemes = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
+				fileChooser.setCurrentDirectory(new File(dataPath + "/phsource/mbrola/"));
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+					org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+				}
+			}
+		}
+	};
+	
+	ActionListener compileIntonationData = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmCompileIntonationData) {
+				String cmd = "export ESPEAK_DATA_PATH=" + dataPath
+						+ "; " + dataPath + "/src/espeak-ng --compile-intonations";
+				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
+			}
+		}
+	};
+	
+	// TODO: Finish layoutRulesFile
+	ActionListener layoutRulesFile = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmLayoutrulesFile) {
+				String cmd = "export ESPEAK_DATA_PATH=" + dataPath
+						+ "; " + dataPath + "/src/espeak-ng placeholder";
+				org.espeakng.jeditor.utils.CommandUtilities.main(null, cmd);
 			}
 		}
 	};
@@ -553,9 +588,9 @@ public class EventHandlers {
 		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
 		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
-		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
-		// mainW.mntmCompileIntonationData.addActionListener();
-		// mainW.mntmLayoutrulesFile.addActionListener();
+		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
+		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
+		mainW.mntmLayoutrulesFile.addActionListener(layoutRulesFile);
 		// mainW.mntmSortrulesFile.addActionListener();
 
 		// Help
