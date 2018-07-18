@@ -297,9 +297,11 @@ public class MainWindow extends JFrame {
 		mnSpeak.add(mntmSpeakfile);
 
 		mntmPause = new JMenuItem("Pause");
+		mntmPause.setEnabled(false);
 		mnSpeak.add(mntmPause);
 
 		mntmStop = new JMenuItem("Stop");
+		mntmStop.setEnabled(false);
 		mnSpeak.add(mntmStop);
 		
 		/////////////////
