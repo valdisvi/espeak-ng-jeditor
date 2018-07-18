@@ -69,7 +69,7 @@ public class EspeakNg {
 
 		// The following three commands do not require file for output (but the
 		// rest of commands DO require output file):
-		if (!(command.equals("speakPunctuation") || command.equals("speakBySymbol") || command.equals("speak"))) {
+		if (!(command.equals("speakPunc") || command.equals("speakBySymbol")|| command.equals("speakCharName") || command.equals("speak"))) {
 			createFileOutput();
 		}
 		
@@ -79,7 +79,7 @@ public class EspeakNg {
 		fileInput.delete();
 		
 		// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
-		if (!(command.equals("speakPunctuation") || command.equals("speakBySymbol") || command.equals("speak"))) {
+		if (!(command.equals("speakPunc") || command.equals("speakBySymbol") || command.equals("speakCharName")   || command.equals("speak"))) {
 			readOutputFile();
 		}
 	}
@@ -115,10 +115,18 @@ public class EspeakNg {
 					+ fileInput.getAbsolutePath();
 			
 			break;
-		case "speakPunctuation":
-			// --punct='<characters>' ,where <characters> is
-			// symbols which espeaker won't ignore
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
+		case "speakPunc":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()\""
+					+ mainW.textAreaIn.getText() + "\"";
+			System.out.println(runTimeCommand);
+			break;
+		case "speakCharName":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice+ " --punct=',;?<>@#.$%^&*()\""
+					+ mainW.textAreaIn.getText() + "\"";
+			System.out.println(runTimeCommand);
+			break;
+		case "speakBySymbol":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
 					+ mainW.textAreaIn.getText() + "\"";
 			System.out.println(runTimeCommand);
 			break;
@@ -214,22 +222,55 @@ public class EspeakNg {
 	 */
 	public String getText(String command) {
 
-		String text = "";
-		// speakBySymbol - it means that we need to pronounce each word by
-		// letters
+		String text = mainW.textAreaIn.getText();
+		// speakBySymbol - it means that we need to pronounce each word by letters
 		if (command.equals("speakBySymbol")) {
 			// A non-whitespace character
 			Pattern noSpaces = Pattern.compile("\\s+");
 			Matcher m = noSpaces.matcher(mainW.textAreaIn.getText());
 			// after every character put space
 			text = m.replaceAll("").replaceAll(".(?!$)", "$0 ");
-		} else {
-			// get full
-			text = mainW.textAreaIn.getText();
+			return text;
+		} 
+		else if (command.equals("speakCharName")) {
+            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
+		    int lenght = text.length();
+		    StringBuilder c = new StringBuilder();//Create another String Builder
+		    for(int i =0; i<lenght;i++){
+		        text=sbnew.charAt(i)+"";
+		        //text matches vowels and next character is not space then put space
+		        if(text.matches("[AEIOUYaeiouy]+")&&(sbnew.charAt(i+1)!=' ')){
+		            c.append(text+' ');
+		            System.out.println(c.toString());
+		          //printing out result in console
+		           
+		        }else{
+		            c.append(text);
+		        }
+		       
+		    }
+		    return c.toString();
+		    //text = sbnew.toString();
+		}
+		else if (command.equals("speakPunc")) {
+            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
+		    int lenght = text.length();
+		    StringBuilder temp = new StringBuilder();//Create another String Builder
+		    for(int i=0; i<lenght;i++){
+		        text=sbnew.charAt(i)+"";
+		        if(text.matches("[a-zA-Z]+")){
+		            temp.append(' ');
+		            System.out.println(temp.toString());
+		            //printing out result in console
+		           
+		        }else{
+		            temp.append(text);
+		        }
+		    }
+		    return temp.toString();
 		}
 		return text;
-	}
-
+		}
 	/**
 	 * This method sets pronunciation rules depending on chosen voice (Voice ->
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".

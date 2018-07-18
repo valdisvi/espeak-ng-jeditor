@@ -222,6 +222,14 @@ public void clearText(){
 			espeakNg.makeAction("speakBySymbol");
 		}
 	};
+	
+	ActionListener SpeakCharName = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			espeakNg.makeAction("SpeakCharName");
+		}
+	};
+
 
 	//Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
@@ -283,7 +291,7 @@ public void clearText(){
 		mainW.mntmSpeed.addActionListener(event);
 		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
 		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		// mainW.mntmSpeakCharacterName.addActionListener();
+		mainW.mntmSpeakCharacterName.addActionListener(speakCharName);
 
 		// Tools
 
