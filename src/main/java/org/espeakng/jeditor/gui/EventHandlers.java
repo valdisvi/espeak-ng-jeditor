@@ -239,7 +239,7 @@ public class EventHandlers {
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
 			
-			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
+			CommandUtilities.executeCmd(terminalCommand);
 			//espeakNg.makeAction("speak");
 		}
 	};
@@ -252,9 +252,18 @@ public class EventHandlers {
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
-				CommandUtilities.main(null, terminalCommand);
+				CommandUtilities.executeCmd(terminalCommand);
 			}
 		}
+	};
+	
+	ActionListener stopFile = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			CommandUtilities.executeCmd("pkill -9 -f aplay");
+		}
+		
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
@@ -352,10 +361,14 @@ public class EventHandlers {
 
 	// requires espeak-ng library
 	// speaking without ignoring punctuation (says "dot" where is ".")
-	ActionListener speakPunctuation = new ActionListener() {
+	ActionListener speakPunc = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speakPunctuation");
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakPunc")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+			//espeakNg.makeAction("speakPunc");
 		}
 	};
 
@@ -368,6 +381,17 @@ public class EventHandlers {
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
+		}
+	};
+	
+	ActionListener speakCharName = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+			//espeakNg.makeAction("SpeakCharName");
 		}
 	};
 
@@ -478,8 +502,8 @@ public class EventHandlers {
 		mainW.mntmShowIPA.addActionListener(showIpa);
 		mainW.mntmSpeak.addActionListener(speak);
 		mainW.mntmSpeakfile.addActionListener(speakFile);
-		// mainW.mntmPause.addActionListener();
-		// mainW.mntmStop.addActionListener();
+//  mainW.mntmPause.addActionListener();
+		mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
@@ -507,9 +531,9 @@ public class EventHandlers {
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
+		mainW.mntmSpeakPunctuation.addActionListener(speakPunc);
 		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		// mainW.mntmSpeakCharacterName.addActionListener();
+		mainW.mntmSpeakCharacterName.addActionListener(speakCharName);
 
 		// Tools
 
@@ -517,7 +541,6 @@ public class EventHandlers {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if (fileChooser3.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					prefs3.put("a", fileChooser3.getSelectedFile().getParent());
 					VowelChart.vowelOpen(fileChooser3.getSelectedFile(), mainW);
@@ -529,7 +552,6 @@ public class EventHandlers {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				EspeakNg ng = new EspeakNg(mainW);
 				String lang = ng.getVoiceFromSelection();
 				String path = "";

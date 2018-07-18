@@ -75,7 +75,7 @@ public class EspeakNg {
 
 		// The following three commands do not require file for output (but the
 		// rest of commands DO require output file):
-		if (!(command.equals("speakPunctuation") || command.equals("speakBySymbol") || command.equals("speak"))) {
+		if (!(command.equals("speakPunc") || command.equals("speakBySymbol")|| command.equals("speakCharName") || command.equals("speak"))) {
 			createFileOutput();
 		}
 		
@@ -85,7 +85,7 @@ public class EspeakNg {
 		fileInput.delete();
 		
 		// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
-		if (!(command.equals("speakPunctuation") || command.equals("speakBySymbol") || command.equals("speak"))) {
+		if (!(command.equals("speakPunc") || command.equals("speakBySymbol") || command.equals("speakCharName")   || command.equals("speak"))) {
 			readOutputFile();
 		}
 	}
@@ -121,10 +121,18 @@ public class EspeakNg {
 					+ fileInput.getAbsolutePath();
 			
 			break;
-		case "speakPunctuation":
-			// --punct='<characters>' ,where <characters> is
-			// symbols which espeaker won't ignore
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()' \""
+		case "speakPunc":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()\""
+					+ mainW.textAreaIn.getText() + "\"";
+			System.out.println(runTimeCommand);
+			break;
+		case "speakCharName":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice+ " --punct=',;?<>@#.$%^&*()\""
+					+ mainW.textAreaIn.getText() + "\"";
+			System.out.println(runTimeCommand);
+			break;
+		case "speakBySymbol":
+			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
 					+ mainW.textAreaIn.getText() + "\"";
 			System.out.println(runTimeCommand);
 			break;
@@ -190,7 +198,6 @@ public class EspeakNg {
 	private void createFileInput(String text) {
 
 		try {
-
 			fileInput = new File("MyFile.txt");
 			FileWriter fileWriter = new FileWriter(fileInput);
 			fileWriter.write(text);
@@ -220,22 +227,53 @@ public class EspeakNg {
 	 */
 	public String getText(String command) {
 
-		String text = "";
-		// speakBySymbol - it means that we need to pronounce each word by
-		// letters
+		String text = mainW.textAreaIn.getText();
+		// speakBySymbol - it means that we need to pronounce each word by letters
 		if (command.equals("speakBySymbol")) {
 			// A non-whitespace character
 			Pattern noSpaces = Pattern.compile("\\s+");
 			Matcher m = noSpaces.matcher(mainW.textAreaIn.getText());
 			// after every character put space
 			text = m.replaceAll("").replaceAll(".(?!$)", "$0 ");
-		} else {
-			// get full
-			text = mainW.textAreaIn.getText();
+			return text;
+		} 
+		
+		if (command.equals("speakCharName")) {
+			StringBuilder c = new StringBuilder();
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		        String character = String.valueOf(text.charAt(i));
+		    	
+		        // if text matches vowels and next character is not space then put space
+		        if (character.matches("[AEIOUYaeiouy]+") && (text.charAt(i+1) != ' ')) {
+		            c.append(text.charAt(i)+' ');
+		        } else {
+		            c.append(text.charAt(i));
+		        }
+		    }
+		    
+		    return c.toString();
 		}
+		
+		if (command.equals("speakPunc")) {
+		    StringBuilder sb = new StringBuilder();
+		    String character;
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		    	character = String.valueOf(text.charAt(i));
+		    	
+		        if (character.matches("[a-zA-Z]+")) {
+		            sb.append(' ');
+		        } else {
+		            sb.append(character);
+		        }
+		    }
+		    
+		    return sb.toString();
+		}
+		
 		return text;
 	}
-
 	/**
 	 * This method sets pronunciation rules depending on chosen voice (Voice ->
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
