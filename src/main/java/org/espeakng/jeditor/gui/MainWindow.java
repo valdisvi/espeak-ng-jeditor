@@ -507,7 +507,8 @@ public class MainWindow extends JFrame {
 				for (int j = 0; j < 7; j++) {
 					rmsArray[0][j] = (double) ((!tfFreq.get(j).getText().equals(""))
 							? Integer.parseInt(tfFreq.get(j).getText()) : 0);
-					rmsArray[1][j] = (double) Integer.parseInt(tfHeight.get(j).getText()) / maxHeight;
+					rmsArray[1][j] = (double) ((!tfHeight.get(j).getText().equals(""))
+							? (double) Integer.parseInt(tfHeight.get(j).getText()) / maxHeight : 0);
 				}
 			}
 		}
@@ -562,7 +563,7 @@ public class MainWindow extends JFrame {
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
 
-		JLabel lblFreq = new JLabel("Frequency");
+		JLabel lblFreq = new JLabel("Formants");
 		lblFreq.setBounds(3, 6, 100, labelHeight);
 		lblFreq.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblFreq);
@@ -581,35 +582,35 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(lblklatt);
 
 		JLabel label_0 = new JLabel("0");
-		label_0.setBounds(6, 31, 8, labelHeight);
+		label_0.setBounds(6, tfy0 + 3 + 0 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_0);
 
 		JLabel label_1 = new JLabel("1");
-		label_1.setBounds(6, 53, 8, labelHeight);
+		label_1.setBounds(6, tfy0 + 3 + 1 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_1);
 
 		JLabel label_2 = new JLabel("2");
-		label_2.setBounds(6, 75, 8, labelHeight);
+		label_2.setBounds(6, tfy0 + 3 + 2 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_2);
 
 		JLabel label_3 = new JLabel("3");
-		label_3.setBounds(6, 97, 8, labelHeight);
+		label_3.setBounds(6, tfy0 + 3 + 3 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_3);
 
 		JLabel label_4 = new JLabel("4");
-		label_4.setBounds(6, 119, 8, labelHeight);
+		label_4.setBounds(6, tfy0 + 3 + 4 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_4);
 
 		JLabel label_5 = new JLabel("5");
-		label_5.setBounds(6, 141, 8, labelHeight);
+		label_5.setBounds(6, tfy0 + 3 + 5 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_5);
 
 		JLabel label_6 = new JLabel("6");
-		label_6.setBounds(6, 163, 8, labelHeight);
+		label_6.setBounds(6, tfy0 + 3 + 6 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_6);
 
 		JLabel label_7 = new JLabel("7");
-		label_7.setBounds(6, 185, 8, labelHeight);
+		label_7.setBounds(6, tfy0 + 3 + 7 * (compHeight + tfygap), 8, labelHeight);
 		panel_Spect.add(label_7);
 
 		JTextField tfFreq0 = new JTextField();
