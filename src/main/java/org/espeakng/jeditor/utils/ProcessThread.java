@@ -17,6 +17,7 @@ public class ProcessThread implements Runnable {
 
 	@Override
 	public void run() {
+		Logger logger = CommandUtilities.getLogger();
 		try {
 			Process pb = Runtime.getRuntime().exec(command);
 			pb.waitFor();
@@ -24,7 +25,7 @@ public class ProcessThread implements Runnable {
 			String output = CommandUtilities.getOutput(pb);
 			String error = CommandUtilities.getError(pb);
 	        
-			Logger logger = CommandUtilities.getLogger();
+		
 			
 			if (!(output.equals("")))
                 logger.info("executeCmd(" + Arrays.toString(command) + ")\nOutput message: " + output);
