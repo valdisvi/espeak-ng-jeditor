@@ -80,6 +80,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmEnglish;
 	public JMenuItem mntmLatvian;
 	public JMenuItem mntmRussian;
+	public JMenuItem mntmTamil;
 	public JMenuItem mntmSpeed;
 	public OptionsSpeedWindow optionsSpeed;
 	public JMenuItem mntmSpeakPunctuation;
@@ -388,6 +389,9 @@ public class MainWindow extends JFrame {
 
 		mntmRussian = new JMenuItem("Russian");
 		mnLanguage.add(mntmRussian);
+		
+		mntmTamil = new JMenuItem("Tamil");
+		mnLanguage.add(mntmTamil);
 
 		mntmSpeed = new JMenuItem("Speed...");
 		mnOptions.add(mntmSpeed);
@@ -531,7 +535,7 @@ public class MainWindow extends JFrame {
 		panel_Spect.setLayout(null);
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 		
-		
+	
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
@@ -1021,7 +1025,6 @@ public class MainWindow extends JFrame {
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panel_text, null);
-
 		// Input text area:
 		
 		textAreaIn = new JTextArea();
