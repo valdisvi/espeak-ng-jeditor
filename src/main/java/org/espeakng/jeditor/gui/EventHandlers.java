@@ -1,7 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
-
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -123,7 +125,6 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmAbout) {
 				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
-
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
@@ -284,14 +285,13 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (!isPaused) {
 				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
-				isPaused = true;
 				mainW.mntmPause.setText("Unpause");
 			}
 			else {
 				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
-				isPaused = false;
 				mainW.mntmPause.setText("Pause");
 			}
+			isPaused = !isPaused;
 		}
 	};
 	
@@ -359,11 +359,38 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+		}
+	};
+	
+
+	ActionListener countWordFreq = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			
+			String[] keys = espeakNg.getText("").toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
+			Map<String, Integer> map = new TreeMap<>();
+			
+			for (String key : keys) {
+				map.compute(key, (k, v) -> v == null ? 1 : v+1);
+			}
+			
+			String[] words = map.toString().split(", ");
+			if (words.length > 0){
+				words[0] = words[0].substring(1);
+				words[words.length-1] = words[words.length-1].substring(0, words[words.length-1].length()-1);
+			}
+				
+			new WordFrequencyWindow(words);
+			
+ 		}
+	};
+  
+  ActionListener compileDictionary = new ActionListener() {
 			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand);
 		}
-		
-	}
 	
 	private class CompileListener implements ActionListener {
 
@@ -386,21 +413,30 @@ public class EventHandlers {
   				}
 			}
 		}
-		
-	}
+	};
+
+	ActionListener compileDictionaryDebug = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
+				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
+  				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+  					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+  							"; cd " + fileChooser.getSelectedFile().getParent() +
+  							" && " + dataPath + "/src/espeak-ng --compile-debug=" + 
+  							fileChooser.getSelectedFile().getName().split("_")[0];
+  					CommandUtilities.executeCmd(cmd);
+  				} 
+			}
+		}
+	};
 
 	
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				fileChooser.setSelectedFile(new File(dataPath + "/phsource/phonemes"));
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
-							"; cd " + fileChooser.getSelectedFile().getParentFile().getParent() +
-							" && " + dataPath + "/src/espeak-ng --compile-phonemes=" +
-							fileChooser.getSelectedFile().getParentFile().getName();
-					CommandUtilities.executeCmd(cmd);
-				}
+				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
+						+ "; espeak-ng --compile-phonemes" ;
+				CommandUtilities.executeCmd(cmd);
 			}
 		}
 	};
@@ -429,14 +465,16 @@ public class EventHandlers {
 		}
 	};
 	
-	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			Runtime rt = Runtime.getRuntime();
-			try {
-				rt.exec("firefox ./docs/docindex.html");
-			} catch (IOException e) {
-				logger.warn(e);
+			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+			File file = new File("./docs/docindex.html");
+			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+				try {
+					desktop.browse(file.toURI());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	};
@@ -474,7 +512,6 @@ public class EventHandlers {
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
 		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
-		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
 		// mainW.rdbtnmntmLatvian.addActionListener();
 		// mainW.rdbtnmntmPolish.addActionListener();
@@ -482,16 +519,11 @@ public class EventHandlers {
 
 		// Options
 
-		// mainW.mntmMasterPhonemesFile.addActionListener();
-		// mainW.mntmPhonemeDataSource.addActionListener();
-		// mainW.mntmDictionaryDataSource.addActionListener();
-		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
-		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
-		mainW.mntmMasterPhonemesFile.addActionListener(viaFileChooser);
-		mainW.mntmPhonemeDataSource.addActionListener(viaFileChooser);
-		mainW.mntmDictionaryDataSource.addActionListener(viaFileChooser);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(viaFileChooser);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(viaFileChooser);
+		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
+		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
+		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(synthesizedSoundWAVFile);
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(voiceFileToModifyFormantPeaks);
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
@@ -504,22 +536,12 @@ public class EventHandlers {
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
-					if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-						String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
-								"; cd " + fileChooser.getSelectedFile().getParent() +
-								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
-						CommandUtilities.executeCmd(cmd);
-					}
-				}
+			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
 
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EspeakNg ng = new EspeakNg(mainW);
@@ -547,9 +569,8 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		// mainW.mntmConvertFileUTF8.addActionListener();
-		// mainW.mntmCountWordFrequencies.addActionListener();
-		// mainW.mntmTesttemporary.addActionListener();
+		//mainW.mntmConvertFileUTF8.addActionListener();
+		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
 
 		// Compile
 

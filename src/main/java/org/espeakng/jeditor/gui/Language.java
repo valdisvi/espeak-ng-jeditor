@@ -133,7 +133,6 @@ public class Language {
 		mainW.mntmPLItalian.setText(translation.get(46));
 		mainW.mntmConvertFileUTF8.setText(translation.get(47));
 		mainW.mntmCountWordFrequencies.setText(translation.get(48));
-		mainW.mntmTesttemporary.setText(translation.get(49));
 		
 		// menuBar group Compile
 		mainW.mnCompile.setText(translation.get(50));
