@@ -84,6 +84,7 @@ public class VowelChart extends JPanel {
 			g2.setColor(gridColor);
 			g2.drawLine(0, y0, getWidth(), y0);
 			g2.setColor(Color.BLACK);
+	
 
 			int value = (int) (getMinValueY() - (getMinValueY() % 100) + (i * 50));
 
@@ -269,9 +270,8 @@ public class VowelChart extends JPanel {
 	}
 
 	public static void createAndShowGui(String path, MainWindow mainW) {
-
 		VowelChart vc = new VowelChart(createFromFile(path));
-		tabbedPaneGraphs.addTab("Vowel Chart", new JScrollPane(new JPanel().add(vc)));
+		tabbedPaneGraphs.addTab(new File(path).getName(), new JScrollPane(new JPanel().add(vc)));
 
 	}
 

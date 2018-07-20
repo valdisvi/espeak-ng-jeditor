@@ -515,6 +515,7 @@ public class EventHandlers {
 								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
 						CommandUtilities.executeCmd(cmd);
 						VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
+						
 					}
 				}
 			}
