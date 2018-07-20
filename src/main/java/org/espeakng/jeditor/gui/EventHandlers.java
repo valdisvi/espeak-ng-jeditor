@@ -217,14 +217,23 @@ public class EventHandlers {
 	// requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			String voice = espeakNg.getVoiceFromSelection();
-			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand);
-			lastThread = CommandUtilities.getLastThread();
-			Thread tMonitor = createMonitorThread();
-			tMonitor.start();
+//			EspeakNg espeakNg = new EspeakNg(mainW);
+//			String voice = espeakNg.getVoiceFromSelection();
+//			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+//			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+//			CommandUtilities.executeCmd(terminalCommand);
+//			lastThread = CommandUtilities.getLastThread();
+//			Thread tMonitor = createMonitorThread();
+//			tMonitor.start();
+			String text = espeakNg.getText("speak");
+			String terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
+			
+			
+			String[] dataR = data.split("\\n");
+			String[] dataR1 = dataR[0].split("\\t");
+			System.out.println(dataR1[1]);
+			PhonemeLoad.phonemeOpen(mainW);
 		}
 	};
 
