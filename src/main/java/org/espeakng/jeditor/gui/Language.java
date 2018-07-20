@@ -7,10 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
 /**
@@ -157,7 +153,9 @@ public class Language {
 		mainW.mntmCloseAll.setText(translation.get(69));
 		mainW.mntmExportGraph.setText(translation.get(70));
 		mainW.mntmTamil.setText(translation.get(71));
-
 		
+		//text area
+		mainW.textAreaIn.setText(translation.get(72));
 	}
+
 }
