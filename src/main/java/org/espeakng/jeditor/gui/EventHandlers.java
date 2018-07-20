@@ -413,7 +413,7 @@ public class EventHandlers {
 	ActionListener countWordFreq = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			
-			String[] keys = espeakNg.getText("").toLowerCase().split(" ");
+			String[] keys = espeakNg.getText("").toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
 			Map<String, Integer> map = new TreeMap<>();
 			
 			for (String key : keys) {
@@ -428,18 +428,6 @@ public class EventHandlers {
 				
 			new WordFrequencyWindow(words);
 			
- 		}
-	};
-	
-	ActionListener convertFileUTF8 = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmConvertFileUTF8) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
-					
-					
-					
-				}
-  			}
  		}
 	};
 	
@@ -611,7 +599,7 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		mainW.mntmConvertFileUTF8.addActionListener(convertFileUTF8);
+		//mainW.mntmConvertFileUTF8.addActionListener();
 		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
 
 		// Compile
