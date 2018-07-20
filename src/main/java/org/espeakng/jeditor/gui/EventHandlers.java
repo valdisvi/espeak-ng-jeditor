@@ -109,6 +109,15 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
+      }else if (e.getSource() == mainW.mntmTamil) {
+					File file = new File("./src/main/resources/tamil.txt");
+					if (!file.exists()) {
+						InputStream in = getClass().getResourceAsStream("/tamil.txt");
+						BufferedReader input = new BufferedReader(new InputStreamReader(in));
+						Language.initLanguage(input, mainW);
+					} else {
+						Language.initLanguage(file, mainW);
+					}
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
@@ -486,6 +495,7 @@ public class EventHandlers {
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
+		mainW.mntmTamil.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
 		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));

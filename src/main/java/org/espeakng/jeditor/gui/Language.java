@@ -7,6 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 import org.apache.log4j.Logger;
 /**
  * This class is used to set or change the language of the program.
@@ -142,5 +147,17 @@ public class Language {
 		mainW.mnHelp.setText(translation.get(59));
 		mainW.mntmEspeakDocumentation.setText(translation.get(60));
 		mainW.mntmAbout.setText(translation.get(61));
+		
+		mainW.btnZoom.setText(translation.get(62));
+		mainW.btnZoom_1.setText(translation.get(63));
+		mainW.btnTranslate.setText(translation.get(65));
+		mainW.btnShowRules.setText(translation.get(66));
+		mainW.btnShowIPA.setText(translation.get(68));
+		mainW.btnSpeak.setText(translation.get(67));
+		mainW.mntmCloseAll.setText(translation.get(69));
+		mainW.mntmExportGraph.setText(translation.get(70));
+		mainW.mntmTamil.setText(translation.get(71));
+
+		
 	}
 }

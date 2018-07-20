@@ -30,8 +30,8 @@ Synthesized sound wAV file...
 Voice file to modify formant peaks...
 Language
 English
-Latvian
-Russian
+Latviešu
+Русский
 Speed
 Speak Punctuation
 Speak Characters
@@ -67,3 +67,6 @@ Translate
 Show Rules
 Speak
 Show IPA
+Close All
+Export Graph
+தமிழ்
