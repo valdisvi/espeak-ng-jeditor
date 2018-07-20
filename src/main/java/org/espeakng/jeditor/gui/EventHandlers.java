@@ -412,17 +412,6 @@ public class EventHandlers {
 		}
 	};
 	
-	private void openDialog(){
-		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-			rt = Runtime.getRuntime();
-			try {
-				rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
-
 	ActionListener compileDictionary = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
@@ -441,7 +430,14 @@ public class EventHandlers {
 	ActionListener compileDictionaryDebug = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
-				 openDialog();
+				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
+  				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+  					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+  							"; cd " + fileChooser.getSelectedFile().getParent() +
+  							" && " + dataPath + "/src/espeak-ng --compile-debug=" + 
+  							fileChooser.getSelectedFile().getName().split("_")[0];
+  					CommandUtilities.executeCmd(cmd);
+  				}
 			}
 		}
 	};
@@ -450,7 +446,9 @@ public class EventHandlers {
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				 openDialog();
+				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
+						+ "; espeak-ng --compile-phonemes" ;
+				CommandUtilities.executeCmd(cmd);
 			}
 		}
 	};
@@ -479,10 +477,8 @@ public class EventHandlers {
 		}
 	};
 	
-	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			
 			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 			File file = new File("./docs/docindex.html");
 			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -492,8 +488,6 @@ public class EventHandlers {
 					e.printStackTrace();
 				}
 			}
-			
-			
 		}
 	};
 
