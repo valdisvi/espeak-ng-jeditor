@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -18,13 +17,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
@@ -219,9 +216,10 @@ public class Graph {
 			g.drawString(((int) (currentFrame.time * 1000)) + " ms" + "  "
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
-			// before this rms needs to be calculated
-			//g.drawString(currentFrame.rms+" rms", keyframeWidth
-					//- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
+			
+			
+			//g.drawString(String.format("%.4f rms",currentFrame.rms), keyframeWidth
+			//		- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 			for (int j = 0; j < 8; j++) {
@@ -290,7 +288,7 @@ public class Graph {
 			int pkright;
 			int pkwidth;
 			int[] buf = new int[4000];
-			// double rms;
+			//double rms;
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
@@ -338,7 +336,7 @@ public class Graph {
 			// rms = buf[0] >> 12;
 			// rms = rms * rms * 23;
 			// rms = rms * rms;
-
+			// rms = currentFrame.rms;
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
 			for (ix = 1; ix < max_ix; ix++) {
@@ -811,7 +809,7 @@ public class Graph {
 			final JPanel filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
-		Box box = Box.createVerticalBox();
+		// Box box = Box.createVerticalBox(); // Not used
 		Dimension size = new Dimension();
 		int y = 5;
 		if (!frames.isEmpty()) {

@@ -15,7 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.PhonemeLoad;
-import org.espeakng.jeditor.data.RMSGraph;
+import org.espeakng.jeditor.data.SpectrumGraph;
 
 import java.awt.Color;
 
@@ -143,7 +143,7 @@ public class MainWindow extends JFrame {
 	public JPanel panel_Spect;
 
 	// Data for rms graph
-	public static double[][] rmsArray = new double[2][7];
+	// public static double[][] rmsArray = new double[2][7];
 
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -495,30 +495,22 @@ public class MainWindow extends JFrame {
 	 * tabbed pane with all the necessary text fields and labels, as well as
 	 * tabbed pane for graphs.
 	 */
-	public static void getRMSData() {
-		if ((!tfHeight.isEmpty()) && (!tfFreq.isEmpty())) {
-			int maxHeight = 0;
-			for (JTextField h : tfHeight) {
-				int currentValue = (!h.getText().equals("")) ? Integer.parseInt(h.getText()) : 0;
-				if (currentValue > maxHeight)
-					maxHeight = currentValue;
-			}
-			if (maxHeight != 0) {
-				for (int j = 0; j < 7; j++) {
-					rmsArray[0][j] = (double) ((!tfFreq.get(j).getText().equals(""))
-							? Integer.parseInt(tfFreq.get(j).getText()) : 0);
-					rmsArray[1][j] = (double) ((!tfHeight.get(j).getText().equals(""))
-							? (double) Integer.parseInt(tfHeight.get(j).getText()) / maxHeight : 0);
-				}
-			}
-		}
-		// panel_Spect.RMSGraph.repaint();
-	}
+	/*
+	 * public static void getRMSData() { if ((!tfHeight.isEmpty()) &&
+	 * (!tfFreq.isEmpty())) { int maxHeight = 0; for (JTextField h : tfHeight) {
+	 * int currentValue = (!h.getText().equals("")) ?
+	 * Integer.parseInt(h.getText()) : 0; if (currentValue > maxHeight)
+	 * maxHeight = currentValue; } if (maxHeight != 0) { for (int j = 0; j < 7;
+	 * j++) { rmsArray[0][j] = (double) ((!tfFreq.get(j).getText().equals("")) ?
+	 * Integer.parseInt(tfFreq.get(j).getText()) : 0); rmsArray[1][j] = (double)
+	 * ((!tfHeight.get(j).getText().equals("")) ? (double)
+	 * Integer.parseInt(tfHeight.get(j).getText()) / maxHeight : 0); } } } //
+	 * panel_Spect.RMSGraph.repaint(); }
+	 */
 
 	public void bodyInit() {
 
 		// TODO Implement "Amplitude frame" in bottom left corner.
-		// see getRMSData;
 
 		// initiate keyframe sequence/prosody tab pane:
 
@@ -1053,13 +1045,13 @@ public class MainWindow extends JFrame {
 		spms.setModel(new SpinnerNumberModel(0, 0, 596, 1));
 		spms.setBounds(20, 481, compWidth, compHeight);
 		panel_Spect.add(spms);
-		// graph pane for RMS
 
-		JPanel panelRmsGraph = new RMSGraph();
-		panelRmsGraph.setBounds(3, 511, 364, 200);
-		panel_Spect.add(panelRmsGraph);
-		panelRmsGraph.setBackground(new Color(238, 238, 238));
-
+		/*
+		 * JPanel panelSpectrumGraph = new SpectrumGraph();
+		 * panelSpectrumGraph.setBounds(3, 511, 364, 200);
+		 * panel_Spect.add(panelSpectrumGraph);
+		 * panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+		 */
 		//////////////////////////
 		//////// Text Tab ////////
 		//////////////////////////

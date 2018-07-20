@@ -598,7 +598,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[0].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(0).getText().toString());
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -609,7 +608,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[1].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(1).getText().toString());
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 
@@ -621,7 +619,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[2].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(2).getText().toString());
 					mainW.focusedPanel.repaint();
-			//		mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 
@@ -633,7 +630,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[3].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(3).getText().toString());
 					mainW.focusedPanel.repaint();
-			//		mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -644,7 +640,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[4].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(4).getText().toString());
 					mainW.focusedPanel.repaint();
-			//		mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -655,7 +650,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[5].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(5).getText().toString());
 					mainW.focusedPanel.repaint();
-			//		mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -666,7 +660,6 @@ public class EventHandlers {
 					mainW.focusedFrame.peaks[6].pkfreq = Short
 							.parseShort(MainWindow.tfFreq.get(6).getText().toString());
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -681,7 +674,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[0].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -693,7 +685,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[1].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -705,7 +696,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[2].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -717,7 +707,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[3].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -729,7 +718,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[4].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -741,7 +729,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[5].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -753,7 +740,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[6].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -765,7 +751,6 @@ public class EventHandlers {
 					value = (short) (value << 6);
 					mainW.focusedFrame.peaks[7].pkheight = value;
 					mainW.focusedPanel.repaint();
-				//	mainW.panel_Spect.repaint();
 				} catch (NumberFormatException ex) {
 				}
 			}
@@ -1032,7 +1017,7 @@ public class EventHandlers {
 			}
 		});
 		
-		//mainW.panel_Spect.repaint();
+		//TODO Add here in the same way as for previous fields listeners for fields in the second block.
 		
 		
 
