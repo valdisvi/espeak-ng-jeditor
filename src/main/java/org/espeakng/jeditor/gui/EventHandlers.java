@@ -1,7 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
-
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -479,12 +482,18 @@ public class EventHandlers {
 	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			Runtime rt = Runtime.getRuntime();
-			try {
-				rt.exec("firefox ./docs/docindex.html");
-			} catch (IOException e) {
-				logger.warn(e);
+			
+			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+			File file = new File("./docs/docindex.html");
+			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+				try {
+					desktop.browse(file.toURI());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			
+			
 		}
 	};
 
@@ -521,7 +530,6 @@ public class EventHandlers {
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
 		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
-		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
 		// mainW.rdbtnmntmLatvian.addActionListener();
 		// mainW.rdbtnmntmPolish.addActionListener();
@@ -529,11 +537,6 @@ public class EventHandlers {
 
 		// Options
 
-		// mainW.mntmMasterPhonemesFile.addActionListener();
-		// mainW.mntmPhonemeDataSource.addActionListener();
-		// mainW.mntmDictionaryDataSource.addActionListener();
-		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
-		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
 		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
 		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
 		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
@@ -550,17 +553,9 @@ public class EventHandlers {
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
-					if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-						String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
-								"; cd " + fileChooser.getSelectedFile().getParent() +
-								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
-						CommandUtilities.executeCmd(cmd);
-					}
-				}
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 
