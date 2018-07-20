@@ -42,7 +42,7 @@ public class EventHandlers {
 	private Preferences prefs;
     private File file;
     private EspeakNg espeakNg;
-    private Runtime rt;
+//    private Runtime rt;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
@@ -53,15 +53,9 @@ public class EventHandlers {
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
+		
 		prefs = Preferences.userRoot().node(getClass().getName());
 		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-		//fileChooser1 = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-		//fileChooser2 = new JFileChooser(
-		//		prefs.get("a", new File("../espeak-ng/phonemes/vowelcharts").getAbsolutePath()));
-     //   fileChooser3 = new JFileChooser(
-        //		prefs.get("", new File("../espeak-ng/espeak-ng-data/lang").getAbsolutePath()));
-       // fileChooser4 = new JFileChooser(
-        //		prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
 	}
 
 	ChangeListener getPhoneme = new ChangeListener() {
@@ -106,8 +100,6 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
-				// Language.initLanguage(new
-				// File("./src/main/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
 				File file = new File("./src/main/resources/russian.txt");
 				if (!file.exists()) {
@@ -117,10 +109,7 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
-				// Language.initLanguage(new
-				// File("./src/main/resources/russian.txt"), mainW);
-				}
-				else if (e.getSource() == mainW.mntmTamil) {
+      }else if (e.getSource() == mainW.mntmTamil) {
 					File file = new File("./src/main/resources/tamil.txt");
 					if (!file.exists()) {
 						InputStream in = getClass().getResourceAsStream("/tamil.txt");
@@ -129,8 +118,6 @@ public class EventHandlers {
 					} else {
 						Language.initLanguage(file, mainW);
 					}
-					// Language.initLanguage(new
-					// File("./src/main/resources/russian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
@@ -150,23 +137,23 @@ public class EventHandlers {
 	 * This method clears JTextFields that represent values of peaks
 	 */
 	public void clearText() {
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < MainWindow.tfFreq.size(); i++) {
 			MainWindow.tfFreq.get(i).setText("");
 		
 		}
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < MainWindow.tfHeight.size(); i++) {
 			MainWindow.tfHeight.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfWidth.size(); i++) {
 			MainWindow.tfWidth.get(i).setText("");
 		}
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MainWindow.tfBw.size(); i++) {
 			MainWindow.tfBw.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfAp.size(); i++) {
 			MainWindow.tfAp.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfBp.size(); i++) {
 			MainWindow.tfBp.get(i).setText("");
 		}
 	}
@@ -217,27 +204,20 @@ public class EventHandlers {
 		}
 	};
 
-	// requires espeak-ng library
-	ActionListener translate = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			espeakNg.makeAction("translate");
-		}
-	};
-	
+	private class MakeActionListener implements ActionListener {
 
-	// requires espeak-ng library
-	ActionListener showRules = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			espeakNg.makeAction("showRules");
+		private String action;
+		
+		public MakeActionListener(String action) {
+			this.action = action;
 		}
-	};
-
-	// requires espeak-ng library
-	ActionListener showIpa = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			espeakNg.makeAction("showIpa");
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			espeakNg.makeAction(action);
 		}
-	};
+		
+	}
 
 	
 	private boolean isPaused = false;
@@ -346,37 +326,16 @@ public class EventHandlers {
 			}
 		}
 	};
+	
+	ActionListener viaFileChooser = new ActionListener() {
 
-	ActionListener masterPhonemesFile = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			usingFileChooser();
 		}
+		
 	};
-
-	ActionListener phonemeDataSource = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			usingFileChooser();
-		}
-	};
-
-	ActionListener dictionaryDataSource = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			usingFileChooser();
-		}
-	};
-
-	ActionListener synthesizedSoundWAVFile = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			usingFileChooser();
-		}
-
-	};
-
-	ActionListener voiceFileToModifyFormantPeaks = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			usingFileChooser();
-		}
-	};
+	
 	private void usingFileChooser(){
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		int returnVal = fileChooser.showDialog(mainW, "Select");
@@ -386,80 +345,62 @@ public class EventHandlers {
 		}
 	}
 
-	// requires espeak-ng library
-	// speaking without ignoring punctuation (says "dot" where is ".")
-	ActionListener speakPunc = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			String voice = espeakNg.getVoiceFromSelection();
-			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakPunc")+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand1);
-			//espeakNg.makeAction("speakPunc");
-		}
-	};
+	private class GetTextListener implements ActionListener {
 
-	// requires espeak-ng library
-	// splits word and spell it by symbol
-	ActionListener speakBySymbol = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
+		private String command;
+		
+		public GetTextListener(String command) {
+			this.command = command;
+		}
+		
+		// requires espeak-ng library
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand1);
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand);
 		}
-	};
-	
-	ActionListener speakCharName = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			String voice = espeakNg.getVoiceFromSelection();
-			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand1);
-		}
-	};
-	
-	private void openDialog(){
-		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-			rt = Runtime.getRuntime();
-			try {
-				rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
+		
 	}
+	
+	private class CompileListener implements ActionListener {
 
-	ActionListener compileDictionary = new ActionListener() {
+		private String compileCommand;
+		
+		public CompileListener(String compileCommand) {
+			this.compileCommand = compileCommand;
+		}
+		
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
 				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
   				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
   					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
   							"; cd " + fileChooser.getSelectedFile().getParent() +
-  							" && " + dataPath + "/src/espeak-ng --compile=" + 
+  							" && " + dataPath + "/src/espeak-ng --" + compileCommand + "=" + 
   							fileChooser.getSelectedFile().getName().split("_")[0];
   					CommandUtilities.executeCmd(cmd);
   				}
 			}
 		}
-	};
-
-	ActionListener compileDictionaryDebug = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
-				 openDialog();
-			}
-		}
-	};
+		
+	}
 
 	
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				 openDialog();
+				fileChooser.setSelectedFile(new File(dataPath + "/phsource/phonemes"));
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+							"; cd " + fileChooser.getSelectedFile().getParentFile().getParent() +
+							" && " + dataPath + "/src/espeak-ng --compile-phonemes=" +
+							fileChooser.getSelectedFile().getParentFile().getName();
+					CommandUtilities.executeCmd(cmd);
+				}
 			}
 		}
 	};
@@ -521,9 +462,9 @@ public class EventHandlers {
 
 		// Speak
 
-		mainW.mntmTranslate.addActionListener(translate);
-		mainW.mntmShowRules.addActionListener(showRules);
-		mainW.mntmShowIPA.addActionListener(showIpa);
+		mainW.mntmTranslate.addActionListener(new MakeActionListener("translate"));
+		mainW.mntmShowRules.addActionListener(new MakeActionListener("showRules"));
+		mainW.mntmShowIPA.addActionListener(new MakeActionListener("showIpa"));
 		mainW.mntmSpeak.addActionListener(speak);
 		mainW.mntmSpeakfile.addActionListener(speakFile);
 		mainW.mntmPause.addActionListener(pauseFile);
@@ -546,19 +487,19 @@ public class EventHandlers {
 		// mainW.mntmDictionaryDataSource.addActionListener();
 		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
 		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
-		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
-		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
-		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(synthesizedSoundWAVFile);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(voiceFileToModifyFormantPeaks);
+		mainW.mntmMasterPhonemesFile.addActionListener(viaFileChooser);
+		mainW.mntmPhonemeDataSource.addActionListener(viaFileChooser);
+		mainW.mntmDictionaryDataSource.addActionListener(viaFileChooser);
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(viaFileChooser);
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(viaFileChooser);
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
 		mainW.mntmTamil.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunc);
-		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		mainW.mntmSpeakCharacterName.addActionListener(speakCharName);
+		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
+		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
+		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
 
 		// Tools
 
@@ -612,8 +553,8 @@ public class EventHandlers {
 
 		// Compile
 
-		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
-		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
+		mainW.mntmCompileDictionary.addActionListener(new CompileListener("compile"));
+		mainW.mntmCompileDictionarydebug.addActionListener(new CompileListener("compile-debug"));
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
 		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
 		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
@@ -628,10 +569,10 @@ public class EventHandlers {
 		mainW.btnZoom_1.addActionListener(event);
 
 		// Prosody ("Text") tab buttons
-		mainW.btnTranslate.addActionListener(translate);
+		mainW.btnTranslate.addActionListener(new MakeActionListener("translate"));
 		mainW.btnSpeak.addActionListener(speak);
-		mainW.btnShowRules.addActionListener(showRules);
-		mainW.btnShowIPA.addActionListener(showIpa);
+		mainW.btnShowRules.addActionListener(new MakeActionListener("showRules"));
+		mainW.btnShowIPA.addActionListener(new MakeActionListener("showIpa"));
 
 		addTFListeners();
 	}
