@@ -363,7 +363,7 @@ public class EventHandlers {
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
 		}
-	};
+	}
 	
 
 	ActionListener countWordFreq = new ActionListener() {
@@ -387,10 +387,6 @@ public class EventHandlers {
  		}
 	};
   
-  ActionListener compileDictionary = new ActionListener() {
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand);
-		}
 	
 	private class CompileListener implements ActionListener {
 
@@ -413,7 +409,8 @@ public class EventHandlers {
   				}
 			}
 		}
-	};
+		
+	}
 
 	ActionListener compileDictionaryDebug = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -519,11 +516,11 @@ public class EventHandlers {
 
 		// Options
 
-		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
-		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
-		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(synthesizedSoundWAVFile);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(voiceFileToModifyFormantPeaks);
+		mainW.mntmMasterPhonemesFile.addActionListener(viaFileChooser);
+		mainW.mntmPhonemeDataSource.addActionListener(viaFileChooser);
+		mainW.mntmDictionaryDataSource.addActionListener(viaFileChooser);
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(viaFileChooser);
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(viaFileChooser);
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
