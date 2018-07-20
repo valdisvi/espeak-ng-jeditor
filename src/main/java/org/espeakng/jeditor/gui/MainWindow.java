@@ -97,7 +97,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLRussian;
 	public JMenuItem mntmConvertFileUTF8;
 	public JMenuItem mntmCountWordFrequencies;
-	public JMenuItem mntmTesttemporary;
 	// menuBar group Compile
 	public JMenu mnCompile;
 	public JMenuItem mntmCompileDictionary;
@@ -442,9 +441,6 @@ public class MainWindow extends JFrame {
 		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
 		mnTools.add(mntmCountWordFrequencies);
 
-		mntmTesttemporary = new JMenuItem("Test (temporary)");
-		mnTools.add(mntmTesttemporary);
-		
 		///////////////////
 		// Compile group //
 		///////////////////

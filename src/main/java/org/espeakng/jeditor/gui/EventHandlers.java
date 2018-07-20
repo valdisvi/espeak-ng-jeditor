@@ -11,9 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -127,7 +126,6 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmAbout) {
 				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
-
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
@@ -295,14 +293,13 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (!isPaused) {
 				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
-				isPaused = true;
 				mainW.mntmPause.setText("Unpause");
 			}
 			else {
 				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
-				isPaused = false;
 				mainW.mntmPause.setText("Pause");
 			}
+			isPaused = !isPaused;
 		}
 	};
 	
@@ -412,6 +409,40 @@ public class EventHandlers {
 		}
 	};
 	
+	
+	ActionListener countWordFreq = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			
+			String[] keys = espeakNg.getText("").toLowerCase().split(" ");
+			Map<String, Integer> map = new TreeMap<>();
+			
+			for (String key : keys) {
+				map.compute(key, (k, v) -> v == null ? 1 : v+1);
+			}
+			
+			String[] words = map.toString().split(", ");
+			if (words.length > 0){
+				words[0] = words[0].substring(1);
+				words[words.length-1] = words[words.length-1].substring(0, words[words.length-1].length()-1);
+			}
+				
+			new WordFrequencyWindow(words);
+			
+ 		}
+	};
+	
+	ActionListener convertFileUTF8 = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == mainW.mntmConvertFileUTF8) {
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+					
+					
+					
+				}
+  			}
+ 		}
+	};
+	
 	ActionListener compileDictionary = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary) {
@@ -437,7 +468,7 @@ public class EventHandlers {
   							" && " + dataPath + "/src/espeak-ng --compile-debug=" + 
   							fileChooser.getSelectedFile().getName().split("_")[0];
   					CommandUtilities.executeCmd(cmd);
-  				}
+  				} 
 			}
 		}
 	};
@@ -548,13 +579,11 @@ public class EventHandlers {
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
 
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EspeakNg ng = new EspeakNg(mainW);
@@ -582,9 +611,8 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		// mainW.mntmConvertFileUTF8.addActionListener();
-		// mainW.mntmCountWordFrequencies.addActionListener();
-		// mainW.mntmTesttemporary.addActionListener();
+		mainW.mntmConvertFileUTF8.addActionListener(convertFileUTF8);
+		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
 
 		// Compile
 
