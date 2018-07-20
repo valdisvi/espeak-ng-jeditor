@@ -1,7 +1,6 @@
 package org.espeakng.jeditor.gui;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
