@@ -2,6 +2,8 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -33,9 +35,7 @@ public class MainWindow extends JFrame {
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
 	 */
-	
 	private static final long serialVersionUID = 6548939748883665055L;
-
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;	
@@ -142,8 +142,11 @@ public class MainWindow extends JFrame {
 	public JPanel panel_Spect;
 	public JPopupMenu pmenu;
 	public JMenuItem openMI;
-	public JMenuItem closeMI;
 	public JMenuItem exportMI;
+	public JMenuItem clMI;
+	public JMenuItem clalMI;
+	public JMenuItem quitMI;
+	
 	
 	
 	// eventHandler object
@@ -213,8 +216,9 @@ public class MainWindow extends JFrame {
 					logger.warn(e);
 				}
 			}
-		}
-	}
+		}}
+	
+
 	
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
@@ -492,12 +496,26 @@ public class MainWindow extends JFrame {
 	    pmenu = new JPopupMenu();
 	    openMI = new JMenuItem("Open");
 	    exportMI = new JMenuItem("Export");
-	    closeMI = new JMenuItem("Close");
-	   
+	    clMI = new JMenuItem("Close graph");
+	    clalMI = new JMenuItem("Close all graph");
+	    quitMI = new JMenuItem("Quit");
+		
+	    clMI.addActionListener(
+		new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						MainWindow.tabbedPaneGraphs.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent());
+					}});
+	    clalMI.addActionListener(
+	    		new ActionListener(){
+	    					public void actionPerformed(ActionEvent e){
+	    						MainWindow.tabbedPaneGraphs.removeAll();
+	    					}});
 	    
 	    pmenu.add(openMI);
 	    pmenu.add(exportMI);
-	    pmenu.add(closeMI);
+	    pmenu.add(clMI);
+	    pmenu.add(clalMI);
+	    pmenu.add(quitMI);
 	    addMouseListener(
 	    		new MouseAdapter(){
 	    			public void mouseReleased(MouseEvent e){

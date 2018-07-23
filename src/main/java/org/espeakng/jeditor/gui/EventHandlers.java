@@ -36,8 +36,6 @@ import javax.swing.JScrollPane;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
-
-
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
@@ -67,6 +65,7 @@ public class EventHandlers {
 		}
 	};
 
+
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
@@ -81,7 +80,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.closeMI) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -159,6 +158,7 @@ public class EventHandlers {
 		}
 	}
 
+
 	// clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -204,6 +204,7 @@ public class EventHandlers {
 			mainW.mntmCloseAll.setVisible(false);
 		}
 	};
+
 
 	private class MakeActionListener implements ActionListener {
 
@@ -530,8 +531,9 @@ public class EventHandlers {
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
         mainW.openMI.addActionListener(event);
-        mainW.closeMI.addActionListener(event);
         mainW.exportMI.addActionListener(event);
+        mainW.clMI.addActionListener(event);
+        mainW.quitMI.addActionListener(event);
 
 		// Tools
 
