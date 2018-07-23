@@ -533,7 +533,7 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-		tabbedPane.addTab("Spect", null, panel_Spect, "lrtkv");
+		tabbedPane.addTab("Spect", null, panel_Spect, null);
 	
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
