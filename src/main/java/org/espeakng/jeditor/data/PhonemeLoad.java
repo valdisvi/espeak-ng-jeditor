@@ -17,15 +17,10 @@ public class PhonemeLoad {
 	 * @param mainW - Main Window
 	 */
 	public static void phonemeOpen(File file, MainWindow mainW){
+		
 		Phoneme newPhoneme=new Phoneme(file);
 		phonemeList.add(newPhoneme);
 	}
-	
-	public static void phonemeOpen(MainWindow mainW) {
-		Phoneme newPhoneme = new Phoneme();
-		phonemeList.add(newPhoneme);
-	}
-	
 	/**
 	 * Initializing ArrayList of phonemes
 	 */

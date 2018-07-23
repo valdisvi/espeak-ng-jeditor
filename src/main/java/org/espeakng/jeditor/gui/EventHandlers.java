@@ -21,11 +21,11 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.data.VowelGraph;
 import org.espeakng.jeditor.utils.CommandUtilities;
 
-
 import javax.swing.JFileChooser;
-
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 
@@ -42,6 +42,7 @@ public class EventHandlers {
 	private Preferences prefs;
     private File file;
     private EspeakNg espeakNg;
+    private JScrollPane scrollPane;
 //    private Runtime rt;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
 	/**
@@ -229,11 +230,16 @@ public class EventHandlers {
 			String terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
 			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
 			
+			JPanel mg = new VowelGraph(data);
 			
-			String[] dataR = data.split("\\n");
-			String[] dataR1 = dataR[0].split("\\t");
-			System.out.println(dataR1[1]);
-			PhonemeLoad.phonemeOpen(mainW);
+			MainWindow.tabbedPaneGraphs.remove(scrollPane);
+			
+			scrollPane = new JScrollPane(mg);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			
+			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
+			
 		}
 	};
 

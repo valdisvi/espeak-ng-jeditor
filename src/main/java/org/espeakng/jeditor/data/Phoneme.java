@@ -57,10 +57,6 @@ public class Phoneme{
 		
 		graph = new Graph(file.getName(), frameList);
 	}
-	
-	public Phoneme() {
-		
-	}
 	/**
 	 * Getter for graph
 	 * 
