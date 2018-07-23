@@ -43,7 +43,7 @@ public class SpectFrame{
 	public Formant_t[] formants;
 	public Peak_t[] peaks;
 	
-	SpectFrame(){
+	public SpectFrame(){
 		klaat_param = new short[JeSpeak_Synthesize.N_KLATTP2];
 		formants = new Formant_t[JeSpeak_Synthesize.N_PEAKS];
 		peaks = new Peak_t[JeSpeak_Synthesize.N_PEAKS];

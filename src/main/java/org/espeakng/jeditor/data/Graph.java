@@ -99,6 +99,10 @@ public class Graph {
 	 * @param frameList
 	 */
 	
+	public static void main(String[] args){
+		
+	}
+	
 	public Graph(String fileName, ArrayList<Frame> frameList) {
 		repaintActive();
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
