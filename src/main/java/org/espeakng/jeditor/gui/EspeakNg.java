@@ -163,7 +163,7 @@ public class EspeakNg {
 			bufferedReader.close();
 			fileOutput.delete();
 		} catch (FileNotFoundException e) {
-			logger.warn(e);;
+			logger.warn(e);
 		} catch (IOException e) {
 			logger.warn(e);
 		}
