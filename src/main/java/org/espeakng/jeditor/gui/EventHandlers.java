@@ -533,16 +533,29 @@ public class EventHandlers {
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileChooser= new JFileChooser("../espeak-ng/phsource/vowelcharts/");
+				if (e.getSource() == mainW.mntmFromDirectoryVowelFiles) {
+					if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+						String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+								"; cd " + fileChooser.getSelectedFile().getParent() +
+								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+						CommandUtilities.executeCmd(cmd);
+						VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
+						
+					}
+				}
+
 			}
 		});
 
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EspeakNg ng = new EspeakNg(mainW);
-				String lang = ng.getVoiceFromSelection();
+				String lang = espeakNg.getVoiceFromSelection();
 				String path = "";
 				switch (lang) {
 				case "en":
