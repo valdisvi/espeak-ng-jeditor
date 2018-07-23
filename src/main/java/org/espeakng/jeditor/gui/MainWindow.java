@@ -2,6 +2,8 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -138,6 +140,8 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
+	public JMenuItem openMI;
+	public JMenuItem closeMI;
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -463,7 +467,7 @@ public class MainWindow extends JFrame {
 
 		mnCompile.add(new JSeparator());
 
-    mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
@@ -481,8 +485,21 @@ public class MainWindow extends JFrame {
 
 		mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
-
-	}
+		
+	    JPopupMenu pmenu = new JPopupMenu();
+	    openMI = new JMenuItem("Open");
+	    closeMI = new JMenuItem("Close");
+	    
+	    pmenu.add(openMI);
+	    pmenu.add(closeMI);
+	    
+	    addMouseListener(
+	    		new MouseAdapter(){
+	    			public void mouseReleased(MouseEvent e){
+	    				if(e.getButton() == MouseEvent.BUTTON3)
+	    					pmenu.show(e.getComponent(),e.getX(),e.getY());
+	    			}}
+	    		);}
 
 	/**
 	 * This method initiates frame body. Creates "Spect" and "Text" tabs on

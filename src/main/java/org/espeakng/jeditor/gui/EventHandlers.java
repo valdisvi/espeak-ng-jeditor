@@ -27,7 +27,6 @@ import org.espeakng.jeditor.utils.CommandUtilities;
 
 
 import javax.swing.JFileChooser;
-
 import javax.swing.JScrollPane;
 
 
@@ -52,6 +51,7 @@ public class EventHandlers {
 	 * 
 	 * @param mainW
 	 */
+ 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
@@ -70,7 +70,7 @@ public class EventHandlers {
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-			if (e.getSource() == mainW.mntmOpen) {
+			if (e.getSource() == mainW.mntmOpen||e.getSource() == mainW.openMI) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
@@ -81,7 +81,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.closeMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -529,11 +529,12 @@ public class EventHandlers {
 		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
+        mainW.openMI.addActionListener(event);
+        mainW.closeMI.addActionListener(event);
 
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -551,7 +552,6 @@ public class EventHandlers {
 
 			}
 		});
-
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -735,6 +735,7 @@ public class EventHandlers {
 			});
 		}
 	}
+	
 	/**
 	 * Get method for file chooser
 	 * 
