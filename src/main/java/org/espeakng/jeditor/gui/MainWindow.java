@@ -33,7 +33,7 @@ public class MainWindow extends JFrame {
 	 */
 	
 	private static final long serialVersionUID = 6548939748883665055L;
-	
+
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;	
@@ -98,7 +98,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLRussian;
 	public JMenuItem mntmConvertFileUTF8;
 	public JMenuItem mntmCountWordFrequencies;
-	public JMenuItem mntmTesttemporary;
 	// menuBar group Compile
 	public JMenu mnCompile;
 	public JMenuItem mntmCompileDictionary;
@@ -146,6 +145,7 @@ public class MainWindow extends JFrame {
 	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
+
 	
 	// Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
@@ -177,7 +177,6 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
 		mainW.setUp();
-		
 	}
 	
 	/**
@@ -446,9 +445,6 @@ public class MainWindow extends JFrame {
 		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
 		mnTools.add(mntmCountWordFrequencies);
 
-		mntmTesttemporary = new JMenuItem("Test (temporary)");
-		mnTools.add(mntmTesttemporary);
-		
 		///////////////////
 		// Compile group //
 		///////////////////
@@ -537,8 +533,7 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-		tabbedPane.addTab("Spect", null, panel_Spect, null);
-		
+		tabbedPane.addTab("Spect", null, panel_Spect, "lrtkv");
 	
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
@@ -1029,11 +1024,14 @@ public class MainWindow extends JFrame {
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panel_text, null);
+		
+		
 		// Input text area:
 		
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
+		textAreaIn.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -1041,6 +1039,7 @@ public class MainWindow extends JFrame {
 		
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
+		textAreaOut.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
