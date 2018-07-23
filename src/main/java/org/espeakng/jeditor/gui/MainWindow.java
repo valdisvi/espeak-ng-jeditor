@@ -1082,17 +1082,17 @@ public class MainWindow extends JFrame {
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
-										.addComponent(btnSpeak))
+										.addComponent(btnSpeak, Alignment.CENTER))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnPause, Alignment.LEADING))
+										.addComponent(btnPause, Alignment.CENTER))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnStop, Alignment.LEADING))))
+										.addComponent(btnStop, Alignment.CENTER))))
 				.addContainerGap()));
 
 		// Text tab vertical grouping.
