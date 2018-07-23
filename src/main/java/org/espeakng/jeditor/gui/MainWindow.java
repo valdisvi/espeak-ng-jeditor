@@ -135,6 +135,8 @@ public class MainWindow extends JFrame {
 	public JTextArea textAreaOut;
 	public JButton btnTranslate;
 	public JButton btnSpeak;
+	public JButton btnPause;
+	public JButton btnStop;
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
@@ -1042,7 +1044,12 @@ public class MainWindow extends JFrame {
 		// Command buttons:
 		
 		btnTranslate = new JButton("Translate");
-		btnSpeak = new JButton("Speak");
+		btnSpeak = new JButton("");
+		btnSpeak.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/play.png"));
+		btnPause = new JButton("");
+		btnPause.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/pause.png"));
+		btnStop = new JButton("");
+		btnStop.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/stop.png"));
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
@@ -1057,12 +1064,17 @@ public class MainWindow extends JFrame {
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
-										.addComponent(btnShowRules))
+										.addComponent(btnSpeak))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnSpeak, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnShowIPA, Alignment.LEADING))))
+										.addComponent(btnPause, Alignment.LEADING))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnStop, Alignment.LEADING))))
 				.addContainerGap()));
 
 		// Text tab vertical grouping.
@@ -1073,10 +1085,12 @@ public class MainWindow extends JFrame {
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
 						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnSpeak))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnShowRules)
+								.addComponent(btnShowRules)
 								.addComponent(btnShowIPA))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
+								.addComponent(btnPause)
+								.addComponent(btnStop))
 						.addGap(54)));
 
 		panel_text.setLayout(gl_panel_text);
