@@ -127,6 +127,7 @@ public class MainWindow extends JFrame {
 	public static ArrayList<JTextField> tfBw;
 	public static ArrayList<JTextField> tfAp;
 	public static ArrayList<JTextField> tfBp;
+	public static ArrayList<ArrayList<JTextField>> array;
 	public static JTextField tfmS;
 	public static JSpinner spampF;
 	public JButton btnZoom;
@@ -153,12 +154,12 @@ public class MainWindow extends JFrame {
 	public static MainWindow getMainWindow(){return instance;}
 	
 	private  MainWindow() {
-		tfFreq = new ArrayList<JTextField>();
-		tfHeight = new ArrayList<JTextField>();
-		tfWidth = new ArrayList<JTextField>();
-		tfBw = new ArrayList<JTextField>();
-		tfAp = new ArrayList<JTextField>();
-		tfBp = new ArrayList<JTextField>();
+		array.add(tfFreq = new ArrayList<JTextField>());
+		array.add(tfHeight = new ArrayList<JTextField>());
+		array.add(tfWidth = new ArrayList<JTextField>());
+		array.add(tfBw = new ArrayList<JTextField>());
+		array.add(tfAp = new ArrayList<JTextField>());
+		array.add(tfBp = new ArrayList<JTextField>());
 		
 		frameInit();
 		menuBarInit();

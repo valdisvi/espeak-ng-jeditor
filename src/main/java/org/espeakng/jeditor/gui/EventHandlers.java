@@ -1,5 +1,6 @@
 package org.espeakng.jeditor.gui;
 
+import javax.swing.*;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,11 +27,6 @@ import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
 import org.espeakng.jeditor.utils.CommandUtilities;
-
-
-import javax.swing.JFileChooser;
-
-import javax.swing.JScrollPane;
 
 
 /**
@@ -153,24 +150,10 @@ public class EventHandlers {
 	 * This method clears JTextFields that represent values of peaks
 	 */
 	public void clearText() {
-		for (int i = 0; i < MainWindow.tfFreq.size(); i++) {
-			MainWindow.tfFreq.get(i).setText("");
-		
-		}
-		for (int i = 0; i < MainWindow.tfHeight.size(); i++) {
-			MainWindow.tfHeight.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfWidth.size(); i++) {
-			MainWindow.tfWidth.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfBw.size(); i++) {
-			MainWindow.tfBw.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfAp.size(); i++) {
-			MainWindow.tfAp.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfBp.size(); i++) {
-			MainWindow.tfBp.get(i).setText("");
+		for(ArrayList<JTextField> jTextArray : MainWindow.array ){
+			for(JTextField jTextField : jTextArray){
+				jTextField.setText("");
+			}
 		}
 	}
 
@@ -242,7 +225,6 @@ public class EventHandlers {
 	// requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
@@ -255,7 +237,6 @@ public class EventHandlers {
 
 	ActionListener speakFile = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
