@@ -360,7 +360,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakCharName")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
 		}
 	}
