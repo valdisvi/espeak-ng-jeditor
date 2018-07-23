@@ -140,8 +140,11 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
+	public JPopupMenu pmenu;
 	public JMenuItem openMI;
 	public JMenuItem closeMI;
+	public JMenuItem exportMI;
+	
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -486,13 +489,15 @@ public class MainWindow extends JFrame {
 		mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
 		
-	    JPopupMenu pmenu = new JPopupMenu();
+	    pmenu = new JPopupMenu();
 	    openMI = new JMenuItem("Open");
+	    exportMI = new JMenuItem("Export");
 	    closeMI = new JMenuItem("Close");
+	   
 	    
 	    pmenu.add(openMI);
+	    pmenu.add(exportMI);
 	    pmenu.add(closeMI);
-	    
 	    addMouseListener(
 	    		new MouseAdapter(){
 	    			public void mouseReleased(MouseEvent e){
@@ -520,6 +525,7 @@ public class MainWindow extends JFrame {
 		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPaneGraphs.setComponentPopupMenu(pmenu);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
@@ -550,6 +556,7 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
+		panel_Spect.setComponentPopupMenu(pmenu);
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 	
 		///////////////////////////////////////////////

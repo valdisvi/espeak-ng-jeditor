@@ -128,7 +128,7 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
+			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
 			}
 		}
@@ -531,6 +531,7 @@ public class EventHandlers {
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
         mainW.openMI.addActionListener(event);
         mainW.closeMI.addActionListener(event);
+        mainW.exportMI.addActionListener(event);
 
 		// Tools
 
