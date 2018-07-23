@@ -566,7 +566,6 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		//mainW.mntmConvertFileUTF8.addActionListener();
 		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
 
 		// Compile
