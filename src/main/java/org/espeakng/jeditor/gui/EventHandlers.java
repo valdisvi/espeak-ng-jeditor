@@ -26,7 +26,7 @@ import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
 import org.espeakng.jeditor.utils.CommandUtilities;
 
-
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
 import javax.swing.JScrollPane;
@@ -45,7 +45,6 @@ public class EventHandlers {
 	private Preferences prefs;
     private File file;
     // Files required for buttons. Do not delete.
-    
     private Map<String, File> folders = new HashMap<>();
     // ******************************************
     private EspeakNg espeakNg;
@@ -276,6 +275,8 @@ public class EventHandlers {
 				mainW.mntmSpeak.setEnabled(false);
 				mainW.mntmSpeakfile.setEnabled(false);
 				mainW.btnSpeak.setEnabled(false);
+				mainW.btnPause.setEnabled(true);
+				mainW.btnStop.setEnabled(true);
 				mainW.mntmPause.setEnabled(true);
 				mainW.mntmStop.setEnabled(true);
 				try {
@@ -288,6 +289,8 @@ public class EventHandlers {
 				mainW.mntmSpeak.setEnabled(true);
 				mainW.mntmSpeakfile.setEnabled(true);
 				mainW.btnSpeak.setEnabled(true);
+				mainW.btnPause.setEnabled(false);
+				mainW.btnStop.setEnabled(false);
 				mainW.mntmPause.setEnabled(false);
 				mainW.mntmStop.setEnabled(false);
 			}
@@ -301,10 +304,12 @@ public class EventHandlers {
 			if (!isPaused) {
 				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
 				mainW.mntmPause.setText("Unpause");
+				mainW.btnPause.setIcon(mainW.resumeIcon);
 			}
 			else {
 				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
 				mainW.mntmPause.setText("Pause");
+				mainW.btnPause.setIcon(mainW.pauseIcon);
 			}
 			isPaused = !isPaused;
 		}
@@ -317,12 +322,12 @@ public class EventHandlers {
 			CommandUtilities.executeCmd("pkill -9 -f aplay");
 			isPaused = false;
 			mainW.mntmPause.setText("Pause");
+			mainW.btnPause.setIcon(mainW.pauseIcon);
 		}
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			// String file8 = "en";
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				System.out.println(fileChooser.getName(fileChooser.getSelectedFile()));
@@ -619,9 +624,11 @@ public class EventHandlers {
 
 		// Prosody ("Text") tab buttons
 		mainW.btnTranslate.addActionListener(new MakeActionListener("translate"));
-		mainW.btnSpeak.addActionListener(speak);
 		mainW.btnShowRules.addActionListener(new MakeActionListener("showRules"));
 		mainW.btnShowIPA.addActionListener(new MakeActionListener("showIpa"));
+		mainW.btnSpeak.addActionListener(speak);
+		mainW.btnPause.addActionListener(pauseFile);
+		mainW.btnStop.addActionListener(stopFile);
 
 		addTFListeners();
 	}

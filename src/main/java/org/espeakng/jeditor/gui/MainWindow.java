@@ -2,6 +2,7 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -147,7 +149,8 @@ public class MainWindow extends JFrame {
 	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
-
+	
+	public ImageIcon pauseIcon, resumeIcon;
 	
 	// Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
@@ -1043,13 +1046,28 @@ public class MainWindow extends JFrame {
 
 		// Command buttons:
 		
-		btnTranslate = new JButton("Translate");
 		btnSpeak = new JButton("");
-		btnSpeak.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/play.png"));
 		btnPause = new JButton("");
-		btnPause.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/pause.png"));
+		btnPause.setEnabled(false);
 		btnStop = new JButton("");
-		btnStop.setIcon(new ImageIcon("/home/student/eSpeak_NG/espeak-ng-jeditor/src/main/resources/stop.png"));
+		btnStop.setEnabled(false);
+		
+		Image play, pause, stop, resume;
+		try {
+			play = ImageIO.read(new File("./src/main/resources/play.png"));
+			btnSpeak.setIcon(new ImageIcon(play));
+			pause = ImageIO.read(new File("./src/main/resources/pause.png"));
+			btnPause.setIcon(new ImageIcon(pause));
+			stop = ImageIO.read(new File("./src/main/resources/stop.png"));
+			btnStop.setIcon(new ImageIcon(stop));
+			resume = ImageIO.read(new File("./src/main/resources/resume.png"));
+			pauseIcon = new ImageIcon(pause);
+			resumeIcon = new ImageIcon(resume);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		btnTranslate = new JButton("Translate");
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
