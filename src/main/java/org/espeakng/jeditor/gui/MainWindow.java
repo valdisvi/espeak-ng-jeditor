@@ -14,8 +14,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.espeakng.jeditor.data.Frame;
+import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
-import org.espeakng.jeditor.data.SpectrumGraph;
+//import org.espeakng.jeditor.data.SpectrumGraph;
 
 import java.awt.Color;
 
@@ -122,7 +123,7 @@ public class MainWindow extends JFrame {
 	public int compHeight = 23;
 	public int labelyOffset = compHeight / 4; // vertical offset from the top of
 												// the text field/spinner
-
+	public Phoneme phoneme;
 	// some components
 	public static ArrayList<JTextField> tfFreq;
 	public static ArrayList<JTextField> tfHeight;
@@ -141,9 +142,8 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
-
-	// Data for rms graph
-	// public static double[][] rmsArray = new double[2][7];
+	public JPanel panelSpectrumGraph;
+	// public ArrayList<Frame> frameList;
 
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -179,7 +179,7 @@ public class MainWindow extends JFrame {
 		MainWindow mainW = MainWindow.getMainWindow();
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
-		mainW.setSize(new Dimension(1000, 810));// was 600
+		mainW.setSize(new Dimension(1000, 810));// 810 was 600
 		mainW.setVisible(true);
 		mainW.setUp();
 
@@ -494,18 +494,6 @@ public class MainWindow extends JFrame {
 	 * This method initiates frame body. Creates "Spect" and "Text" tabs on
 	 * tabbed pane with all the necessary text fields and labels, as well as
 	 * tabbed pane for graphs.
-	 */
-	/*
-	 * public static void getRMSData() { if ((!tfHeight.isEmpty()) &&
-	 * (!tfFreq.isEmpty())) { int maxHeight = 0; for (JTextField h : tfHeight) {
-	 * int currentValue = (!h.getText().equals("")) ?
-	 * Integer.parseInt(h.getText()) : 0; if (currentValue > maxHeight)
-	 * maxHeight = currentValue; } if (maxHeight != 0) { for (int j = 0; j < 7;
-	 * j++) { rmsArray[0][j] = (double) ((!tfFreq.get(j).getText().equals("")) ?
-	 * Integer.parseInt(tfFreq.get(j).getText()) : 0); rmsArray[1][j] = (double)
-	 * ((!tfHeight.get(j).getText().equals("")) ? (double)
-	 * Integer.parseInt(tfHeight.get(j).getText()) / maxHeight : 0); } } } //
-	 * panel_Spect.RMSGraph.repaint(); }
 	 */
 
 	public void bodyInit() {
@@ -1047,10 +1035,10 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(spms);
 
 		/*
-		 * JPanel panelSpectrumGraph = new SpectrumGraph();
+		 * panelSpectrumGraph = new SpectrumGraph();
 		 * panelSpectrumGraph.setBounds(3, 511, 364, 200);
-		 * panel_Spect.add(panelSpectrumGraph);
 		 * panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+		 * panel_Spect.add(panelSpectrumGraph);
 		 */
 		//////////////////////////
 		//////// Text Tab ////////

@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -113,6 +119,7 @@ public class Graph {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVisible(true);
+		
 		MainWindow.getMainWindow().repaint();
 		
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
@@ -123,10 +130,13 @@ public class Graph {
 
 		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
 		tabbedPaneGraphs.setSelectedComponent(scrollPane);
-		
-		// filePanel.requestFocus();
+ 		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
-
+		MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(frameList);
+		MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
+		MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+		MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().panelSpectrumGraph);
+		MainWindow.getMainWindow().repaint();
 	}
 
 	class Draw extends JPanel {
@@ -179,6 +189,7 @@ public class Graph {
 							/ 18, keyframeHeight);
 				}
 			}
+			
 			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
 					points[i][0] = (int) (peaks[i].pkfreq * scalex); // peak x
@@ -209,6 +220,7 @@ public class Graph {
 			}
 			drawFormants(g);
 			drawPeaks(peaks, g);
+			
 			// draws increments
 			g.setColor(Color.BLACK);
 			g.setFont(new Font(g.getFont().getFontName(), g.getFont()
@@ -235,6 +247,7 @@ public class Graph {
 					rectPosX -= rectPosY + 3;
 				}
 			}
+			
 		}
 
 		public void drawFormants(Graphics g) {
@@ -360,6 +373,108 @@ public class Graph {
 
 			// rms = GetRms(seq_amplitude);
 		} // end of SpectFrame::DrawPeaks
+		
+		
+	}
+	
+	class SpectrumGraph extends JPanel {
+		ArrayList<Frame> frames;
+	    public SpectrumGraph(ArrayList<Frame> frames){
+	    	this.frames = frames;
+	    }
+	 
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        final int PAD = 20;
+	       // Phoneme phoneme = PhonemeLoad.getSelectedPhoneme((JScrollPane) MainWindow.getMainWindow()
+	        //		.tabbedPaneGraphs.getSelectedComponent());
+	        
+			int frameNumber = frames.size();
+	        double [][] data = new double [frameNumber][7]; 
+	        Graphics2D g2 = (Graphics2D) g;
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	                            RenderingHints.VALUE_ANTIALIAS_ON);
+	        int w = getWidth();
+	        int h = getHeight();
+	        
+	        for (int i=0;i < frameNumber;i++){
+	        	data [i][0]= frames.get(i).time;
+	        	for (int j=0;j<3;j++){
+	        		data[i][1]= frames.get(i).formants[1].freq;
+	        		data[i][2]= frames.get(i).formants[2].freq;
+	        		data[i][3]= frames.get(i).formants[3].freq;
+	        		data[i][4]= frames.get(i).peaks[1].pkfreq;
+	        		data[i][5]= frames.get(i).peaks[2].pkfreq;
+	        		data[i][6]= frames.get(i).peaks[3].pkfreq;
+	        	}
+	        }
+	        double minTime = Integer.MAX_VALUE;
+	        double maxTime = 0;
+	        for (int i=0;i<frameNumber;i++){
+	        	double value= data[i][0];
+	        	if (data[i][0]> maxTime) maxTime= value;
+	        	if (data[i][0]< minTime) minTime= value;
+	        }
+	        double xScale = (maxTime-minTime);
+	        // Draw ordinate.
+	        g2.draw(new Line2D.Double(PAD, PAD, PAD, h-PAD));
+	        // Draw abscissa.
+	        g2.draw(new Line2D.Double(PAD, h-PAD, w-PAD, h-PAD));
+	        // Draw labels.
+	        Font font = g2.getFont();
+	        FontRenderContext frc = g2.getFontRenderContext();
+	        LineMetrics lm = font.getLineMetrics("0", frc);
+	        float sh = lm.getAscent() + lm.getDescent();
+	        
+	        // Ordinate label.
+	        String s = "formants&peaks";
+	        float sy = PAD + ((h - 2*PAD) - s.length()*sh)/2 + lm.getAscent();
+	        for(int i = 0; i < s.length(); i++) {
+	            String letter = String.valueOf(s.charAt(i));
+	            float sw = (float)font.getStringBounds(letter, frc).getWidth();
+	            float sx = (PAD - sw)/2;
+	            g2.drawString(letter, sx, sy);
+	            sy += sh;
+	        }
+	        // Abscissa label.
+	        s = "frame time, mS";
+	        sy = h - PAD + (PAD - sh)/2 + lm.getAscent();
+	        float sw = (float)font.getStringBounds(s, frc).getWidth();
+	        float sx = (w - sw)/2;
+	      	g2.drawString(s, sx, sy);
+	      	// Draw border
+	      	g2.setPaint(Color.black);
+	      	g2.draw(new Line2D.Double(w -PAD,  PAD, w -PAD, h-PAD));
+	      	g2.draw(new Line2D.Double(PAD, PAD, w-PAD, PAD));
+	      	
+	        // Draw lines.
+	       // double xInc = (double)(w - 2*PAD)/(data[0].length-1);
+	        double scale = (double)(h - 2*PAD);
+	        
+	        for(int i = 0; i < frameNumber; i++) {
+	        	g2.setPaint(Color.ORANGE);
+	            double x = PAD + (data[i][0]-minTime)/xScale*(w-2*PAD);
+	            g2.draw(new Line2D.Double(x, h-PAD , x, PAD));
+	            g2.setPaint(Color.BLACK);
+	            double y1 = h - PAD - scale*data[i][1];
+	            g2.draw(new Line2D.Double(x-2, y1, x+2, y1));
+	             y1 = h - PAD - scale*data[i][2];
+	            g2.draw(new Line2D.Double(x-2, y1, x+2, y1));
+	             y1 = h - PAD - scale*data[i][3];
+	            g2.draw(new Line2D.Double(x-2, y1, x+2, y1));
+	            g2.setPaint(Color.RED);
+	            y1 = h - PAD - scale*data[i][4]-2;
+	            g2.fill(new Ellipse2D.Double(x-2, y1, 4, 4));
+	            y1 = h - PAD - scale*data[i][5]-2;
+	            g2.fill(new Ellipse2D.Double(x-2, y1, 4, 4));
+	            y1 = h - PAD - scale*data[i][6]-2;
+	            g2.fill(new Ellipse2D.Double(x-2, y1, 4, 4));
+	            
+	        }
+	        
+	        repaint();
+		}
+	 
 	}
 
 	double SpectTilt(int value, int freq, boolean bass_reduction) {
@@ -917,6 +1032,7 @@ public class Graph {
 		filePanel2.revalidate();
 		filePanel2.repaint();
 		filePanel2.addKeyListener(keyListener);
+		MainWindow.getMainWindow().panel_Spect.repaint();
 		// filePanel.requestFocus();
 
 	}
@@ -989,4 +1105,5 @@ public class Graph {
 			
 		}
 	}
+	
 }

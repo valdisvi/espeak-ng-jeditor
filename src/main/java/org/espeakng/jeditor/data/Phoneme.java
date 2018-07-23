@@ -22,6 +22,7 @@ public class Phoneme{
 	public ArrayList<Frame> frameList;
 	private Graph graph;
 	public String path;
+	
 	public ArrayList<Frame> getFrameList() {
 		return frameList;
 	}

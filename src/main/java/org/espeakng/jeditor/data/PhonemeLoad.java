@@ -51,6 +51,7 @@ public class PhonemeLoad {
 				phoneme.loadFirstFrame();
 		}
 	}
+	
 	/**
 	 * Zooming in using jScrollPane object as argument
 	 * @param jScrollPane to be zoomed in
