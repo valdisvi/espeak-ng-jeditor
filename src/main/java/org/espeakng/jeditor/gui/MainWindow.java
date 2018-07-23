@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -187,27 +188,26 @@ public class MainWindow extends JFrame {
 	 * For proper work with code just create hiden .lib folder nearby Your project src folder
 	 * and copy libespeakservice.so from lib folder.
 	 */
+	
 
 	public void setUp() {
 		if (!(new File(".lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
-			
-			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
-				this.setFile(input, ".lib/libespeakservice.so");
-				
+				Files.copy(new File("lib/libespeakservice.so").toPath(),new File(".lib/libespeakservice.so").toPath());
 			} catch (IOException e) {
 				logger.warn(e);
-			} finally {
-				try {
-					if (input != null)
-						input.close();
-				} catch (IOException e) {
-					logger.warn(e);
-				}
 			}
 		}
 	}
+	
+/*
+ * This method copies files correct way. It is used for setUp() method.
+ * 
+ * 
+ */
+	
+
 	
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the

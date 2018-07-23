@@ -268,7 +268,7 @@ public class EventHandlers {
 						Thread.sleep(50);
 					}
 				} catch (InterruptedException e) {
-						e.printStackTrace();
+					logger.warn(e);
 				}
 				mainW.mntmSpeak.setEnabled(true);
 				mainW.mntmSpeakfile.setEnabled(true);
@@ -470,7 +470,7 @@ public class EventHandlers {
 				try {
 					desktop.browse(file.toURI());
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		}
@@ -744,7 +744,7 @@ public class EventHandlers {
 			System.out.println("Exported graphs: " + file.getAbsolutePath());
 			ImageIO.write(image, "png", file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 }
