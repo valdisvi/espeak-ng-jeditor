@@ -96,7 +96,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLGerman;
 	public JMenuItem mntmPLItalian;
 	public JMenuItem mntmPLRussian;
-	public JMenuItem mntmConvertFileUTF8;
 	public JMenuItem mntmCountWordFrequencies;
 	// menuBar group Compile
 	public JMenu mnCompile;
@@ -438,9 +437,6 @@ public class MainWindow extends JFrame {
 
 		mntmPLRussian = new JMenuItem("Russian");
 		mnProcessLexicon.add(mntmPLRussian);
-
-		mntmConvertFileUTF8 = new JMenuItem("Convert file to UTF8...");
-		mnTools.add(mntmConvertFileUTF8);
 
 		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
 		mnTools.add(mntmCountWordFrequencies);

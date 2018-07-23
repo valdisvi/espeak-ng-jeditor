@@ -127,7 +127,6 @@ public class Language {
 		mainW.mntmPLBulgarian.setText(translation.get(44));
 		mainW.mntmPLGerman.setText(translation.get(45));
 		mainW.mntmPLItalian.setText(translation.get(46));
-		mainW.mntmConvertFileUTF8.setText(translation.get(47));
 		mainW.mntmCountWordFrequencies.setText(translation.get(48));
 		
 		// menuBar group Compile
