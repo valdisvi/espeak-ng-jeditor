@@ -1,7 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
-
+import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -21,8 +22,11 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
-import org.espeakng.jeditor.data.VowelGraph;
+import org.espeakng.jeditor.data.ProsodyPanel;
+import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
+import org.espeakng.jeditor.utils.Utilities;
+import org.espeakng.jeditor.utils.WrapLayout;
 
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -218,19 +222,30 @@ public class EventHandlers {
 	// requires espeak-ng library
 	ActionListener speak = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-//			EspeakNg espeakNg = new EspeakNg(mainW);
-//			String voice = espeakNg.getVoiceFromSelection();
-//			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-//			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
-//			CommandUtilities.executeCmd(terminalCommand);
-//			lastThread = CommandUtilities.getLastThread();
-//			Thread tMonitor = createMonitorThread();
-//			tMonitor.start();
+			EspeakNg espeakNg = new EspeakNg(mainW);
+			String voice = espeakNg.getVoiceFromSelection();
+			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 			String text = espeakNg.getText("speak");
-			String terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + text + "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand);
+			lastThread = CommandUtilities.getLastThread();
+			
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
+			
+			terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
 			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
 			
-			JPanel mg = new VowelGraph(data);
+			JPanel mg = new JPanel();
+			WrapLayout wl = new WrapLayout(FlowLayout.LEFT, 0, 0);
+			mg.setLayout(wl);
+			
+			ArrayList<ProsodyPhoneme> prosodyPhonemes = Utilities.getProsodyData(data);
+
+			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes) {
+				mg.add(new ProsodyPanel(prosodyPhoneme));
+			}
 			
 			MainWindow.tabbedPaneGraphs.remove(scrollPane);
 			
@@ -239,6 +254,8 @@ public class EventHandlers {
 	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			
 			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
+			MainWindow.tabbedPaneGraphs.revalidate();
+			MainWindow.tabbedPaneGraphs.repaint();
 			
 		}
 	};
