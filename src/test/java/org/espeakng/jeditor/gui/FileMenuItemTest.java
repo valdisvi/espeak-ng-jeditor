@@ -2,12 +2,10 @@ package org.espeakng.jeditor.gui;
 
 import static org.junit.Assert.*;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.BeforeClass;
@@ -19,7 +17,6 @@ public class FileMenuItemTest {
 	static MainWindow cs;
 	private static FrameFixture fixture;
 	private static MainWindow mainW;
-	private static Logger logger = Logger.getLogger(FileMenuItemTest.class);
 
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(10);
@@ -29,30 +26,15 @@ public class FileMenuItemTest {
 	 */
 	@BeforeClass
 	public static void onSetUp() {
-
-		/*- if project is compiled to Java8, Lambda expression can be used, e.g.
-		 *
-		 *     app = GuiActionRunner.execute(() -> new ColorSlider());
-		 *
-		 * For Java7 anonymous class should be used as following:
-		 */
 		mainW = GuiActionRunner.execute(new Callable<MainWindow>() {
 			@Override
 			public MainWindow call() throws Exception {
 				return MainWindow.getMainWindow();
 			}
 		});
-		/*
-		 * If test Application extends JFrame, you can assign reference from it
-		 * to frame fixture directly. Otherwise you have to provide access to
-		 * used JFrame object of the application.
-		 */
 		fixture = new FrameFixture(mainW);
-		// Show window of the application
 		fixture.show();
-		// This is just workaround to fix size of the application window:
 		mainW.setSize(new Dimension(1000, 600));
-		//mainW.setBounds(100, 100, 450, 300);
 	}
 
 	/*
@@ -65,38 +47,45 @@ public class FileMenuItemTest {
 		testOpenButton(); 
 		testExportButton();
 		testCloseButton();
-		testCloseAllButton();
-		}
+	}
 	void testExportButton()   {
 		fixture.menuItem(mainW.mntmExportGraph.getText()).click();
-	//	fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/phsource/j/ji"));
-	//fixture.fileChooser().approve();
-		
 	}
 	
 	 void testOpenButton()   {
+		 int numberOfTabs = fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length;
 		fixture.menuItem(mainW.mntmOpen.getText()).click();
 		fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/phsource/j/je"));
 		fixture.fileChooser().approve();
+		assertEquals(numberOfTabs+1, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
 	}
 	
 	@Test
 	public void testOpen2Button()   {
+		 int numberOfTabs = fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length;
 		fixture.menuItem(mainW.mntmOpen2.getText()).click();
 		fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/phsource/j/ji"));
 		fixture.fileChooser().approve();
-		
+		assertEquals(numberOfTabs+1, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
 	}
 	
 	 void testCloseButton()   {
 		 int numberOfTabs = fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length;
-		fixture.menuItem(mainW.mntmClose.getText()).click();
-		assertEquals(numberOfTabs-1, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
+		 if(numberOfTabs==0)
+			 assertEquals(false, mainW.mntmClose.isVisible());
+		 else{
+			 fixture.menuItem(mainW.mntmClose.getText()).click();
+				assertEquals(numberOfTabs-1, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
+		 }
+		
 	}
 	 @Test
 	 public void testCloseAllButton()   {
 		 testOpenButton();
 		 testOpen2Button();
+		 int numberOfTabs = fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length;
+		 if(numberOfTabs==0)
+			 assertEquals(false, mainW.mntmClose.isVisible());
 		fixture.menuItem(mainW.mntmCloseAll.getText()).click();
 		assertEquals(0, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
 	}
