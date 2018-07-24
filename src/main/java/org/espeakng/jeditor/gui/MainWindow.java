@@ -154,6 +154,7 @@ public class MainWindow extends JFrame {
 	public static MainWindow getMainWindow(){return instance;}
 	
 	private  MainWindow() {
+		array = new ArrayList<ArrayList<JTextField>>();
 		array.add(tfFreq = new ArrayList<JTextField>());
 		array.add(tfHeight = new ArrayList<JTextField>());
 		array.add(tfWidth = new ArrayList<JTextField>());
@@ -172,7 +173,6 @@ public class MainWindow extends JFrame {
 
 	public static void main(String[] args) {
 		MainWindow mainW = MainWindow.getMainWindow();
-		
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
@@ -181,7 +181,7 @@ public class MainWindow extends JFrame {
 	}
 	
 	/**
-	 * FIXME
+	 * 
 	 * This method copies libespeakservice.so file to hidden folder where the
 	 * executable jar runs for passing all tests in Maven. It is required to have hidden
 	 * lib folder containing that file.
@@ -243,6 +243,7 @@ public class MainWindow extends JFrame {
 	 * separators for each of mentioned menus are created as well.
 	 */
 	
+
 	private void menuBarInit() {
 		menuBar = new JMenuBar();
 		
@@ -250,17 +251,22 @@ public class MainWindow extends JFrame {
 		// File group //
 		////////////////
 		
+		
 		mnFile = new JMenu("File");
+		mnFile.setName(mnFile.getText());
 		menuBar.add(mnFile);
 
-		mntmOpen = new JMenuItem("Open...");
+		mntmOpen = new JMenuItem("Open");
+		mntmOpen.setName(mntmOpen.getText());
 		mnFile.add(mntmOpen);
 
 		mntmOpen2 = new JMenuItem("Open2...");
+		mntmOpen2.setName(mntmOpen2.getText());
 		mnFile.add(mntmOpen2);
 		
 
 		mntmExportGraph = new JMenuItem("Export graph");
+		mntmExportGraph.setName(mntmExportGraph.getText());
 		mnFile.add(mntmExportGraph);
 
 		mntmSave = new JMenuItem("Save");
@@ -272,14 +278,17 @@ public class MainWindow extends JFrame {
 		mnFile.add(mntmSaveAs);
 
 		mntmClose = new JMenuItem("Close");
+		mntmClose.setName(mntmClose.getText());
 		mntmClose.setVisible(false);
 		mnFile.add(mntmClose);
 		
 		mntmCloseAll = new JMenuItem("Close all");
+		mntmCloseAll.setName(mntmCloseAll.getText());
 		mntmCloseAll.setVisible(false);
 		mnFile.add(mntmCloseAll);
 
 		mntmQuit = new JMenuItem("Quit");
+		mntmQuit.setName(mntmQuit.getText());
 		mnFile.add(mntmQuit);
 		
 		/////////////////
@@ -496,9 +505,11 @@ public class MainWindow extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
+		
 		// initiate keyframe sequence graph pane:
 		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneGraphs.setName("tabbedPaneGraphs");
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

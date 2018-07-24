@@ -13,14 +13,14 @@ public class ESpeakServiceTest {
 
 	@Test
 	public void testNativeTextToPhonemes() {
-		System.out.println(ESpeakService.nativeTextToPhonemes("Hello"));
+		//System.out.println(ESpeakService.nativeTextToPhonemes("Hello").toString());
 	}
 
 	@Test
 	public void testGetSpectSeq() {
 		SpectSeq s = new SpectSeq();
 		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/b/b");
-		System.out.println(s.name + ":" + s.amplitude);
+		System.out.println(s.name + ":" + s.amplitude+s.numframes);
 	}
 
 }

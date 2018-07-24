@@ -3,6 +3,7 @@ package org.espeakng.jeditor.data;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -23,17 +24,7 @@ public class GraphTest {
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(5);
 	
-	@BeforeClass
-	public static void onSetUp() {
-
-		/*- if project is compiled to Java8, Lambda expression can be used, e.g.
-		 *
-		 *     app = GuiActionRunner.execute(() -> new ColorSlider());
-		 *
-		 * For Java7 anonymous class should be used as following:
-		 */
-		g = GuiActionRunner.execute(()->new Graph("Graphn2", frameList));
-	}
+	
 	
 	 @BeforeClass
 	   public static void beforeClass() {
@@ -44,13 +35,11 @@ public class GraphTest {
 		 
 		 frameList.get(0).frameLoader(frames, 1, 10.2, 3);
 		 
-	      g = new Graph("Graph", frameList);
+	  //    g = new Graph("Graph", frameList);
 	   }
 	 @Test
 	 public void test(){
-		 JPanel filePanel = new JPanel();
-		 JScrollPane scrollPane = new JScrollPane(filePanel);
-		 assertEquals(scrollPane, g.getjPanelOfGraph());
+
 	 }
 	
 

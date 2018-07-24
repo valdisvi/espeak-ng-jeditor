@@ -5,9 +5,10 @@ import java.util.Arrays;
 
 
 import org.apache.log4j.Logger;
+import org.espeakng.jeditor.gui.EspeakNg;
 
 public class ProcessThread implements Runnable {
-
+	private static Logger logger = Logger.getLogger(ProcessThread.class.getName());
 	private String[] command;
 	public static boolean stop = false;
 	
@@ -17,7 +18,6 @@ public class ProcessThread implements Runnable {
 
 	@Override
 	public void run() {
-		Logger logger = CommandUtilities.getLogger();
 		try {
 			Process pb = Runtime.getRuntime().exec(command);
 			pb.waitFor();
@@ -41,6 +41,10 @@ public class ProcessThread implements Runnable {
 			logger.warn(e);
 		}
 		return;
+	}
+	
+	public Logger getLogger(){
+		return logger;
 	}
 
 }

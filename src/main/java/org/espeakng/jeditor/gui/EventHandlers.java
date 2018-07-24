@@ -96,6 +96,7 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmQuit) {
 				mainW.setVisible(false);
 				mainW.dispose();
+				
 			} else if (e.getSource() == mainW.mntmEnglish) {
 				File file = new File("./src/main/resources/english.txt");
 				if (!file.exists()) {
