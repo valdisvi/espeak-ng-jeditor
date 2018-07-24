@@ -2,12 +2,10 @@ package org.espeakng.jeditor.gui;
 
 import static org.junit.Assert.*;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.concurrent.Callable;
-
 
 import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -17,18 +15,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-
-// Call test methods in
-
-public class MainWindowTest {
-	
+public class FileMenuItemTest {
 	static MainWindow cs;
-	static Color color;
-
 	private static FrameFixture fixture;
 	private static MainWindow mainW;
-
-	private static Logger logger = Logger.getLogger(MainWindowTest.class);
+	private static Logger logger = Logger.getLogger(FileMenuItemTest.class);
 
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(10);
@@ -109,33 +100,5 @@ public class MainWindowTest {
 		fixture.menuItem(mainW.mntmCloseAll.getText()).click();
 		assertEquals(0, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
 	}
-	 
-	 
-	 /*
-	  * Test for Speak Menu
-	 */
-	 
-	 @Test
-	 public void testTranslateButton()   {
-		 mainW.textAreaIn.setText("Hi!");
-		 fixture.menuItem(mainW.mntmTranslate.getText()).click();
-		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
-	}
-	 @Test
-	 public void testhowRulesButton()   {
-		 mainW.textAreaIn.setText("hello");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
-		assertEquals("Found: 'hello' [h@loU]  \n h@l'oU", mainW.textAreaOut.getText().trim());
-		mainW.textAreaIn.setText("h!");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
-		assertEquals("Found: 'h' [eItS]  \n 'eItS", mainW.textAreaOut.getText().trim());
-		mainW.textAreaIn.setText("!");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
-		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
-	}
-	
-	
-	
-	
 	 
 }
