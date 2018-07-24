@@ -43,11 +43,7 @@ public class OptionsSpeedWindow extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> master
 		JButton btnButtonCancel = new JButton("Cancel");
 		btnButtonCancel.setBounds(12, 99, 105, 25);
 		getContentPane().add(btnButtonCancel);

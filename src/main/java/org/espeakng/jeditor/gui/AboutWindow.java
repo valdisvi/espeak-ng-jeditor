@@ -44,10 +44,6 @@ public class AboutWindow extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-=======
-		
->>>>>>> master
 
 		JButton btnOk = new JButton("OK");
 		btnOk.setBounds(207, 146, 117, 25);
