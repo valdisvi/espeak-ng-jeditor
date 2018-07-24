@@ -1,6 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,8 +26,12 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.data.ProsodyPanel;
+import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
-
+import org.espeakng.jeditor.utils.Utilities;
+import org.espeakng.jeditor.utils.WrapLayout;
+import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 
@@ -44,6 +50,7 @@ public class EventHandlers {
     private Map<String, File> folders = new HashMap<>();
     // ******************************************
     private EspeakNg espeakNg;
+    private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     
     
@@ -244,11 +251,35 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String text = espeakNg.getText("speak");
+
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + text + "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand);
 			lastThread = CommandUtilities.getLastThread();
+			
 			Thread tMonitor = createMonitorThread();
 			tMonitor.start();
+			
+			terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
+			
+			JPanel mg = new JPanel();
+			WrapLayout wl = new WrapLayout(FlowLayout.LEFT, 0, 0);
+			mg.setLayout(wl);
+			
+			ArrayList<ProsodyPhoneme> prosodyPhonemes = Utilities.getProsodyData(data);
+
+			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes)
+				mg.add(new ProsodyPanel(prosodyPhoneme));
+						
+			MainWindow.tabbedPaneGraphs.remove(scrollPane);
+			
+			scrollPane = new JScrollPane(mg);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	        scrollPane.setPreferredSize(MainWindow.tabbedPaneGraphs.getPreferredSize());
+	        
+			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
 		}
 	};
 
