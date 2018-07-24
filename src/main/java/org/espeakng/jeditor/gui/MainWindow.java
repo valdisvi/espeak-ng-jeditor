@@ -251,10 +251,10 @@ public class MainWindow extends JFrame {
 		} catch(NullPointerException e){
 			logger.warn("There is no libespeakservice.so file in .lib folder!");
 			logger.warn(e);
+		} finally {
+			fos.close();
 		}
 		
-		
-		fos.close();
 	}
 	
 	/**

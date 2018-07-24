@@ -1,6 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,9 +26,14 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.data.ProsodyPanel;
+import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
-
+import org.espeakng.jeditor.utils.Utilities;
+import org.espeakng.jeditor.utils.WrapLayout;
+import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 
@@ -44,6 +51,7 @@ public class EventHandlers {
     private Map<String, File> folders = new HashMap<>();
     // ******************************************
     private EspeakNg espeakNg;
+    private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     
     
@@ -244,11 +252,35 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String text = espeakNg.getText("speak");
+
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + text + "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand);
 			lastThread = CommandUtilities.getLastThread();
+			
 			Thread tMonitor = createMonitorThread();
 			tMonitor.start();
+			
+			terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
+			
+			JPanel mg = new JPanel();
+			WrapLayout wl = new WrapLayout(FlowLayout.LEFT, 0, 0);
+			mg.setLayout(wl);
+			
+			ArrayList<ProsodyPhoneme> prosodyPhonemes = Utilities.getProsodyData(data);
+
+			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes)
+				mg.add(new ProsodyPanel(prosodyPhoneme));
+						
+			MainWindow.tabbedPaneGraphs.remove(scrollPane);
+			
+			scrollPane = new JScrollPane(mg);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	        scrollPane.setPreferredSize(MainWindow.tabbedPaneGraphs.getPreferredSize());
+	        
+			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
 		}
 	};
 
@@ -269,7 +301,7 @@ public class EventHandlers {
 	};
 	
 	private Thread createMonitorThread() {
-		Thread tMonitor = new Thread() {
+		return new Thread() {
 			@Override
 			public void run() {
 				mainW.mntmSpeak.setEnabled(false); mainW.mntmSpeakfile.setEnabled(false);
@@ -291,7 +323,6 @@ public class EventHandlers {
 				mainW.mntmSpeakCharacters.setEnabled(true); mainW.mntmSpeakCharacterName.setEnabled(true);
 			}
 		};
-		return tMonitor;
 	}
 	
 	ActionListener pauseFile = new ActionListener() {
@@ -516,7 +547,6 @@ public class EventHandlers {
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
 
 		// Speak
 
@@ -772,19 +802,34 @@ public class EventHandlers {
 	}
 
 	private void exportGraphImage() {
-		// MainWindow.tabbedPaneGraphs.setSize
-		// setSize(getPreferredSize());
-		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
-				MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		MainWindow.tabbedPaneGraphs.printAll(g);
-		g.dispose();
-		try {
-			File file = new File("graph.png");
-			System.out.println("Exported graphs: " + file.getAbsolutePath());
-			ImageIO.write(image, "png", file);
-		} catch (IOException e) {
-			logger.warn(e);
+		fileChooser.setCurrentDirectory(new File("./"));
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
+					MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = image.createGraphics();
+			MainWindow.tabbedPaneGraphs.printAll(g);
+			g.dispose();
+			try {
+				
+				File file = fileChooser.getSelectedFile();
+		        if (!file.getName().endsWith(".png")) {
+		            file = new File(file.getParentFile(), file.getName() + ".png");
+		        }
+		        
+		        int confirm;
+		        if (file.exists()) {
+		            confirm = JOptionPane.showConfirmDialog(
+		                            null, "File already exists, overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+		            if (confirm == JOptionPane.NO_OPTION) {
+		                return;
+		            }
+		        }
+				System.out.println("Exported graphs: " + file.getAbsolutePath());
+				ImageIO.write(image, "png", file);
+			} catch (IOException e) {
+				logger.warn(e);
+			}
 		}
 	}
 }
