@@ -249,8 +249,9 @@ public class EventHandlers {
 			MainWindow.tabbedPaneGraphs.remove(scrollPane);
 			
 			scrollPane = new JScrollPane(mg);
-			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	        scrollPane.setPreferredSize(MainWindow.tabbedPaneGraphs.getPreferredSize());
 	        
 			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
 		}
