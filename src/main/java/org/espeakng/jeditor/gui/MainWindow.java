@@ -3,8 +3,11 @@ package org.espeakng.jeditor.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,9 +39,7 @@ public class MainWindow extends JFrame {
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
 	 */
-	
 	private static final long serialVersionUID = 6548939748883665055L;
-
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;	
@@ -144,6 +145,14 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
+	public JPopupMenu pmenu;
+	public JMenuItem openMI;
+	public JMenuItem exportMI;
+	public JMenuItem clMI;
+	public JMenuItem clalMI;
+	public JMenuItem quitMI;
+	
+	
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -204,8 +213,9 @@ public class MainWindow extends JFrame {
 			} catch (IOException e) {
 				logger.warn(e);
 			}
-		}
-	}
+		}}
+	
+
 	
 /*
  * This method copies files correct way. It is used for setUp() method.
@@ -466,7 +476,7 @@ public class MainWindow extends JFrame {
 
 		mnCompile.add(new JSeparator());
 
-    mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
@@ -484,8 +494,37 @@ public class MainWindow extends JFrame {
 
 		mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
-
-	}
+		
+	    pmenu = new JPopupMenu();
+	    openMI = new JMenuItem("Open");
+	    exportMI = new JMenuItem("Export");
+	    clMI = new JMenuItem("Close graph");
+	    clalMI = new JMenuItem("Close all graph");
+	    quitMI = new JMenuItem("Quit");
+		
+	    clMI.addActionListener(
+		new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						MainWindow.tabbedPaneGraphs.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent());
+					}});
+	    clalMI.addActionListener(
+	    		new ActionListener(){
+	    					public void actionPerformed(ActionEvent e){
+	    						MainWindow.tabbedPaneGraphs.removeAll();
+	    					}});
+	    
+	    pmenu.add(openMI);
+	    pmenu.add(exportMI);
+	    pmenu.add(clMI);
+	    pmenu.add(clalMI);
+	    pmenu.add(quitMI);
+	    addMouseListener(
+	    		new MouseAdapter(){
+	    			public void mouseReleased(MouseEvent e){
+	    				if(e.getButton() == MouseEvent.BUTTON3)
+	    					pmenu.show(e.getComponent(),e.getX(),e.getY());
+	    			}}
+	    		);}
 
 	/**
 	 * This method initiates frame body. Creates "Spect" and "Text" tabs on
@@ -506,6 +545,7 @@ public class MainWindow extends JFrame {
 		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPaneGraphs.setComponentPopupMenu(pmenu);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
@@ -563,6 +603,7 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
+		panel_Spect.setComponentPopupMenu(pmenu);
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
 	
 		///////////////////////////////////////////////
