@@ -49,6 +49,8 @@ public class PhonemeLoad {
 		for(Phoneme phoneme: phonemeList){
 			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane))
 				phoneme.loadFirstFrame();
+				
+			
 		}
 	}
 	
@@ -71,5 +73,8 @@ public class PhonemeLoad {
 			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane))
 				phoneme.doZoomOut();
 		}
+	}
+	public static ArrayList<Phoneme> getPhonemeList(){
+		return phonemeList;
 	}
 }

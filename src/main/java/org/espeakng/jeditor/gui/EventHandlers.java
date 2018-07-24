@@ -1,5 +1,6 @@
 package org.espeakng.jeditor.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
@@ -26,6 +27,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -37,6 +39,7 @@ public class EventHandlers {
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
 	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
     private File file1, file2, file3, file4, file5;
+    
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -65,9 +68,14 @@ public class EventHandlers {
 	}
 
 	ChangeListener getPhoneme = new ChangeListener() {
-		public void stateChanged(ChangeEvent arg0) {
+		public void stateChanged(ChangeEvent e) {
 			setVisibleMenuItemsFile(mainW);
 			PhonemeLoad.getPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
+			if (e.getSource() instanceof JTabbedPane) {
+                JTabbedPane pane = (JTabbedPane) e.getSource();
+                System.out.println("Selected paneNo : " + pane.getSelectedIndex());
+			}
+//	mainW.panelSpectrumGraph = new SpectrumGraph(phoneme.get(e.getSource().getSelectedIndex()).getFrameList());
 			mainW.panel_Spect.repaint();
 			
 		}
@@ -84,6 +92,7 @@ public class EventHandlers {
 			} else if (e.getSource() == mainW.mntmOpen2) {
 				if (fileChooser2.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser2.getSelectedFile(), mainW);
+					mainW.panel_Spect.repaint();
 					prefs2.put("a", fileChooser2.getSelectedFile().getParent());
 				}
 			} else if (e.getSource() == mainW.mntmQuit) {
@@ -131,6 +140,8 @@ public class EventHandlers {
 				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.mntmExportGraph) {
 				exportGraphImage();
+			} else if (e.getSource() == mainW.panel_Spect){
+				mainW.panel_Spect.repaint();
 			}
 		}
 	};

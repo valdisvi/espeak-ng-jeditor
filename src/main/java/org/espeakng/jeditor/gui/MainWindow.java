@@ -18,8 +18,6 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 //import org.espeakng.jeditor.data.SpectrumGraph;
 
-import java.awt.Color;
-
 /**
  * This class is an entry point for the program. It does all the initial
  * preparations for the program to start, builds the main window interface.
@@ -36,6 +34,7 @@ public class MainWindow extends JFrame {
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;
+	public static JPanel panelSpectrumGraph;
 
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
 	// Language.java
@@ -123,7 +122,7 @@ public class MainWindow extends JFrame {
 	public int compHeight = 23;
 	public int labelyOffset = compHeight / 4; // vertical offset from the top of
 												// the text field/spinner
-	public Phoneme phoneme;
+
 	// some components
 	public static ArrayList<JTextField> tfFreq;
 	public static ArrayList<JTextField> tfHeight;
@@ -142,8 +141,7 @@ public class MainWindow extends JFrame {
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
-	public JPanel panelSpectrumGraph;
-	// public ArrayList<Frame> frameList;
+	public Phoneme currentPhoneme;
 
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -1034,12 +1032,6 @@ public class MainWindow extends JFrame {
 		spms.setBounds(20, 481, compWidth, compHeight);
 		panel_Spect.add(spms);
 
-		/*
-		 * panelSpectrumGraph = new SpectrumGraph();
-		 * panelSpectrumGraph.setBounds(3, 511, 364, 200);
-		 * panelSpectrumGraph.setBackground(new Color(238, 238, 238));
-		 * panel_Spect.add(panelSpectrumGraph);
-		 */
 		//////////////////////////
 		//////// Text Tab ////////
 		//////////////////////////
