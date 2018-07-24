@@ -2,6 +2,7 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -27,9 +31,8 @@ import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
 import org.espeakng.jeditor.utils.Utilities;
 import org.espeakng.jeditor.utils.WrapLayout;
-
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 
 
@@ -39,28 +42,40 @@ import javax.swing.JScrollPane;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
-
-
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     private File file;
+    // Files required for buttons. Do not delete.
+    private Map<String, File> folders = new HashMap<>();
+    // ******************************************
     private EspeakNg espeakNg;
     private JScrollPane scrollPane;
-//    private Runtime rt;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
+    
+    
+    
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
 	 * 
 	 * @param mainW
 	 */
+ 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
 		
+		setFolders();
+		
 		prefs = Preferences.userRoot().node(getClass().getName());
 		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
+	}
+	
+	private void setFolders() {
+		folders.put("masterPhFile", new File("../espeak-ng/phsource/phonemes"));
+		folders.put("phonemeSource", new File("../espeak-ng/phsource"));
+		folders.put("dictSource", new File("../espeak-ng/dictsource"));
 	}
 
 	ChangeListener getPhoneme = new ChangeListener() {
@@ -70,10 +85,11 @@ public class EventHandlers {
 		}
 	};
 
+
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-			if (e.getSource() == mainW.mntmOpen) {
+			if (e.getSource() == mainW.mntmOpen||e.getSource() == mainW.openMI) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
@@ -84,7 +100,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -114,16 +130,24 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
+      }else if (e.getSource() == mainW.mntmTamil) {
+					File file = new File("./src/main/resources/tamil.txt");
+					if (!file.exists()) {
+						InputStream in = getClass().getResourceAsStream("/tamil.txt");
+						BufferedReader input = new BufferedReader(new InputStreamReader(in));
+						Language.initLanguage(input, mainW);
+					} else {
+						Language.initLanguage(file, mainW);
+					}
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
 				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
-
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
+			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
 			}
 		}
@@ -153,6 +177,7 @@ public class EventHandlers {
 			MainWindow.tfBp.get(i).setText("");
 		}
 	}
+
 
 	// clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
@@ -199,6 +224,7 @@ public class EventHandlers {
 			mainW.mntmCloseAll.setVisible(false);
 		}
 	};
+
 
 	private class MakeActionListener implements ActionListener {
 
@@ -277,23 +303,23 @@ public class EventHandlers {
 		Thread tMonitor = new Thread() {
 			@Override
 			public void run() {
-				mainW.mntmSpeak.setEnabled(false);
-				mainW.mntmSpeakfile.setEnabled(false);
-				mainW.btnSpeak.setEnabled(false);
-				mainW.mntmPause.setEnabled(true);
-				mainW.mntmStop.setEnabled(true);
+				mainW.mntmSpeak.setEnabled(false); mainW.mntmSpeakfile.setEnabled(false);
+				mainW.btnSpeak.setEnabled(false); mainW.btnPause.setEnabled(true);
+				mainW.btnStop.setEnabled(true); mainW.mntmPause.setEnabled(true);
+				mainW.mntmStop.setEnabled(true); mainW.mntmSpeakPunctuation.setEnabled(false);
+				mainW.mntmSpeakCharacters.setEnabled(false); mainW.mntmSpeakCharacterName.setEnabled(false);
 				try {
 					while (lastThread.isAlive()) {
 						Thread.sleep(50);
 					}
 				} catch (InterruptedException e) {
-						e.printStackTrace();
+					logger.warn(e);
 				}
-				mainW.mntmSpeak.setEnabled(true);
-				mainW.mntmSpeakfile.setEnabled(true);
-				mainW.btnSpeak.setEnabled(true);
-				mainW.mntmPause.setEnabled(false);
-				mainW.mntmStop.setEnabled(false);
+				mainW.mntmSpeak.setEnabled(true); mainW.mntmSpeakfile.setEnabled(true);
+				mainW.btnSpeak.setEnabled(true); mainW.btnPause.setEnabled(false);
+				mainW.btnStop.setEnabled(false); mainW.mntmPause.setEnabled(false);
+				mainW.mntmStop.setEnabled(false); mainW.mntmSpeakPunctuation.setEnabled(true);
+				mainW.mntmSpeakCharacters.setEnabled(true); mainW.mntmSpeakCharacterName.setEnabled(true);
 			}
 		};
 		return tMonitor;
@@ -304,14 +330,15 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (!isPaused) {
 				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
-				isPaused = true;
 				mainW.mntmPause.setText("Unpause");
+				mainW.btnPause.setIcon(mainW.resumeIcon);
 			}
 			else {
 				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
-				isPaused = false;
 				mainW.mntmPause.setText("Pause");
+				mainW.btnPause.setIcon(mainW.pauseIcon);
 			}
+			isPaused = !isPaused;
 		}
 	};
 	
@@ -322,12 +349,12 @@ public class EventHandlers {
 			CommandUtilities.executeCmd("pkill -9 -f aplay");
 			isPaused = false;
 			mainW.mntmPause.setText("Pause");
+			mainW.btnPause.setIcon(mainW.pauseIcon);
 		}
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			// String file8 = "en";
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				System.out.println(fileChooser.getName(fileChooser.getSelectedFile()));
@@ -356,13 +383,33 @@ public class EventHandlers {
 		
 	};
 	
-	private void usingFileChooser(){
+	private File usingFileChooser(){
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		int returnVal = fileChooser.showDialog(mainW, "Select");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = fileChooser.getSelectedFile();
 			System.out.println(file.getAbsolutePath() + " " + file.isDirectory());
+			return fileChooser.getSelectedFile();
 		}
+		return null;
+	}
+	
+	private class FoldersListener implements ActionListener {
+
+		private String key;
+		
+		public FoldersListener(String key) {
+			this.key = key;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			File temp = usingFileChooser();
+			if (temp != null) {
+				folders.put(key, temp);
+			}
+		}
+		
 	}
 
 	private class GetTextListener implements ActionListener {
@@ -379,11 +426,37 @@ public class EventHandlers {
 			EspeakNg espeakNg = new EspeakNg(mainW);
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
-			CommandUtilities.executeCmd(terminalCommand);
+
+			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+			lastThread = CommandUtilities.getLastThread();
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
 		}
-		
 	}
+	
+
+	ActionListener countWordFreq = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			
+			String[] keys = espeakNg.getText("").toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
+			Map<String, Integer> map = new TreeMap<>();
+			
+			for (String key : keys) {
+				map.compute(key, (k, v) -> v == null ? 1 : v+1);
+			}
+			
+			String[] words = map.toString().split(", ");
+			if (words.length > 0){
+				words[0] = words[0].substring(1);
+				words[words.length-1] = words[words.length-1].substring(0, words[words.length-1].length()-1);
+			}
+				
+			new WordFrequencyWindow(words);
+			
+ 		}
+	};
+  
 	
 	private class CompileListener implements ActionListener {
 
@@ -395,8 +468,8 @@ public class EventHandlers {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileDictionary) {
-				fileChooser.setCurrentDirectory(new File(dataPath + "/dictsource/"));
+			if (e.getSource() == mainW.mntmCompileDictionary || e.getSource() == mainW.mntmCompileDictionarydebug) {
+				fileChooser.setCurrentDirectory(folders.get("dictSource"));
   				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
   					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
   							"; cd " + fileChooser.getSelectedFile().getParent() +
@@ -406,21 +479,15 @@ public class EventHandlers {
   				}
 			}
 		}
-		
 	}
-
 	
 	ActionListener compilePhonemeData = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				fileChooser.setSelectedFile(new File(dataPath + "/phsource/phonemes"));
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
-							"; cd " + fileChooser.getSelectedFile().getParentFile().getParent() +
-							" && " + dataPath + "/src/espeak-ng --compile-phonemes=" +
-							fileChooser.getSelectedFile().getParentFile().getName();
-					CommandUtilities.executeCmd(cmd);
-				}
+				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
+						+ "; cd " + folders.get("phonemeSource").getParent() + " && "
+						+ dataPath + "/src/espeak-ng --compile-phonemes=" + folders.get("phonemeSource").getName();
+				CommandUtilities.executeCmd(cmd);
 			}
 		}
 	};
@@ -449,14 +516,16 @@ public class EventHandlers {
 		}
 	};
 	
-	// Any other way of calling browser without relying on one concrete?
 	ActionListener showDocumentation = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			Runtime rt = Runtime.getRuntime();
-			try {
-				rt.exec("firefox ./docs/docindex.html");
-			} catch (IOException e) {
-				logger.warn(e);
+			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+			File file = new File("./docs/docindex.html");
+			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+				try {
+					desktop.browse(file.toURI());
+				} catch (IOException e) {
+					logger.warn(e);
+				}
 			}
 		}
 	};
@@ -494,7 +563,6 @@ public class EventHandlers {
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
 		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
-		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
 		// mainW.rdbtnmntmLatvian.addActionListener();
 		// mainW.rdbtnmntmPolish.addActionListener();
@@ -502,23 +570,23 @@ public class EventHandlers {
 
 		// Options
 
-		// mainW.mntmMasterPhonemesFile.addActionListener();
-		// mainW.mntmPhonemeDataSource.addActionListener();
-		// mainW.mntmDictionaryDataSource.addActionListener();
-		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
-		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
-		mainW.mntmMasterPhonemesFile.addActionListener(viaFileChooser);
-		mainW.mntmPhonemeDataSource.addActionListener(viaFileChooser);
-		mainW.mntmDictionaryDataSource.addActionListener(viaFileChooser);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(viaFileChooser);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(viaFileChooser);
+		mainW.mntmMasterPhonemesFile.addActionListener(new FoldersListener("masterPhFile"));
+		mainW.mntmPhonemeDataSource.addActionListener(new FoldersListener("phonemeSource"));
+		mainW.mntmDictionaryDataSource.addActionListener(new FoldersListener("dictSource"));
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(new FoldersListener("WAVFile"));
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(new FoldersListener("voiceFile"));
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
+		mainW.mntmTamil.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
 		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
+        mainW.openMI.addActionListener(event);
+        mainW.exportMI.addActionListener(event);
+        mainW.clMI.addActionListener(event);
+        mainW.quitMI.addActionListener(event);
 
 		// Tools
 
@@ -526,23 +594,24 @@ public class EventHandlers {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
+				fileChooser= new JFileChooser("../espeak-ng/phsource/vowelcharts/");
+				if (e.getSource() == mainW.mntmFromDirectoryVowelFiles) {
 					if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 						String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
 								"; cd " + fileChooser.getSelectedFile().getParent() +
 								" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
 						CommandUtilities.executeCmd(cmd);
+						VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
+						
 					}
 				}
+
 			}
 		});
-
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EspeakNg ng = new EspeakNg(mainW);
-				String lang = ng.getVoiceFromSelection();
+				String lang = espeakNg.getVoiceFromSelection();
 				String path = "";
 				switch (lang) {
 				case "en":
@@ -566,9 +635,7 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		// mainW.mntmConvertFileUTF8.addActionListener();
-		// mainW.mntmCountWordFrequencies.addActionListener();
-		// mainW.mntmTesttemporary.addActionListener();
+		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
 
 		// Compile
 
@@ -589,9 +656,11 @@ public class EventHandlers {
 
 		// Prosody ("Text") tab buttons
 		mainW.btnTranslate.addActionListener(new MakeActionListener("translate"));
-		mainW.btnSpeak.addActionListener(speak);
 		mainW.btnShowRules.addActionListener(new MakeActionListener("showRules"));
 		mainW.btnShowIPA.addActionListener(new MakeActionListener("showIpa"));
+		mainW.btnSpeak.addActionListener(speak);
+		mainW.btnPause.addActionListener(pauseFile);
+		mainW.btnStop.addActionListener(stopFile);
 
 		addTFListeners();
 	}
@@ -723,6 +792,7 @@ public class EventHandlers {
 			});
 		}
 	}
+	
 	/**
 	 * Get method for file chooser
 	 * 
@@ -745,7 +815,7 @@ public class EventHandlers {
 			System.out.println("Exported graphs: " + file.getAbsolutePath());
 			ImageIO.write(image, "png", file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 	}
 }

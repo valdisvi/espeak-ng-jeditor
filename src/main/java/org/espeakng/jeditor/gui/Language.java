@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import org.apache.log4j.Logger;
 /**
  * This class is used to set or change the language of the program.
@@ -126,9 +127,7 @@ public class Language {
 		mainW.mntmPLBulgarian.setText(translation.get(44));
 		mainW.mntmPLGerman.setText(translation.get(45));
 		mainW.mntmPLItalian.setText(translation.get(46));
-		mainW.mntmConvertFileUTF8.setText(translation.get(47));
 		mainW.mntmCountWordFrequencies.setText(translation.get(48));
-		mainW.mntmTesttemporary.setText(translation.get(49));
 		
 		// menuBar group Compile
 		mainW.mnCompile.setText(translation.get(50));
@@ -142,5 +141,19 @@ public class Language {
 		mainW.mnHelp.setText(translation.get(59));
 		mainW.mntmEspeakDocumentation.setText(translation.get(60));
 		mainW.mntmAbout.setText(translation.get(61));
+		
+		mainW.btnZoom.setText(translation.get(62));
+		mainW.btnZoom_1.setText(translation.get(63));
+		mainW.btnTranslate.setText(translation.get(65));
+		mainW.btnShowRules.setText(translation.get(66));
+		mainW.btnShowIPA.setText(translation.get(68));
+		mainW.btnSpeak.setText(translation.get(67));
+		mainW.mntmCloseAll.setText(translation.get(69));
+		mainW.mntmExportGraph.setText(translation.get(70));
+		mainW.mntmTamil.setText(translation.get(71));
+		
+		//text area
+		mainW.textAreaIn.setText(translation.get(72));
 	}
+
 }

@@ -8,3 +8,4 @@ target/**
 *.class
 *.orig
 /bin/
+graph.png

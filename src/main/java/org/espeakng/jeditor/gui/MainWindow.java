@@ -2,12 +2,20 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -31,9 +39,7 @@ public class MainWindow extends JFrame {
 	 * TODO See bodyInit() method for exact tasks to do.
 	 * 
 	 */
-	
 	private static final long serialVersionUID = 6548939748883665055L;
-	
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;	
@@ -80,6 +86,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmEnglish;
 	public JMenuItem mntmLatvian;
 	public JMenuItem mntmRussian;
+	public JMenuItem mntmTamil;
 	public JMenuItem mntmSpeed;
 	public OptionsSpeedWindow optionsSpeed;
 	public JMenuItem mntmSpeakPunctuation;
@@ -95,9 +102,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLGerman;
 	public JMenuItem mntmPLItalian;
 	public JMenuItem mntmPLRussian;
-	public JMenuItem mntmConvertFileUTF8;
 	public JMenuItem mntmCountWordFrequencies;
-	public JMenuItem mntmTesttemporary;
 	// menuBar group Compile
 	public JMenu mnCompile;
 	public JMenuItem mntmCompileDictionary;
@@ -135,9 +140,19 @@ public class MainWindow extends JFrame {
 	public JTextArea textAreaOut;
 	public JButton btnTranslate;
 	public JButton btnSpeak;
+	public JButton btnPause;
+	public JButton btnStop;
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
+	public JPopupMenu pmenu;
+	public JMenuItem openMI;
+	public JMenuItem exportMI;
+	public JMenuItem clMI;
+	public JMenuItem clalMI;
+	public JMenuItem quitMI;
+	
+	
 	
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -145,6 +160,8 @@ public class MainWindow extends JFrame {
 	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
+	
+	public ImageIcon pauseIcon, resumeIcon;
 	
 	// Singleton design pattern, also easier to access main window from anywhere in code.
 	private static MainWindow instance = new MainWindow();
@@ -176,7 +193,6 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 600));
 		mainW.setVisible(true);
 		mainW.setUp();
-		
 	}
 	
 	/**
@@ -187,27 +203,27 @@ public class MainWindow extends JFrame {
 	 * For proper work with code just create hiden .lib folder nearby Your project src folder
 	 * and copy libespeakservice.so from lib folder.
 	 */
+	
 
 	public void setUp() {
 		if (!(new File(".lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
-			
-			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
-				this.setFile(input, ".lib/libespeakservice.so");
-				
+				Files.copy(new File("lib/libespeakservice.so").toPath(),new File(".lib/libespeakservice.so").toPath());
 			} catch (IOException e) {
 				logger.warn(e);
-			} finally {
-				try {
-					if (input != null)
-						input.close();
-				} catch (IOException e) {
-					logger.warn(e);
-				}
 			}
-		}
-	}
+		}}
+	
+
+	
+/*
+ * This method copies files correct way. It is used for setUp() method.
+ * 
+ * 
+ */
+	
+
 	
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
@@ -389,6 +405,9 @@ public class MainWindow extends JFrame {
 
 		mntmRussian = new JMenuItem("Russian");
 		mnLanguage.add(mntmRussian);
+		
+		mntmTamil = new JMenuItem("Tamil");
+		mnLanguage.add(mntmTamil);
 
 		mntmSpeed = new JMenuItem("Speed...");
 		mnOptions.add(mntmSpeed);
@@ -436,15 +455,9 @@ public class MainWindow extends JFrame {
 		mntmPLRussian = new JMenuItem("Russian");
 		mnProcessLexicon.add(mntmPLRussian);
 
-		mntmConvertFileUTF8 = new JMenuItem("Convert file to UTF8...");
-		mnTools.add(mntmConvertFileUTF8);
-
 		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
 		mnTools.add(mntmCountWordFrequencies);
 
-		mntmTesttemporary = new JMenuItem("Test (temporary)");
-		mnTools.add(mntmTesttemporary);
-		
 		///////////////////
 		// Compile group //
 		///////////////////
@@ -463,7 +476,7 @@ public class MainWindow extends JFrame {
 
 		mnCompile.add(new JSeparator());
 
-    mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
@@ -481,8 +494,37 @@ public class MainWindow extends JFrame {
 
 		mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
-
-	}
+		
+	    pmenu = new JPopupMenu();
+	    openMI = new JMenuItem("Open");
+	    exportMI = new JMenuItem("Export");
+	    clMI = new JMenuItem("Close graph");
+	    clalMI = new JMenuItem("Close all graph");
+	    quitMI = new JMenuItem("Quit");
+		
+	    clMI.addActionListener(
+		new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						MainWindow.tabbedPaneGraphs.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent());
+					}});
+	    clalMI.addActionListener(
+	    		new ActionListener(){
+	    					public void actionPerformed(ActionEvent e){
+	    						MainWindow.tabbedPaneGraphs.removeAll();
+	    					}});
+	    
+	    pmenu.add(openMI);
+	    pmenu.add(exportMI);
+	    pmenu.add(clMI);
+	    pmenu.add(clalMI);
+	    pmenu.add(quitMI);
+	    addMouseListener(
+	    		new MouseAdapter(){
+	    			public void mouseReleased(MouseEvent e){
+	    				if(e.getButton() == MouseEvent.BUTTON3)
+	    					pmenu.show(e.getComponent(),e.getX(),e.getY());
+	    			}}
+	    		);}
 
 	/**
 	 * This method initiates frame body. Creates "Spect" and "Text" tabs on
@@ -503,8 +545,36 @@ public class MainWindow extends JFrame {
 		
 		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPaneGraphs.setComponentPopupMenu(pmenu);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        InputMap  actionMap = (InputMap) UIManager.getDefaults().get("ScrollPane.ancestorInputMap");
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        
         
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
@@ -533,9 +603,9 @@ public class MainWindow extends JFrame {
         
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
+		panel_Spect.setComponentPopupMenu(pmenu);
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
-		
-		
+	
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
@@ -1025,12 +1095,14 @@ public class MainWindow extends JFrame {
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panel_text, null);
-
+		
+		
 		// Input text area:
 		
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
+		textAreaIn.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -1038,13 +1110,34 @@ public class MainWindow extends JFrame {
 		
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
+		textAreaOut.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Command buttons:
 		
+		btnSpeak = new JButton("");
+		btnPause = new JButton("");
+		btnPause.setEnabled(false);
+		btnStop = new JButton("");
+		btnStop.setEnabled(false);
+		
+		Image play, pause, stop, resume;
+		try {
+			play = ImageIO.read(new File("./src/main/resources/play.png"));
+			btnSpeak.setIcon(new ImageIcon(play));
+			pause = ImageIO.read(new File("./src/main/resources/pause.png"));
+			btnPause.setIcon(new ImageIcon(pause));
+			stop = ImageIO.read(new File("./src/main/resources/stop.png"));
+			btnStop.setIcon(new ImageIcon(stop));
+			resume = ImageIO.read(new File("./src/main/resources/resume.png"));
+			pauseIcon = new ImageIcon(pause);
+			resumeIcon = new ImageIcon(resume);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		btnTranslate = new JButton("Translate");
-		btnSpeak = new JButton("Speak");
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
@@ -1059,12 +1152,17 @@ public class MainWindow extends JFrame {
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
-										.addComponent(btnShowRules))
+										.addComponent(btnSpeak, Alignment.CENTER))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnSpeak, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnShowIPA, Alignment.LEADING))))
+										.addComponent(btnPause, Alignment.CENTER))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnStop, Alignment.CENTER))))
 				.addContainerGap()));
 
 		// Text tab vertical grouping.
@@ -1075,10 +1173,12 @@ public class MainWindow extends JFrame {
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
 						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnSpeak))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnShowRules)
+								.addComponent(btnShowRules)
 								.addComponent(btnShowIPA))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
+								.addComponent(btnPause)
+								.addComponent(btnStop))
 						.addGap(54)));
 
 		panel_text.setLayout(gl_panel_text);
