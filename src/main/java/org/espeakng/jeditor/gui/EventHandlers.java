@@ -28,7 +28,6 @@ import org.espeakng.jeditor.utils.CommandUtilities;
 
 
 import javax.swing.JFileChooser;
-
 import javax.swing.JScrollPane;
 
 
@@ -38,8 +37,6 @@ import javax.swing.JScrollPane;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
-
-
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
@@ -59,6 +56,7 @@ public class EventHandlers {
 	 * 
 	 * @param mainW
 	 */
+ 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
@@ -82,10 +80,11 @@ public class EventHandlers {
 		}
 	};
 
+
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-			if (e.getSource() == mainW.mntmOpen) {
+			if (e.getSource() == mainW.mntmOpen||e.getSource() == mainW.openMI) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
@@ -96,7 +95,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -143,7 +142,7 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
+			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
 			}
 		}
@@ -173,6 +172,7 @@ public class EventHandlers {
 			MainWindow.tfBp.get(i).setText("");
 		}
 	}
+
 
 	// clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
@@ -219,6 +219,7 @@ public class EventHandlers {
 			mainW.mntmCloseAll.setVisible(false);
 		}
 	};
+
 
 	private class MakeActionListener implements ActionListener {
 
@@ -548,11 +549,14 @@ public class EventHandlers {
 		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
+        mainW.openMI.addActionListener(event);
+        mainW.exportMI.addActionListener(event);
+        mainW.clMI.addActionListener(event);
+        mainW.quitMI.addActionListener(event);
 
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -570,7 +574,6 @@ public class EventHandlers {
 
 			}
 		});
-
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -753,6 +756,7 @@ public class EventHandlers {
 			});
 		}
 	}
+	
 	/**
 	 * Get method for file chooser
 	 * 
