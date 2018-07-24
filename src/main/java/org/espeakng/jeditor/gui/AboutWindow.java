@@ -40,7 +40,7 @@ public class AboutWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		try {
-			setIconImage(ImageIO.read(new File("./docs/images/lips.png")));
+			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

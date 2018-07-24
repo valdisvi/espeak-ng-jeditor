@@ -364,7 +364,7 @@ public class EventHandlers {
 
 	ActionListener selectVoiceVariant = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices/v!").getAbsolutePath()));
+			fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());

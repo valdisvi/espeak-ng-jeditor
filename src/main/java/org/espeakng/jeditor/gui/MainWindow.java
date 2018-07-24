@@ -192,7 +192,7 @@ public class MainWindow extends JFrame {
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
 		try {
-			mainW.setIconImage(ImageIO.read(new File("./docs/images/lips.png")));
+			mainW.setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -39,7 +39,7 @@ public class OptionsSpeedWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		try {
-			setIconImage(ImageIO.read(new File("./docs/images/lips.png")));
+			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
