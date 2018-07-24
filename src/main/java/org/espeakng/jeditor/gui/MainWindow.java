@@ -3,6 +3,8 @@ package org.espeakng.jeditor.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -506,6 +508,33 @@ public class MainWindow extends JFrame {
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
         		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        InputMap  actionMap = (InputMap) UIManager.getDefaults().get("ScrollPane.ancestorInputMap");
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0), new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }});
+        
         
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
