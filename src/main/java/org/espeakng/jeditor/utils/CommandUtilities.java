@@ -2,6 +2,7 @@ package org.espeakng.jeditor.utils;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.io.IOException;
 import java.lang.Process;
 
 import org.apache.log4j.Level;
@@ -11,6 +12,7 @@ public class CommandUtilities {
 
         private static Logger logger = Logger.getLogger(CommandUtilities.class.getName());
         private static Thread lastThread;
+        
         /**
          * Executes external process with bash interpreter synchronously
          * 
@@ -31,6 +33,41 @@ public class CommandUtilities {
                 lastThread = t;
                 t.start();
                 
+        }
+        
+        public static String executeBlockingCmd(String command) {
+            String[] cmd = new String[3];
+            cmd[0] = "/bin/bash";
+            cmd[1] = "-c";
+            cmd[2] = command;
+            
+            Logger logger = CommandUtilities.getLogger();
+            String output = null;
+            
+            try {
+    			Process pb = Runtime.getRuntime().exec(cmd);
+    			pb.waitFor();
+    			
+    			output = CommandUtilities.getOutput(pb);
+    			String error = CommandUtilities.getError(pb);
+    	        
+    		
+    			
+    			if (!(output.equals("")))
+                    logger.info("executeCmd(" + Arrays.toString(cmd) + ")\nOutput message: " + output);
+    	        else
+    	                logger.info("executeCmd(" + Arrays.toString(cmd) + ") executed successfully");
+    	
+    	        if (error != "")
+    	                logger.fatal(error);
+    			 
+    		} catch (IOException e) {
+    			logger.warn(e);
+    		} catch (InterruptedException e) {
+    			logger.warn(e);
+    		}
+        	
+    		return output;
         }
         
         public static Thread getLastThread() {
