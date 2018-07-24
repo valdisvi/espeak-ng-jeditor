@@ -1,10 +1,11 @@
 ﻿bin/**
 logs/**
 target/**
-./log
+.log/**
 .settings
 .classpath
 .project
 *.class
 *.orig
 /bin/
+graph.png

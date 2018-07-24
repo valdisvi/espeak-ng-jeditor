@@ -2,6 +2,7 @@ package org.espeakng.jeditor.gui;
 
 import javax.swing.*;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,16 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+import org.espeakng.jeditor.data.ProsodyPanel;
+import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
+
+import org.espeakng.jeditor.utils.Utilities;
+import org.espeakng.jeditor.utils.WrapLayout;
+import javax.swing.JPanel;
+import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+
 
 
 /**
@@ -35,17 +45,15 @@ import org.espeakng.jeditor.utils.CommandUtilities;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
-
-
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     private File file;
     // Files required for buttons. Do not delete.
-    
     private Map<String, File> folders = new HashMap<>();
     // ******************************************
     private EspeakNg espeakNg;
+    private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     
     
@@ -56,6 +64,7 @@ public class EventHandlers {
 	 * 
 	 * @param mainW
 	 */
+ 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
 		espeakNg = new EspeakNg(mainW);
@@ -79,10 +88,11 @@ public class EventHandlers {
 		}
 	};
 
+
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-			if (e.getSource() == mainW.mntmOpen) {
+			if (e.getSource() == mainW.mntmOpen||e.getSource() == mainW.openMI) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
@@ -93,7 +103,7 @@ public class EventHandlers {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 				
@@ -141,7 +151,7 @@ public class EventHandlers {
 				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
+			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
 			}
 		}
@@ -157,6 +167,7 @@ public class EventHandlers {
 			}
 		}
 	}
+
 
 	// clear the text field and spinner values in this and in closeAllTab
 	ActionListener closeTab = new ActionListener() {
@@ -204,6 +215,7 @@ public class EventHandlers {
 		}
 	};
 
+
 	private class MakeActionListener implements ActionListener {
 
 		private String action;
@@ -228,11 +240,35 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent arg0) {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
+			String text = espeakNg.getText("speak");
+
+			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + text + "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand);
 			lastThread = CommandUtilities.getLastThread();
+			
 			Thread tMonitor = createMonitorThread();
 			tMonitor.start();
+			
+			terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+			String data = CommandUtilities.executeBlockingCmd(terminalCommand);
+			
+			JPanel mg = new JPanel();
+			WrapLayout wl = new WrapLayout(FlowLayout.LEFT, 0, 0);
+			mg.setLayout(wl);
+			
+			ArrayList<ProsodyPhoneme> prosodyPhonemes = Utilities.getProsodyData(data);
+
+			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes)
+				mg.add(new ProsodyPanel(prosodyPhoneme));
+						
+			MainWindow.tabbedPaneGraphs.remove(scrollPane);
+			
+			scrollPane = new JScrollPane(mg);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	        scrollPane.setPreferredSize(MainWindow.tabbedPaneGraphs.getPreferredSize());
+	        
+			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
 		}
 	};
 
@@ -255,11 +291,11 @@ public class EventHandlers {
 		Thread tMonitor = new Thread() {
 			@Override
 			public void run() {
-				mainW.mntmSpeak.setEnabled(false);
-				mainW.mntmSpeakfile.setEnabled(false);
-				mainW.btnSpeak.setEnabled(false);
-				mainW.mntmPause.setEnabled(true);
-				mainW.mntmStop.setEnabled(true);
+				mainW.mntmSpeak.setEnabled(false); mainW.mntmSpeakfile.setEnabled(false);
+				mainW.btnSpeak.setEnabled(false); mainW.btnPause.setEnabled(true);
+				mainW.btnStop.setEnabled(true); mainW.mntmPause.setEnabled(true);
+				mainW.mntmStop.setEnabled(true); mainW.mntmSpeakPunctuation.setEnabled(false);
+				mainW.mntmSpeakCharacters.setEnabled(false); mainW.mntmSpeakCharacterName.setEnabled(false);
 				try {
 					while (lastThread.isAlive()) {
 						Thread.sleep(50);
@@ -267,11 +303,11 @@ public class EventHandlers {
 				} catch (InterruptedException e) {
 					logger.warn(e);
 				}
-				mainW.mntmSpeak.setEnabled(true);
-				mainW.mntmSpeakfile.setEnabled(true);
-				mainW.btnSpeak.setEnabled(true);
-				mainW.mntmPause.setEnabled(false);
-				mainW.mntmStop.setEnabled(false);
+				mainW.mntmSpeak.setEnabled(true); mainW.mntmSpeakfile.setEnabled(true);
+				mainW.btnSpeak.setEnabled(true); mainW.btnPause.setEnabled(false);
+				mainW.btnStop.setEnabled(false); mainW.mntmPause.setEnabled(false);
+				mainW.mntmStop.setEnabled(false); mainW.mntmSpeakPunctuation.setEnabled(true);
+				mainW.mntmSpeakCharacters.setEnabled(true); mainW.mntmSpeakCharacterName.setEnabled(true);
 			}
 		};
 		return tMonitor;
@@ -283,10 +319,12 @@ public class EventHandlers {
 			if (!isPaused) {
 				CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
 				mainW.mntmPause.setText("Unpause");
+				mainW.btnPause.setIcon(mainW.resumeIcon);
 			}
 			else {
 				CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
 				mainW.mntmPause.setText("Pause");
+				mainW.btnPause.setIcon(mainW.pauseIcon);
 			}
 			isPaused = !isPaused;
 		}
@@ -299,12 +337,12 @@ public class EventHandlers {
 			CommandUtilities.executeCmd("pkill -9 -f aplay");
 			isPaused = false;
 			mainW.mntmPause.setText("Pause");
+			mainW.btnPause.setIcon(mainW.pauseIcon);
 		}
 	};
 	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			// String file8 = "en";
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				System.out.println(fileChooser.getName(fileChooser.getSelectedFile()));
@@ -379,6 +417,9 @@ public class EventHandlers {
 
 			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
+			lastThread = CommandUtilities.getLastThread();
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
 		}
 	}
 	
@@ -530,11 +571,14 @@ public class EventHandlers {
 		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener("speakPunc"));
 		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener("speakBySymbol"));
 		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener("speakCharName"));
+        mainW.openMI.addActionListener(event);
+        mainW.exportMI.addActionListener(event);
+        mainW.clMI.addActionListener(event);
+        mainW.quitMI.addActionListener(event);
 
 		// Tools
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -552,7 +596,6 @@ public class EventHandlers {
 
 			}
 		});
-
 		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -601,9 +644,11 @@ public class EventHandlers {
 
 		// Prosody ("Text") tab buttons
 		mainW.btnTranslate.addActionListener(new MakeActionListener("translate"));
-		mainW.btnSpeak.addActionListener(speak);
 		mainW.btnShowRules.addActionListener(new MakeActionListener("showRules"));
 		mainW.btnShowIPA.addActionListener(new MakeActionListener("showIpa"));
+		mainW.btnSpeak.addActionListener(speak);
+		mainW.btnPause.addActionListener(pauseFile);
+		mainW.btnStop.addActionListener(stopFile);
 
 		addTFListeners();
 	}
@@ -735,6 +780,7 @@ public class EventHandlers {
 			});
 		}
 	}
+	
 	/**
 	 * Get method for file chooser
 	 * 

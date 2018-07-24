@@ -64,6 +64,11 @@ public class MainWindowTest {
 		//mainW.setBounds(100, 100, 450, 300);
 	}
 
+	/*
+	 * 
+	 * Tests for File Menu 
+	 * 
+	*/
 	@Test
 	public void testOpenButtonAndExportButton() { 
 		testOpenButton(); 
@@ -104,13 +109,31 @@ public class MainWindowTest {
 		fixture.menuItem(mainW.mntmCloseAll.getText()).click();
 		assertEquals(0, fixture.tabbedPane("tabbedPaneGraphs").tabTitles().length);
 	}
+	 
+	 
+	 /*
+	  * Test for Speak Menu
+	 */
+	 
 	 @Test
-	 public void testQuitButton()   {
-		
-		fixture.menuItem(mainW.mntmQuit.getText()).click();
-		fixture.close();
-		assertTrue(mainW==null);
+	 public void testTranslateButton()   {
+		 mainW.textAreaIn.setText("Hi!");
+		 fixture.menuItem(mainW.mntmTranslate.getText()).click();
+		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
 	}
+	 @Test
+	 public void testhowRulesButton()   {
+		 mainW.textAreaIn.setText("hello");
+		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+		assertEquals("Found: 'hello' [h@loU]  \n h@l'oU", mainW.textAreaOut.getText().trim());
+		mainW.textAreaIn.setText("h!");
+		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+		assertEquals("Found: 'h' [eItS]  \n 'eItS", mainW.textAreaOut.getText().trim());
+		mainW.textAreaIn.setText("!");
+		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
+	}
+	
 	
 	
 	
