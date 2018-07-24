@@ -243,20 +243,16 @@ public class EventHandlers {
 			
 			ArrayList<ProsodyPhoneme> prosodyPhonemes = Utilities.getProsodyData(data);
 
-			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes) {
+			for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes)
 				mg.add(new ProsodyPanel(prosodyPhoneme));
-			}
-			
+						
 			MainWindow.tabbedPaneGraphs.remove(scrollPane);
 			
 			scrollPane = new JScrollPane(mg);
-			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-			
+	        
 			MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
-			MainWindow.tabbedPaneGraphs.revalidate();
-			MainWindow.tabbedPaneGraphs.repaint();
-			
 		}
 	};
 

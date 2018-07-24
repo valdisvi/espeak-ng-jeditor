@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 public class ProsodyPanel extends JPanel {
 
-
 	private static final long serialVersionUID = 7933989079965484732L;
 
     private int height = 150;
@@ -23,7 +22,6 @@ public class ProsodyPanel extends JPanel {
 	
 	public ProsodyPanel(ProsodyPhoneme prosodyPhoneme) {
 		this.prosodyPhoneme = prosodyPhoneme;
-		System.out.println(prosodyPhoneme.getFrequencies().toString());
 		width = (int) (prosodyPhoneme.getDuration() * lengthMultiplier);
 	}
 	
@@ -89,6 +87,6 @@ public class ProsodyPanel extends JPanel {
 	
 	private void writeProsodyNames(Graphics2D g2) {
 		g2.setColor(Color.BLACK);
-		g2.drawString(prosodyPhoneme.getName(), getWidth() / 2 - 5, height + 15);
+		g2.drawString(prosodyPhoneme.getName(), getWidth() / 2 - 5, height);
 	}
 }

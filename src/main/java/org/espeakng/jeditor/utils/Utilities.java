@@ -25,9 +25,8 @@ public class Utilities {
 				
         		Map<Integer, Integer> frequencies = new TreeMap<>();
         		int j = pitchData[0].isEmpty() ? 1 : 0;
-        		for (; j < pitchData.length; j += 2) {
+        		for (; j < pitchData.length; j += 2)
 					frequencies.put(Integer.parseInt(pitchData[j]), Integer.parseInt(pitchData[j + 1]));
-				}
         		
         		prosodyPhonemes.add(new ProsodyPhoneme(tempData[0], Integer.parseInt(tempData[1]), frequencies));
 			}
