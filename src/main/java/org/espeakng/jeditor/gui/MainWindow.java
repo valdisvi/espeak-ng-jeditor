@@ -191,6 +191,11 @@ public class MainWindow extends JFrame {
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
+		try {
+			mainW.setIconImage(ImageIO.read(new File("./docs/images/lips.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		mainW.setVisible(true);
 		mainW.setUp();
 	}
@@ -1144,42 +1149,46 @@ public class MainWindow extends JFrame {
 		// Text tab horizontal grouping
 		
 		GroupLayout gl_panel_text = new GroupLayout(panel_text);
-		gl_panel_text.setHorizontalGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_text
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addComponent(scrollPaneTextAreaOut)
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)
+		gl_panel_text.setHorizontalGroup(
+			gl_panel_text.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_text.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPaneTextAreaOut)
 						.addGroup(gl_panel_text.createSequentialGroup()
-								.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnSpeak, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnPause, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnStop, Alignment.CENTER))))
-				.addContainerGap()));
-
-		// Text tab vertical grouping.
-		
-		gl_panel_text.setVerticalGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel_text.createSequentialGroup().addContainerGap()
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnShowRules)
-								.addComponent(btnShowIPA))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
-								.addComponent(btnPause)
-								.addComponent(btnStop))
-						.addGap(54)));
+							.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnSpeak, Alignment.CENTER))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnPause, Alignment.CENTER))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnStop, Alignment.CENTER)))
+						.addComponent(scrollPaneTextAreaIn))
+					.addContainerGap())
+		);
+		gl_panel_text.setVerticalGroup(
+			gl_panel_text.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_text.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+					.addGap(20)
+					.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnTranslate)
+						.addComponent(btnShowRules)
+						.addComponent(btnShowIPA))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSpeak)
+						.addComponent(btnPause)
+						.addComponent(btnStop))
+					.addGap(54))
+		);
 
 		panel_text.setLayout(gl_panel_text);
 		getContentPane().setLayout(groupLayout);

@@ -2,8 +2,11 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -35,6 +38,11 @@ public class OptionsSpeedWindow extends JFrame {
 		setBounds(100, 100, 257, 166);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
+		try {
+			setIconImage(ImageIO.read(new File("./docs/images/lips.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		JButton btnButtonCancel = new JButton("Cancel");
 		btnButtonCancel.setBounds(12, 99, 105, 25);
