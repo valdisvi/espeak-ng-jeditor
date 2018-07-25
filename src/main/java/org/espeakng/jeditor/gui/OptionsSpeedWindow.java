@@ -1,11 +1,16 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -17,7 +22,9 @@ import javax.swing.SpinnerNumberModel;
 
 public class OptionsSpeedWindow extends JFrame {
 
+	private static Logger logger = Logger.getLogger(OptionsSpeedWindow.class.getName());
 	private static final long serialVersionUID = 6781488050526787847L;
+
 
 	private JSpinner spinner;
 	
@@ -34,6 +41,12 @@ public class OptionsSpeedWindow extends JFrame {
 		setBounds(100, 100, 257, 166);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
+		
+		try {
+			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+		} catch (IOException e) {
+			logger.warn(e);
+		}
 
 		JButton btnButtonCancel = new JButton("Cancel");
 		btnButtonCancel.setBounds(12, 99, 105, 25);

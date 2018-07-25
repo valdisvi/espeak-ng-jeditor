@@ -75,9 +75,9 @@ public class EspeakNg {
 
 		// The following three commands do not require file for output (but the
 		// rest of commands DO require output file):
-		if (!(command.equals("speakPunc") || command.equals("speakBySymbol")|| command.equals("speakCharName") || command.equals("speak"))) {
-			createFileOutput();
-		}
+		boolean isFile = !(command.equals(Command.SPEAK_PUNC) || command.equals(Command.SPEAK_BY_SYMBOL)|| command.equals(Command.SPEAK_CHAR_NAME) || command.equals(Command.SPEAK));
+		
+		if (isFile) createFileOutput();
 		
 		// Command for espeak-ng is constructed as required and executed on terminal:
 		makeRunTimeAction(getRunTimeCommand(command));
@@ -90,9 +90,7 @@ public class EspeakNg {
 		}
 		
 		// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
-		if (!(command.equals("speakPunc") || command.equals("speakBySymbol") || command.equals("speakCharName")   || command.equals("speak"))) {
-			readOutputFile();
-		}
+		if (isFile)	readOutputFile();
 	}
 
 	/**
@@ -103,48 +101,39 @@ public class EspeakNg {
 	 * @return command for espeak-ng. 
 	 */
 	public String getRunTimeCommand(Command command) {
-
 		String runTimeCommand = "";
-		// Get pronunciation rules:
+
 		String voice = getVoiceFromSelection();
-		// Get value of speech speed:
 		int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 
 		switch (command) {
-
-		case TRANSLATE:
-			return "espeak-ng -q -v" + voice + " -x --phonout=" + fileOutput.getAbsolutePath() + " -f "
-					+ fileInput.getAbsolutePath();
-		case "showRules":
-			runTimeCommand = "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
-					+ fileInput.getAbsolutePath();
-					 
-			break;
-		case "showIpa":
-			runTimeCommand = "espeak-ng -q --ipa --phonout=" + fileOutput.getAbsolutePath() + " -f "
-					+ fileInput.getAbsolutePath();
-			
-			break;
-		case "speakPunc":
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()\""
-					+ mainW.textAreaIn.getText() + "\"";
-			logger.info(runTimeCommand);
-			break;
-		case "speakCharName":
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice+ " --punct=',;?<>@#.$%^&*()\""
-					+ mainW.textAreaIn.getText() + "\"";
-			logger.info(runTimeCommand);
-			break;
-		case "speakBySymbol":
-			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
-					+ mainW.textAreaIn.getText() + "\"";
-			break;
-		default:
-			break;
+			case TRANSLATE:
+				return "espeak-ng -q -v" + voice + " -x --phonout=" + fileOutput.getAbsolutePath() + " -f "
+						+ fileInput.getAbsolutePath();
+			case SHOW_RULES:
+				return "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
+						+ fileInput.getAbsolutePath();
+			case SHOW_IPA:
+				return "espeak-ng -q --ipa --phonout=" + fileOutput.getAbsolutePath() + " -f "
+						+ fileInput.getAbsolutePath();
+			case SPEAK_PUNC:
+				runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',.;?<>@#$%^&*()\""
+						+ mainW.textAreaIn.getText() + "\"";
+				logger.info(runTimeCommand);
+				return runTimeCommand;
+			case SPEAK_CHAR_NAME:
+				runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice+ " --punct=',;?<>@#.$%^&*()\""
+						+ mainW.textAreaIn.getText() + "\"";
+				logger.info(runTimeCommand);
+				return runTimeCommand;
+			case SPEAK_BY_SYMBOL:
+				return "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
+						+ mainW.textAreaIn.getText() + "\"";
+			default:
+				return runTimeCommand;
+			}
 		}
-		return runTimeCommand;
-	}
-
+	
 	/**
 	 * This method reads the contents of output file written by espeak-ng, and
 	 * WRITES it to the lower text area of "Text" tab as well.

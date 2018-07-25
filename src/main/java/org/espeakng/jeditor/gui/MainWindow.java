@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,14 +35,10 @@ import org.espeakng.jeditor.data.PhonemeLoad;
 public class MainWindow extends JFrame {
     private static Logger logger = Logger.getLogger(MainWindow.class.getName());
 
-	/*
-	 * TODO See bodyInit() method for exact tasks to do.
-	 * 
-	 */
 	private static final long serialVersionUID = 6548939748883665055L;
 	// some containers.
-	public JMenuBar mMenuBar;
-	public static JTabbedPane tabbedPaneGraphs;	
+	private JMenuBar mMenuBar;
+	public static final JTabbedPane tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);;
 	
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in Language.java
 	// menuBar group File
@@ -125,14 +122,14 @@ public class MainWindow extends JFrame {
 	private int labelyOffset = compHeight / 4; // vertical offset from the top of the text field/spinner
 	
 	// some components
-	public static ArrayList<JTextField> tfFreq;
-	public static ArrayList<JTextField> tfHeight;
-	public static ArrayList<JTextField> tfWidth;
-	public static ArrayList<JTextField> tfBw;
-	public static ArrayList<JTextField> tfAp;
-	public static ArrayList<JTextField> tfBp;
-	public static JTextField tfmS;
-	public static JSpinner spampF;
+	public static final List<JTextField> tfFreq = new ArrayList<>();
+	public static final List<JTextField> tfHeight = new ArrayList<>();
+	public static final List<JTextField> tfWidth = new ArrayList<>();
+	public static final List<JTextField> tfBw = new ArrayList<>();
+	public static final List<JTextField> tfAp = new ArrayList<>();
+	public static final List<JTextField> tfBp = new ArrayList<>();
+	public static final JTextField tfmS = new JTextField();
+	public static final JSpinner spampF = new JSpinner();
 	public JButton btnZoom;
 	public JButton btnZoom_1;
 	public JTextArea textAreaIn;
@@ -181,12 +178,6 @@ public class MainWindow extends JFrame {
 	public static MainWindow getMainWindow(){return instance;}
 	
 	private  MainWindow() {
-		tfFreq = new ArrayList<JTextField>();
-		tfHeight = new ArrayList<JTextField>();
-		tfWidth = new ArrayList<JTextField>();
-		tfBw = new ArrayList<JTextField>();
-		tfAp = new ArrayList<JTextField>();
-		tfBp = new ArrayList<JTextField>();
 		
 		frameInit();
 		menuBarInit();
@@ -203,6 +194,13 @@ public class MainWindow extends JFrame {
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 600));
+		
+		try {
+			mainW.setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+		} catch (IOException e) {
+			logger.warn(e);
+		}
+		
 		mainW.setVisible(true);
 		mainW.setUp();
 	}
@@ -540,7 +538,6 @@ public class MainWindow extends JFrame {
 		
 		// initiate keyframe sequence graph pane:
 		
-		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
         tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPaneGraphs.setComponentPopupMenu(pmenu);
         JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
@@ -701,7 +698,6 @@ public class MainWindow extends JFrame {
 		
 		// mS text field & label //
 		
-		tfmS = new JTextField();
 		tfmS.setBounds(tfx0, tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		tfmS.setHorizontalAlignment(SwingConstants.CENTER);
 		tfmS.setColumns(10);
@@ -716,7 +712,6 @@ public class MainWindow extends JFrame {
 		// (AV, Tilt, Avp, kopen, FNZ, Aspr...).	 //
 		///////////////////////////////////////////////
 		
-		spampF = new JSpinner();
 		spampF.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		spampF.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spampF);
@@ -918,44 +913,47 @@ public class MainWindow extends JFrame {
 		btnShowIPA = new JButton("Show IPA");
 
 		// Text tab horizontal grouping
-		
 		GroupLayout glPanelText = new GroupLayout(panelText);
-		glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING).addGroup(glPanelText
-				.createSequentialGroup().addContainerGap()
-				.addGroup(glPanelText.createParallelGroup(Alignment.LEADING).addComponent(scrollPaneTextAreaOut)
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)
+		glPanelText.setHorizontalGroup(
+			glPanelText.createParallelGroup(Alignment.LEADING)
+				.addGroup(glPanelText.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPaneTextAreaOut)
 						.addGroup(glPanelText.createSequentialGroup()
-								.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnSpeak, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnPause, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnStop, Alignment.CENTER))))
-				.addContainerGap()));
-
-		// Text tab vertical grouping.
-		
-		glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
-				.addGroup(glPanelText.createSequentialGroup().addContainerGap()
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
-						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnShowRules)
-								.addComponent(btnShowIPA))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
-								.addComponent(btnPause)
-								.addComponent(btnStop))
-						.addGap(54)));
+							.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnSpeak, Alignment.CENTER))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnPause, Alignment.CENTER))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnStop, Alignment.CENTER)))
+						.addComponent(scrollPaneTextAreaIn))
+					.addContainerGap())
+		);
+		glPanelText.setVerticalGroup(
+			glPanelText.createParallelGroup(Alignment.TRAILING)
+				.addGroup(glPanelText.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+					.addGap(20)
+					.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnTranslate)
+						.addComponent(btnShowRules)
+						.addComponent(btnShowIPA))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSpeak)
+						.addComponent(btnPause)
+						.addComponent(btnStop))
+					.addGap(54))
+		);
 
 		panelText.setLayout(glPanelText);
 		getContentPane().setLayout(groupLayout);

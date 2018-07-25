@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -34,6 +34,7 @@ import org.espeakng.jeditor.utils.Utilities;
 import org.espeakng.jeditor.utils.WrapLayout;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 
@@ -47,7 +48,7 @@ public class EventHandlers {
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     // Files required for buttons. Do not delete.
-    private Map<Command, File> folders = new HashMap<>();
+    private Map<Command, File> folders = new EnumMap<>(Command.class);
     // ******************************************
     private EspeakNg espeakNg;
     private JScrollPane scrollPane;
@@ -126,7 +127,7 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
-      }else if (e.getSource() == mainW.mntmTamil) {
+			} else if (e.getSource() == mainW.mntmTamil) {
 					File file = new File("./src/main/resources/tamil.txt");
 					if (!file.exists()) {
 						InputStream in = getClass().getResourceAsStream("/tamil.txt");
@@ -145,6 +146,38 @@ public class EventHandlers {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
+			}
+		}
+		
+		private void exportGraphImage() {
+			fileChooser.setCurrentDirectory(new File("./"));
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
+						MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = image.createGraphics();
+				MainWindow.tabbedPaneGraphs.printAll(g);
+				g.dispose();
+				try {
+					
+					File file = fileChooser.getSelectedFile();
+			        if (!file.getName().endsWith(".png")) {
+			            file = new File(file.getParentFile(), file.getName() + ".png");
+			        }
+			        
+			        int confirm;
+			        if (file.exists()) {
+			            confirm = JOptionPane.showConfirmDialog(
+			                            null, "File already exists, overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+			            if (confirm == JOptionPane.NO_OPTION) {
+			                return;
+			            }
+			        }
+					logger.debug("Exported graphs: " + file.getAbsolutePath());
+					ImageIO.write(image, "png", file);
+				} catch (IOException e) {
+					logger.warn(e);
+				}
 			}
 		}
 	};
@@ -179,7 +212,7 @@ public class EventHandlers {
 	ActionListener closeTab = (ActionEvent arg0) -> {
 		MainWindow.tabbedPaneGraphs.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent());
 		// if this is the last one, then clear text fields
-		System.out.println("Component count " + MainWindow.tabbedPaneGraphs.getComponentCount());
+		logger.debug("Component count " + MainWindow.tabbedPaneGraphs.getComponentCount());
 		boolean lastPhoneme = true;
 		// tabbedPaneGraphs contains more Components than phoneme files
 		for (Component comp : MainWindow.tabbedPaneGraphs.getComponents()) {
@@ -243,7 +276,7 @@ public class EventHandlers {
 		int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 		String text = espeakNg.getText(Command.SPEAK);
 
-		String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" +speedVoice+ " --stdout \"" + text + "\" |/usr/bin/aplay 2>/dev/null";
+		String terminalCommand = "espeak-ng -v" + voice + " -s" +speedVoice+ " --stdout \"" + text + "\" |aplay 2>/dev/null";
 		CommandUtilities.executeCmd(terminalCommand);
 		lastThread = CommandUtilities.getLastThread();
 		
@@ -278,7 +311,7 @@ public class EventHandlers {
 		
 		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			String terminalCommand = "/usr/bin/espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |/usr/bin/aplay 2>/dev/null";
+			String terminalCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |aplay 2>/dev/null";
 			
 			CommandUtilities.executeCmd(terminalCommand);
 			lastThread = CommandUtilities.getLastThread();
@@ -401,7 +434,7 @@ public class EventHandlers {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |/usr/bin/aplay 2>/dev/null";
+			String terminalCommand1 = "espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |aplay 2>/dev/null";
 			CommandUtilities.executeCmd(terminalCommand1);
 			lastThread = CommandUtilities.getLastThread();
 			
@@ -440,7 +473,7 @@ public class EventHandlers {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary || e.getSource() == mainW.mntmCompileDictionarydebug) {
-				fileChooser.setCurrentDirectory(folders.get("dictSource"));
+				fileChooser.setCurrentDirectory(folders.get(Command.DICT_SOURCE));
   				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
   					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
   							"; cd " + fileChooser.getSelectedFile().getParent() +
@@ -455,8 +488,8 @@ public class EventHandlers {
 	ActionListener compilePhonemeData = (ActionEvent e) -> {
 		if (e.getSource() == mainW.mntmCompilePhonemeData) {
 			String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
-					+ "; cd " + folders.get("phonemeSource").getParent() + " && "
-					+ dataPath + "/src/espeak-ng --compile-phonemes=" + folders.get("phonemeSource").getName();
+					+ "; cd " + folders.get(Command.PHONEME_SOURCE).getParent() + " && "
+					+ dataPath + "/src/espeak-ng --compile-phonemes=" + folders.get(Command.PHONEME_SOURCE).getName();
 			CommandUtilities.executeCmd(cmd);
 		}
 	};
@@ -495,14 +528,12 @@ public class EventHandlers {
 	
 	ActionListener exportDirectoryVowelFiles = (ActionEvent e) -> {
 		fileChooser= new JFileChooser("../espeak-ng/phsource/vowelcharts/");
-		if (e.getSource() == mainW.mntmFromDirectoryVowelFiles) {
-			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-				String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
-						"; cd " + fileChooser.getSelectedFile().getParent() +
-						" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
-				CommandUtilities.executeCmd(cmd);
-				VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
-			}
+		if (e.getSource() == mainW.mntmFromDirectoryVowelFiles && fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+					"; cd " + fileChooser.getSelectedFile().getParent() +
+					" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+			CommandUtilities.executeCmd(cmd);
+			VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
 		}
 	};
 	
@@ -545,7 +576,6 @@ public class EventHandlers {
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
 
 		// Speak
 
@@ -637,7 +667,7 @@ public class EventHandlers {
 
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
 
-		boolean toSetVisible = (MainWindow.tabbedPaneGraphs.getTabCount() == 0) ? false : true;
+		boolean toSetVisible = MainWindow.tabbedPaneGraphs.getTabCount() != 0;
 		mainW.mntmSave.setVisible(toSetVisible);
 		mainW.mntmSaveAs.setVisible(toSetVisible);
 		mainW.mntmClose.setVisible(toSetVisible);
@@ -659,7 +689,7 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfFreq.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[index].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText().toString());
+					mainW.focusedFrame.peaks[index].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
 					logger.warn(ex);
@@ -709,7 +739,7 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfBw.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[index+1].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText().toString());
+					mainW.focusedFrame.peaks[index+1].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
 					logger.warn(ex);
@@ -724,7 +754,7 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfAp.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[index].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText().toString());
+					mainW.focusedFrame.peaks[index].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
 					logger.warn(ex);
@@ -738,7 +768,7 @@ public class EventHandlers {
 			final int index =i;
 			MainWindow.tfBp.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[index+1].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText().toString());
+					mainW.focusedFrame.peaks[index+1].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
 					logger.warn(ex);
@@ -754,22 +784,5 @@ public class EventHandlers {
 	 */
 	public JFileChooser getFileChooser() {
 		return fileChooser;
-	}
-
-	private void exportGraphImage() {
-		// MainWindow.tabbedPaneGraphs.setSize
-		// setSize(getPreferredSize());
-		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
-				MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		MainWindow.tabbedPaneGraphs.printAll(g);
-		g.dispose();
-		try {
-			File file = new File("graph.png");
-			logger.debug("Exported graphs: " + file.getAbsolutePath());
-			ImageIO.write(image, "png", file);
-		} catch (IOException e) {
-			logger.warn(e);
-		}
 	}
 }
