@@ -31,6 +31,7 @@ public class AboutWindow extends JFrame {
 	public AboutWindow() {
 		
 		setTitle("About");
+		setName(getTitle());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 380, 226);
 		contentPane = new JPanel();
@@ -39,6 +40,7 @@ public class AboutWindow extends JFrame {
 		contentPane.setLayout(null);
 
 		JButton btnOk = new JButton("OK");
+		btnOk.setName(btnOk.getText());
 		btnOk.setBounds(207, 146, 117, 25);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

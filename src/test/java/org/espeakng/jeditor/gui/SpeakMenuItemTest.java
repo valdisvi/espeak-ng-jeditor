@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +40,12 @@ public class SpeakMenuItemTest {
 		fixture.show();
 		mainW.setSize(new Dimension(1000, 600));
 	}
+	
+    @AfterClass
+    public static void tearDownAfterClass() {
+        fixture.cleanUp();
+    }
+	
 	 @Test
 	 public void testTranslateButton()   {
 		 mainW.textAreaIn.setText("Hi!");

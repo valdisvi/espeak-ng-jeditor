@@ -1,5 +1,6 @@
 package org.espeakng.jeditor.gui;
 
+import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.junit.Assert.*;
 
 import java.awt.Dimension;
@@ -45,6 +46,8 @@ public class HelpMenuItemTest {
 	@Test
 	public void aboutTest() {
 		fixture.menuItem(mainW.mntmAbout.getText()).click();
+		FrameFixture aboutWindow = findFrame("About").using(fixture.robot());
+		aboutWindow.button("OK").click();
 	}
 
 }

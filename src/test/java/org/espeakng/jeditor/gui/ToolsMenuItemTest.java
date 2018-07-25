@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,7 +39,12 @@ public class ToolsMenuItemTest {
 		fixture.show();
 		mainW.setSize(new Dimension(1000, 600));
 	}
-
+	
+    @AfterClass
+    public static void tearDownAfterClass() {
+        fixture.cleanUp();
+    }
+	
 	@Test
 	public void vowelsFromPhDataTest() {
 		fixture.menuItem(mainW.mntmFromCompiledPhoneme.getText()).click();
@@ -53,7 +59,7 @@ public class ToolsMenuItemTest {
 		fixture.fileChooser().selectFile(selectedFile);
 		fixture.fileChooser().approve();
 		assertTrue("Failed to open tab from vowel file", checkIfContains("ru"));
-		
+		assertFalse("Random charts opened", checkIfContains("ro"));
 	}
 
 	private boolean checkIfContains(String lang) {
@@ -95,7 +101,7 @@ public class ToolsMenuItemTest {
 				frequencyWindow.list("list").contents()[0].equals("hello=3"));
 		assertTrue("Incorrect output of word frequency window, expected last line: world=2",
 				frequencyWindow.list("list").contents()[3].equals("world=2"));
-		frequencyWindow.cleanUp();
+		frequencyWindow.close();
 	}
 	
 }
