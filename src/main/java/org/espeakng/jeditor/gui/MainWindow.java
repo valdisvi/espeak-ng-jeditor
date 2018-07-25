@@ -188,6 +188,12 @@ public class MainWindow extends JFrame {
 	
 	public static void main(String[] args) {
 		try {
+			Splashscr.splashProgress(10);
+			Splashscr.splashProgress(50);
+			Splashscr.splashText("loading....");
+			Splashscr.splashProgress(60);
+			Splashscr.splashText("loading....");
+			Splashscr.splashProgress(100);
 			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
