@@ -7,6 +7,9 @@ import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -618,7 +621,7 @@ public class EventHandlers {
 				VowelChart.createAndShowGui(path, mainW);
 			}
 		});
-
+		
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
@@ -650,6 +653,13 @@ public class EventHandlers {
 		mainW.btnPause.addActionListener(pauseFile);
 		mainW.btnStop.addActionListener(stopFile);
 
+		mainW.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				CommandUtilities.executeCmd("pkill -9 -f aplay");
+			}
+		});
+		
 		addTFListeners();
 	}
 
@@ -749,7 +759,6 @@ public class EventHandlers {
 			});
 		}
 	
-
 		// klt_ap text fields
 
 		for(int i=0; i<MainWindow.tfAp.size();i++){
@@ -806,4 +815,6 @@ public class EventHandlers {
 			logger.warn(e);
 		}
 	}
+	
+	
 }
