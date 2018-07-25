@@ -107,6 +107,7 @@ public class EventHandlers {
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
 			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
+				CommandUtilities.executeCmd("pkill -9 -f aplay");
 				mainW.setVisible(false);
 				mainW.dispose();
 				

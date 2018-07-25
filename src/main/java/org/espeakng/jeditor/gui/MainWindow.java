@@ -333,6 +333,7 @@ public class MainWindow extends JFrame {
 		mnSpeak.add(new JSeparator());
 
 		mntmSpeakfile = new JMenuItem("Speak file...");
+		mntmSpeakfile.setName("SpeakFile");
 		mnSpeak.add(mntmSpeakfile);
 
 		mntmPause = new JMenuItem("Pause");
@@ -1076,10 +1077,12 @@ public class MainWindow extends JFrame {
 		// Zoom buttons //
 		
 		btnZoom = new JButton("Zoom-");
+		btnZoom.setName("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
 		
 		btnZoom_1 = new JButton("Zoom+");
+		btnZoom_1.setName("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
 		
@@ -1110,6 +1113,7 @@ public class MainWindow extends JFrame {
 		JPanel panel_text = new JPanel();
 		panel_text.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panel_text, null);
+		tabbedPane.setName("Text");
 		
 		
 		// Input text area:
@@ -1134,9 +1138,12 @@ public class MainWindow extends JFrame {
 		// Command buttons:
 		
 		btnSpeak = new JButton("");
+		btnSpeak.setName("btnSpeak");
 		btnPause = new JButton("");
+		btnSpeak.setName("btnPause");
 		btnPause.setEnabled(false);
 		btnStop = new JButton("");
+		btnSpeak.setName("btnStop");
 		btnStop.setEnabled(false);
 		
 		Image play, pause, stop, resume;
@@ -1155,8 +1162,11 @@ public class MainWindow extends JFrame {
 		}
 		
 		btnTranslate = new JButton("Translate");
+		btnTranslate.setName("TranslateB");
 		btnShowRules = new JButton("Show Rules");
+		btnShowRules.setName("ShowRulesB");
 		btnShowIPA = new JButton("Show IPA");
+		btnShowIPA.setName("ShowIPAB");
 
 		// Text tab horizontal grouping
 		
