@@ -1,6 +1,7 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -15,17 +16,25 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import org.espeakng.jeditor.data.Frame;
+
 public class SpectrumGraph extends JPanel {
-	ArrayList<Frame> frames;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -27394060722915822L;
+	private ArrayList<Frame> frames;
     public SpectrumGraph(ArrayList<Frame> frames){
     	this.frames = frames;
+    	
     }
- 
-    protected void paintComponent(Graphics g) {
+     
+    public void paint(Graphics g) {
         super.paintComponent(g);
         final int PAD = 20;
-      	        
+        System.out.println(frames.size()+" inside");
+        System.out.println(frames);
 		int frameNumber = frames.size();
+		
         double [][] data = new double [frameNumber][7]; 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -109,9 +118,7 @@ public class SpectrumGraph extends JPanel {
           
             }  
         }
-   /*  removeAll();
-       revalidate(); */
-       repaint(); 
+       
 	}
  
 } 

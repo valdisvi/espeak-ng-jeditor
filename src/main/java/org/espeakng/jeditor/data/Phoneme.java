@@ -1,8 +1,12 @@
 package org.espeakng.jeditor.data;
 
+import java.awt.Color;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+
+import org.espeakng.jeditor.gui.MainWindow;
+import org.espeakng.jeditor.gui.SpectrumGraph;
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
 	/**
@@ -23,9 +27,6 @@ public class Phoneme{
 	private Graph graph;
 	public String path;
 	
-	public ArrayList<Frame> getFrameList() {
-		return frameList;
-	}
 
 	/**
 	 * Constructor for Phoneme, it loads SpectSeq, from given file using JNI implementation,
@@ -57,6 +58,10 @@ public class Phoneme{
 			assert false : "From Phoneme class. File doesn't exist.";
 		
 		graph = new Graph(file.getName(), frameList);
+		MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(frameList);
+		MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
+		MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+		MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().panelSpectrumGraph).repaint();
 	}
 	/**
 	 * Getter for graph
@@ -102,5 +107,9 @@ public class Phoneme{
 		if (inc.length < 4)
 			value = ByteBuffer.wrap(wrpd).getShort();
 		return value;
+	}
+
+	public ArrayList<Frame> getFrameList() {
+		return this.frameList;
 	}
 }

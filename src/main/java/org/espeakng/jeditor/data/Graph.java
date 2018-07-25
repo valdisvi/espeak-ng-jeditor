@@ -20,6 +20,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
+import org.espeakng.jeditor.gui.SpectrumGraph;
 import org.espeakng.jeditor.jni.Formant_t;
 import org.espeakng.jeditor.jni.Peak_t;
 
@@ -93,7 +95,8 @@ public class Graph {
 	private int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
-	
+	//private ArrayList<Frame> readyFrames = new ArrayList<Frame>();
+	private Map<Integer, ArrayList<Frame>> tabList = new HashMap<Integer, ArrayList<Frame>>();
 	int max_x = 0;
 	double max_y = 0;
 	boolean gridEnable = true;
@@ -108,6 +111,7 @@ public class Graph {
 	 */
 	
 	public Graph(String fileName, ArrayList<Frame> frameList) {
+		//readyFrames = frameList;
 		repaintActive();
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
@@ -123,7 +127,7 @@ public class Graph {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVisible(true);
 		
-		MainWindow.getMainWindow().repaint();
+		//MainWindow.getMainWindow().repaint();
 		
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
@@ -133,10 +137,15 @@ public class Graph {
 
 		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
 		tabbedPaneGraphs.setSelectedComponent(scrollPane);
+		tabList.put(tabbedPaneGraphs.getSelectedIndex(), frameList);
 	
  		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
 		
+	}
+	
+	public ArrayList<Frame> selectedTabList(int t){
+		return tabList.get(t);
 	}
 
 	class Draw extends JPanel {
@@ -377,108 +386,6 @@ public class Graph {
 		
 	}
 	
-	@SuppressWarnings("serial")
-	class SpectrumGraph extends JPanel {
-		ArrayList<Frame> frames;
-	    public SpectrumGraph(ArrayList<Frame> frames){
-	    	this.frames = frames;
-	    }
-	 
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        final int PAD = 20;
-	      	        
-			int frameNumber = frames.size();
-	        double [][] data = new double [frameNumber][7]; 
-	        Graphics2D g2 = (Graphics2D) g;
-	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-	                            RenderingHints.VALUE_ANTIALIAS_ON);
-	        int w = getWidth();
-	        int h = getHeight();
-	        
-	        for (int i=0;i < frameNumber;i++){
-	        	data [i][0]= frames.get(i).time;
-	        	for (int j=0;j<3;j++){
-	        		data[i][1]= frames.get(i).formants[1].freq;
-	        		data[i][2]= frames.get(i).formants[2].freq;
-	        		data[i][3]= frames.get(i).formants[3].freq;
-	        		data[i][4]= frames.get(i).peaks[1].pkfreq;
-	        		data[i][5]= frames.get(i).peaks[2].pkfreq;
-	        		data[i][6]= frames.get(i).peaks[3].pkfreq;
-	        	}
-	        }
-	        double minTime = Integer.MAX_VALUE;
-	        double maxTime = 0;
-	        double maxFreq = 0;
-	        double minFreq = Integer.MAX_VALUE;
-	        for (int i=0;i<frameNumber;i++){
-	        	double value= data[i][0];
-	        	if (data[i][0]> maxTime) maxTime= value;
-	        	if (data[i][0]< minTime) minTime= value;
-	        	for (int j = 1; j<7;j++){
-	        		if (data[i][j]> maxFreq) maxFreq= data[i][j];
-	        		if (data[i][j]< minFreq) minFreq= data[i][j];
-	        	}
-	        }
-	        double xScale = (maxTime*1.1-minTime*0.9);
-	        // Draw ordinate.
-	        g2.draw(new Line2D.Double(PAD, PAD, PAD, h-PAD));
-	        // Draw abscissa.
-	        g2.draw(new Line2D.Double(PAD, h-PAD, w-PAD, h-PAD));
-	        // Draw labels.
-	        Font font = g2.getFont();
-	        FontRenderContext frc = g2.getFontRenderContext();
-	        LineMetrics lm = font.getLineMetrics("0", frc);
-	        float sh = lm.getAscent() + lm.getDescent();
-	        
-	        // Ordinate label.
-	        String s = "formants&peaks";
-	        float sy = PAD + ((h - 2*PAD) - s.length()*sh)/2 + lm.getAscent();
-	        for(int i = 0; i < s.length(); i++) {
-	            String letter = String.valueOf(s.charAt(i));
-	            float sw = (float)font.getStringBounds(letter, frc).getWidth();
-	            float sx = (PAD - sw)/2;
-	            g2.drawString(letter, sx, sy);
-	            sy += sh;
-	        }
-	        // Abscissa label.
-	        s = "frame time, mS";
-	        sy = h - PAD + (PAD - sh)/2 + lm.getAscent();
-	        float sw = (float)font.getStringBounds(s, frc).getWidth();
-	        float sx = (w - sw)/2;
-	      	g2.drawString(s, sx, sy);
-	      	// Draw border
-	      	g2.setPaint(Color.black);
-	      	g2.draw(new Line2D.Double(w -PAD,  PAD, w -PAD, h-PAD));
-	      	g2.draw(new Line2D.Double(PAD, PAD, w-PAD, PAD));
-	      	
-	        // Draw lines.
-	        double scale = (double)(h - 4*PAD);
-	        double y1;
-	        g2.setStroke(new BasicStroke(2));
-	        for(int i = 0; i < frameNumber; i++) {
-	        	g2.setPaint(Color.ORANGE);
-	            double x = PAD*1.5 + (data[i][0]-minTime)/xScale*(w-2*PAD);
-	            g2.draw(new Line2D.Double(x, h-PAD , x, PAD));
-	            for (int j=1;j<4;j++){
-	            g2.setPaint(Color.RED); // formants
-	            byte centerOffset = 4;
-	            byte circleSize = (byte) (2*centerOffset);
-	            y1 = h - PAD - scale*data[i][j+3]/maxFreq-centerOffset;
-	            g2.fill(new Ellipse2D.Double(x-centerOffset, y1, circleSize, circleSize));
-	            g2.setPaint(Color.BLACK); //peaks
-	            y1 = h - PAD - scale*data[i][j]/maxFreq;
-	            g2.draw(new Line2D.Double(x-4, y1, x+4, y1));
-	          
-	            }  
-	        }
-	   /*  removeAll();
-	       revalidate();
-	       repaint(); */
-		}
-	 
-	} 
-
 	double SpectTilt(int value, int freq, boolean bass_reduction) {
 		double x;
 		double y;
@@ -1029,20 +936,22 @@ public class Graph {
 				
 			}
 			loadFirstFrame();
-			
-			
-			MainWindow.panelSpectrumGraph = new SpectrumGraph(new ArrayList<Frame>(mapPanels.values()));
-			MainWindow.panelSpectrumGraph.setBounds(3, 511, 364, 200);
-			MainWindow.panelSpectrumGraph.setBackground(new Color(238, 238, 238));
-			MainWindow.getMainWindow().panel_Spect.add(MainWindow.panelSpectrumGraph);
-	
+		/*	
+			MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(frames);
+			MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
+			MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+			MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().panelSpectrumGraph).repaint();
+			//MainWindow.getMainWindow().panel_Spect.repaint();
+			 */
 		}
+		// new ArrayList<Frame>(mapPanels.values())
+		
 		filePanel2.setPreferredSize(size);
 		filePanel2.revalidate();
 		filePanel2.repaint();
-		MainWindow.getMainWindow().panelSpectrumGraph.repaint();
+		//MainWindow.getMainWindow().panelSpectrumGraph.repaint();
 		filePanel2.addKeyListener(keyListener);
-		 filePanel.requestFocus();
+		// filePanel.requestFocus();
 
 	}
 

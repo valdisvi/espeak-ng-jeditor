@@ -17,7 +17,7 @@ public class PhonemeLoad {
 	 * @param mainW - Main Window
 	 */
 	public static void phonemeOpen(File file, MainWindow mainW){
-		
+
 		Phoneme newPhoneme=new Phoneme(file);
 		phonemeList.add(newPhoneme);
 	}
@@ -47,13 +47,14 @@ public class PhonemeLoad {
 	 */
 	public static void getPhoneme(JScrollPane jScrollPane){
 		for(Phoneme phoneme: phonemeList){
-			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane))
+			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane)){
 				phoneme.loadFirstFrame();
-				
-			
+				break;
+			}
+
 		}
 	}
-	
+
 	/**
 	 * Zooming in using jScrollPane object as argument
 	 * @param jScrollPane to be zoomed in
@@ -74,7 +75,14 @@ public class PhonemeLoad {
 				phoneme.doZoomOut();
 		}
 	}
-	public static ArrayList<Phoneme> getPhonemeList(){
-		return phonemeList;
+	public static ArrayList<Frame> getFrameList(JScrollPane jScrollPane, int index){
+		ArrayList<Frame> result = new ArrayList<Frame>();
+		for(Phoneme phoneme: phonemeList){
+			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane)){
+				result = phoneme.getGraph().selectedTabList(index);
+				break;
+			}
+		}
+		return result;
 	}
 }

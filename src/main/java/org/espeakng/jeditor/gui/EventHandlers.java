@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -12,10 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
@@ -26,6 +30,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
@@ -38,8 +43,9 @@ public class EventHandlers {
 	private MainWindow mainW;
 	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
 	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
-    private File file1, file2, file3, file4, file5;
-    
+	private File file1, file2, file3, file4, file5;
+	private JPanel spectrumPanel;
+
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -57,29 +63,50 @@ public class EventHandlers {
 		prefs3 = Preferences.userRoot().node(getClass().getName());
 		fileChooser3 = new JFileChooser(
 				prefs3.get("a", new File("../espeak-ng/phonemes/vowelcharts").getAbsolutePath()));
-		
+
 		prefs4 = Preferences.userRoot().node(getClass().getName());
-        fileChooser4 = new JFileChooser(
-                prefs4.get("", new File("../espeak-ng/espeak-ng-data/lang").getAbsolutePath()));
-       
-        prefs5 = Preferences.userRoot().node(getClass().getName());
-        fileChooser5 = new JFileChooser(
-                prefs5.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
+		fileChooser4 = new JFileChooser(
+				prefs4.get("", new File("../espeak-ng/espeak-ng-data/lang").getAbsolutePath()));
+
+		prefs5 = Preferences.userRoot().node(getClass().getName());
+		fileChooser5 = new JFileChooser(
+				prefs5.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
 	}
 
+
+	
 	ChangeListener getPhoneme = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
 			setVisibleMenuItemsFile(mainW);
 			PhonemeLoad.getPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			if (e.getSource() instanceof JTabbedPane) {
-                JTabbedPane pane = (JTabbedPane) e.getSource();
-                System.out.println("Selected paneNo : " + pane.getSelectedIndex());
-			}
-//	mainW.panelSpectrumGraph = new SpectrumGraph(phoneme.get(e.getSource().getSelectedIndex()).getFrameList());
-			mainW.panel_Spect.repaint();
+			System.err.println(mainW.tabbedPaneGraphs.getSelectedComponent());
+			ArrayList<Frame> dataList = new ArrayList<Frame>();
+			JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+	        int index = sourceTabbedPane.getSelectedIndex();
+			if(mainW.tabbedPaneGraphs.getComponentCount()>0){
+				dataList = null;
+				dataList = PhonemeLoad.getFrameList((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent(),index);
+				System.err.println(dataList.size()+" in listener");
+				System.err.println(dataList.toString());
+				
+				if (!dataList.isEmpty()){
+
+					MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(dataList);
+					MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
+					MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+					MainWindow.getMainWindow().panelSpectrumGraph.repaint();
+					MainWindow.getMainWindow().panel_Spect.add(mainW.panelSpectrumGraph).repaint();
+
+
+				}
+			} 
+			//mainW.panel_Spect.repaint();
 			
-		}
+		}	
+
 	};
+
+
 
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -224,7 +251,7 @@ public class EventHandlers {
 
 		}
 	};
-	
+
 
 	// requires espeak-ng library
 	ActionListener showRules = new ActionListener() {
@@ -1027,10 +1054,10 @@ public class EventHandlers {
 				}
 			}
 		});
-		
+
 		//TODO Add here in the same way as for previous fields listeners for fields in the second block.
-		
-		
+
+
 
 	}
 
