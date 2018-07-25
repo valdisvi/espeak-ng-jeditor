@@ -2,7 +2,6 @@ package org.espeakng.jeditor.gui;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +18,10 @@ public class Language {
 	
 	private static ArrayList<String> translation;
 
+	private Language() {
+		throw new IllegalStateException("Language Utility class");
+	}
+	
 	/**
 	 * This method is called to change language. It loads a file (formatted in specific way),
 	 * containing all the names for buttons. And adds them to an ArrayList.
@@ -28,16 +31,10 @@ public class Language {
 	 * @param mainW - Main Window
 	 */
 	public static void initLanguage(File file, MainWindow mainW){
-		
-		
-		
 		translation = new ArrayList<>();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			initLanguage(br, mainW);
-			
-		} catch (FileNotFoundException e) {
-			logger.warn(e);
 		} catch (IOException e) {
 			logger.warn(e);
 		}
@@ -74,9 +71,9 @@ public class Language {
 		mainW.mnFile.setText(translation.get(0));
 		mainW.mntmOpen.setText(translation.get(1));
 		mainW.mntmOpen2.setText(translation.get(2));
-		mainW.mntmSave.setText(translation.get(3));;
-		mainW.mntmSaveAs.setText(translation.get(4));;
-		mainW.mntmClose.setText(translation.get(5));;
+		mainW.mntmSave.setText(translation.get(3));
+		mainW.mntmSaveAs.setText(translation.get(4));
+		mainW.mntmClose.setText(translation.get(5));
 		mainW.mntmQuit.setText(translation.get(6));
 		
 		// menuBar group Speak
@@ -91,8 +88,6 @@ public class Language {
 		
 		// menuBar group Voice
 		mainW.mnVoice.setText(translation.get(15));
-		
-		//mainW.mntmSelectVoice.setText(translation.get(16));
 		mainW.mntmSelectVoiceVariant.setText(translation.get(17));
 		mainW.mnSelectVoice.setText(translation.get(18));
 		mainW.rdbtnmntmEnglish.setText(translation.get(19));
