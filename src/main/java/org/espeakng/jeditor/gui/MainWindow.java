@@ -1,5 +1,6 @@
 package org.espeakng.jeditor.gui;
 
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -66,7 +67,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmStop;
 	// menuBar group Voice
 	public JMenu mnVoice;
-	//public JMenuItem mntmSelectVoice;
 	public JMenuItem mntmSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
@@ -185,7 +185,15 @@ public class MainWindow extends JFrame {
 		eventHandlers.initHandlers();
 	}
 
+	
 	public static void main(String[] args) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
 		MainWindow mainW = MainWindow.getMainWindow();
 		
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -199,6 +207,7 @@ public class MainWindow extends JFrame {
 		mainW.setVisible(true);
 		mainW.setUp();
 	}
+	
 	
 	/**
 	 * FIXME
@@ -615,8 +624,8 @@ public class MainWindow extends JFrame {
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
 		
-		JLabel lblFreq = new JLabel("Frequency");
-		lblFreq.setBounds(3, 6, 100, labelHeight);
+		JLabel lblFreq = new JLabel("Freq.");
+		lblFreq.setBounds(27, 6, 100, labelHeight);
 		lblFreq.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblFreq);
 
@@ -626,11 +635,11 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(lblHt);
 		
 		JLabel lblWidth = new JLabel("Width");
-		lblWidth.setBounds(135, 6, 42, labelHeight);
+		lblWidth.setBounds(139, 6, 42, labelHeight);
 		panel_Spect.add(lblWidth);
 		
 		JLabel lblklatt = new JLabel("(Klatt)");
-		lblklatt.setBounds(231, 6, 44, labelHeight);
+		lblklatt.setBounds(253, 6, 44, labelHeight);
 		panel_Spect.add(lblklatt);
 		
 		JLabel label_0 = new JLabel("0");
@@ -638,31 +647,31 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(label_0);
 		
 		JLabel label_1 = new JLabel("1");
-		label_1.setBounds(6, 53, 8, labelHeight);
+		label_1.setBounds(6, 57, 8, labelHeight);
 		panel_Spect.add(label_1);
 		
 		JLabel label_2 = new JLabel("2");
-		label_2.setBounds(6, 75, 8, labelHeight);
+		label_2.setBounds(6, 79, 8, labelHeight);
 		panel_Spect.add(label_2);
 		
 		JLabel label_3 = new JLabel("3");
-		label_3.setBounds(6, 97, 8, labelHeight);
+		label_3.setBounds(6, 102, 8, labelHeight);
 		panel_Spect.add(label_3);
 		
 		JLabel label_4 = new JLabel("4");
-		label_4.setBounds(6, 119, 8, labelHeight);
+		label_4.setBounds(6, 126, 8, labelHeight);
 		panel_Spect.add(label_4);
 		
 		JLabel label_5 = new JLabel("5");
-		label_5.setBounds(6, 141, 8, labelHeight);
+		label_5.setBounds(6, 150, 8, labelHeight);
 		panel_Spect.add(label_5);
 		
 		JLabel label_6 = new JLabel("6");
-		label_6.setBounds(6, 163, 8, labelHeight);
+		label_6.setBounds(6, 175, 8, labelHeight);
 		panel_Spect.add(label_6);
 		
 		JLabel label_7 = new JLabel("7");
-		label_7.setBounds(6, 185, 8, labelHeight);
+		label_7.setBounds(6, 199, 8, labelHeight);
 		panel_Spect.add(label_7);
 		
 		JTextField tfFreq0 = new JTextField();
@@ -817,17 +826,17 @@ public class MainWindow extends JFrame {
 		/////////////////////////////////////////////
 		
 		JLabel lblBw = new JLabel("Bw");
-		lblBw.setBounds(196, 31, 21, labelHeight);
+		lblBw.setBounds(210, 31, 21, labelHeight);
 		lblBw.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblBw);
 		
 		JLabel lblAp = new JLabel("Ap");
-		lblAp.setBounds(247, 31, 18, labelHeight);
+		lblAp.setBounds(265, 31, 18, labelHeight);
 		lblAp.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblAp);
 		
 		JLabel lblBp = new JLabel("Bp");
-		lblBp.setBounds(304, 31, 18, labelHeight);
+		lblBp.setBounds(320, 31, 18, labelHeight);
 		lblBp.setFont(new Font("Dialog", Font.BOLD, 12));
 		panel_Spect.add(lblBp);
 		
@@ -1123,6 +1132,10 @@ public class MainWindow extends JFrame {
 		
 		btnSpeak = new JButton("");
 		btnPause = new JButton("");
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnPause.setEnabled(false);
 		btnStop = new JButton("");
 		btnStop.setEnabled(false);
