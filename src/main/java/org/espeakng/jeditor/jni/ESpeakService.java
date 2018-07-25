@@ -1,6 +1,5 @@
 package org.espeakng.jeditor.jni;
 
-import org.apache.log4j.Logger;
 
 
 /*-
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
  * 		
  */
 public class ESpeakService {
-    private static Logger logger = Logger.getLogger(ESpeakService.class.getName());
 
     private ESpeakService() {
     	throw new IllegalStateException("ESpeakService Utility class");
@@ -35,7 +33,7 @@ public class ESpeakService {
 		try {
 			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {
-			logger.warn(e);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
