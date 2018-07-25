@@ -443,33 +443,43 @@ public class MainWindow extends JFrame {
 		/////////////////
 		
 		mnTools = new JMenu("Tools");
+		mnTools.setName(mnTools.getText());
 		menuBar.add(mnTools);
 
 		mnMakeVowelsChart = new JMenu("Make Vowels Chart");
+		mnMakeVowelsChart.setName(mnMakeVowelsChart.getText());
 		mnTools.add(mnMakeVowelsChart);
 
 		mntmFromCompiledPhoneme = new JMenuItem("From compiled phoneme data");
+		mntmFromCompiledPhoneme.setName(mntmFromCompiledPhoneme.getText());
 		mnMakeVowelsChart.add(mntmFromCompiledPhoneme);
 
 		mntmFromDirectoryVowelFiles = new JMenuItem("From directory of vowel files...");
+		mntmFromDirectoryVowelFiles.setName(mntmFromDirectoryVowelFiles.getText());
 		mnMakeVowelsChart.add(mntmFromDirectoryVowelFiles);
 
 		mnProcessLexicon = new JMenu("Process Lexicon");
+		mnProcessLexicon.setName(mnProcessLexicon.getText());
 		mnTools.add(mnProcessLexicon);
 
 		mntmPLBulgarian = new JMenuItem("Bulgarian");
+		mntmPLBulgarian.setName(mntmPLBulgarian.getText());
 		mnProcessLexicon.add(mntmPLBulgarian);
 
 		mntmPLGerman = new JMenuItem("German");
+		mntmPLGerman.setName(mntmPLGerman.getText());
 		mnProcessLexicon.add(mntmPLGerman);
 
 		mntmPLItalian = new JMenuItem("Italian");
+		mntmPLItalian.setName(mntmPLItalian.getText());
 		mnProcessLexicon.add(mntmPLItalian);
 
 		mntmPLRussian = new JMenuItem("Russian");
+		mntmPLRussian.setName(mntmPLRussian.getText());
 		mnProcessLexicon.add(mntmPLRussian);
 
 		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
+		mntmCountWordFrequencies.setName(mntmCountWordFrequencies.getText());
 		mnTools.add(mntmCountWordFrequencies);
 
 		///////////////////
@@ -477,23 +487,27 @@ public class MainWindow extends JFrame {
 		///////////////////
 		
 		mnCompile = new JMenu("Compile");
+		mnCompile.setName(mnCompile.getText());
 		menuBar.add(mnCompile);
 
-		mntmCompileDictionary = new JMenuItem("Compile dictionary\"");
+		mntmCompileDictionary = new JMenuItem("Compile dictionary");
+		mntmCompileDictionary.setName(mntmCompileDictionary.getText());
 		mnCompile.add(mntmCompileDictionary);
 
 		mntmCompileDictionarydebug = new JMenuItem("Compile dictionary (debug)");
+		mntmCompileDictionarydebug.setName(mntmCompileDictionarydebug.getText());
 		mnCompile.add(mntmCompileDictionarydebug);
 
 		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
+		mntmCompilePhonemeData.setName(mntmCompilePhonemeData.getText());
 		mnCompile.add(mntmCompilePhonemeData);
 
-		mnCompile.add(new JSeparator());
-
         mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes.setName(mntmCompileMbrolaPhonemes.getText());
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
+		mntmCompileIntonationData.setName(mntmCompileIntonationData.getText());
 		mnCompile.add(mntmCompileIntonationData);
 		
 		////////////////
@@ -501,12 +515,15 @@ public class MainWindow extends JFrame {
 		////////////////
 		
 		mnHelp = new JMenu("Help");
+		mnHelp.setName(mnHelp.getText());
 		menuBar.add(mnHelp);
 
 		mntmEspeakDocumentation = new JMenuItem("eSpeak Documentation");
+		mntmEspeakDocumentation.setName(mntmEspeakDocumentation.getText());
 		mnHelp.add(mntmEspeakDocumentation);
 
 		mntmAbout = new JMenuItem("About");
+		mntmAbout.setName(mntmAbout.getText());
 		mnHelp.add(mntmAbout);
 		
 	    pmenu = new JPopupMenu();

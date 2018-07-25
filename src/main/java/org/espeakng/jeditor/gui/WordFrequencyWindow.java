@@ -19,6 +19,7 @@ public class WordFrequencyWindow extends JFrame {
 	public WordFrequencyWindow(String[] listItems) {
 		
 		setTitle("Word Frequencies");
+		setName(getTitle());
 		setBounds(100, 100, 270, 400);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -29,6 +30,7 @@ public class WordFrequencyWindow extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		JList<String> list = new JList<>(listItems);
+		list.setName("list");
 		scrollPane.setViewportView(list);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		

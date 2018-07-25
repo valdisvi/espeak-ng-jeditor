@@ -22,7 +22,7 @@ public class CompileMenuItemTest {
 	private static Logger logger = Logger.getLogger(CompileMenuItemTest.class);
 	
 	@Rule
-	public Timeout globalTimeout = Timeout.seconds(10);
+	public Timeout globalTimeout = Timeout.seconds(5);
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -34,9 +34,7 @@ public class CompileMenuItemTest {
 		});
 		
 		fixture = new FrameFixture(mainW);
-		// Show window of the application
 		fixture.show();
-		// This is just workaround to fix size of the application window:
 		mainW.setSize(new Dimension(1000, 600));
 	}
 
@@ -52,8 +50,8 @@ public class CompileMenuItemTest {
 	@Test
 	public void compileDebugTest() {
 		fixture.menuItem(mainW.mntmCompileDictionarydebug.getText()).click();
-		File selectedFile = new File("../espeak-ng/dictsource/en_list");
-		assertTrue("English list file not found", selectedFile.exists());
+		File selectedFile = new File("../espeak-ng/dictsource/ru_list");
+		assertTrue("Russian list file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
 		fixture.fileChooser().approve();
 	}
@@ -66,6 +64,10 @@ public class CompileMenuItemTest {
 	@Test
 	public void compileMbrolaTest() {
 		fixture.menuItem(mainW.mntmCompileMbrolaPhonemes.getText()).click();
+		File selectedFile = new File("../espeak-ng/phsource/mbrola/en1");
+		assertTrue("English mbrola file not found", selectedFile.exists());
+		fixture.fileChooser().selectFile(selectedFile);
+		fixture.fileChooser().approve();
 	}
 	
 	@Test
