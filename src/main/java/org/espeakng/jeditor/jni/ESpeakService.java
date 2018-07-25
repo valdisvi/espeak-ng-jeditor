@@ -27,6 +27,10 @@ import org.apache.log4j.Logger;
 public class ESpeakService {
     private static Logger logger = Logger.getLogger(ESpeakService.class.getName());
 
+    private ESpeakService() {
+    	throw new IllegalStateException("ESpeakService Utility class");
+    }
+    
 	static {
 		try {
 			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");

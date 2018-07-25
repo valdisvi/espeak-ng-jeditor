@@ -1,10 +1,12 @@
 package org.espeakng.jeditor.data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProsodyPhoneme {
+public class ProsodyPhoneme implements Serializable {
 
+	private static final long serialVersionUID = -8750162848955429411L;
 	private String name;
 	private int duration;
 	private Map<Integer, Integer> frequencies;

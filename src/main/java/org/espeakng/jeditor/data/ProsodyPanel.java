@@ -13,16 +13,16 @@ public class ProsodyPanel extends JPanel {
 
 	private static final long serialVersionUID = 7933989079965484732L;
 
-    private int height = 150;
     private int stringOffset = 20;
-    private int width;
+    private int mWidth;
     private int bgLinesCount = 5;
     private double lengthMultiplier = 1.5;
     private ProsodyPhoneme prosodyPhoneme;
+    private static final int HEIGHT = 150;
 	
 	public ProsodyPanel(ProsodyPhoneme prosodyPhoneme) {
 		this.prosodyPhoneme = prosodyPhoneme;
-		width = (int) (prosodyPhoneme.getDuration() * lengthMultiplier);
+		mWidth = (int) (prosodyPhoneme.getDuration() * lengthMultiplier);
 	}
 	
 
@@ -40,13 +40,13 @@ public class ProsodyPanel extends JPanel {
 	
 	private void initialize(Graphics2D g2) {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		Dimension sizes = new Dimension(width, height + stringOffset);
+		Dimension sizes = new Dimension(mWidth, HEIGHT + stringOffset);
 		this.setSize(sizes);
 		this.setPreferredSize(sizes);
 	}
 	
 	private void drawGrid(Graphics2D g2) {
-		int bgRowsOffset = height / (bgLinesCount + 1);
+		int bgRowsOffset = HEIGHT / (bgLinesCount + 1);
 				
 		g2.setColor(Color.LIGHT_GRAY);
 		int lineY;
@@ -74,10 +74,10 @@ public class ProsodyPanel extends JPanel {
 			
 			double percent = entry.getKey() / 100.0;
 			
-			int wholeLength = (int) (width * percent);
+			int wholeLength = (int) (mWidth * percent);
 			int length = wholeLength - previousLength;
 			
-			g2.drawLine(previousLength, height - previousValue, previousLength + length, height - entry.getValue());
+			g2.drawLine(previousLength, HEIGHT - previousValue, previousLength + length, HEIGHT - entry.getValue());
 			
 			previousLength = wholeLength;
 			previousKey = entry.getKey();
@@ -87,6 +87,6 @@ public class ProsodyPanel extends JPanel {
 	
 	private void writeProsodyNames(Graphics2D g2) {
 		g2.setColor(Color.BLACK);
-		g2.drawString(prosodyPhoneme.getName(), getWidth() / 2 - 5, height);
+		g2.drawString(prosodyPhoneme.getName(), getWidth() / 2 - 5, HEIGHT);
 	}
 }

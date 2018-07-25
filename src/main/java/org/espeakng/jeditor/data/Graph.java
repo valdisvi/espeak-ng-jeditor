@@ -423,24 +423,24 @@ public class Graph {
 		Peak_t[] peaks = frameToLoad.peaks;
 		String value;
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < MainWindow.tfFreq.size(); i++) {
 			MainWindow.tfFreq.get(i).setText("" + peaks[i].pkfreq);
 		}
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < MainWindow.tfHeight.size(); i++) {
 			MainWindow.tfHeight.get(i).setText("" + (peaks[i].pkheight >> 6));
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfWidth.size(); i++) {
 			value = (peaks[i].pkright == peaks[i].pkwidth) ? ("" + (peaks[i].pkright / 2))
 					: ("" + (peaks[i].pkright / 2) + "/" + (peaks[i].pkwidth / 2));
 			MainWindow.tfWidth.get(i).setText(value);
 		}
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MainWindow.tfBw.size(); i++) {
 			MainWindow.tfBw.get(i).setText("" + (peaks[i + 1].klt_bw));
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfAp.size(); i++) {
 			MainWindow.tfAp.get(i).setText("" + (peaks[i].klt_ap));
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfBp.size(); i++) {
 			MainWindow.tfBp.get(i).setText("" + (peaks[i + 1].klt_bp));
 		}
 

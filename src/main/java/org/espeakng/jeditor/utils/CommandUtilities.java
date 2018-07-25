@@ -13,6 +13,10 @@ public class CommandUtilities {
         private static Logger logger = Logger.getLogger(CommandUtilities.class.getName());
         private static Thread lastThread;
         
+        private CommandUtilities() {
+        	throw new IllegalStateException("Command Utility class");
+        }
+        
         /**
          * Executes external process with bash interpreter synchronously
          * 
