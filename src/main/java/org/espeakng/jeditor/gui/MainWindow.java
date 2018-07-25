@@ -636,7 +636,7 @@ public class MainWindow extends JFrame {
 		for (int i = 0; i <= 5; i++) {
 			JTextField tfWidthOption = new JTextField();
 			
-			tfWidthOption.setBounds(tfx0 + i * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth, compHeight);
+			tfWidthOption.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth, compHeight);
 			tfWidthOption.setHorizontalAlignment(SwingConstants.CENTER);
 			tfWidthOption.setColumns(10);
 			
