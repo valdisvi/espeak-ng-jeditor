@@ -33,6 +33,7 @@ import org.espeakng.jeditor.utils.Utilities;
 import org.espeakng.jeditor.utils.WrapLayout;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 
@@ -300,7 +301,7 @@ public class EventHandlers {
 	};
 	
 	private Thread createMonitorThread() {
-		Thread tMonitor = new Thread() {
+		return new Thread() {
 			@Override
 			public void run() {
 				mainW.mntmSpeak.setEnabled(false); mainW.mntmSpeakfile.setEnabled(false);
@@ -322,7 +323,6 @@ public class EventHandlers {
 				mainW.mntmSpeakCharacters.setEnabled(true); mainW.mntmSpeakCharacterName.setEnabled(true);
 			}
 		};
-		return tMonitor;
 	}
 	
 	ActionListener pauseFile = new ActionListener() {
@@ -547,7 +547,6 @@ public class EventHandlers {
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
 
 		// Speak
 
@@ -803,19 +802,34 @@ public class EventHandlers {
 	}
 
 	private void exportGraphImage() {
-		// MainWindow.tabbedPaneGraphs.setSize
-		// setSize(getPreferredSize());
-		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
-				MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		MainWindow.tabbedPaneGraphs.printAll(g);
-		g.dispose();
-		try {
-			File file = new File("graph.png");
-			System.out.println("Exported graphs: " + file.getAbsolutePath());
-			ImageIO.write(image, "png", file);
-		} catch (IOException e) {
-			logger.warn(e);
+		fileChooser.setCurrentDirectory(new File("./"));
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
+					MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = image.createGraphics();
+			MainWindow.tabbedPaneGraphs.printAll(g);
+			g.dispose();
+			try {
+				
+				File file = fileChooser.getSelectedFile();
+		        if (!file.getName().endsWith(".png")) {
+		            file = new File(file.getParentFile(), file.getName() + ".png");
+		        }
+		        
+		        int confirm;
+		        if (file.exists()) {
+		            confirm = JOptionPane.showConfirmDialog(
+		                            null, "File already exists, overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+		            if (confirm == JOptionPane.NO_OPTION) {
+		                return;
+		            }
+		        }
+				System.out.println("Exported graphs: " + file.getAbsolutePath());
+				ImageIO.write(image, "png", file);
+			} catch (IOException e) {
+				logger.warn(e);
+			}
 		}
 	}
 }
