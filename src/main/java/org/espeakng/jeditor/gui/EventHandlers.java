@@ -442,9 +442,7 @@ public class EventHandlers {
 			tMonitor.start();
 		}
 	}
-	
-
-	ActionListener countWordFreq = (ActionEvent e) -> {
+	ActionListener countWordOccurance = (ActionEvent e) -> {
 		String[] keys = espeakNg.getText(null).toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
 		Map<String, Integer> map = new TreeMap<>();
 		
@@ -625,7 +623,7 @@ public class EventHandlers {
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		mainW.mntmCountWordFrequencies.addActionListener(countWordFreq);
+		mainW.mntmCountWordOccurrences.addActionListener(countWordOccurance);
 
 		// Compile
 
