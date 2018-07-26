@@ -10,8 +10,16 @@ import org.espeakng.jeditor.gui.EspeakNg;
 public class ProcessThread implements Runnable {
 	private static Logger logger = Logger.getLogger(ProcessThread.class.getName());
 	private String[] command;
-	public static boolean stop = false;
+	private static boolean stop = false;
 	
+	public static boolean isStop() {
+		return stop;
+	}
+
+	public static void setStop(boolean stop) {
+		ProcessThread.stop = stop;
+	}
+
 	public ProcessThread(String[] command) {
 		this.command = command;
 	}
@@ -35,12 +43,10 @@ public class ProcessThread implements Runnable {
 	        if (error != "")
 	                logger.fatal(error);
 			 
-		} catch (IOException e) {
+		} catch (IOException|InterruptedException e) {
 			logger.warn(e);
-		} catch (InterruptedException e) {
-			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
-		return;
 	}
 	
 	public Logger getLogger(){

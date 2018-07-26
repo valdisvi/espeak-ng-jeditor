@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.espeakng.jeditor.data.Command;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -57,27 +58,27 @@ public class OptionsMenuItemTest {
 		fixture.menuItem(mainW.mntmMasterPhonemesFile.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Master phonemes file location not changed", 
-				EventHandlers.getFolders().get("masterPhFile").getName().equals(absPath));
+				EventHandlers.getFolders().get(Command.PH_FILE).getName().equals(absPath));
 		
 		fixture.menuItem(mainW.mntmPhonemeDataSource.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Phonemes source file location not changed", 
-				EventHandlers.getFolders().get("phonemeSource").getName().equals(absPath));
+				EventHandlers.getFolders().get(Command.PHONEME_SOURCE).getName().equals(absPath));
 		
 		fixture.menuItem(mainW.mntmDictionaryDataSource.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Dictionary source file location not changed", 
-				EventHandlers.getFolders().get("dictSource").getName().equals(absPath));
+				EventHandlers.getFolders().get(Command.DICT_SOURCE).getName().equals(absPath));
 		
 		fixture.menuItem(mainW.mntmSynthesizedSoundWAVfile.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Synthesized WAV file location not changed", 
-				EventHandlers.getFolders().get("WAVFile").getName().equals(absPath));
+				EventHandlers.getFolders().get(Command.WAV_FILE).getName().equals(absPath));
 		
 		fixture.menuItem(mainW.mntmVoiceFileToModifyFormantPeaks.getText()).click();
 		selectAndApprove(setPath);
 		assertTrue("Voice file location not changed", 
-				EventHandlers.getFolders().get("voiceFile").getName().equals(absPath));
+				EventHandlers.getFolders().get(Command.VOICE_FILE).getName().equals(absPath));
 		
 	}
 	

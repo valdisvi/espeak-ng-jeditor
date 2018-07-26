@@ -60,24 +60,15 @@ public class ToolsMenuItemTest {
 		assertTrue("Russian chart file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
 		fixture.fileChooser().approve();
-		assertEquals("Failed to open tab from vowel file", tabCount+1, mainW.tabbedPaneGraphs.getTabCount());
-	}
-
-	private boolean checkIfContains(String lang) {
-		for (String str : fixture.tabbedPane("tabbedPaneGraphs").tabTitles()) {
-			if (str.equals(lang)) {
-				return true;
-			}
-		}
-		return false;
+		assertEquals("Failed to open tab from vowel file", tabCount+1, MainWindow.tabbedPaneGraphs.getTabCount());
 	}
 	
 	@Test
 	public void wordFrequencyTest() {
 		fixture.tabbedPane("Text").click();
 		mainW.textAreaIn.setText("hello Hello HELLO world! world java swing");
-		fixture.menuItem(mainW.mntmCountWordFrequencies.getText()).click();
-		FrameFixture frequencyWindow = findFrame("Word Frequencies").using(fixture.robot());
+		fixture.menuItem(mainW.mntmCountWordOccurrences.getName()).click();
+		FrameFixture frequencyWindow = findFrame("Word Occurences").using(fixture.robot());
 		assertTrue("Incorrect output of word frequency window, expected first line: hello=3",
 				frequencyWindow.list("list").contents()[0].equals("hello=3"));
 		assertTrue("Incorrect output of word frequency window, expected last line: world=2",

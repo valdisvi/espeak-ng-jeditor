@@ -1,12 +1,16 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -18,13 +22,15 @@ import javax.swing.SpinnerNumberModel;
 
 public class OptionsSpeedWindow extends JFrame {
 
+	private static Logger logger = Logger.getLogger(OptionsSpeedWindow.class.getName());
 	private static final long serialVersionUID = 6781488050526787847L;
+
 
 	private JSpinner spinner;
 	
 	/* If user wants to cancel his choice, spinner is set
 		to the previously chosen value (which is stored here). */
-	private Object oldValue;
+	private transient Object oldValue;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -37,33 +43,32 @@ public class OptionsSpeedWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
+		try {
+			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+		} catch (IOException e) {
+			logger.warn(e);
+		}
+
 		JButton btnButtonCancel = new JButton("Cancel");
 		btnButtonCancel.setName("Cancel");
 		btnButtonCancel.setBounds(12, 99, 105, 25);
 		getContentPane().add(btnButtonCancel);
-		btnButtonCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				spinner.setValue(oldValue);
-				dispose();
-			}
+		btnButtonCancel.addActionListener((ActionEvent e) -> {
+			spinner.setValue(oldValue);
+			dispose();
 		});
 
 		JButton btnNewButtonOK = new JButton("OK");
 		btnNewButtonOK.setName("OK");
 		btnNewButtonOK.setBounds(127, 99, 105, 25);
 		getContentPane().add(btnNewButtonOK);
-		btnNewButtonOK.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		btnNewButtonOK.addActionListener((ActionEvent e) -> dispose());
 
 		spinner = new JSpinner();
 		spinner.setName("spinner");
 		spinner.setModel(new SpinnerNumberModel(175, 80, 500, 1));
 		spinner.setBounds(22, 29, 200, 34);
 		getContentPane().add(spinner);
-
 	}
 
 	/**
@@ -73,8 +78,7 @@ public class OptionsSpeedWindow extends JFrame {
 	 * 
 	 */
 	public int getSpinnerValue() {
-		Integer result = (Integer) spinner.getValue();
-		return result.intValue();
+		return (Integer) spinner.getValue();
 	}
 
 	/**

@@ -90,7 +90,8 @@ public class FileMenuItemTest {
 		graphFile.delete();
 	}
 	
-	@Test
+	//@Test
+	//Save tests not safe
 	public void test04SaveButton()   {
 		File vowel = new File("../espeak-ng/phsource/vowel/u");
 		long vowelModifiedAt = vowel.lastModified();
@@ -105,7 +106,8 @@ public class FileMenuItemTest {
 		
 	}
 	
-	@Test
+	//@Test
+	//Save tests not safe
 	public void test05SaveAsButton()   {
 		int fileName = Math.abs(new Random().nextInt());
 		File testFile = new File("/src/main/resources/" + fileName);
