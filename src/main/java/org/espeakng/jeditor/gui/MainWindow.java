@@ -189,19 +189,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		try {
-			Splashscr.splashProgress(10);
-			Splashscr.splashProgress(50);
-			Splashscr.splashText("loading....");
-			Splashscr.splashProgress(60);
-			Splashscr.splashText("loading....");
-			Splashscr.splashProgress(100);
-			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			logger.warn(e1);
-			e1.printStackTrace();
-		}
-		
+	
 		MainWindow mainW = MainWindow.getMainWindow();
 		
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

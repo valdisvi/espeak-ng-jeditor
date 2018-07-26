@@ -2,15 +2,15 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
+
 import org.apache.log4j.Logger;
 
 
-public class Splashscr {
+public class Splashscr{
 	static SplashScreen mySplash = SplashScreen.getSplashScreen();
 	static Graphics2D splashGraphics = mySplash.createGraphics();
 	static Dimension ssDim = mySplash.getSize();
@@ -20,38 +20,6 @@ public class Splashscr {
     static Double  splashProgressArea = new Rectangle2D.Double(width * .55, height*.92, width*.4, 12 );
     private static final Logger LOGGER = Logger.getRootLogger();
 
-	  static void splashInit() {
-		    if (mySplash != null)
-		    { 
-		        Font font = new Font("Dialog", Font.PLAIN, 14);
-		        splashGraphics.setFont(font);
-		        // initialize the status info
-		        splashText("Starting");
-		        splashProgress(0);
-		    }
-		} // initialize splash overlay drawing parameters
-      static void appInit() {
-    	    for(int i=1;i<=10;i++)
-    	    {
-    	        int pctDone = i * 10;
-    	        splashText("Doing task #" + i);
-    	        splashProgress(pctDone);
-    	        try
-    	        {
-    	            Thread.sleep(1000);
-    	        }
-    	        catch (InterruptedException ex)
-    	        {
-    	           LOGGER.warn(ex);
-    	           Thread.currentThread().interrupt();
-    	        }
-    	    }
-		}  
-       {            // simulate what an application would do              
-    	   // before starting
-       if (mySplash != null)   // check if we really had a spash screen
-           mySplash.close();
-		}
        
 static void splashText(String str) 
 {
