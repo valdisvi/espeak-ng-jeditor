@@ -136,6 +136,7 @@ public class MainWindow extends JFrame {
 												// of the text field/spinner
 
 	// some components
+	public static ArrayList<List<JTextField>> array;
 	public static final List<JTextField> tfFreq = new ArrayList<>();
 	public static final List<JTextField> tfHeight = new ArrayList<>();
 	public static final List<JTextField> tfWidth = new ArrayList<>();
@@ -163,7 +164,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem quitMI;
 
 	private enum Texts {
-		RUSSIAN("Russian"), DIALOG("Dialog");
+		RUSSIAN("Русский"), DIALOG("Dialog");
 
 		private String text;
 
@@ -188,12 +189,17 @@ public class MainWindow extends JFrame {
 	// Singleton design pattern, also easier to access main window from anywhere
 	// in code.
 	private static MainWindow instance = new MainWindow();
-
-	public static MainWindow getMainWindow() {
-		return instance;
-	}
-
-	private MainWindow() {
+	public static MainWindow getMainWindow(){return instance;}
+	
+	private  MainWindow() {
+		array = new ArrayList<List<JTextField>>();
+		array.add(tfFreq);
+		array.add(tfHeight);
+		array.add(tfWidth);
+		array.add(tfBw);
+		array.add(tfAp);
+		array.add(tfBp);
+	
 		frameInit();
 		menuBarInit();
 		bodyInit();
@@ -205,7 +211,6 @@ public class MainWindow extends JFrame {
 
 	public static void main(String[] args) {
 		MainWindow mainW = MainWindow.getMainWindow();
-
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 810));// 810 was 600
@@ -278,34 +283,43 @@ public class MainWindow extends JFrame {
 		////////////////
 
 		mnFile = new JMenu("File");
+		mnFile.setName("File");
 		mMenuBar.add(mnFile);
 
-		mntmOpen = new JMenuItem("Open...");
+		mntmOpen = new JMenuItem("Open");
+		mntmOpen.setName("Open");
 		mnFile.add(mntmOpen);
 
 		mntmOpen2 = new JMenuItem("Open2...");
+		mntmOpen2.setName("Open2...");
 		mnFile.add(mntmOpen2);
 
 		mntmExportGraph = new JMenuItem("Export graph");
+		mntmExportGraph.setName("Export graph");
 		mnFile.add(mntmExportGraph);
 
 		mntmSave = new JMenuItem("Save");
+		mntmSave.setName("Save");
 		mntmSave.setVisible(false);
 		mnFile.add(mntmSave);
 
 		mntmSaveAs = new JMenuItem("Save As...");
+		mntmSaveAs.setName("Save As...");
 		mntmSaveAs.setVisible(false);
 		mnFile.add(mntmSaveAs);
 
 		mntmClose = new JMenuItem("Close");
+		mntmClose.setName("Close");
 		mntmClose.setVisible(false);
 		mnFile.add(mntmClose);
 
 		mntmCloseAll = new JMenuItem("Close all");
+		mntmCloseAll.setName("Close all");
 		mntmCloseAll.setVisible(false);
 		mnFile.add(mntmCloseAll);
 
 		mntmQuit = new JMenuItem("Quit");
+		mntmQuit.setName("Quit");
 		mnFile.add(mntmQuit);
 
 		/////////////////
@@ -313,30 +327,39 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnSpeak = new JMenu("Speak");
+		mnSpeak.setName("Speak");
 		mMenuBar.add(mnSpeak);
 
+
 		mntmTranslate = new JMenuItem("Translate");
+		mntmTranslate.setName("Translate");
 		mnSpeak.add(mntmTranslate);
 
 		mntmShowRules = new JMenuItem("Show Rules");
+		mntmShowRules.setName("Show Rules");
 		mnSpeak.add(mntmShowRules);
 
 		mntmShowIPA = new JMenuItem("Show IPA");
+		mntmShowIPA.setName("Show IPA");
 		mnSpeak.add(mntmShowIPA);
 
+		mnSpeak.add(new JSeparator());
+		
 		mntmSpeak = new JMenuItem("Speak");
+		mntmSpeak.setName("Speak");
 		mnSpeak.add(mntmSpeak);
 
-		mnSpeak.add(new JSeparator());
-
 		mntmSpeakfile = new JMenuItem("Speak file...");
+		mntmSpeakfile.setName("SpeakFile");
 		mnSpeak.add(mntmSpeakfile);
 
 		mntmPause = new JMenuItem("Pause");
+		mntmPause.setName("Pause");
 		mntmPause.setEnabled(false);
 		mnSpeak.add(mntmPause);
 
 		mntmStop = new JMenuItem("Stop");
+		mntmStop.setName("Stop");
 		mntmStop.setEnabled(false);
 		mnSpeak.add(mntmStop);
 
@@ -345,27 +368,35 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnVoice = new JMenu("Voice");
+		mnVoice.setName("Voice");
 		mMenuBar.add(mnVoice);
 
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
+		mntmSelectVoiceVariant.setName("Select Voice Variant...");
 		mnVoice.add(mntmSelectVoiceVariant);
 
 		mnVoice.add(new JSeparator());
 
 		mnSelectVoice = new JMenu("Select Voice ");
+		mnSelectVoice.setName("Select Voice ");
 		mnVoice.add(mnSelectVoice);
 
 		rdbtnmntmEnglish = new JRadioButtonMenuItem("English");
+		rdbtnmntmEnglish.setName("EnglishVoice");
 		rdbtnmntmEnglish.setSelected(true);
 		mnSelectVoice.add(rdbtnmntmEnglish);
 
 		rdbtnmntmLatvian = new JRadioButtonMenuItem("Latvian");
+		rdbtnmntmLatvian.setName("LatvianVoice");
 		mnSelectVoice.add(rdbtnmntmLatvian);
 
 		rdbtnmntmPolish = new JRadioButtonMenuItem("Polish");
+		rdbtnmntmPolish.setName("PolishVoice");
 		mnSelectVoice.add(rdbtnmntmPolish);
 
-		rdbtnmntmRussian = new JRadioButtonMenuItem(Texts.RUSSIAN.getText());
+		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
+		rdbtnmntmRussian.setName("RussianVoice");
+
 		mnSelectVoice.add(rdbtnmntmRussian);
 
 		groupOfVoices = new ButtonGroup();
@@ -382,53 +413,65 @@ public class MainWindow extends JFrame {
 		mMenuBar.add(mnOptions);
 
 		mnSetPaths = new JMenu("Set paths");
+		mnSetPaths.setName("Set paths");
 		mnOptions.add(mnSetPaths);
 
 		mntmMasterPhonemesFile = new JMenuItem("Master phonemes file...");
+		mntmMasterPhonemesFile.setName("Master phonemes file...");
 		mnSetPaths.add(mntmMasterPhonemesFile);
 
 		mntmPhonemeDataSource = new JMenuItem("Phoneme data source...");
+		mntmPhonemeDataSource.setName("Phoneme data source...");
 		mnSetPaths.add(mntmPhonemeDataSource);
 
 		mntmDictionaryDataSource = new JMenuItem("Dictionary data source...");
+		mntmDictionaryDataSource.setName("Dictionary data source...");
 		mnSetPaths.add(mntmDictionaryDataSource);
 
 		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
+		mntmSynthesizedSoundWAVfile.setName("Synthesized sound WAV file...");
 		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
 
-		mnSetPaths.add(new JSeparator());
-
 		mntmVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
+		mntmVoiceFileToModifyFormantPeaks.setName("Voice file to modify formant peaks...");
 		mnSetPaths.add(mntmVoiceFileToModifyFormantPeaks);
 
 		mnLanguage = new JMenu("Language");
 		mnOptions.add(mnLanguage);
 
 		mntmEnglish = new JMenuItem("English");
+		mntmEnglish.setName("EnglishLang");
 		mnLanguage.add(mntmEnglish);
 
-		mntmLatvian = new JMenuItem("Latvian");
+		mntmLatvian = new JMenuItem("Latviešu");
+		mntmLatvian.setName("LatvianLang");
 		mnLanguage.add(mntmLatvian);
 
 		mntmRussian = new JMenuItem(Texts.RUSSIAN.getText());
+		mntmRussian.setName("RussianLang");
 		mnLanguage.add(mntmRussian);
-
-		mntmTamil = new JMenuItem("Tamil");
+		
+		mntmTamil = new JMenuItem("தமிழ்");
+		mntmTamil.setName("TamilLang");
 		mnLanguage.add(mntmTamil);
 
 		mntmSpeed = new JMenuItem("Speed...");
+		mntmSpeed.setName("Speed...");
 		mnOptions.add(mntmSpeed);
 		optionsSpeed = new OptionsSpeedWindow();
 
 		mnOptions.add(new JSeparator());
 
 		mntmSpeakPunctuation = new JMenuItem("Speak punctuation");
+		mntmSpeakPunctuation.setName(mntmSpeakPunctuation.getText());
 		mnOptions.add(mntmSpeakPunctuation);
 
 		mntmSpeakCharacters = new JMenuItem("Speak characters");
+		mntmSpeakCharacters.setName(mntmSpeakCharacters.getText());
 		mnOptions.add(mntmSpeakCharacters);
 
 		mntmSpeakCharacterName = new JMenuItem("Speak character name");
+		mntmSpeakCharacterName.setName(mntmSpeakCharacterName.getText());
 		mnOptions.add(mntmSpeakCharacterName);
 
 		/////////////////
@@ -436,33 +479,43 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnTools = new JMenu("Tools");
+		mnTools.setName(mnTools.getText());
 		mMenuBar.add(mnTools);
 
 		mnMakeVowelsChart = new JMenu("Make Vowels Chart");
+		mnMakeVowelsChart.setName(mnMakeVowelsChart.getText());
 		mnTools.add(mnMakeVowelsChart);
 
 		mntmFromCompiledPhoneme = new JMenuItem("From compiled phoneme data");
+		mntmFromCompiledPhoneme.setName(mntmFromCompiledPhoneme.getText());
 		mnMakeVowelsChart.add(mntmFromCompiledPhoneme);
 
 		mntmFromDirectoryVowelFiles = new JMenuItem("From directory of vowel files...");
+		mntmFromDirectoryVowelFiles.setName(mntmFromDirectoryVowelFiles.getText());
 		mnMakeVowelsChart.add(mntmFromDirectoryVowelFiles);
 
 		mnProcessLexicon = new JMenu("Process Lexicon");
+		mnProcessLexicon.setName(mnProcessLexicon.getText());
 		mnTools.add(mnProcessLexicon);
 
 		mntmPLBulgarian = new JMenuItem("Bulgarian");
+		mntmPLBulgarian.setName(mntmPLBulgarian.getText());
 		mnProcessLexicon.add(mntmPLBulgarian);
 
 		mntmPLGerman = new JMenuItem("German");
+		mntmPLGerman.setName(mntmPLGerman.getText());
 		mnProcessLexicon.add(mntmPLGerman);
 
 		mntmPLItalian = new JMenuItem("Italian");
+		mntmPLItalian.setName(mntmPLItalian.getText());
 		mnProcessLexicon.add(mntmPLItalian);
 
 		mntmPLRussian = new JMenuItem(Texts.RUSSIAN.getText());
+		mntmPLRussian.setName(mntmPLRussian.getText());
 		mnProcessLexicon.add(mntmPLRussian);
 
 		mntmCountWordOccurrences = new JMenuItem("Count word occurrences...");
+		mntmCountWordOccurrences.setName("Count word occurrences...");
 		mnTools.add(mntmCountWordOccurrences);
 
 		///////////////////
@@ -470,23 +523,27 @@ public class MainWindow extends JFrame {
 		///////////////////
 
 		mnCompile = new JMenu("Compile");
+		mnCompile.setName(mnCompile.getText());
 		mMenuBar.add(mnCompile);
 
-		mntmCompileDictionary = new JMenuItem("Compile dictionary\"");
+		mntmCompileDictionary = new JMenuItem("Compile dictionary");
+		mntmCompileDictionary.setName(mntmCompileDictionary.getText());
 		mnCompile.add(mntmCompileDictionary);
 
 		mntmCompileDictionarydebug = new JMenuItem("Compile dictionary (debug)");
+		mntmCompileDictionarydebug.setName(mntmCompileDictionarydebug.getText());
 		mnCompile.add(mntmCompileDictionarydebug);
 
 		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
+		mntmCompilePhonemeData.setName(mntmCompilePhonemeData.getText());
 		mnCompile.add(mntmCompilePhonemeData);
 
-		mnCompile.add(new JSeparator());
-
-		mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        mntmCompileMbrolaPhonemes.setName(mntmCompileMbrolaPhonemes.getText());
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
+		mntmCompileIntonationData.setName(mntmCompileIntonationData.getText());
 		mnCompile.add(mntmCompileIntonationData);
 		//
 		// JSeparator separator_4 = new JSeparator();
@@ -503,12 +560,15 @@ public class MainWindow extends JFrame {
 		////////////////
 
 		mnHelp = new JMenu("Help");
+		mnHelp.setName(mnHelp.getText());
 		mMenuBar.add(mnHelp);
 
 		mntmEspeakDocumentation = new JMenuItem("eSpeak Documentation");
+		mntmEspeakDocumentation.setName(mntmEspeakDocumentation.getText());
 		mnHelp.add(mntmEspeakDocumentation);
 
 		mntmAbout = new JMenuItem("About");
+		mntmAbout.setName(mntmAbout.getText());
 		mnHelp.add(mntmAbout);
 
 		pmenu = new JPopupMenu();
@@ -842,10 +902,12 @@ public class MainWindow extends JFrame {
 		// Zoom buttons //
 
 		btnZoom = new JButton("Zoom-");
+		btnZoom.setName("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
 
 		btnZoom_1 = new JButton("Zoom+");
+		btnZoom_1.setName("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
 
@@ -878,15 +940,17 @@ public class MainWindow extends JFrame {
 		//////////////////////////
 		//////// Text Tab ////////
 		//////////////////////////
-
+		
 		JPanel panelText = new JPanel();
 		panelText.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panelText, null);
-
+		tabbedPane.setName("Text");
+		
 		// Input text area:
 
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
+		textAreaIn.setName("textAreaIn");
 		textAreaIn.setLineWrap(true);
 		textAreaIn.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -895,6 +959,7 @@ public class MainWindow extends JFrame {
 		// Output text area:
 
 		textAreaOut = new JTextArea();
+		textAreaOut.setName("textAreaOut");
 		textAreaOut.setLineWrap(true);
 		textAreaOut.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -903,9 +968,12 @@ public class MainWindow extends JFrame {
 		// Command buttons:
 
 		btnSpeak = new JButton("");
+		btnSpeak.setName("btnSpeak");
 		btnPause = new JButton("");
+		btnSpeak.setName("btnPause");
 		btnPause.setEnabled(false);
 		btnStop = new JButton("");
+		btnSpeak.setName("btnStop");
 		btnStop.setEnabled(false);
 
 		Image play;
@@ -932,8 +1000,11 @@ public class MainWindow extends JFrame {
 		}
 
 		btnTranslate = new JButton("Translate");
+		btnTranslate.setName("TranslateB");
 		btnShowRules = new JButton("Show Rules");
+		btnShowRules.setName("ShowRulesB");
 		btnShowIPA = new JButton("Show IPA");
+		btnShowIPA.setName("ShowIPAB");
 
 		// Text tab horizontal grouping
 

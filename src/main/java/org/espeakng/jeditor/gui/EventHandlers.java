@@ -1,11 +1,15 @@
 package org.espeakng.jeditor.gui;
 
+import javax.swing.*;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -31,13 +36,10 @@ import org.espeakng.jeditor.data.VowelChart;
 import org.espeakng.jeditor.data.ProsodyPanel;
 import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
+
 import org.espeakng.jeditor.utils.Utilities;
 import org.espeakng.jeditor.utils.WrapLayout;
-import javax.swing.JPanel;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+
 
 
 /**
@@ -46,15 +48,22 @@ import javax.swing.JTabbedPane;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+    // Files required for buttons. Do not delete.
+    private static Map<Command, File> folders = new EnumMap<>(Command.class);
+    // ******************************************
+    private EspeakNg espeakNg;
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
-    // Files required for buttons. Do not delete.
-    private Map<Command, File> folders = new EnumMap<>(Command.class);
-    // ******************************************
-    private EspeakNg espeakNg;
-    private JScrollPane scrollPane;
+    private File file;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
+    private JScrollPane scrollPane;
+    
+    // Need a getter for tests
+    public static Map<Command, File> getFolders() {
+    	return folders;
+    }
+    
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -112,8 +121,10 @@ public class EventHandlers {
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
 			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
+				CommandUtilities.executeCmd("pkill -9 -f aplay");
 				mainW.setVisible(false);
 				mainW.dispose();
+				
 			} else if (e.getSource() == mainW.mntmEnglish) {
 				File file = new File("./src/main/resources/english.txt");
 				if (!file.exists()) {
@@ -202,24 +213,10 @@ public class EventHandlers {
 	 * This method clears JTextFields that represent values of peaks
 	 */
 	public void clearText() {
-		for (int i = 0; i < MainWindow.tfFreq.size(); i++) {
-			MainWindow.tfFreq.get(i).setText("");
-		
-		}
-		for (int i = 0; i < MainWindow.tfHeight.size(); i++) {
-			MainWindow.tfHeight.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfWidth.size(); i++) {
-			MainWindow.tfWidth.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfBw.size(); i++) {
-			MainWindow.tfBw.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfAp.size(); i++) {
-			MainWindow.tfAp.get(i).setText("");
-		}
-		for (int i = 0; i < MainWindow.tfBp.size(); i++) {
-			MainWindow.tfBp.get(i).setText("");
+		for(List<JTextField> jTextArray : MainWindow.array ){
+			for(JTextField jTextField : jTextArray){
+				jTextField.setText("");
+			}
 		}
 	}
 
@@ -392,14 +389,16 @@ public class EventHandlers {
 		}
 	};
 
-	ActionListener selectVoiceVariant = (ActionEvent a) -> {
-		fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		
-		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-			prefs.put("", fileChooser.getSelectedFile().getParent());
-			if(fileChooser.getName(fileChooser.getSelectedFile()).matches("[A-Za-z0-9]+"))
-				EspeakNg.setVoiceVariant(fileChooser.getName(fileChooser.getSelectedFile()));
+
+	ActionListener selectVoiceVariant = new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+			fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				prefs.put("", fileChooser.getSelectedFile().getParent());
+				if(fileChooser.getName(fileChooser.getSelectedFile()).matches("[A-Za-z0-9]+"))
+					espeakNg.setVoiceVariant(fileChooser.getName(fileChooser.getSelectedFile()));
+			}
 		}
 	};
 	
@@ -457,8 +456,13 @@ public class EventHandlers {
 			tMonitor.start();
 		}
 	}
+
+	
+
+
 	ActionListener countWordOccurance = (ActionEvent e) -> {
-		String[] keys = espeakNg.getText(null).toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
+		String[] keys = mainW.textAreaIn.getText().toLowerCase().replaceAll("\n", " ")
+				.replaceAll("[^a-zA-Z0-9\\s\\.-]", "").split("\\s+");
 		Map<String, Integer> map = new TreeMap<>();
 		
 		for (String key : keys) {
@@ -470,6 +474,7 @@ public class EventHandlers {
 			words[0] = words[0].substring(1);
 			words[words.length-1] = words[words.length-1].substring(0, words[words.length-1].length()-1);
 		}
+
 			
 		new WordFrequencyWindow(words);
 	};
@@ -633,7 +638,6 @@ public class EventHandlers {
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(exportDirectoryVowelFiles);
 		mainW.mntmFromCompiledPhoneme.addActionListener(switchLang);
-
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
@@ -665,6 +669,13 @@ public class EventHandlers {
 		mainW.btnPause.addActionListener(pauseFile);
 		mainW.btnStop.addActionListener(stopFile);
 
+		mainW.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				CommandUtilities.executeCmd("pkill -9 -f aplay");
+			}
+		});
+		
 		addTFListeners();
 	}
 
@@ -760,7 +771,6 @@ public class EventHandlers {
 			});
 		}
 	
-
 		// klt_ap text fields
 
 		for(int i=0; i<MainWindow.tfAp.size();i++){
@@ -798,4 +808,14 @@ public class EventHandlers {
 	public JFileChooser getFileChooser() {
 		return fileChooser;
 	}
+	
+	// Getters for tests.
+	public String getVoice() {
+		return espeakNg.getVoiceFromSelection();
+	}
+	
+	public String getVoiceVariant() {
+		return espeakNg.getVoiceVariant();
+	}
+	
 }

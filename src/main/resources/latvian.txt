@@ -18,9 +18,9 @@ Izvēlieties balss...
 Izvēlieties balss variant…
 Izvēlieties balss
 Anglu
-Русский
-Latviesu
-Polu
+Krievu
+Latviešu
+Poļu
 Opcijas
 Skatīt ceļus
 Pārvaldīt fonēmas failu...
