@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 import org.assertj.swing.edt.GuiActionRunner;
@@ -100,6 +101,13 @@ public class SpeakMenuItemTest {
 		 	fixture.menuItem("SpeakFile").click();
 			fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/espeak-ng-data/phondata-manifest"));
 			fixture.fileChooser().approve();
+			
+			Runtime rt = Runtime.getRuntime();
+			try {
+				rt.exec("pkill -9 aplay");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 	}
 }

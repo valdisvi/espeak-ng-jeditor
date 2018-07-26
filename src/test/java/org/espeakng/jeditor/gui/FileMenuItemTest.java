@@ -60,6 +60,7 @@ public class FileMenuItemTest {
 		int numberOfTabs = MainWindow.tabbedPaneGraphs.getTabCount();
 		File temp = new File("../espeak-ng/phsource/vowel/u");
 		fixture.menuItem(mainW.mntmOpen.getName()).click();
+		fixture.fileChooser().setCurrentDirectory(temp.getParentFile());
 		fixture.fileChooser().selectFile(temp);
 		fixture.fileChooser().approve();
 		assertTrue("File /espeak-ng/phsource/vowel/u does not exist", temp.exists());
@@ -71,6 +72,7 @@ public class FileMenuItemTest {
 		int numberOfTabs = MainWindow.tabbedPaneGraphs.getTabCount();
 		File temp = new File("../espeak-ng/phsource/vowel/e");
 		fixture.menuItem(mainW.mntmOpen2.getName()).click();
+		fixture.fileChooser().setCurrentDirectory(temp.getParentFile());
 		fixture.fileChooser().selectFile(temp);
 		fixture.fileChooser().approve();
 		assertTrue("File /espeak-ng/phsource/vowel/e does not exist", temp.exists());

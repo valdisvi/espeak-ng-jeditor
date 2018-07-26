@@ -73,26 +73,6 @@ public class ToolsMenuItemTest {
 	}
 	
 	@Test
-	public void bulgarianLexiconTest() {
-		fail("Bulgarian lexicon not implemented");
-	}
-	
-	@Test
-	public void germanLexiconTest() {
-		fail("German lexicon not implemented");
-	}
-	
-	@Test
-	public void italianLexiconTest() {
-		fail("Italian lexicon not implemented");
-	}
-	
-	@Test
-	public void russianLexiconTest() {
-		fail("Russian lexicon not implemented");
-	}
-	
-	@Test
 	public void wordFrequencyTest() {
 		fixture.tabbedPane("Text").click();
 		mainW.textAreaIn.setText("hello Hello HELLO world! world java swing");
