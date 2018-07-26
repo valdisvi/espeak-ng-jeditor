@@ -27,6 +27,7 @@ import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
+
 import org.espeakng.jeditor.data.ProsodyPanel;
 import org.espeakng.jeditor.data.ProsodyPhoneme;
 import org.espeakng.jeditor.utils.CommandUtilities;
@@ -36,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 
 /**
@@ -53,7 +55,6 @@ public class EventHandlers {
     private EspeakNg espeakNg;
     private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
-    
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
@@ -70,19 +71,32 @@ public class EventHandlers {
 		prefs = Preferences.userRoot().node(getClass().getName());
 		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
 	}
-	
+
+
+	ChangeListener getPhoneme = new ChangeListener() {
+		public void stateChanged(ChangeEvent e) {
+			setVisibleMenuItemsFile(mainW);
+			PhonemeLoad.getPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
+			JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+			int index = sourceTabbedPane.getSelectedIndex();
+			// FIX ME: changing tabs graphs are shown in incorrect order... Graph sequence changes after each click on tab. 
+			if(index < MainWindow.getMainWindow().spectrumGraphList.size()){
+				  MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().spectrumGraphList.get(index)).repaint();
+			
+			}
+			
+		}	
+
+	};
+
+
+
 	private void setFolders() {
 		folders.put(Command.PH_FILE, new File("../espeak-ng/phsource/phonemes"));
 		folders.put(Command.PHONEME_SOURCE, new File("../espeak-ng/phsource"));
 		folders.put(Command.DICT_SOURCE, new File("../espeak-ng/dictsource"));
 	}
 	
-	ChangeListener getPhoneme = (ChangeEvent arg0) -> {
-		setVisibleMenuItemsFile(mainW);
-		PhonemeLoad.getPhoneme((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
-	};
-
-
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
@@ -146,6 +160,8 @@ public class EventHandlers {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
+			} else if (e.getSource() == mainW.panel_Spect){
+				mainW.panel_Spect.repaint();
 			}
 		}
 		
@@ -249,7 +265,6 @@ public class EventHandlers {
 		mainW.mntmClose.setVisible(false);
 		mainW.mntmCloseAll.setVisible(false);
 	};
-
 
 	private class MakeActionListener implements ActionListener {
 
@@ -762,7 +777,7 @@ public class EventHandlers {
 	
 		// klt_bp text fields
 		
-		for(int i=0; i<MainWindow.tfBp.size();i++){
+		for(int i=0; i<MainWindow.tfBp.size();i++) {
 			final int index =i;
 			MainWindow.tfBp.get(i).addActionListener((ActionEvent ae) -> {
 				try {
