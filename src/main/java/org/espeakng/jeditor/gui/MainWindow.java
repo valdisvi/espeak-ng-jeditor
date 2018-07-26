@@ -355,24 +355,30 @@ public class MainWindow extends JFrame {
 		//mnVoice.add(mntmSelectVoice);
 
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
+		mntmSelectVoiceVariant.setName(mntmSelectVoiceVariant.getText());
 		mnVoice.add(mntmSelectVoiceVariant);
 
 		mnVoice.add(new JSeparator());
 
 		mnSelectVoice = new JMenu("Select Voice ");
+		mnSelectVoice.setName(mnSelectVoice.getText());
 		mnVoice.add(mnSelectVoice);
 
 		rdbtnmntmEnglish = new JRadioButtonMenuItem("English");
+		rdbtnmntmEnglish.setName("EnglishVoice");
 		rdbtnmntmEnglish.setSelected(true);
 		mnSelectVoice.add(rdbtnmntmEnglish);
 
 		rdbtnmntmLatvian = new JRadioButtonMenuItem("Latvian");
+		rdbtnmntmLatvian.setName("LatvianVoice");
 		mnSelectVoice.add(rdbtnmntmLatvian);
 
 		rdbtnmntmPolish = new JRadioButtonMenuItem("Polish");
+		rdbtnmntmPolish.setName("PolishVoice");
 		mnSelectVoice.add(rdbtnmntmPolish);
 
 		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
+		rdbtnmntmRussian.setName("RussianVoice");
 		mnSelectVoice.add(rdbtnmntmRussian);
 
 		groupOfVoices = new ButtonGroup();

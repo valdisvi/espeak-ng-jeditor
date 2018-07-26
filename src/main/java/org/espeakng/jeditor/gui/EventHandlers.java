@@ -51,11 +51,11 @@ public class EventHandlers {
     // Files required for buttons. Do not delete.
     private static Map<String, File> folders = new HashMap<>();
     // ******************************************
+    private EspeakNg espeakNg;
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     private File file;
-    private EspeakNg espeakNg;
     private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     
@@ -360,7 +360,7 @@ public class EventHandlers {
 	ActionListener selectVoiceVariant = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
 			fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				if(fileChooser.getName(fileChooser.getSelectedFile()).matches("[A-Za-z0-9]+"))
@@ -803,7 +803,16 @@ public class EventHandlers {
 	public JFileChooser getFileChooser() {
 		return fileChooser;
 	}
-
+	
+	// Getters for tests.
+	public String getVoice() {
+		return espeakNg.getVoiceFromSelection();
+	}
+	
+	public String getVoiceVariant() {
+		return espeakNg.getVoiceVariant();
+	}
+	
 	private void exportGraphImage() {
 		// MainWindow.tabbedPaneGraphs.setSize
 		// setSize(getPreferredSize());
