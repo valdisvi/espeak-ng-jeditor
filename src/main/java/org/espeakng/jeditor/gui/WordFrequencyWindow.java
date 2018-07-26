@@ -22,7 +22,7 @@ public class WordFrequencyWindow extends JFrame {
 	
 	public WordFrequencyWindow(String[] listItems) {
 		
-		setTitle("Word Frequencies");
+		setTitle("Word Occurences");
 		setBounds(100, 100, 270, 400);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -33,7 +33,7 @@ public class WordFrequencyWindow extends JFrame {
 		}
 		
 		
-		JLabel lblWordFrequencies = new JLabel("Word Frequencies");
+		JLabel lblWordFrequencies = new JLabel("Word Occurences");
 		lblWordFrequencies.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(lblWordFrequencies, BorderLayout.NORTH);
 		

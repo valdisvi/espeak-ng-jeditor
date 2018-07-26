@@ -98,7 +98,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLGerman;
 	public JMenuItem mntmPLItalian;
 	public JMenuItem mntmPLRussian;
-	public JMenuItem mntmCountWordFrequencies;
+	public JMenuItem mntmCountWordOccurrences;
 	// menuBar group Compile
 	public JMenu mnCompile;
 	public JMenuItem mntmCompileDictionary;
@@ -198,7 +198,7 @@ public class MainWindow extends JFrame {
 			Splashscr.splashProgress(100);
 			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
+			logger.warn(e1);
 			e1.printStackTrace();
 		}
 		
@@ -469,8 +469,8 @@ public class MainWindow extends JFrame {
 		mntmPLRussian = new JMenuItem(Texts.RUSSIAN.getText());
 		mnProcessLexicon.add(mntmPLRussian);
 
-		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
-		mnTools.add(mntmCountWordFrequencies);
+		mntmCountWordOccurrences = new JMenuItem("Count word occurrences...");
+		mnTools.add(mntmCountWordOccurrences);
 
 		///////////////////
 		// Compile group //

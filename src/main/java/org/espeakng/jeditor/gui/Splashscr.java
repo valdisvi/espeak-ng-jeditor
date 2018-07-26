@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.SplashScreen;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
+import org.apache.log4j.Logger;
+
 
 public class Splashscr {
 	static SplashScreen mySplash = SplashScreen.getSplashScreen();
@@ -16,6 +18,8 @@ public class Splashscr {
 	static int width = ssDim.width;
     static Double splashTextArea = new Rectangle2D.Double(15., height*0.88, width * .45, 32.);
     static Double  splashProgressArea = new Rectangle2D.Double(width * .55, height*.92, width*.4, 12 );
+    private static final Logger LOGGER = Logger.getRootLogger();
+
 	  static void splashInit() {
 		    if (mySplash != null)
 		    { 
@@ -38,7 +42,8 @@ public class Splashscr {
     	        }
     	        catch (InterruptedException ex)
     	        {
-    	            // ignore it
+    	           LOGGER.warn(ex);
+    	           Thread.currentThread().interrupt();
     	        }
     	    }
 		}  
@@ -50,7 +55,6 @@ public class Splashscr {
        
 static void splashText(String str) 
 {
-	
     if (mySplash != null && mySplash.isVisible())
     {   // important to check here so no other methods need to know if there
         // really is a Splash being displayed
