@@ -1,5 +1,7 @@
 package org.espeakng.jeditor.jni;
 
+import org.apache.log4j.Logger;
+import org.espeakng.jeditor.gui.EspeakNg;
 
 
 /*-
@@ -24,16 +26,18 @@ package org.espeakng.jeditor.jni;
  * 		
  */
 public class ESpeakService {
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 
     private ESpeakService() {
     	throw new IllegalStateException("ESpeakService Utility class");
     }
+   
     
 	static {
 		try {
 			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {
-			e.printStackTrace();
+			logger.warn(e);
 			System.exit(1);
 		}
 	}
