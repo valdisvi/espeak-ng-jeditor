@@ -26,7 +26,7 @@ import org.espeakng.jeditor.gui.EspeakNg;
  * 		
  */
 public class ESpeakService {
-	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+	private static Logger logger = Logger.getLogger(ESpeakService.class);
 
     private ESpeakService() {
     	throw new IllegalStateException("ESpeakService Utility class");
