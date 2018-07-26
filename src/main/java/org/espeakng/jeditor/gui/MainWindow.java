@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -43,10 +45,8 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 6548939748883665055L;
 	private static Logger logger = Logger.getLogger(MainWindow.class.getName());
 	public JMenuBar mMenuBar;
-	// TODO
-	// public static JTabbedPane tabbedPaneGraphs;
 	public JPanel panelSpectrumGraph;
-	public ArrayList<JPanel> spectrumGraphList = new ArrayList<JPanel>();
+	public Map<String, SpectrumGraph> spectrumGraphList = new HashMap<>();
 
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
 	// Language.java
@@ -161,6 +161,8 @@ public class MainWindow extends JFrame {
 	public JMenuItem clMI;
 	public JMenuItem clalMI;
 	public JMenuItem quitMI;
+	
+	public static SpectrumGraph lastThing;
 
 	private enum Texts {
 		RUSSIAN("Russian"), DIALOG("Dialog");

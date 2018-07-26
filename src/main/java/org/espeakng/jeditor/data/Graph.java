@@ -123,15 +123,15 @@ public class Graph {
 		// the insertion order.
 		mapPanels = new LinkedHashMap<JPanel, Frame>();
 
-		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
-
 		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
 		tabbedPaneGraphs.setSelectedComponent(scrollPane);
 		// filePanel.requestFocus();
 		panelSpectrumGraph = new SpectrumGraph(frameList);
 		panelSpectrumGraph.setBounds(3, 511, 364, 200);
 		panelSpectrumGraph.setBackground(new Color(238, 238, 238));
-		MainWindow.getMainWindow().spectrumGraphList.add(panelSpectrumGraph);
+		
+		MainWindow.getMainWindow().spectrumGraphList.put(fileName, panelSpectrumGraph);
+		MainWindow.lastThing = panelSpectrumGraph;
 		MainWindow.getMainWindow().panel_Spect.add(panelSpectrumGraph).repaint();
 		ShowFrames(frameList, filePanel, mapPanels);
 		
