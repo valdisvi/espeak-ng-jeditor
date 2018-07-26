@@ -17,12 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.gui.MainWindow;
 
 //this class uses espeak-ng/phsource/vowelcharts folder for creating vowel charts
 public class VowelChart extends JPanel {
-	private int width = 1500;
-	private int heigth = 750;
+	
+    private static Logger logger = Logger.getLogger(VowelChart.class.getName());
+
+	
+	private static final long serialVersionUID = 5668493458379304247L;
+	
 	private static int padding = 25; // padding from the borders
 	private int labelPadding = 25; // padding of labels from the borders
 	private static Color lineColor = new Color(44, 102, 230, 180); // color of
@@ -37,10 +42,10 @@ public class VowelChart extends JPanel {
 	private static JTabbedPane tabbedPaneGraphs;
 
 	// list of Vowel objects
-	protected static List<Vowel> vowelsList;
-	protected static List<Vowel> vowelsInText;
-	protected static List<Double> xValues;
-	protected static List<Double> yValues;
+	protected  List<Vowel> vowelsList;
+	protected  List<Vowel> vowelsInText;
+	protected  List<Double> xValues;
+	protected  List<Double> yValues;
 
 	// pass the file's path to the constructor so that it assigns the file's
 	// values into vowelsList
@@ -79,6 +84,7 @@ public class VowelChart extends JPanel {
 			g2.setColor(gridColor);
 			g2.drawLine(0, y0, getWidth(), y0);
 			g2.setColor(Color.BLACK);
+	
 
 			int value = (int) (getMinValueY() - (getMinValueY() % 100) + (i * 50));
 
@@ -156,7 +162,7 @@ public class VowelChart extends JPanel {
 
 	}
 
-	public static void drawPoint(String s, int x0, int y0, int x1, int y1, double max, Graphics g) {
+	public  void drawPoint(String s, int x0, int y0, int x1, int y1, double max, Graphics g) {
 
 		g.setColor(lineColor);
 		g.drawLine(x0, y0, x1, y1);
@@ -173,10 +179,9 @@ public class VowelChart extends JPanel {
 	 */
 	public static List<Vowel> createFromFile(String fileName) {
 		List<Vowel> vowelList = new ArrayList<>(); // list of
+		File vowelChart = new File(fileName);
 
-		try {
-			File vowelChart = new File(fileName);
-			Scanner sc = new Scanner(vowelChart);
+		try (Scanner sc = new Scanner(vowelChart)) {
 			String line;
 			while (sc.hasNextLine()) {
 				line = sc.nextLine();
@@ -190,8 +195,9 @@ public class VowelChart extends JPanel {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
+		
 		return vowelList;
 	}
 
@@ -218,7 +224,7 @@ public class VowelChart extends JPanel {
 	}
 
 	// calculate the min value of X
-	public static double getMinValueX() {
+	public  double getMinValueX() {
 		double minValue = Integer.MAX_VALUE;
 		for (Double min : xValues) {
 			minValue = Math.min(minValue, min);
@@ -228,7 +234,7 @@ public class VowelChart extends JPanel {
 	}
 
 	// calculate the min value of Y
-	public static double getMinValueY() {
+	public  double getMinValueY() {
 		double minValue = Integer.MAX_VALUE;
 		for (Double min : yValues) {
 			minValue = Math.min(minValue, min);
@@ -238,7 +244,7 @@ public class VowelChart extends JPanel {
 	}
 
 	// calculate the max value of X
-	public static double getMaxValueX() {
+	public  double getMaxValueX() {
 		double minValue = Integer.MIN_VALUE;
 		for (Double min : xValues) {
 			minValue = Math.max(minValue, min);
@@ -248,7 +254,7 @@ public class VowelChart extends JPanel {
 	}
 
 	// calculate the max value of Y
-	public static double getMaxValueY() {
+	public  double getMaxValueY() {
 		double minValue = Integer.MIN_VALUE;
 		for (Double min : yValues) {
 			minValue = Math.max(minValue, min);
@@ -264,9 +270,8 @@ public class VowelChart extends JPanel {
 	}
 
 	public static void createAndShowGui(String path, MainWindow mainW) {
-
 		VowelChart vc = new VowelChart(createFromFile(path));
-		tabbedPaneGraphs.addTab("Vowel Chart", new JScrollPane(new JPanel().add(vc)));
+		tabbedPaneGraphs.addTab(new File(path).getName(), new JScrollPane(new JPanel().add(vc)));
 
 	}
 
@@ -277,7 +282,7 @@ public class VowelChart extends JPanel {
 
 
 	// get the max value of frequency from the given list of Vowels objects
-	public static double getMaxFrequency() {
+	public double getMaxFrequency() {
 		double maxValue = Integer.MIN_VALUE;
 		for (int i = 0; i < vowelsList.size(); i++) {
 			maxValue = Math.max(maxValue, vowelsList.get(i).getMax1());
@@ -287,7 +292,7 @@ public class VowelChart extends JPanel {
 	}
 
 	// get the max value of frequency from the given list of Vowels objects
-	public static double getMinFrequency() {
+	public  double getMinFrequency() {
 		double minValue = Integer.MAX_VALUE;
 		for (int i = 0; i < vowelsList.size(); i++) {
 			minValue = Math.min(minValue, vowelsList.get(i).getMax1());
@@ -305,7 +310,7 @@ public class VowelChart extends JPanel {
 	// Yellow-ish if the frequency is close to the min value of it, and blue-ish
 	// if the frequency is closer to the max value
 
-	public static Color forColor(double value) {
+	public  Color forColor(double value) {
 		int red = 0;
 		int green = 230;
 		int blue = 0;

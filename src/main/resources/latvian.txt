@@ -18,7 +18,7 @@ Izvēlieties balss...
 Izvēlieties balss variant…
 Izvēlieties balss
 Anglu
-Krievu
+Русский
 Latviesu
 Polu
 Opcijas
@@ -29,9 +29,9 @@ Vārdnīca datu avots...
 Sintezēt skaņas wAV failu...
 Mainīt balss failu  virsotnes  formants...
 Izvēlnes valoda
-Angļu
+English
 Latviešu
-Krievu
+Русский
 Ātrums
 Runāšanas punktuacija
 Runā rakstzīmes
@@ -60,10 +60,14 @@ Izkārtot '_rules' failu
 Palīdzība
 eSpeak documentacija
 Par mūms
-Atlikt
 Tuvināt
+Tālināt
 Teksts
 Tulkot
 Parādīt noteikumus
 Runāt
 Parādīt IPA
+Aizvērt visu
+Eksportēt grafiku
+தமிழ்
+Sveiki

@@ -3,13 +3,17 @@ package org.espeakng.jeditor.gui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import org.apache.log4j.Logger;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -21,13 +25,10 @@ import java.io.IOException;
  */
 
 public class AboutWindow extends JFrame {
-
+	private static Logger logger = Logger.getLogger(AboutWindow.class.getName());
+	private static final long serialVersionUID = -6382834025393046240L;
+	private static final String DIALOG_TEXT = "Dialog";
 	private JPanel contentPane;
-	
-	/** Create the frame. */
-	public static void OpenAboutWindow() {
-		AboutWindow ab = new AboutWindow();
-	}
 	
 	public AboutWindow() {
 		
@@ -38,59 +39,62 @@ public class AboutWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		try {
+			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		JButton btnOk = new JButton("OK");
 		btnOk.setBounds(207, 146, 117, 25);
-		btnOk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		btnOk.addActionListener((ActionEvent e) -> dispose());
 		contentPane.add(btnOk);
 
 		JLabel lblNewLabel = new JLabel("espeakedit 1.48.15 16.Apr.15");
-		lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 10));
+		lblNewLabel.setFont(new Font(DIALOG_TEXT, Font.PLAIN, 10));
 		lblNewLabel.setBounds(10, 10, 356, 25);
 		contentPane.add(lblNewLabel);
 
-		JLabel lblNewLabel_1 = new JLabel("Author: Jonathan Duddington (c) 2009");
-		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblNewLabel_1.setBounds(10, 32, 356, 25);
-		contentPane.add(lblNewLabel_1);
+		JLabel lblNewLabel1 = new JLabel("Author: Jonathan Duddington (c) 2009");
+		lblNewLabel1.setFont(new Font(DIALOG_TEXT, Font.PLAIN, 10));
+		lblNewLabel1.setBounds(10, 32, 356, 25);
+		contentPane.add(lblNewLabel1);
 
-		JLabel lblNewLabel_2 = new JLabel("<html><head></head><body><a href=\"http://espeak.sourceforge.net\">http://espeak.sourceforge.net</a></body></html>");
-		lblNewLabel_2.addMouseListener(new MouseAdapter() {
+		JLabel lblNewLabel2 = new JLabel("<html><head></head><body><a href=\"http://espeak.sourceforge.net\">http://espeak.sourceforge.net</a></body></html>");
+		lblNewLabel2.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Runtime rt = Runtime.getRuntime();
 				try {
 					rt.exec("firefox http://espeak.sourceforge.net/");
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		});
 		
-		lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblNewLabel_2.setBounds(10, 57, 356, 31);
-		contentPane.add(lblNewLabel_2);
+		lblNewLabel2.setFont(new Font(DIALOG_TEXT, Font.PLAIN, 10));
+		lblNewLabel2.setBounds(10, 57, 356, 31);
+		contentPane.add(lblNewLabel2);
 
-		JLabel lblNewLabel_3 = new JLabel("<html><body>Licensed under " +
+		JLabel lblNewLabel3 = new JLabel("<html><body>Licensed under " +
 					"<a href = \"http://espeak.sourceforge.net/license.html\">" +
 				"GNU General Public License version 3" +
 					"</a></body></html>");
-		lblNewLabel_3.addMouseListener(new MouseAdapter() {
+		lblNewLabel3.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Runtime rt = Runtime.getRuntime();
 				try {
 					rt.exec("firefox http://espeak.sourceforge.net/license.html");
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.warn(e);
 				}
 			}
 		});
-		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblNewLabel_3.setBounds(10, 82, 356, 31);
-		contentPane.add(lblNewLabel_3);
+		lblNewLabel3.setFont(new Font(DIALOG_TEXT, Font.PLAIN, 10));
+		lblNewLabel3.setBounds(10, 82, 356, 31);
+		contentPane.add(lblNewLabel3);
 		
 		setVisible(true);
 	}

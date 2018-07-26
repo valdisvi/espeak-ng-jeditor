@@ -1,6 +1,8 @@
 package org.espeakng.jeditor.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,54 +12,64 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.apache.log4j.Logger;
+import org.espeakng.jeditor.data.Command;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
 import org.espeakng.jeditor.data.PhonemeSave;
 import org.espeakng.jeditor.data.VowelChart;
 
+import org.espeakng.jeditor.data.ProsodyPanel;
+import org.espeakng.jeditor.data.ProsodyPhoneme;
+import org.espeakng.jeditor.utils.CommandUtilities;
+import org.espeakng.jeditor.utils.Utilities;
+import org.espeakng.jeditor.utils.WrapLayout;
+import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+
 
 /**
  * This class is for setting up event handlers
  */
 public class EventHandlers {
-
+	
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 	private MainWindow mainW;
-	private JFileChooser fileChooser, fileChooser2, fileChooser3, fileChooser4, fileChooser5;
-	private Preferences prefs, prefs2, prefs3, prefs4, prefs5;
-	private File file1, file2, file3, file4, file5;
-
+	private JFileChooser fileChooser;
+	private Preferences prefs;
+    // Files required for buttons. Do not delete.
+    private Map<Command, File> folders = new EnumMap<>(Command.class);
+    // ******************************************
+    private EspeakNg espeakNg;
+    private JScrollPane scrollPane;
+    private String dataPath = new File("../espeak-ng").getAbsolutePath();
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
 	 * different directory
 	 * 
 	 * @param mainW
 	 */
+ 
 	public EventHandlers(MainWindow mainW) {
 		this.mainW = mainW;
+		espeakNg = new EspeakNg(mainW);
+		
+		setFolders();
+		
 		prefs = Preferences.userRoot().node(getClass().getName());
 		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
-
-		prefs2 = Preferences.userRoot().node(getClass().getName());
-		fileChooser2 = new JFileChooser(prefs2.get("a", new File(".").getAbsolutePath()));
-
-		prefs3 = Preferences.userRoot().node(getClass().getName());
-		fileChooser3 = new JFileChooser(
-				prefs3.get("a", new File("../espeak-ng/phonemes/vowelcharts").getAbsolutePath()));
-
-		prefs4 = Preferences.userRoot().node(getClass().getName());
-		fileChooser4 = new JFileChooser(
-				prefs4.get("", new File("../espeak-ng/espeak-ng-data/lang").getAbsolutePath()));
-
-		prefs5 = Preferences.userRoot().node(getClass().getName());
-		fileChooser5 = new JFileChooser(
-				prefs5.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
 	}
 
 
@@ -79,21 +91,27 @@ public class EventHandlers {
 
 
 
+	private void setFolders() {
+		folders.put(Command.PH_FILE, new File("../espeak-ng/phsource/phonemes"));
+		folders.put(Command.PHONEME_SOURCE, new File("../espeak-ng/phsource"));
+		folders.put(Command.DICT_SOURCE, new File("../espeak-ng/dictsource"));
+	}
+	
 	ActionListener event = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == mainW.mntmOpen) {
+			fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
+			if (e.getSource() == mainW.mntmOpen||e.getSource() == mainW.openMI) {
 				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
 					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
 			} else if (e.getSource() == mainW.mntmOpen2) {
-				if (fileChooser2.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					PhonemeLoad.phonemeOpen(fileChooser2.getSelectedFile(), mainW);
-					mainW.panel_Spect.repaint();
-					prefs2.put("a", fileChooser2.getSelectedFile().getParent());
+				fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
+				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+					PhonemeLoad.phonemeOpen(fileChooser.getSelectedFile(), mainW);
+					prefs.put("a", fileChooser.getSelectedFile().getParent());
 				}
-			} else if (e.getSource() == mainW.mntmQuit) {
+			} else if (e.getSource() == mainW.mntmQuit||e.getSource() == mainW.quitMI) {
 				mainW.setVisible(false);
 				mainW.dispose();
 			} else if (e.getSource() == mainW.mntmEnglish) {
@@ -114,8 +132,6 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
-				// Language.initLanguage(new
-				// File("./src/main/resources/latvian.txt"), mainW);
 			} else if (e.getSource() == mainW.mntmRussian) {
 				File file = new File("./src/main/resources/russian.txt");
 				if (!file.exists()) {
@@ -125,21 +141,59 @@ public class EventHandlers {
 				} else {
 					Language.initLanguage(file, mainW);
 				}
-				// Language.initLanguage(new
-				// File("./src/main/resources/russian.txt"), mainW);
+			} else if (e.getSource() == mainW.mntmTamil) {
+					File file = new File("./src/main/resources/tamil.txt");
+					if (!file.exists()) {
+						InputStream in = getClass().getResourceAsStream("/tamil.txt");
+						BufferedReader input = new BufferedReader(new InputStreamReader(in));
+						Language.initLanguage(input, mainW);
+					} else {
+						Language.initLanguage(file, mainW);
+					}
 			} else if (e.getSource() == mainW.mntmSpeed) {
 				mainW.optionsSpeed.showOptionsSpeed();
 			} else if (e.getSource() == mainW.mntmAbout) {
-				AboutWindow.OpenAboutWindow();
+				new AboutWindow();
 			} else if (e.getSource() == mainW.btnZoom) {
-
-				PhonemeLoad.zoomOut((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
+				PhonemeLoad.zoomOut((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.btnZoom_1) {
-				PhonemeLoad.zoomIn((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			} else if (e.getSource() == mainW.mntmExportGraph) {
+				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
+			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
 			} else if (e.getSource() == mainW.panel_Spect){
 				mainW.panel_Spect.repaint();
+			}
+		}
+		
+		private void exportGraphImage() {
+			fileChooser.setCurrentDirectory(new File("./"));
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+				BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
+						MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = image.createGraphics();
+				MainWindow.tabbedPaneGraphs.printAll(g);
+				g.dispose();
+				try {
+					
+					File file = fileChooser.getSelectedFile();
+			        if (!file.getName().endsWith(".png")) {
+			            file = new File(file.getParentFile(), file.getName() + ".png");
+			        }
+			        
+			        int confirm;
+			        if (file.exists()) {
+			            confirm = JOptionPane.showConfirmDialog(
+			                            null, "File already exists, overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+			            if (confirm == JOptionPane.NO_OPTION) {
+			                return;
+			            }
+			        }
+					logger.debug("Exported graphs: " + file.getAbsolutePath());
+					ImageIO.write(image, "png", file);
+				} catch (IOException e) {
+					logger.warn(e);
+				}
 			}
 		}
 	};
@@ -148,291 +202,374 @@ public class EventHandlers {
 	 * This method clears JTextFields that represent values of peaks
 	 */
 	public void clearText() {
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < MainWindow.tfFreq.size(); i++) {
 			MainWindow.tfFreq.get(i).setText("");
+		
 		}
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < MainWindow.tfHeight.size(); i++) {
 			MainWindow.tfHeight.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfWidth.size(); i++) {
 			MainWindow.tfWidth.get(i).setText("");
 		}
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MainWindow.tfBw.size(); i++) {
 			MainWindow.tfBw.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfAp.size(); i++) {
 			MainWindow.tfAp.get(i).setText("");
 		}
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < MainWindow.tfBp.size(); i++) {
 			MainWindow.tfBp.get(i).setText("");
 		}
 	}
 
+
 	// clear the text field and spinner values in this and in closeAllTab
-	ActionListener closeTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			mainW.tabbedPaneGraphs.remove(mainW.tabbedPaneGraphs.getSelectedComponent());
-			// if this is the last one, then clear text fields
-			System.out.println("Component count " + mainW.tabbedPaneGraphs.getComponentCount());
-			boolean lastPhoneme = true;
-			// tabbedPaneGraphs contains more Components than phoneme files
-			for (Component comp : mainW.tabbedPaneGraphs.getComponents()) {
-				if (comp.getClass().equals(JScrollPane.class)) {
-					lastPhoneme = false;
-					break;
-				}
+	ActionListener closeTab = (ActionEvent arg0) -> {
+		MainWindow.tabbedPaneGraphs.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent());
+		// if this is the last one, then clear text fields
+		logger.debug("Component count " + MainWindow.tabbedPaneGraphs.getComponentCount());
+		boolean lastPhoneme = true;
+		// tabbedPaneGraphs contains more Components than phoneme files
+		for (Component comp : MainWindow.tabbedPaneGraphs.getComponents()) {
+			if (comp.getClass().equals(JScrollPane.class)) {
+				lastPhoneme = false;
+				break;
 			}
+		}
 
-			if (lastPhoneme) {
-				clearText();
-			}
-		}
-	};
-	ActionListener saveTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			PhonemeSave.saveToDirectory(temp, new File(temp.path));
-		}
-	};
-	ActionListener saveAsTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
-			if (fileChooser.showSaveDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-				PhonemeSave.saveToCustomDirectory(temp, fileChooser.getSelectedFile().getAbsolutePath());
-			}
-
-		}
-	};
-	ActionListener closeAllTab = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			mainW.tabbedPaneGraphs.removeAll();
+		if (lastPhoneme) {
 			clearText();
-			mainW.mntmSave.setVisible(false);
-			mainW.mntmSaveAs.setVisible(false);
-			mainW.mntmClose.setVisible(false);
-			mainW.mntmCloseAll.setVisible(false);
+		}
+	};
+	
+	ActionListener saveTab = (ActionEvent arg0) -> {
+		Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
+		PhonemeSave.saveToDirectory(temp, new File(temp.path));
+	};
+	
+	ActionListener saveAsTab = (ActionEvent arg0) -> {
+		Phoneme temp = PhonemeLoad.getSelectedPhoneme((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
+		
+		if (fileChooser.showSaveDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			PhonemeSave.saveToCustomDirectory(temp, fileChooser.getSelectedFile().getAbsolutePath());
+		}
+	};
+	
+	ActionListener closeAllTab = (ActionEvent arg0) -> {
+		MainWindow.tabbedPaneGraphs.removeAll();
+		clearText();
+		
+		mainW.mntmSave.setVisible(false);
+		mainW.mntmSaveAs.setVisible(false);
+		mainW.mntmClose.setVisible(false);
+		mainW.mntmCloseAll.setVisible(false);
+	};
+
+	private class MakeActionListener implements ActionListener {
+
+		private Command action;
+		
+		public MakeActionListener(Command action) {
+			this.action = action;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			espeakNg.makeAction(action);
+		}
+		
+	}
+
+	
+	private boolean isPaused = false;
+	private Thread lastThread;
+	
+	// requires espeak-ng library
+	ActionListener speak = (ActionEvent arg0) -> {
+		String voice = espeakNg.getVoiceFromSelection();
+		int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+		String text = espeakNg.getText(Command.SPEAK);
+
+		String terminalCommand = "espeak-ng -v" + voice + " -s" +speedVoice+ " --stdout \"" + text + "\" |aplay 2>/dev/null";
+		CommandUtilities.executeCmd(terminalCommand);
+		lastThread = CommandUtilities.getLastThread();
+		
+		Thread tMonitor = createMonitorThread();
+		tMonitor.start();
+		
+		terminalCommand = "espeak-ng -vmb-en1 --pho " + "\"" + text + "\"";
+		String data = CommandUtilities.executeBlockingCmd(terminalCommand);
+		
+		JPanel mg = new JPanel();
+		WrapLayout wl = new WrapLayout(FlowLayout.LEFT, 0, 0);
+		mg.setLayout(wl);
+		
+		ArrayList<ProsodyPhoneme> prosodyPhonemes = (ArrayList<ProsodyPhoneme>) Utilities.getProsodyData(data);
+
+		for (ProsodyPhoneme prosodyPhoneme : prosodyPhonemes)
+			mg.add(new ProsodyPanel(prosodyPhoneme));
+					
+		MainWindow.tabbedPaneGraphs.remove(scrollPane);
+		
+		scrollPane = new JScrollPane(mg);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(MainWindow.tabbedPaneGraphs.getPreferredSize());
+        
+		MainWindow.tabbedPaneGraphs.add("Prosody", scrollPane);
+	};
+
+	ActionListener speakFile = (ActionEvent arg0) -> {
+		String voice = espeakNg.getVoiceFromSelection();
+		int speedVoice = mainW.optionsSpeed.getSpinnerValue();
+		
+		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			String terminalCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " -f " + selectedFile.getAbsolutePath() + " --stdout |aplay 2>/dev/null";
+			
+			CommandUtilities.executeCmd(terminalCommand);
+			lastThread = CommandUtilities.getLastThread();
+			
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
+		}
+	};
+	
+	private Thread createMonitorThread() {
+		return new Thread() {
+			@Override
+			public void run() {
+				mainW.mntmSpeak.setEnabled(false); mainW.mntmSpeakfile.setEnabled(false);
+				mainW.btnSpeak.setEnabled(false); mainW.btnPause.setEnabled(true);
+				mainW.btnStop.setEnabled(true); mainW.mntmPause.setEnabled(true);
+				mainW.mntmStop.setEnabled(true); mainW.mntmSpeakPunctuation.setEnabled(false);
+				mainW.mntmSpeakCharacters.setEnabled(false); mainW.mntmSpeakCharacterName.setEnabled(false);
+				try {
+					while (lastThread.isAlive()) {
+						Thread.sleep(50);
+					}
+				} catch (InterruptedException e) {
+					logger.warn(e);
+					Thread.currentThread().interrupt();
+				}
+				mainW.mntmSpeak.setEnabled(true); mainW.mntmSpeakfile.setEnabled(true);
+				mainW.btnSpeak.setEnabled(true); mainW.btnPause.setEnabled(false);
+				mainW.btnStop.setEnabled(false); mainW.mntmPause.setEnabled(false);
+				mainW.mntmStop.setEnabled(false); mainW.mntmSpeakPunctuation.setEnabled(true);
+				mainW.mntmSpeakCharacters.setEnabled(true); mainW.mntmSpeakCharacterName.setEnabled(true);
+			}
+		};
+	}
+	
+	ActionListener pauseFile = (ActionEvent e) -> {
+		if (!isPaused) {
+			CommandUtilities.executeCmd("kill -STOP $(pgrep aplay)");
+			mainW.mntmPause.setText("Unpause");
+			mainW.btnPause.setIcon(mainW.resumeIcon);
+		}
+		else {
+			CommandUtilities.executeCmd("kill -CONT $(pgrep aplay)");
+			mainW.mntmPause.setText("Pause");
+			mainW.btnPause.setIcon(mainW.pauseIcon);
+		}
+		isPaused = !isPaused;
+	};
+	
+	
+	ActionListener stopFile = (ActionEvent arg0) -> {
+		CommandUtilities.executeCmd("pkill -9 -f aplay");
+		isPaused = false;
+		
+		mainW.mntmPause.setText("Pause");
+		mainW.btnPause.setIcon(mainW.pauseIcon);
+	};
+	
+	ActionListener selectVoice = (ActionEvent a) -> {
+		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			prefs.put("", fileChooser.getSelectedFile().getParent());
+			logger.info(fileChooser.getName(fileChooser.getSelectedFile()));
 		}
 	};
 
-	// requires espeak-ng library
-	ActionListener translate = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("translate");
-
+	ActionListener selectVoiceVariant = (ActionEvent a) -> {
+		fileChooser = new JFileChooser(prefs.get("", new File("../espeak-ng/espeak-ng-data/voices").getAbsolutePath()));
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		
+		if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			prefs.put("", fileChooser.getSelectedFile().getParent());
+			if(fileChooser.getName(fileChooser.getSelectedFile()).matches("[A-Za-z0-9]+"))
+				EspeakNg.setVoiceVariant(fileChooser.getName(fileChooser.getSelectedFile()));
 		}
 	};
-
-
-	// requires espeak-ng library
-	ActionListener showRules = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("showRules");
+	
+	ActionListener viaFileChooser = (ActionEvent e) -> usingFileChooser();
+	
+	private File usingFileChooser(){
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		int returnVal = fileChooser.showDialog(mainW, "Select");
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			logger.debug(file.getAbsolutePath() + " " + file.isDirectory());
+			return fileChooser.getSelectedFile();
 		}
-	};
+		
+		return null;
+	}
+	
+	private class FoldersListener implements ActionListener {
 
-	// requires espeak-ng library
-	ActionListener showIpa = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("showIpa");
+		private Command key;
+		
+		public FoldersListener(Command key) {
+			this.key = key;
 		}
-	};
-
-	// requires espeak-ng library
-	ActionListener speak = new ActionListener() {
+		
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
+			File temp = usingFileChooser();
+			if (temp != null) {
+				folders.put(key, temp);
+			}
+		}
+		
+	}
+
+	private class GetTextListener implements ActionListener {
+
+		private Command command;
+		
+		public GetTextListener(Command command) {
+			this.command = command;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			String voice = espeakNg.getVoiceFromSelection();
 			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speak")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null, terminalCommand);
-			//espeakNg.makeAction("speak");
+
+			String terminalCommand1 = "espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText(command)+ "\" |aplay 2>/dev/null";
+			CommandUtilities.executeCmd(terminalCommand1);
+			lastThread = CommandUtilities.getLastThread();
+			
+			Thread tMonitor = createMonitorThread();
+			tMonitor.start();
 		}
-	};
-
-	ActionListener selectVoice = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			// EspeakNg espeakNg = new EspeakNg(mainW);
-			// String file8 = "en";
-			if (fileChooser4.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-				prefs4.put("", fileChooser4.getSelectedFile().getParent());
-				// espeakNg.setVoice(fileChooser4.getName(fileChooser4.getSelectedFile()))
-				// ;
-				System.out.println(fileChooser4.getName(fileChooser4.getSelectedFile()));
-			}
+	}
+	ActionListener countWordOccurance = (ActionEvent e) -> {
+		String[] keys = espeakNg.getText(null).toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
+		Map<String, Integer> map = new TreeMap<>();
+		
+		for (String key : keys) {
+			map.compute(key, (k, v) -> v == null ? 1 : v+1);
 		}
-	};
-
-	ActionListener selectVoiceVariant = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			// EspeakNg espeakNg = new EspeakNg(mainW);
-			// String file8 = "en";
-			if (fileChooser5.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-				prefs5.put("", fileChooser5.getSelectedFile().getParent());
-				// espeakNg.setVoice(fileChooser5.getName(fileChooser5.getSelectedFile()))
-				// ;
-				System.out.println(fileChooser5.getName(fileChooser5.getSelectedFile()));
-			}
+		
+		String[] words = map.toString().split(", ");
+		if (words.length > 0){
+			words[0] = words[0].substring(1);
+			words[words.length-1] = words[words.length-1].substring(0, words[words.length-1].length()-1);
 		}
+			
+		new WordFrequencyWindow(words);
 	};
+  
+	
+	private class CompileListener implements ActionListener {
 
-	ActionListener masterPhonemesFile = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			JFileChooser chooser = new JFileChooser(file1);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = chooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file1 = chooser.getSelectedFile();
-				System.out.println(file1.getAbsolutePath() + " " + file1.isDirectory());
-			}
+		private String compileCommand;
+		
+		public CompileListener(String compileCommand) {
+			this.compileCommand = compileCommand;
 		}
-	};
-
-	ActionListener phonemeDataSource = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			JFileChooser chooser = new JFileChooser(file2);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = chooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file2 = chooser.getSelectedFile();
-				System.out.println(file2);
-				// .getAbsolutePath() + " " + file2.isDirectory());
-			}
-		}
-	};
-
-	ActionListener dictionaryDataSource = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			JFileChooser chooser = new JFileChooser(file3);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = chooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file3 = chooser.getSelectedFile();
-				System.out.println(file3.getAbsolutePath() + " " + file3.isDirectory());
-
-			}
-		}
-	};
-
-	ActionListener synthesizedSoundWAVFile = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			JFileChooser chooser = new JFileChooser(file4);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = chooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file4 = chooser.getSelectedFile();
-				System.out.println(file4.getAbsolutePath() + " " + file4.isDirectory());
-			}
-		}
-
-	};
-
-	ActionListener voiceFileToModifyFormantPeaks = new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-			JFileChooser chooser = new JFileChooser(file5);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			int returnVal = chooser.showDialog(mainW, "Select");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file5 = chooser.getSelectedFile();
-				System.out.println(file5.getAbsolutePath() + " " + file5.isDirectory());
-			}
-		}
-	};
-
-	// requires espeak-ng library
-	// speaking without ignoring punctuation (says "dot" where is ".")
-	ActionListener speakPunctuation = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			espeakNg.makeAction("speakPunctuation");
-		}
-	};
-
-	// requires espeak-ng library
-	// splits word and spell it by symbol
-	ActionListener speakBySymbol = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			EspeakNg espeakNg = new EspeakNg(mainW);
-			String voice = espeakNg.getVoiceFromSelection();
-			int speedVoice = mainW.optionsSpeed.getSpinnerValue();
-			String terminalCommand1 = "/usr/bin/espeak-ng -v" +voice+ " -s" +speedVoice+ " --stdout \"" + espeakNg.getText("speakBySymbol")+ "\" |/usr/bin/aplay 2>/dev/null";
-			org.espeakng.jeditor.utils.CommandUtilities.main(null,terminalCommand1);
-			//espeakNg.makeAction("speakBySymbol");
-		}
-	};
-
-	ActionListener compileDictionary = new ActionListener() {
+		
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileDictionary) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
+			if (e.getSource() == mainW.mntmCompileDictionary || e.getSource() == mainW.mntmCompileDictionarydebug) {
+				fileChooser.setCurrentDirectory(folders.get(Command.DICT_SOURCE));
+  				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+  					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
+  							"; cd " + fileChooser.getSelectedFile().getParent() +
+  							" && " + dataPath + "/src/espeak-ng --" + compileCommand + "=" + 
+  							fileChooser.getSelectedFile().getName().split("_")[0];
+  					CommandUtilities.executeCmd(cmd);
+  				}
+			}
+		}
+	}
+	
+	ActionListener compilePhonemeData = (ActionEvent e) -> {
+		if (e.getSource() == mainW.mntmCompilePhonemeData) {
+			String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
+					+ "; cd " + folders.get(Command.PHONEME_SOURCE).getParent() + " && "
+					+ dataPath + "/src/espeak-ng --compile-phonemes=" + folders.get(Command.PHONEME_SOURCE).getName();
+			CommandUtilities.executeCmd(cmd);
+		}
+	};
+	
+	ActionListener compileMbrolaPhonemes = (ActionEvent e) -> {
+		if (e.getSource() == mainW.mntmCompileMbrolaPhonemes) {
+			fileChooser.setCurrentDirectory(new File(dataPath + "/phsource/mbrola/"));
+			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
+				String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+						"; cd " + fileChooser.getSelectedFile().getParent() +
+						" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+				CommandUtilities.executeCmd(cmd);
 			}
 		}
 	};
-
-	ActionListener compileDictionaryDebug = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileDictionarydebug) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
-			}
+	
+	ActionListener compileIntonationData = (ActionEvent e) -> {
+		if (e.getSource() == mainW.mntmCompileIntonationData) {
+			String cmd = "export ESPEAK_DATA_PATH=" + dataPath
+					+ "; " + dataPath + "/src/espeak-ng --compile-intonations";
+			CommandUtilities.executeCmd(cmd);
 		}
 	};
-
-	ActionListener compilePhonemeData = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompilePhonemeData) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
-
-	ActionListener compileAtSample = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == mainW.mntmCompileAtSample) {
-				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					Runtime rt = Runtime.getRuntime();
-					try {
-						rt.exec("javac " + fileChooser.getSelectedFile().getParent());
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
-			}
-		}
-	};
-
-	// Any other way of calling browser without relying on one concrete?
-	ActionListener showDocumentation = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			Runtime rt = Runtime.getRuntime();
+	
+	ActionListener showDocumentation = (ActionEvent arg0) -> {
+		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+		File file = new File("./docs/docindex.html");
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
 			try {
-				rt.exec("firefox ./docs/docindex.html");
+				desktop.browse(file.toURI());
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.warn(e);
 			}
 		}
+	};
+	
+	ActionListener exportDirectoryVowelFiles = (ActionEvent e) -> {
+		fileChooser= new JFileChooser("../espeak-ng/phsource/vowelcharts/");
+		if (e.getSource() == mainW.mntmFromDirectoryVowelFiles && fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
+			String cmd = "export ESPEAK_DATA_PATH=" + dataPath +
+					"; cd " + fileChooser.getSelectedFile().getParent() +
+					" && " + dataPath + "/src/espeak-ng --compile-mbrola=" +  fileChooser.getSelectedFile().getName();
+			CommandUtilities.executeCmd(cmd);
+			VowelChart.createAndShowGui(fileChooser.getSelectedFile().getPath(), mainW);
+		}
+	};
+	
+	ActionListener switchLang = (ActionEvent e) -> {
+		String lang = espeakNg.getVoiceFromSelection();
+		String path = "";
+
+		switch (lang) {
+			case "ru":
+				path = "../espeak-ng/phsource/vowelcharts/ru";
+				break;
+			case "lv":
+				path = "../espeak-ng/phsource/vowelcharts/lv";
+				break;
+			case "pl":
+				path = "../espeak-ng/phsource/vowelcharts/pl";
+				break;
+			default:
+				path = "../espeak-ng/phsource/vowelcharts/en";
+				break;
+		}
+		
+		VowelChart.createAndShowGui(path, mainW);
 	};
 
 	/**
@@ -440,7 +577,7 @@ public class EventHandlers {
 	 */
 	public void initHandlers() {
 
-		mainW.tabbedPaneGraphs.addChangeListener(getPhoneme);
+		MainWindow.tabbedPaneGraphs.addChangeListener(getPhoneme);
 
 		// File
 
@@ -452,23 +589,21 @@ public class EventHandlers {
 		mainW.mntmClose.addActionListener(closeTab);
 		mainW.mntmCloseAll.addActionListener(closeAllTab);
 		mainW.mntmQuit.addActionListener(event);
-		mainW.mntmExportGraph.addActionListener(event);
 
 		// Speak
 
-		mainW.mntmTranslate.addActionListener(translate);
-		mainW.mntmShowRules.addActionListener(showRules);
-		mainW.mntmShowIPA.addActionListener(showIpa);
+		mainW.mntmTranslate.addActionListener(new MakeActionListener(Command.TRANSLATE));
+		mainW.mntmShowRules.addActionListener(new MakeActionListener(Command.SHOW_RULES));
+		mainW.mntmShowIPA.addActionListener(new MakeActionListener(Command.SHOW_IPA));
 		mainW.mntmSpeak.addActionListener(speak);
-		// mainW.mntmSpeakfile.addActionListener();
-		// mainW.mntmPause.addActionListener();
-		// mainW.mntmStop.addActionListener();
+		mainW.mntmSpeakfile.addActionListener(speakFile);
+		mainW.mntmPause.addActionListener(pauseFile);
+		mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice
 		//mainW.mntmSelectVoice.addActionListener(selectVoice);
-		//mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
+		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
 		// mainW.mntmSelectVoice.addActionListener();
-		// mainW.mntmSelectVoiceVariant.addActionListener();
 		// mainW.rdbtnmntmEnglish.addActionListener();
 		// mainW.rdbtnmntmLatvian.addActionListener();
 		// mainW.rdbtnmntmPolish.addActionListener();
@@ -476,82 +611,42 @@ public class EventHandlers {
 
 		// Options
 
-		// mainW.mntmMasterPhonemesFile.addActionListener();
-		// mainW.mntmPhonemeDataSource.addActionListener();
-		// mainW.mntmDictionaryDataSource.addActionListener();
-		// mainW.mntmSynthesizedSoundWAVfile.addActionListener();
-		// mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener();
-		mainW.mntmMasterPhonemesFile.addActionListener(masterPhonemesFile);
-		mainW.mntmPhonemeDataSource.addActionListener(phonemeDataSource);
-		mainW.mntmDictionaryDataSource.addActionListener(dictionaryDataSource);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(synthesizedSoundWAVFile);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(voiceFileToModifyFormantPeaks);
+		mainW.mntmMasterPhonemesFile.addActionListener(new FoldersListener(Command.PH_FILE));
+		mainW.mntmPhonemeDataSource.addActionListener(new FoldersListener(Command.PHONEME_SOURCE));
+		mainW.mntmDictionaryDataSource.addActionListener(new FoldersListener(Command.DICT_SOURCE));
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(new FoldersListener(Command.WAV_FILE));
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(new FoldersListener(Command.VOICE_FILE));
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
+		mainW.mntmTamil.addActionListener(event);
 		mainW.mntmSpeed.addActionListener(event);
-		mainW.mntmSpeakPunctuation.addActionListener(speakPunctuation);
-		mainW.mntmSpeakCharacters.addActionListener(speakBySymbol);
-		// mainW.mntmSpeakCharacterName.addActionListener();
+		mainW.mntmSpeakPunctuation.addActionListener(new GetTextListener(Command.SPEAK_PUNC));
+		mainW.mntmSpeakCharacters.addActionListener(new GetTextListener(Command.SPEAK_BY_SYMBOL));
+		mainW.mntmSpeakCharacterName.addActionListener(new GetTextListener(Command.SPEAK_CHAR_NAME));
+        mainW.openMI.addActionListener(event);
+        mainW.exportMI.addActionListener(event);
+        mainW.clMI.addActionListener(event);
+        mainW.quitMI.addActionListener(event);
 
 		// Tools
 
-		mainW.mntmFromDirectoryVowelFiles.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if (fileChooser3.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
-					prefs3.put("a", fileChooser3.getSelectedFile().getParent());
-					VowelChart.vowelOpen(fileChooser3.getSelectedFile(), mainW);
-				}
-			}
-		});
-
-		mainW.mntmFromCompiledPhoneme.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				EspeakNg ng = new EspeakNg(mainW);
-				String lang = ng.getVoiceFromSelection();
-				String path = "";
-				switch (lang) {
-				case "en":
-					path = "../espeak-ng/phsource/vowelcharts/en";
-					break;
-				case "ru":
-					path = "../espeak-ng/phsource/vowelcharts/ru";
-					break;
-				case "lv":
-					path = "../espeak-ng/phsource/vowelcharts/lv";
-					break;
-				case "pl":
-					path = "../espeak-ng/phsource/vowelcharts/pl";
-					break;
-				}
-				VowelChart.createAndShowGui(path, mainW);
-			}
-		});
+		mainW.mntmFromDirectoryVowelFiles.addActionListener(exportDirectoryVowelFiles);
+		mainW.mntmFromCompiledPhoneme.addActionListener(switchLang);
 
 		// mainW.mntmPLBulgarian.addActionListener();
 		// mainW.mntmPLGerman.addActionListener();
 		// mainW.mntmPLItalian.addActionListener();
 		// mainW.mntmPLRussian.addActionListener();
-		// mainW.mntmConvertFileUTF8.addActionListener();
-		// mainW.mntmCountWordFrequencies.addActionListener();
-		// mainW.mntmTesttemporary.addActionListener();
+		mainW.mntmCountWordOccurrences.addActionListener(countWordOccurance);
 
 		// Compile
 
-		mainW.mntmCompileDictionary.addActionListener(compileDictionary);
-		mainW.mntmCompileDictionarydebug.addActionListener(compileDictionaryDebug);
+		mainW.mntmCompileDictionary.addActionListener(new CompileListener("compile"));
+		mainW.mntmCompileDictionarydebug.addActionListener(new CompileListener("compile-debug"));
 		mainW.mntmCompilePhonemeData.addActionListener(compilePhonemeData);
-		mainW.mntmCompileAtSample.addActionListener(compileAtSample);
-		// mainW.mntmCompileMbrolaPhonemes.addActionListener();
-		// mainW.mntmCompileIntonationData.addActionListener();
-		// mainW.mntmLayoutrulesFile.addActionListener();
-		// mainW.mntmSortrulesFile.addActionListener();
+		mainW.mntmCompileMbrolaPhonemes.addActionListener(compileMbrolaPhonemes);
+		mainW.mntmCompileIntonationData.addActionListener(compileIntonationData);
 
 		// Help
 
@@ -563,10 +658,12 @@ public class EventHandlers {
 		mainW.btnZoom_1.addActionListener(event);
 
 		// Prosody ("Text") tab buttons
-		mainW.btnTranslate.addActionListener(translate);
+		mainW.btnTranslate.addActionListener(new MakeActionListener(Command.TRANSLATE));
+		mainW.btnShowRules.addActionListener(new MakeActionListener(Command.SHOW_RULES));
+		mainW.btnShowIPA.addActionListener(new MakeActionListener(Command.SHOW_IPA));
 		mainW.btnSpeak.addActionListener(speak);
-		mainW.btnShowRules.addActionListener(showRules);
-		mainW.btnShowIPA.addActionListener(showIpa);
+		mainW.btnPause.addActionListener(pauseFile);
+		mainW.btnStop.addActionListener(stopFile);
 
 		addTFListeners();
 	}
@@ -583,7 +680,7 @@ public class EventHandlers {
 
 	private static void setVisibleMenuItemsFile(MainWindow mainW) {
 
-		boolean toSetVisible = (mainW.tabbedPaneGraphs.getTabCount() == 0) ? false : true;
+		boolean toSetVisible = MainWindow.tabbedPaneGraphs.getTabCount() != 0;
 		mainW.mntmSave.setVisible(toSetVisible);
 		mainW.mntmSaveAs.setVisible(toSetVisible);
 		mainW.mntmClose.setVisible(toSetVisible);
@@ -601,437 +698,98 @@ public class EventHandlers {
 		// These listeners works on ENTER button
 
 		// Frequency text fields
-		MainWindow.tfFreq.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		for(int i=0; i<MainWindow.tfFreq.size();i++){
+			final int index =i;
+			MainWindow.tfFreq.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[0].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(0).getText().toString());
+					mainW.focusedFrame.peaks[index].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfFreq.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[1].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(1).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-
-			}
-		});
-		MainWindow.tfFreq.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[2].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(2).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-
-			}
-		});
-		MainWindow.tfFreq.get(3).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[3].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(3).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfFreq.get(4).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[4].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(4).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfFreq.get(5).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[5].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(5).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfFreq.get(6).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					mainW.focusedFrame.peaks[6].pkfreq = Short
-							.parseShort(MainWindow.tfFreq.get(6).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-
+			});
+		}
 		// Height text fields
-
-		MainWindow.tfHeight.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		for(int i=0; i<MainWindow.tfHeight.size();i++){
+			final int index =i;
+			MainWindow.tfHeight.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(0).getText().toString());
+					short value = Short.parseShort(MainWindow.tfHeight.get(index).getText());
 					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[0].pkheight = value;
+					mainW.focusedFrame.peaks[index].pkheight = value;
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfHeight.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(1).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[1].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(2).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[2].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(3).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(3).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[3].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(4).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(4).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[4].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(5).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(5).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[5].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(6).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(6).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[6].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfHeight.get(7).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					short value = Short.parseShort(MainWindow.tfHeight.get(7).getText().toString());
-					value = (short) (value << 6);
-					mainW.focusedFrame.peaks[7].pkheight = value;
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
+			});
+		}
 		// width text fields (also changes peaks.pkright behind the scenes)
-
-		MainWindow.tfWidth.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		
+		for(int i=0; i<MainWindow.tfWidth.size();i++){
+			final int index =i;
+			MainWindow.tfWidth.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					String[] text = MainWindow.tfWidth.get(0).getText().toString().split("/");
+					String[] text = MainWindow.tfWidth.get(index).getText().split("/");
 					if (text.length == 1) {
 						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[0].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[0].pkright = (short) (value * 2);
+						mainW.focusedFrame.peaks[index].pkwidth = (short) (value * 2);
+						mainW.focusedFrame.peaks[index].pkright = (short) (value * 2);
 					} else if (text.length == 2) {
 						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[0].pkright = (short) (value * 2);
+						mainW.focusedFrame.peaks[index].pkright = (short) (value * 2);
 						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[0].pkwidth = (short) (value * 2);
+						mainW.focusedFrame.peaks[index].pkwidth = (short) (value * 2);
 					}
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfWidth.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					String[] text = MainWindow.tfWidth.get(1).getText().toString().split("/");
-					if (text.length == 1) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[1].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[1].pkright = (short) (value * 2);
-					} else if (text.length == 2) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[1].pkright = (short) (value * 2);
-						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[1].pkwidth = (short) (value * 2);
-					}
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfWidth.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					String[] text = MainWindow.tfWidth.get(2).getText().toString().split("/");
-					if (text.length == 1) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[2].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[2].pkright = (short) (value * 2);
-					} else if (text.length == 2) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[2].pkright = (short) (value * 2);
-						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[2].pkwidth = (short) (value * 2);
-					}
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfWidth.get(3).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					String[] text = MainWindow.tfWidth.get(3).getText().toString().split("/");
-					if (text.length == 1) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[3].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[3].pkright = (short) (value * 2);
-					} else if (text.length == 2) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[3].pkright = (short) (value * 2);
-						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[3].pkwidth = (short) (value * 2);
-					}
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfWidth.get(4).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					String[] text = MainWindow.tfWidth.get(4).getText().toString().split("/");
-					if (text.length == 1) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[4].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[4].pkright = (short) (value * 2);
-					} else if (text.length == 2) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[4].pkright = (short) (value * 2);
-						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[4].pkwidth = (short) (value * 2);
-					}
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfWidth.get(5).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					String[] text = MainWindow.tfWidth.get(5).getText().toString().split("/");
-					if (text.length == 1) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[5].pkwidth = (short) (value * 2);
-						mainW.focusedFrame.peaks[5].pkright = (short) (value * 2);
-					} else if (text.length == 2) {
-						short value = Short.parseShort(text[0]);
-						mainW.focusedFrame.peaks[5].pkright = (short) (value * 2);
-						value = Short.parseShort(text[1]);
-						mainW.focusedFrame.peaks[5].pkwidth = (short) (value * 2);
-					}
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
+			});
+		}
 
 		// klt_bw text fields
-
-		MainWindow.tfBw.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		for(int i=0; i<MainWindow.tfBw.size();i++){
+			final int index =i;
+			MainWindow.tfBw.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[1].klt_bw = Short.parseShort(MainWindow.tfBw.get(0).getText().toString());
+					mainW.focusedFrame.peaks[index+1].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfBw.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[2].klt_bw = Short.parseShort(MainWindow.tfBw.get(1).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-
-		MainWindow.tfBw.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[3].klt_bw = Short.parseShort(MainWindow.tfBw.get(2).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
+			});
+		}
+	
 
 		// klt_ap text fields
 
-		MainWindow.tfAp.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		for(int i=0; i<MainWindow.tfAp.size();i++){
+			final int index =i;
+			MainWindow.tfAp.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[0].klt_ap = Short.parseShort(MainWindow.tfAp.get(0).getText().toString());
+					mainW.focusedFrame.peaks[index].klt_ap = Short.parseShort(MainWindow.tfAp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfAp.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[1].klt_ap = Short.parseShort(MainWindow.tfAp.get(1).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfAp.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[2].klt_ap = Short.parseShort(MainWindow.tfAp.get(2).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfAp.get(3).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[3].klt_ap = Short.parseShort(MainWindow.tfAp.get(3).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfAp.get(4).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[4].klt_ap = Short.parseShort(MainWindow.tfAp.get(4).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfAp.get(5).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[5].klt_ap = Short.parseShort(MainWindow.tfAp.get(5).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-
+			});
+		}
+	
 		// klt_bp text fields
-
-		MainWindow.tfBp.get(0).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
+		
+		for(int i=0; i<MainWindow.tfBp.size();i++) {
+			final int index =i;
+			MainWindow.tfBp.get(i).addActionListener((ActionEvent ae) -> {
 				try {
-					mainW.focusedFrame.peaks[1].klt_bp = Short.parseShort(MainWindow.tfBp.get(0).getText().toString());
+					mainW.focusedFrame.peaks[index+1].klt_bp = Short.parseShort(MainWindow.tfBp.get(index).getText());
 					mainW.focusedPanel.repaint();
 				} catch (NumberFormatException ex) {
+					logger.warn(ex);
 				}
-			}
-		});
-		MainWindow.tfBp.get(1).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[2].klt_bp = Short.parseShort(MainWindow.tfBp.get(1).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfBp.get(2).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[3].klt_bp = Short.parseShort(MainWindow.tfBp.get(2).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfBp.get(3).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[4].klt_bp = Short.parseShort(MainWindow.tfBp.get(3).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfBp.get(4).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[5].klt_bp = Short.parseShort(MainWindow.tfBp.get(4).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-		MainWindow.tfBp.get(5).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					mainW.focusedFrame.peaks[6].klt_bp = Short.parseShort(MainWindow.tfBp.get(5).getText().toString());
-					mainW.focusedPanel.repaint();
-				} catch (NumberFormatException ex) {
-				}
-			}
-		});
-
-		//TODO Add here in the same way as for previous fields listeners for fields in the second block.
-
-
-
+			});
+		}
 	}
-
+	
 	/**
 	 * Get method for file chooser
 	 * 
@@ -1039,22 +797,5 @@ public class EventHandlers {
 	 */
 	public JFileChooser getFileChooser() {
 		return fileChooser;
-	}
-
-	private void exportGraphImage() {
-		// mainW.tabbedPaneGraphs.setSize
-		// setSize(getPreferredSize());
-		BufferedImage image = new BufferedImage(MainWindow.tabbedPaneGraphs.getWidth(),
-				MainWindow.tabbedPaneGraphs.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		MainWindow.tabbedPaneGraphs.printAll(g);
-		g.dispose();
-		try {
-			File file = new File("graph.png");
-			System.out.println("Exported graphs: " + file.getAbsolutePath());
-			ImageIO.write(image, "png", file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

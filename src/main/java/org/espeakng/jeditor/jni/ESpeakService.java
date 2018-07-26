@@ -1,5 +1,9 @@
 package org.espeakng.jeditor.jni;
 
+import org.apache.log4j.Logger;
+import org.espeakng.jeditor.gui.EspeakNg;
+
+
 /*-
  * EspeakService class is used to call native EspeakNG functions
  * EspeakService loads libespeakservice.so library witch calls EspeakNG public library functions and 
@@ -22,12 +26,18 @@ package org.espeakng.jeditor.jni;
  * 		
  */
 public class ESpeakService {
+	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 
+    private ESpeakService() {
+    	throw new IllegalStateException("ESpeakService Utility class");
+    }
+   
+    
 	static {
 		try {
 			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {
-			System.out.println("Native code library failed to load.\n" + e);
+			logger.warn(e);
 			System.exit(1);
 		}
 	}

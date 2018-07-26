@@ -2,16 +2,25 @@ package org.espeakng.jeditor.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Frame;
 import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
@@ -31,10 +40,17 @@ public class MainWindow extends JFrame {
 	 */
 
 	// some containers.
-	public JMenuBar menuBar;
-	public static JTabbedPane tabbedPaneGraphs;
+	private static final long serialVersionUID = 6548939748883665055L;
+	private static Logger logger = Logger.getLogger(MainWindow.class.getName());
+	public JMenuBar mMenuBar;
+	// TODO
+	// public static JTabbedPane tabbedPaneGraphs;
 	public JPanel panelSpectrumGraph;
 	public ArrayList<JPanel> spectrumGraphList = new ArrayList<JPanel>();
+
+	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
+	// Language.java
+	public static final JTabbedPane tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
 
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
 	// Language.java
@@ -79,6 +95,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmEnglish;
 	public JMenuItem mntmLatvian;
 	public JMenuItem mntmRussian;
+	public JMenuItem mntmTamil;
 	public JMenuItem mntmSpeed;
 	public OptionsSpeedWindow optionsSpeed;
 	public JMenuItem mntmSpeakPunctuation;
@@ -94,54 +111,70 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmPLGerman;
 	public JMenuItem mntmPLItalian;
 	public JMenuItem mntmPLRussian;
-	public JMenuItem mntmConvertFileUTF8;
-	public JMenuItem mntmCountWordFrequencies;
-	public JMenuItem mntmTesttemporary;
+	public JMenuItem mntmCountWordOccurrences;
 	// menuBar group Compile
 	public JMenu mnCompile;
 	public JMenuItem mntmCompileDictionary;
 	public JMenuItem mntmCompileDictionarydebug;
 	public JMenuItem mntmCompilePhonemeData;
-	public JMenuItem mntmCompileAtSample;
 	public JMenuItem mntmCompileMbrolaPhonemes;
 	public JMenuItem mntmCompileIntonationData;
-	public JMenuItem mntmLayoutrulesFile;
-	public JMenuItem mntmSortrulesFile;
 	// menuBar group Help
 	public JMenu mnHelp;
 	public JMenuItem mntmEspeakDocumentation;
 	public JMenuItem mntmAbout;
 
 	// positions & dimensions of components
-	public int labelHeight = 15;
-	public int tfx0 = 20; // horizontal starting position
-	public int tfxgap = 1; // horizontal interval
-	public int tfy0 = 27; // vertical starting position
-	public int tfygap = 1; // vertical interval
-	public int compWidth = 56;
-	public int compHeight = 23;
-	public int labelyOffset = compHeight / 4; // vertical offset from the top of
-												// the text field/spinner
+	private int labelHeight = 15;
+	private int tfx0 = 20; // horizontal starting position
+	private int tfxgap = 1; // horizontal interval
+	private int tfy0 = 27; // vertical starting position
+	private int tfygap = 1; // vertical interval
+	private int compWidth = 56;
+	private int compHeight = 23;
+	private int labelyOffset = compHeight / 4; // vertical offset from the top
+												// of the text field/spinner
 
 	// some components
-	public static ArrayList<JTextField> tfFreq;
-	public static ArrayList<JTextField> tfHeight;
-	public static ArrayList<JTextField> tfWidth;
-	public static ArrayList<JTextField> tfBw;
-	public static ArrayList<JTextField> tfAp;
-	public static ArrayList<JTextField> tfBp;
-	public static JTextField tfmS;
-	public static JSpinner spampF;
+	public static final List<JTextField> tfFreq = new ArrayList<>();
+	public static final List<JTextField> tfHeight = new ArrayList<>();
+	public static final List<JTextField> tfWidth = new ArrayList<>();
+	public static final List<JTextField> tfBw = new ArrayList<>();
+	public static final List<JTextField> tfAp = new ArrayList<>();
+	public static final List<JTextField> tfBp = new ArrayList<>();
+	public static final JTextField tfmS = new JTextField();
+	public static final JSpinner spampF = new JSpinner();
 	public JButton btnZoom;
 	public JButton btnZoom_1;
 	public JTextArea textAreaIn;
 	public JTextArea textAreaOut;
 	public JButton btnTranslate;
 	public JButton btnSpeak;
+	public JButton btnPause;
+	public JButton btnStop;
 	public JButton btnShowRules;
 	public JButton btnShowIPA;
 	public JPanel panel_Spect;
-	public Phoneme currentPhoneme;
+	public JPopupMenu pmenu;
+	public JMenuItem openMI;
+	public JMenuItem exportMI;
+	public JMenuItem clMI;
+	public JMenuItem clalMI;
+	public JMenuItem quitMI;
+
+	private enum Texts {
+		RUSSIAN("Russian"), DIALOG("Dialog");
+
+		private String text;
+
+		Texts(String text) {
+			this.text = text;
+		}
+
+		public String getText() {
+			return text;
+		}
+	}
 
 	// eventHandler object
 	public EventHandlers eventHandlers;
@@ -149,6 +182,9 @@ public class MainWindow extends JFrame {
 	// Frame and panel currently being focused
 	public Frame focusedFrame;
 	public JPanel focusedPanel;
+
+	public ImageIcon pauseIcon, resumeIcon;
+
 	// Singleton design pattern, also easier to access main window from anywhere
 	// in code.
 	private static MainWindow instance = new MainWindow();
@@ -158,29 +194,30 @@ public class MainWindow extends JFrame {
 	}
 
 	private MainWindow() {
-		tfFreq = new ArrayList<JTextField>();
-		tfHeight = new ArrayList<JTextField>();
-		tfWidth = new ArrayList<JTextField>();
-		tfBw = new ArrayList<JTextField>();
-		tfAp = new ArrayList<JTextField>();
-		tfBp = new ArrayList<JTextField>();
 		frameInit();
 		menuBarInit();
 		bodyInit();
 		PhonemeLoad.phonemeListInit();
+
 		eventHandlers = new EventHandlers(this);
 		eventHandlers.initHandlers();
 	}
 
 	public static void main(String[] args) {
-
 		MainWindow mainW = MainWindow.getMainWindow();
+
 		mainW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainW.setTitle("eSpeak NG Java Editor");
 		mainW.setSize(new Dimension(1000, 810));// 810 was 600
+
+		try {
+			mainW.setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+		} catch (IOException e) {
+			logger.warn(e);
+		}
+
 		mainW.setVisible(true);
 		mainW.setUp();
-
 	}
 
 	/**
@@ -194,20 +231,19 @@ public class MainWindow extends JFrame {
 	public void setUp() {
 		if (!(new File(".lib/libespeakservice.so").exists())) {
 			new File(".lib").mkdir();
-			InputStream input = this.getClass().getResourceAsStream("/lib/libespeakservice.so");
 			try {
-				this.setFile(input, ".lib/libespeakservice.so");
+				Files.copy(new File("lib/libespeakservice.so").toPath(), new File(".lib/libespeakservice.so").toPath());
 			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					input.close();
-				} catch (IOException e) {
-				}
+				logger.warn(e);
 			}
 		}
 	}
 
+	/*
+	 * This method copies files correct way. It is used for setUp() method.
+	 * 
+	 * 
+	 */
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
 	 * contents of hidden file passed as stream (first parameter) to the file
@@ -219,12 +255,14 @@ public class MainWindow extends JFrame {
 	 */
 
 	public void setFile(InputStream io, String fileName) throws IOException {
-		FileOutputStream fos = new FileOutputStream(fileName);
 		int read;
-		while ((read = io.read()) != -1) {
-			fos.write(read);
+		try (FileOutputStream fos = new FileOutputStream(fileName)) {
+			while ((read = io.read()) != -1)
+				fos.write(read);
+		} catch (NullPointerException e) {
+			logger.warn("There is no libespeakservice.so file in .lib folder!");
+			logger.warn(e);
 		}
-		fos.close();
 	}
 
 	/**
@@ -234,14 +272,13 @@ public class MainWindow extends JFrame {
 	 */
 
 	private void menuBarInit() {
-		menuBar = new JMenuBar();
-
+		mMenuBar = new JMenuBar();
 		////////////////
 		// File group //
 		////////////////
 
 		mnFile = new JMenu("File");
-		menuBar.add(mnFile);
+		mMenuBar.add(mnFile);
 
 		mntmOpen = new JMenuItem("Open...");
 		mnFile.add(mntmOpen);
@@ -276,7 +313,7 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnSpeak = new JMenu("Speak");
-		menuBar.add(mnSpeak);
+		mMenuBar.add(mnSpeak);
 
 		mntmTranslate = new JMenuItem("Translate");
 		mnSpeak.add(mntmTranslate);
@@ -290,16 +327,17 @@ public class MainWindow extends JFrame {
 		mntmSpeak = new JMenuItem("Speak");
 		mnSpeak.add(mntmSpeak);
 
-		JSeparator separator = new JSeparator();
-		mnSpeak.add(separator);
+		mnSpeak.add(new JSeparator());
 
 		mntmSpeakfile = new JMenuItem("Speak file...");
 		mnSpeak.add(mntmSpeakfile);
 
 		mntmPause = new JMenuItem("Pause");
+		mntmPause.setEnabled(false);
 		mnSpeak.add(mntmPause);
 
 		mntmStop = new JMenuItem("Stop");
+		mntmStop.setEnabled(false);
 		mnSpeak.add(mntmStop);
 
 		/////////////////
@@ -307,16 +345,12 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnVoice = new JMenu("Voice");
-		menuBar.add(mnVoice);
-
-		// mntmSelectVoice = new JMenuItem("Select Voice...");
-		// mnVoice.add(mntmSelectVoice);
+		mMenuBar.add(mnVoice);
 
 		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
 		mnVoice.add(mntmSelectVoiceVariant);
 
-		JSeparator separator_5 = new JSeparator();
-		mnVoice.add(separator_5);
+		mnVoice.add(new JSeparator());
 
 		mnSelectVoice = new JMenu("Select Voice ");
 		mnVoice.add(mnSelectVoice);
@@ -331,7 +365,7 @@ public class MainWindow extends JFrame {
 		rdbtnmntmPolish = new JRadioButtonMenuItem("Polish");
 		mnSelectVoice.add(rdbtnmntmPolish);
 
-		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
+		rdbtnmntmRussian = new JRadioButtonMenuItem(Texts.RUSSIAN.getText());
 		mnSelectVoice.add(rdbtnmntmRussian);
 
 		groupOfVoices = new ButtonGroup();
@@ -345,7 +379,7 @@ public class MainWindow extends JFrame {
 		///////////////////
 
 		mnOptions = new JMenu("Options");
-		menuBar.add(mnOptions);
+		mMenuBar.add(mnOptions);
 
 		mnSetPaths = new JMenu("Set paths");
 		mnOptions.add(mnSetPaths);
@@ -362,8 +396,7 @@ public class MainWindow extends JFrame {
 		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
 		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
 
-		JSeparator separator_1 = new JSeparator();
-		mnSetPaths.add(separator_1);
+		mnSetPaths.add(new JSeparator());
 
 		mntmVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
 		mnSetPaths.add(mntmVoiceFileToModifyFormantPeaks);
@@ -377,15 +410,17 @@ public class MainWindow extends JFrame {
 		mntmLatvian = new JMenuItem("Latvian");
 		mnLanguage.add(mntmLatvian);
 
-		mntmRussian = new JMenuItem("Russian");
+		mntmRussian = new JMenuItem(Texts.RUSSIAN.getText());
 		mnLanguage.add(mntmRussian);
+
+		mntmTamil = new JMenuItem("Tamil");
+		mnLanguage.add(mntmTamil);
 
 		mntmSpeed = new JMenuItem("Speed...");
 		mnOptions.add(mntmSpeed);
 		optionsSpeed = new OptionsSpeedWindow();
 
-		JSeparator separator_2 = new JSeparator();
-		mnOptions.add(separator_2);
+		mnOptions.add(new JSeparator());
 
 		mntmSpeakPunctuation = new JMenuItem("Speak punctuation");
 		mnOptions.add(mntmSpeakPunctuation);
@@ -401,7 +436,7 @@ public class MainWindow extends JFrame {
 		/////////////////
 
 		mnTools = new JMenu("Tools");
-		menuBar.add(mnTools);
+		mMenuBar.add(mnTools);
 
 		mnMakeVowelsChart = new JMenu("Make Vowels Chart");
 		mnTools.add(mnMakeVowelsChart);
@@ -424,24 +459,18 @@ public class MainWindow extends JFrame {
 		mntmPLItalian = new JMenuItem("Italian");
 		mnProcessLexicon.add(mntmPLItalian);
 
-		mntmPLRussian = new JMenuItem("Russian");
+		mntmPLRussian = new JMenuItem(Texts.RUSSIAN.getText());
 		mnProcessLexicon.add(mntmPLRussian);
 
-		mntmConvertFileUTF8 = new JMenuItem("Convert file to UTF8...");
-		mnTools.add(mntmConvertFileUTF8);
-
-		mntmCountWordFrequencies = new JMenuItem("Count word frequencies...");
-		mnTools.add(mntmCountWordFrequencies);
-
-		mntmTesttemporary = new JMenuItem("Test (temporary)");
-		mnTools.add(mntmTesttemporary);
+		mntmCountWordOccurrences = new JMenuItem("Count word occurrences...");
+		mnTools.add(mntmCountWordOccurrences);
 
 		///////////////////
 		// Compile group //
 		///////////////////
 
 		mnCompile = new JMenu("Compile");
-		menuBar.add(mnCompile);
+		mMenuBar.add(mnCompile);
 
 		mntmCompileDictionary = new JMenuItem("Compile dictionary\"");
 		mnCompile.add(mntmCompileDictionary);
@@ -452,33 +481,29 @@ public class MainWindow extends JFrame {
 		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
 		mnCompile.add(mntmCompilePhonemeData);
 
-		mntmCompileAtSample = new JMenuItem("Compile at sample rate");
-		mnCompile.add(mntmCompileAtSample);
-
-		JSeparator separator_3 = new JSeparator();
-		mnCompile.add(separator_3);
+		mnCompile.add(new JSeparator());
 
 		mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
 		mnCompile.add(mntmCompileMbrolaPhonemes);
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
 		mnCompile.add(mntmCompileIntonationData);
-
-		JSeparator separator_4 = new JSeparator();
-		mnCompile.add(separator_4);
-
-		mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
-		mnCompile.add(mntmLayoutrulesFile);
-
-		mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
-		mnCompile.add(mntmSortrulesFile);
+		//
+		// JSeparator separator_4 = new JSeparator();
+		// mnCompile.add(separator_4);
+		//
+		// mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
+		// mnCompile.add(mntmLayoutrulesFile);
+		//
+		// mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
+		// mnCompile.add(mntmSortrulesFile);
 
 		////////////////
 		// Help group //
 		////////////////
 
 		mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
+		mMenuBar.add(mnHelp);
 
 		mntmEspeakDocumentation = new JMenuItem("eSpeak Documentation");
 		mnHelp.add(mntmEspeakDocumentation);
@@ -486,6 +511,29 @@ public class MainWindow extends JFrame {
 		mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
 
+		pmenu = new JPopupMenu();
+		openMI = new JMenuItem("Open");
+		exportMI = new JMenuItem("Export");
+		clMI = new JMenuItem("Close graph");
+		clalMI = new JMenuItem("Close all graph");
+		quitMI = new JMenuItem("Quit");
+
+		clMI.addActionListener((ActionEvent e) -> MainWindow.tabbedPaneGraphs
+				.remove(MainWindow.tabbedPaneGraphs.getSelectedComponent()));
+		clalMI.addActionListener((ActionEvent e) -> MainWindow.tabbedPaneGraphs.removeAll());
+
+		pmenu.add(openMI);
+		pmenu.add(exportMI);
+		pmenu.add(clMI);
+		pmenu.add(clalMI);
+		pmenu.add(quitMI);
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3)
+					pmenu.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 
 	/**
@@ -501,25 +549,32 @@ public class MainWindow extends JFrame {
 		// initiate keyframe sequence/prosody tab pane:
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		// tabbedPane.setToolTipText("");
 
 		// initiate keyframe sequence graph pane:
 
-		tabbedPaneGraphs = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPaneGraphs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPaneGraphs.setComponentPopupMenu(pmenu);
 		JScrollPane scrollPane = new JScrollPane(tabbedPaneGraphs, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+		InputMap actionMap = (InputMap) UIManager.getDefaults().get("ScrollPane.ancestorInputMap");
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), null);
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), null);
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), null);
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), null);
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0), null);
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0), null);
+
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+				.addGroup(groupLayout.createSequentialGroup()
 						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE).addGap(10))
-				.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE));
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE).addGap(35))
+				.addComponent(mMenuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE));
 		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
 				.createSequentialGroup()
-				.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+				.addComponent(mMenuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -534,21 +589,20 @@ public class MainWindow extends JFrame {
 
 		panel_Spect = new JPanel();
 		panel_Spect.setLayout(null);
-		// panel_Spect.setToolTipText("Spect");
+		panel_Spect.setComponentPopupMenu(pmenu);
 		tabbedPane.addTab("Spect", null, panel_Spect, null);
-
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
 
 		JLabel lblFreq = new JLabel("Formants");
 		lblFreq.setBounds(3, 6, 100, labelHeight);
-		lblFreq.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblFreq.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblFreq);
 
 		JLabel lblHt = new JLabel("Height");
 		lblHt.setBounds(80, 6, 50, labelHeight);
-		lblHt.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblHt.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblHt);
 
 		JLabel lblWidth = new JLabel("Width");
@@ -559,312 +613,103 @@ public class MainWindow extends JFrame {
 		lblklatt.setBounds(231, 6, 44, labelHeight);
 		panel_Spect.add(lblklatt);
 
-		JLabel label_0 = new JLabel("0");
-		label_0.setBounds(6, tfy0 + 3 + 0 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_0);
+		for (int i = 0; i <= 7; i++) {
+			JLabel label = new JLabel(String.valueOf(i));
 
-		JLabel label_1 = new JLabel("1");
-		label_1.setBounds(6, tfy0 + 3 + 1 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_1);
+			label.setBounds(6, 31 + i * 22, 8, labelHeight);
+			panel_Spect.add(label);
+		}
 
-		JLabel label_2 = new JLabel("2");
-		label_2.setBounds(6, tfy0 + 3 + 2 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_2);
+		for (int i = 0; i <= 6; i++) {
+			JTextField tfFreqOption = new JTextField();
 
-		JLabel label_3 = new JLabel("3");
-		label_3.setBounds(6, tfy0 + 3 + 3 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_3);
+			tfFreqOption.setBounds(tfx0, tfy0 + i * (compHeight + tfygap), compWidth, compHeight);
+			tfFreqOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfFreqOption.setColumns(10);
 
-		JLabel label_4 = new JLabel("4");
-		label_4.setBounds(6, tfy0 + 3 + 4 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_4);
+			tfFreq.add(tfFreqOption);
+			panel_Spect.add(tfFreqOption);
+		}
 
-		JLabel label_5 = new JLabel("5");
-		label_5.setBounds(6, tfy0 + 3 + 5 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_5);
+		for (int i = 0; i <= 7; i++) {
+			JTextField tfHeightOption = new JTextField();
 
-		JLabel label_6 = new JLabel("6");
-		label_6.setBounds(6, tfy0 + 3 + 6 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_6);
+			tfHeightOption.setBounds(tfx0 + tfxgap + compWidth, tfy0 + i * (compHeight + tfygap), compWidth,
+					compHeight);
+			tfHeightOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfHeightOption.setColumns(10);
 
-		JLabel label_7 = new JLabel("7");
-		label_7.setBounds(6, tfy0 + 3 + 7 * (compHeight + tfygap), 8, labelHeight);
-		panel_Spect.add(label_7);
+			tfHeight.add(tfHeightOption);
+			panel_Spect.add(tfHeightOption);
+		}
 
-		JTextField tfFreq0 = new JTextField();
-		tfFreq0.setBounds(tfx0, tfy0, compWidth, compHeight);
-		tfFreq0.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq0.setColumns(10);
-		tfFreq.add(tfFreq0);
-		panel_Spect.add(tfFreq0);
+		for (int i = 0; i <= 5; i++) {
+			JTextField tfWidthOption = new JTextField();
 
-		JTextField tfFreq1 = new JTextField();
-		tfFreq1.setBounds(tfx0, tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfFreq1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq1.setColumns(10);
-		tfFreq.add(tfFreq1);
-		panel_Spect.add(tfFreq1);
+			tfWidthOption.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth,
+					compHeight);
+			tfWidthOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfWidthOption.setColumns(10);
 
-		JTextField tfFreq2 = new JTextField();
-		tfFreq2.setBounds(tfx0, tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfFreq2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq2.setColumns(10);
-		tfFreq.add(tfFreq2);
-		panel_Spect.add(tfFreq2);
-
-		JTextField tfFreq3 = new JTextField();
-		tfFreq3.setBounds(tfx0, tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfFreq3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq3.setColumns(10);
-		tfFreq.add(tfFreq3);
-		panel_Spect.add(tfFreq3);
-
-		JTextField tfFreq4 = new JTextField();
-		tfFreq4.setBounds(tfx0, tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
-		tfFreq4.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq4.setColumns(10);
-		tfFreq.add(tfFreq4);
-		panel_Spect.add(tfFreq4);
-
-		JTextField tfFreq5 = new JTextField();
-		tfFreq5.setBounds(tfx0, tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
-		tfFreq5.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq5.setColumns(10);
-		tfFreq.add(tfFreq5);
-		panel_Spect.add(tfFreq5);
-
-		JTextField tfFreq6 = new JTextField();
-		tfFreq6.setBounds(tfx0, tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
-		tfFreq6.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFreq6.setColumns(10);
-		tfFreq.add(tfFreq6);
-		panel_Spect.add(tfFreq6);
-
-		JTextField tfHeight0 = new JTextField();
-		tfHeight0.setBounds(tfx0 + tfxgap + compWidth, tfy0, compWidth, compHeight);
-		tfHeight0.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight0.setColumns(10);
-		tfHeight.add(tfHeight0);
-		panel_Spect.add(tfHeight0);
-
-		JTextField tfHeight1 = new JTextField();
-		tfHeight1.setBounds(tfx0 + tfxgap + compWidth, tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfHeight1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight1.setColumns(10);
-		tfHeight.add(tfHeight1);
-		panel_Spect.add(tfHeight1);
-
-		JTextField tfHeight2 = new JTextField();
-		tfHeight2.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight2.setColumns(10);
-		tfHeight.add(tfHeight2);
-		panel_Spect.add(tfHeight2);
-
-		JTextField tfHeight3 = new JTextField();
-		tfHeight3.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight3.setColumns(10);
-		tfHeight.add(tfHeight3);
-		panel_Spect.add(tfHeight3);
-
-		JTextField tfHeight4 = new JTextField();
-		tfHeight4.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight4.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight4.setColumns(10);
-		tfHeight.add(tfHeight4);
-		panel_Spect.add(tfHeight4);
-
-		JTextField tfHeight5 = new JTextField();
-		tfHeight5.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight5.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight5.setColumns(10);
-		tfHeight.add(tfHeight5);
-		panel_Spect.add(tfHeight5);
-
-		JTextField tfHeight6 = new JTextField();
-		tfHeight6.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight6.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight6.setColumns(10);
-		tfHeight.add(tfHeight6);
-		panel_Spect.add(tfHeight6);
-
-		JTextField tfHeight7 = new JTextField();
-		tfHeight7.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 7 * (compHeight + tfygap), compWidth, compHeight);
-		tfHeight7.setHorizontalAlignment(SwingConstants.CENTER);
-		tfHeight7.setColumns(10);
-		tfHeight.add(tfHeight7);
-		panel_Spect.add(tfHeight7);
-
-		JTextField tfWidth0 = new JTextField();
-		tfWidth0.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0, compWidth, compHeight);
-		tfWidth0.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth0.setColumns(10);
-		tfWidth.add(tfWidth0);
-		panel_Spect.add(tfWidth0);
-
-		JTextField tfWidth1 = new JTextField();
-		tfWidth1.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfWidth1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth1.setColumns(10);
-		tfWidth.add(tfWidth1);
-		panel_Spect.add(tfWidth1);
-
-		JTextField tfWidth2 = new JTextField();
-		tfWidth2.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfWidth2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth2.setColumns(10);
-		tfWidth.add(tfWidth2);
-		panel_Spect.add(tfWidth2);
-
-		JTextField tfWidth3 = new JTextField();
-		tfWidth3.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfWidth3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth3.setColumns(10);
-		tfWidth.add(tfWidth3);
-		panel_Spect.add(tfWidth3);
-
-		JTextField tfWidth4 = new JTextField();
-		tfWidth4.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
-		tfWidth4.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth4.setColumns(10);
-		tfWidth.add(tfWidth4);
-		panel_Spect.add(tfWidth4);
-
-		JTextField tfWidth5 = new JTextField();
-		tfWidth5.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
-		tfWidth5.setHorizontalAlignment(SwingConstants.CENTER);
-		tfWidth5.setColumns(10);
-		tfWidth.add(tfWidth5);
-		panel_Spect.add(tfWidth5);
-
+			tfWidth.add(tfWidthOption);
+			panel_Spect.add(tfWidthOption);
+		}
 		/////////////////////////////////////////////
 		// Klatt synthesis text fields with labels //
 		/////////////////////////////////////////////
 
 		JLabel lblBw = new JLabel("Bw");
 		lblBw.setBounds(196, 31, 21, labelHeight);
-		lblBw.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblBw.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblBw);
 
 		JLabel lblAp = new JLabel("Ap");
 		lblAp.setBounds(247, 31, 18, labelHeight);
-		lblAp.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblAp.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblAp);
 
 		JLabel lblBp = new JLabel("Bp");
 		lblBp.setBounds(304, 31, 18, labelHeight);
-		lblBp.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblBp.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblBp);
 
-		JTextField tfBw1 = new JTextField();
-		tfBw1.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfBw1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBw1.setColumns(10);
-		tfBw.add(tfBw1);
-		panel_Spect.add(tfBw1);
+		for (int i = 1; i <= 3; i++) {
+			JTextField tfBwOption = new JTextField();
 
-		JTextField tfBw2 = new JTextField();
-		tfBw2.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfBw2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBw2.setColumns(10);
-		tfBw.add(tfBw2);
-		panel_Spect.add(tfBw2);
+			tfBwOption.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth,
+					compHeight);
+			tfBwOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfBwOption.setColumns(10);
 
-		JTextField tfBw3 = new JTextField();
-		tfBw3.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfBw3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBw3.setColumns(10);
-		tfBw.add(tfBw3);
-		panel_Spect.add(tfBw3);
+			tfBw.add(tfBwOption);
+			panel_Spect.add(tfBwOption);
+		}
 
-		JTextField tfAp1 = new JTextField();
-		tfAp1.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfAp1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp1.setColumns(10);
-		tfAp.add(tfAp1);
-		panel_Spect.add(tfAp1);
+		for (int i = 1; i <= 6; i++) {
+			JTextField tfApOption = new JTextField();
 
-		JTextField tfAp2 = new JTextField();
-		tfAp2.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfAp2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp2.setColumns(10);
-		tfAp.add(tfAp2);
-		panel_Spect.add(tfAp2);
+			tfApOption.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth,
+					compHeight);
+			tfApOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfApOption.setColumns(10);
 
-		JTextField tfAp3 = new JTextField();
-		tfAp3.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfAp3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp3.setColumns(10);
-		tfAp.add(tfAp3);
-		panel_Spect.add(tfAp3);
+			tfAp.add(tfApOption);
+			panel_Spect.add(tfApOption);
+		}
 
-		JTextField tfAp4 = new JTextField();
-		tfAp4.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
-		tfAp4.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp4.setColumns(10);
-		tfAp.add(tfAp4);
-		panel_Spect.add(tfAp4);
+		for (int i = 1; i <= 6; i++) {
+			JTextField tfBpOption = new JTextField();
 
-		JTextField tfAp5 = new JTextField();
-		tfAp5.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
-		tfAp5.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp5.setColumns(10);
-		tfAp.add(tfAp5);
-		panel_Spect.add(tfAp5);
+			tfBpOption.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + i * (compHeight + tfygap), compWidth,
+					compHeight);
+			tfBpOption.setHorizontalAlignment(SwingConstants.CENTER);
+			tfBpOption.setColumns(10);
 
-		JTextField tfAp6 = new JTextField();
-		tfAp6.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
-		tfAp6.setHorizontalAlignment(SwingConstants.CENTER);
-		tfAp6.setColumns(10);
-		tfAp.add(tfAp6);
-		panel_Spect.add(tfAp6);
-
-		JTextField tfBp1 = new JTextField();
-		tfBp1.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + compHeight + tfygap, compWidth, compHeight);
-		tfBp1.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp1.setColumns(10);
-		tfBp.add(tfBp1);
-		panel_Spect.add(tfBp1);
-
-		JTextField tfBp2 = new JTextField();
-		tfBp2.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 2 * (compHeight + tfygap), compWidth, compHeight);
-		tfBp2.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp2.setColumns(10);
-		tfBp.add(tfBp2);
-		panel_Spect.add(tfBp2);
-
-		JTextField tfBp3 = new JTextField();
-		tfBp3.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 3 * (compHeight + tfygap), compWidth, compHeight);
-		tfBp3.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp3.setColumns(10);
-		tfBp.add(tfBp3);
-		panel_Spect.add(tfBp3);
-
-		JTextField tfBp4 = new JTextField();
-		tfBp4.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 4 * (compHeight + tfygap), compWidth, compHeight);
-		tfBp4.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp4.setColumns(10);
-		tfBp.add(tfBp4);
-		panel_Spect.add(tfBp4);
-
-		JTextField tfBp5 = new JTextField();
-		tfBp5.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 5 * (compHeight + tfygap), compWidth, compHeight);
-		tfBp5.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp5.setColumns(10);
-		tfBp.add(tfBp5);
-		panel_Spect.add(tfBp5);
-
-		JTextField tfBp6 = new JTextField();
-		tfBp6.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 6 * (compHeight + tfygap), compWidth, compHeight);
-		tfBp6.setHorizontalAlignment(SwingConstants.CENTER);
-		tfBp6.setColumns(10);
-		tfBp.add(tfBp6);
-		panel_Spect.add(tfBp6);
+			tfBp.add(tfBpOption);
+			panel_Spect.add(tfBpOption);
+		}
 
 		// mS text field & label //
-
-		tfmS = new JTextField();
 		tfmS.setBounds(tfx0, tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		tfmS.setHorizontalAlignment(SwingConstants.CENTER);
 		tfmS.setColumns(10);
@@ -878,8 +723,6 @@ public class MainWindow extends JFrame {
 		// Additional parameter spinners with labels //
 		// (AV, Tilt, Avp, kopen, FNZ, Aspr...). //
 		///////////////////////////////////////////////
-
-		spampF = new JSpinner();
 		spampF.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		spampF.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spampF);
@@ -1036,16 +879,16 @@ public class MainWindow extends JFrame {
 		//////// Text Tab ////////
 		//////////////////////////
 
-		JPanel panel_text = new JPanel();
-		panel_text.setAutoscrolls(true);
-		// panel_text.setToolTipText("Text");
-		tabbedPane.addTab("Text", null, panel_text, null);
+		JPanel panelText = new JPanel();
+		panelText.setAutoscrolls(true);
+		tabbedPane.addTab("Text", null, panelText, null);
 
 		// Input text area:
 
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
+		textAreaIn.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -1053,50 +896,81 @@ public class MainWindow extends JFrame {
 
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
+		textAreaOut.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Command buttons:
 
+		btnSpeak = new JButton("");
+		btnPause = new JButton("");
+		btnPause.setEnabled(false);
+		btnStop = new JButton("");
+		btnStop.setEnabled(false);
+
+		Image play;
+		Image pause;
+		Image stop;
+		Image resume;
+
+		try {
+			play = ImageIO.read(new File("./src/main/resources/play.png"));
+			btnSpeak.setIcon(new ImageIcon(play));
+
+			pause = ImageIO.read(new File("./src/main/resources/pause.png"));
+			btnPause.setIcon(new ImageIcon(pause));
+
+			stop = ImageIO.read(new File("./src/main/resources/stop.png"));
+			btnStop.setIcon(new ImageIcon(stop));
+
+			resume = ImageIO.read(new File("./src/main/resources/resume.png"));
+
+			pauseIcon = new ImageIcon(pause);
+			resumeIcon = new ImageIcon(resume);
+		} catch (IOException e) {
+			logger.warn(e);
+		}
+
 		btnTranslate = new JButton("Translate");
-		btnSpeak = new JButton("Speak");
 		btnShowRules = new JButton("Show Rules");
 		btnShowIPA = new JButton("Show IPA");
 
 		// Text tab horizontal grouping
 
-		GroupLayout gl_panel_text = new GroupLayout(panel_text);
-		gl_panel_text.setHorizontalGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_text
+		GroupLayout glPanelText = new GroupLayout(panelText);
+		glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING).addGroup(glPanelText
 				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING).addComponent(scrollPaneTextAreaOut)
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_panel_text.createSequentialGroup()
-								.addGroup(gl_panel_text.createParallelGroup(Alignment.LEADING, false)
+				.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false).addComponent(scrollPaneTextAreaOut)
+						.addGroup(glPanelText.createSequentialGroup()
+								.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
-										.addComponent(btnShowRules))
+										.addComponent(btnSpeak, Alignment.CENTER))
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnSpeak, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnShowIPA, Alignment.LEADING))))
+										.addComponent(btnPause, Alignment.CENTER))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnStop, Alignment.CENTER)))
+						.addComponent(scrollPaneTextAreaIn))
 				.addContainerGap()));
-
-		// Text tab vertical grouping.
-
-		gl_panel_text.setVerticalGroup(gl_panel_text.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel_text.createSequentialGroup().addContainerGap()
+		glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
+				.addGroup(glPanelText.createSequentialGroup().addContainerGap()
 						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnSpeak))
+						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
+								.addComponent(btnShowRules).addComponent(btnShowIPA))
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_text.createParallelGroup(Alignment.BASELINE).addComponent(btnShowRules)
-								.addComponent(btnShowIPA))
+						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
+								.addComponent(btnPause).addComponent(btnStop))
 						.addGap(54)));
 
-		panel_text.setLayout(gl_panel_text);
+		panelText.setLayout(glPanelText);
 		getContentPane().setLayout(groupLayout);
 	}
 }
