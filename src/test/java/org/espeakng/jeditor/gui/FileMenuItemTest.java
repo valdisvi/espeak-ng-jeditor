@@ -38,10 +38,10 @@ public class FileMenuItemTest {
 		mainW.setSize(new Dimension(1000, 600));
 	}
 	
-    @AfterClass
-    public static void tearDownAfterClass() {
-        fixture.cleanUp();
-    }
+	 @AfterClass
+	    public static void tearDownAfterClass() {
+	        fixture.cleanUp();
+	    }
 
 	/*
 	 * 
