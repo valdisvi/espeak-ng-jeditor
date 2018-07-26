@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -81,17 +82,25 @@ public class EventHandlers {
 		fileChooser = new JFileChooser(prefs.get("a", new File(".").getAbsolutePath()));
 	}
 
-
 	ChangeListener getPhoneme = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
 			setVisibleMenuItemsFile(mainW);
-			PhonemeLoad.getPhoneme((JScrollPane) mainW.tabbedPaneGraphs.getSelectedComponent());
+			PhonemeLoad.getPhoneme((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
-			int index = sourceTabbedPane.getSelectedIndex();
-			// FIX ME: changing tabs graphs are shown in incorrect order... Graph sequence changes after each click on tab. 
-			if(index < MainWindow.getMainWindow().spectrumGraphList.size()){
-				  MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().spectrumGraphList.get(index)).repaint();
+			int selectedIndex = sourceTabbedPane.getSelectedIndex();
 			
+			if (selectedIndex != -1) {
+				String index = sourceTabbedPane.getTitleAt(selectedIndex);
+				
+				if (MainWindow.getMainWindow().spectrumGraphList.containsKey(index)) {
+					SpectrumGraph currentPanel = MainWindow.getMainWindow().spectrumGraphList.get(index);
+					
+					MainWindow.getMainWindow().panel_Spect.remove(MainWindow.lastThing);
+					
+					MainWindow.getMainWindow().panel_Spect.add(currentPanel);
+					MainWindow.getMainWindow().panel_Spect.repaint();
+					MainWindow.lastThing = currentPanel;
+				}
 			}
 			
 		}	
@@ -217,6 +226,11 @@ public class EventHandlers {
 			for(JTextField jTextField : jTextArray){
 				jTextField.setText("");
 			}
+		}
+		
+		if (MainWindow.lastThing != null) {
+			MainWindow.getMainWindow().panel_Spect.remove(MainWindow.lastThing);
+			MainWindow.getMainWindow().spectrumGraphList = new HashMap<>();
 		}
 	}
 
