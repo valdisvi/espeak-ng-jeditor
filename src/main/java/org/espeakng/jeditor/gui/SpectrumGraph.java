@@ -22,18 +22,17 @@ public class SpectrumGraph extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -27394060722915822L;
-	private ArrayList<Frame> frames;
+	private ArrayList<Frame> frames = new ArrayList<Frame>();
     public SpectrumGraph(ArrayList<Frame> frames){
     	this.frames = frames;
-    	
+    		
     }
+    public SpectrumGraph(){}
      
     public void paint(Graphics g) {
         super.paintComponent(g);
         final int PAD = 20;
-        System.out.println(frames.size()+" inside");
-        System.out.println(frames);
-		int frameNumber = frames.size();
+     	int frameNumber = frames.size();
 		
         double [][] data = new double [frameNumber][7]; 
         Graphics2D g2 = (Graphics2D) g;

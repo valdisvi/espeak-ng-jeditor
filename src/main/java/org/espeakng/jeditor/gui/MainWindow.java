@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -34,7 +33,8 @@ public class MainWindow extends JFrame {
 	// some containers.
 	public JMenuBar menuBar;
 	public static JTabbedPane tabbedPaneGraphs;
-	public static JPanel panelSpectrumGraph;
+	public JPanel panelSpectrumGraph;
+	public ArrayList<JPanel> spectrumGraphList = new ArrayList<JPanel>();
 
 	// Grouping of JMenu objects and JMenuItem objects, suggestion is in
 	// Language.java
@@ -1012,7 +1012,7 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(lblAmpS);
 
 		// A Label that obviously relates to "Amplitude frame", //
-		// witch is not implemented. - done //
+		// witch is not implemented. //
 
 		JLabel lblMs = new JLabel("% mS - Sequence");
 		lblMs.setBounds(80, 477, 137, 23);

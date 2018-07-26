@@ -1,19 +1,16 @@
 package org.espeakng.jeditor.data;
 
-import java.awt.Color;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import org.espeakng.jeditor.gui.MainWindow;
-import org.espeakng.jeditor.gui.SpectrumGraph;
 import org.espeakng.jeditor.jni.ESpeakService;
 import org.espeakng.jeditor.jni.SpectSeq;
-	/**
-	 * This class is the main object that program works on, contains loaded SpectSeq, and some fields
-	 * with the same values of this SpectSeq, and generated frames and graphs for this SpectSeq, etc
-	 * 
-	 */
+/**
+ * This class is the main object that program works on, contains loaded SpectSeq, and some fields
+ * with the same values of this SpectSeq, and generated frames and graphs for this SpectSeq, etc
+ * 
+ */
 public class Phoneme{
 	SpectSeq spect = new SpectSeq();
 	public String type; // Type-name of file (SPECTSEQ,SPECTSEK,SPECTSQ2)
@@ -23,10 +20,10 @@ public class Phoneme{
 	public int amplitude;
 	public int max_y;
 	public String fileName;
-	public ArrayList<Frame> frameList;
+	private ArrayList<Frame> frameList;
 	private Graph graph;
 	public String path;
-	
+
 
 	/**
 	 * Constructor for Phoneme, it loads SpectSeq, from given file using JNI implementation,
@@ -44,7 +41,7 @@ public class Phoneme{
 		max_y = spect.max_y;
 		frameList = new ArrayList<Frame>();
 		name_length = spect.name.length();
-		
+
 		for (int i = 0; i < n; i++) {
 			// SpectFrame *frame = new SpectFrame;
 			Frame newFrame = new Frame();
@@ -58,10 +55,7 @@ public class Phoneme{
 			assert false : "From Phoneme class. File doesn't exist.";
 		
 		graph = new Graph(file.getName(), frameList);
-		MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(frameList);
-		MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
-		MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
-		MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().panelSpectrumGraph).repaint();
+
 	}
 	/**
 	 * Getter for graph

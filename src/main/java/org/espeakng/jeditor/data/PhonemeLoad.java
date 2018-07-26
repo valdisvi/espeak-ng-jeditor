@@ -75,14 +75,5 @@ public class PhonemeLoad {
 				phoneme.doZoomOut();
 		}
 	}
-	public static ArrayList<Frame> getFrameList(JScrollPane jScrollPane, int index){
-		ArrayList<Frame> result = new ArrayList<Frame>();
-		for(Phoneme phoneme: phonemeList){
-			if(phoneme.getGraph().getjPanelOfGraph().equals(jScrollPane)){
-				result = phoneme.getGraph().selectedTabList(index);
-				break;
-			}
-		}
-		return result;
-	}
+
 }
