@@ -14,6 +14,7 @@ import javax.swing.AbstractButton;
 
 import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Command;
+import org.espeakng.jeditor.jni.ESpeakService;
 
 /**
  * The class utilizes functionality of espeak-ng program (which is run on
@@ -68,29 +69,39 @@ public class EspeakNg {
 	 */
 
 	public void makeAction(Command command) {
-
-		// Create file and write to it text typed in upper text area on "Text"
-		// tab:
-		createFileInput(getText(command));
-
-		// The following three commands do not require file for output (but the
-		// rest of commands DO require output file):
-		boolean isFile = !(command.equals(Command.SPEAK_PUNC) || command.equals(Command.SPEAK_BY_SYMBOL)|| command.equals(Command.SPEAK_CHAR_NAME) || command.equals(Command.SPEAK));
-		
-		if (isFile) createFileOutput();
-		
-		// Command for espeak-ng is constructed as required and executed on terminal:
-		makeRunTimeAction(getRunTimeCommand(command));
-		
-		// No need for source file any more:
-		try {
-			Files.delete(fileInput.toPath());
-		} catch (IOException e) {
-			logger.warn(e);
+		if(command.equals(Command.TRANSLATE)){
+			String[] text = ESpeakService.nativeTextToPhonemes(mainW.textAreaIn.getText(), getVoiceFromSelection());
+			mainW.textAreaOut.setText("");
+			for(String line : text)
+				mainW.textAreaOut.append(line);
+		}else{
+			runTimeCommand(command);
 		}
-		
-		// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
-		if (isFile)	readOutputFile();
+	}
+	
+	private void runTimeCommand(Command command){
+		// Create file and write to it text typed in upper text area on "Text"
+				// tab:
+				createFileInput(getText(command));
+
+				// The following three commands do not require file for output (but the
+				// rest of commands DO require output file):
+				boolean isFile = !(command.equals(Command.SPEAK_PUNC) || command.equals(Command.SPEAK_BY_SYMBOL)|| command.equals(Command.SPEAK_CHAR_NAME) || command.equals(Command.SPEAK));
+				
+				if (isFile) createFileOutput();
+				
+				// Command for espeak-ng is constructed as required and executed on terminal:
+				makeRunTimeAction(getRunTimeCommand(command));
+				
+				// No need for source file any more:
+				try {
+					Files.delete(fileInput.toPath());
+				} catch (IOException e) {
+					logger.warn(e);
+				}
+				
+				// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
+				if (isFile)	readOutputFile();
 	}
 
 	/**
@@ -107,9 +118,6 @@ public class EspeakNg {
 		int speedVoice = mainW.optionsSpeed.getSpinnerValue();
 
 		switch (command) {
-			case TRANSLATE:
-				return "espeak-ng -q -v" + voice + " -x --phonout=" + fileOutput.getAbsolutePath() + " -f "
-						+ fileInput.getAbsolutePath();
 			case SHOW_RULES:
 				return "espeak-ng -q -v" + voice + " -X --phonout=" + fileOutput.getAbsolutePath() + " -f "
 						+ fileInput.getAbsolutePath();
