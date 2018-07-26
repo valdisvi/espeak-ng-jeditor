@@ -32,11 +32,13 @@ public class OptionsSpeedWindow extends JFrame {
 	public OptionsSpeedWindow() {
 
 		setTitle("Speed");
+		setName(getTitle());
 		setBounds(100, 100, 257, 166);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
-
+		
 		JButton btnButtonCancel = new JButton("Cancel");
+		btnButtonCancel.setName("Cancel");
 		btnButtonCancel.setBounds(12, 99, 105, 25);
 		getContentPane().add(btnButtonCancel);
 		btnButtonCancel.addActionListener(new ActionListener() {
@@ -47,6 +49,7 @@ public class OptionsSpeedWindow extends JFrame {
 		});
 
 		JButton btnNewButtonOK = new JButton("OK");
+		btnNewButtonOK.setName("OK");
 		btnNewButtonOK.setBounds(127, 99, 105, 25);
 		getContentPane().add(btnNewButtonOK);
 		btnNewButtonOK.addActionListener(new ActionListener() {
@@ -56,6 +59,7 @@ public class OptionsSpeedWindow extends JFrame {
 		});
 
 		spinner = new JSpinner();
+		spinner.setName("spinner");
 		spinner.setModel(new SpinnerNumberModel(175, 80, 500, 1));
 		spinner.setBounds(22, 29, 200, 34);
 		getContentPane().add(spinner);

@@ -26,8 +26,8 @@ public class CompileMenuItemTest {
 	private static MainWindow mainW;
 	private static Logger logger = Logger.getLogger(CompileMenuItemTest.class);
 	
-	//@Rule
-	//public Timeout globalTimeout = Timeout.seconds(5);
+	@Rule
+	public Timeout globalTimeout = Timeout.seconds(5);
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

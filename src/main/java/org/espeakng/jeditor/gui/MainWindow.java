@@ -392,50 +392,61 @@ public class MainWindow extends JFrame {
 		mnOptions.add(mnSetPaths);
 
 		mntmMasterPhonemesFile = new JMenuItem("Master phonemes file...");
+		mntmMasterPhonemesFile.setName(mntmMasterPhonemesFile.getText());
 		mnSetPaths.add(mntmMasterPhonemesFile);
 
 		mntmPhonemeDataSource = new JMenuItem("Phoneme data source...");
+		mntmPhonemeDataSource.setName(mntmPhonemeDataSource.getText());
 		mnSetPaths.add(mntmPhonemeDataSource);
 
 		mntmDictionaryDataSource = new JMenuItem("Dictionary data source...");
+		mntmDictionaryDataSource.setName(mntmDictionaryDataSource.getText());
 		mnSetPaths.add(mntmDictionaryDataSource);
 
 		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
+		mntmSynthesizedSoundWAVfile.setName(mntmSynthesizedSoundWAVfile.getText());
 		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
 
-		mnSetPaths.add(new JSeparator());
-
 		mntmVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
+		mntmVoiceFileToModifyFormantPeaks.setName(mntmVoiceFileToModifyFormantPeaks.getText());
 		mnSetPaths.add(mntmVoiceFileToModifyFormantPeaks);
 
 		mnLanguage = new JMenu("Language");
 		mnOptions.add(mnLanguage);
 
 		mntmEnglish = new JMenuItem("English");
+		mntmEnglish.setName(mntmEnglish.getText());
 		mnLanguage.add(mntmEnglish);
 
-		mntmLatvian = new JMenuItem("Latvian");
+		mntmLatvian = new JMenuItem("Latviešu");
+		mntmLatvian.setName(mntmLatvian.getText());
 		mnLanguage.add(mntmLatvian);
 
-		mntmRussian = new JMenuItem("Russian");
+		mntmRussian = new JMenuItem("Русский");
+		mntmRussian.setName(mntmRussian.getText());
 		mnLanguage.add(mntmRussian);
 		
-		mntmTamil = new JMenuItem("Tamil");
+		mntmTamil = new JMenuItem("தமிழ்");
+		mntmTamil.setName(mntmTamil.getText());
 		mnLanguage.add(mntmTamil);
 
 		mntmSpeed = new JMenuItem("Speed...");
+		mntmSpeed.setName(mntmSpeed.getText());
 		mnOptions.add(mntmSpeed);
 		optionsSpeed = new OptionsSpeedWindow();
 
 		mnOptions.add(new JSeparator());
 
 		mntmSpeakPunctuation = new JMenuItem("Speak punctuation");
+		mntmSpeakPunctuation.setName(mntmSpeakPunctuation.getText());
 		mnOptions.add(mntmSpeakPunctuation);
 
 		mntmSpeakCharacters = new JMenuItem("Speak characters");
+		mntmSpeakCharacters.setName(mntmSpeakCharacters.getText());
 		mnOptions.add(mntmSpeakCharacters);
 
 		mntmSpeakCharacterName = new JMenuItem("Speak character name");
+		mntmSpeakCharacterName.setName(mntmSpeakCharacterName.getText());
 		mnOptions.add(mntmSpeakCharacterName);
 		
 		/////////////////
@@ -1136,8 +1147,8 @@ public class MainWindow extends JFrame {
 		// Input text area:
 		
 		textAreaIn = new JTextArea();
-		textAreaIn.setName("textAreaIn");
 		textAreaIn.setText("Hello");
+		textAreaIn.setName("textAreaIn");
 		textAreaIn.setLineWrap(true);
 		textAreaIn.setWrapStyleWord(true);
 		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,

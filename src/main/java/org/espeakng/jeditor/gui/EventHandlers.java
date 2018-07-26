@@ -48,18 +48,21 @@ import javax.swing.JScrollPane;
 public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+    // Files required for buttons. Do not delete.
+    private static Map<String, File> folders = new HashMap<>();
+    // ******************************************
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     private File file;
-    // Files required for buttons. Do not delete.
-    private Map<String, File> folders = new HashMap<>();
-    // ******************************************
     private EspeakNg espeakNg;
     private JScrollPane scrollPane;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     
-    
+    // Need a getter for tests
+    public static Map<String, File> getFolders() {
+    	return folders;
+    }
     
 	/**
 	 * Constructor initializes 2 fileChoosers so that they would both remember
@@ -431,7 +434,8 @@ public class EventHandlers {
 	ActionListener countWordFreq = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			
-			String[] keys = espeakNg.getText("").toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "").split(" ");
+			String[] keys = espeakNg.getText("").toLowerCase().replaceAll("\n", " ")
+					.replaceAll("[^a-zA-Z0-9\\s\\.-]", "").split("\\s+");
 			Map<String, Integer> map = new TreeMap<>();
 			
 			for (String key : keys) {
