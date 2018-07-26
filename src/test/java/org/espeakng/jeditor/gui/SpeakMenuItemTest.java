@@ -61,7 +61,7 @@ public class SpeakMenuItemTest {
 		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
 	}
 	
-	@Test
+	
 	public void test02ShowRulesButton()   {
 		mainW.textAreaIn.setText("hello");
 		fixture.menuItem(mainW.mntmShowRules.getText()).click();
@@ -99,7 +99,7 @@ public class SpeakMenuItemTest {
 	 public void test04SpeakFileButton()   {
 
 		 	fixture.menuItem("SpeakFile").click();
-			fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/espeak-ng-data/phondata-manifest"));
+			fixture.fileChooser().selectFile(new File("../espeak-ng/espeak-ng-data/phondata-manifest"));
 			fixture.fileChooser().approve();
 			
 			Runtime rt = Runtime.getRuntime();
