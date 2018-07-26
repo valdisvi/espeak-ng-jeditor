@@ -47,19 +47,20 @@ public class ToolsMenuItemTest {
 	
 	@Test
 	public void vowelsFromPhDataTest() {
-		fixture.menuItem(mainW.mntmFromCompiledPhoneme.getText()).click();
-		assertTrue("Failed to open tab from compiled phoneme data", checkIfContains("en"));
+		int tabCount = MainWindow.tabbedPaneGraphs.getTabCount();
+		fixture.menuItem(mainW.mntmFromCompiledPhoneme.getName()).click();
+		assertEquals("Failed to open tab from compiled phoneme data", tabCount+1, mainW.tabbedPaneGraphs.getTabCount());
 	}
 	
 	@Test
 	public void vowelsFromVowelFilesTest() {
+		int tabCount = MainWindow.tabbedPaneGraphs.getTabCount();
 		fixture.menuItem(mainW.mntmFromDirectoryVowelFiles.getText()).click();
 		File selectedFile = new File("../espeak-ng/phsource/vowelcharts/ru");
 		assertTrue("Russian chart file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
 		fixture.fileChooser().approve();
-		assertTrue("Failed to open tab from vowel file", checkIfContains("ru"));
-		assertFalse("Random charts opened", checkIfContains("ro"));
+		assertEquals("Failed to open tab from vowel file", tabCount+1, mainW.tabbedPaneGraphs.getTabCount());
 	}
 
 	private boolean checkIfContains(String lang) {

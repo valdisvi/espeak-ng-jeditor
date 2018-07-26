@@ -287,10 +287,12 @@ public class MainWindow extends JFrame {
 		mnFile.add(mntmExportGraph);
 
 		mntmSave = new JMenuItem("Save");
+		mntmSave.setName(mntmSave.getText());
 		mntmSave.setVisible(false);
 		mnFile.add(mntmSave);
 
 		mntmSaveAs = new JMenuItem("Save As...");
+		mntmSaveAs.setName(mntmSaveAs.getText());
 		mntmSaveAs.setVisible(false);
 		mnFile.add(mntmSaveAs);
 

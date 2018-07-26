@@ -10,10 +10,13 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SpeakMenuItemTest {
 
 	static MainWindow cs;
@@ -23,7 +26,7 @@ public class SpeakMenuItemTest {
 
 
 	@Rule
-	public Timeout globalTimeout = Timeout.seconds(10);
+	public Timeout globalTimeout = Timeout.seconds(3);
 
 	/**
 	 * Prepare application for testing
@@ -46,29 +49,28 @@ public class SpeakMenuItemTest {
         fixture.cleanUp();
     }
 	
-	 @Test
-	 public void testTranslateButton()   {
-		 mainW.textAreaIn.setText("Hi!");
-		 
-		 fixture.menuItem(mainW.mntmTranslate.getText()).click();
+	@Test
+	public void test01TranslateButton()   {
+		mainW.textAreaIn.setText("hi!");
+		fixture.menuItem(mainW.mntmTranslate.getName()).click();
 		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
 		
 		fixture.tabbedPane("Text").selectTab(1);
 		fixture.button("TranslateB").click();
 		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
 	}
-	 @Test
-	 public void testhowRulesButton()   {
-		 mainW.textAreaIn.setText("hello");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+	
+	@Test
+	public void test02ShowRulesButton()   {
+		mainW.textAreaIn.setText("hello");
+		fixture.menuItem(mainW.mntmShowRules.getText()).click();
 		assertEquals("Found: 'hello' [h@loU]  \n h@l'oU", mainW.textAreaOut.getText().trim());
 		mainW.textAreaIn.setText("h!");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+		fixture.menuItem(mainW.mntmShowRules.getText()).click();
 		assertEquals("Found: 'h' [eItS]  \n 'eItS", mainW.textAreaOut.getText().trim());
 		mainW.textAreaIn.setText("!");
-		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
+		fixture.menuItem(mainW.mntmShowRules.getText()).click();
 		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
-		
 		fixture.tabbedPane("Text").selectTab(1);
 		mainW.textAreaIn.setText("hello");
 		fixture.button("ShowRulesB").click();
@@ -81,7 +83,7 @@ public class SpeakMenuItemTest {
 		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
 	}
 	 @Test
-	 public void testShowIPAButton()   {
+	 public void test03ShowIPAButton()   {
 		 mainW.textAreaIn.setText("hello");
 		 fixture.menuItem(mainW.mntmShowRules.getText()).click();
 		assertEquals("Found: 'hello' [h@loU]  \n h@l'oU", mainW.textAreaOut.getText().trim());
@@ -93,19 +95,11 @@ public class SpeakMenuItemTest {
 		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
 	}
 	 @Test
-	 public void testSpeakFileButton()   {
-		 	assertFalse(mainW.btnPause.isEnabled());
-			assertFalse(mainW.btnStop.isEnabled());
-			assertFalse(mainW.mntmPause.isEnabled());
-			assertFalse(mainW.mntmStop.isEnabled());
+	 public void test04SpeakFileButton()   {
+
 		 	fixture.menuItem("SpeakFile").click();
 			fixture.fileChooser().selectFile(new File("/home/student/Documents/code/espeak-ng/espeak-ng-data/phondata-manifest"));
 			fixture.fileChooser().approve();
-			assertTrue(mainW.btnPause.isEnabled());
-			assertTrue(mainW.btnStop.isEnabled());
-			assertFalse(mainW.btnSpeak.isEnabled());
-			assertTrue(mainW.mntmPause.isEnabled());
-			assertTrue(mainW.mntmStop.isEnabled());
-			
+
 	}
 }
