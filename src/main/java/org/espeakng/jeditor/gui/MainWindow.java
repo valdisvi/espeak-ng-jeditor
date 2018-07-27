@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +24,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Frame;
-import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
-//import org.espeakng.jeditor.data.SpectrumGraph;
 
 /**
  * This class is an entry point for the program. It does all the initial
@@ -76,7 +73,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmStop;
 	// menuBar group Voice
 	public JMenu mnVoice;
-	// public JMenuItem mntmSelectVoice;
 	public JMenuItem mntmSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
@@ -548,15 +544,6 @@ public class MainWindow extends JFrame {
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
 		mntmCompileIntonationData.setName(mntmCompileIntonationData.getText());
 		mnCompile.add(mntmCompileIntonationData);
-		//
-		// JSeparator separator_4 = new JSeparator();
-		// mnCompile.add(separator_4);
-		//
-		// mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
-		// mnCompile.add(mntmLayoutrulesFile);
-		//
-		// mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
-		// mnCompile.add(mntmSortrulesFile);
 
 		////////////////
 		// Help group //

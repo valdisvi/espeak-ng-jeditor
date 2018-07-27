@@ -18,9 +18,6 @@ import javax.swing.JPanel;
 import org.espeakng.jeditor.data.Frame;
 
 public class SpectrumGraph extends JPanel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -27394060722915822L;
 	private ArrayList<Frame> frames = new ArrayList<Frame>();
     public SpectrumGraph(ArrayList<Frame> frames){

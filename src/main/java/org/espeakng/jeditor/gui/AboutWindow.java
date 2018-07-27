@@ -43,7 +43,7 @@ public class AboutWindow extends JFrame {
 		try {
 			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 
 		JButton btnOk = new JButton("OK");

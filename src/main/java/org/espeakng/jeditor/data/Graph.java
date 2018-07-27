@@ -125,7 +125,6 @@ public class Graph {
 
 		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
 		tabbedPaneGraphs.setSelectedComponent(scrollPane);
-		// filePanel.requestFocus();
 		panelSpectrumGraph = new SpectrumGraph(frameList);
 		panelSpectrumGraph.setBounds(3, 511, 364, 200);
 		panelSpectrumGraph.setBackground(new Color(238, 238, 238));
@@ -230,8 +229,6 @@ public class Graph {
 					- keyframeWidth / 5, keyframeHeight / 5);
 
 
-			//g.drawString(String.format("%.4f rms",currentFrame.rms), keyframeWidth
-			//		- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 			for (int j = 0; j < 8; j++) {
@@ -305,8 +302,6 @@ public class Graph {
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
-			// if (frame_width > keyframeWidth)
-			// frame_width = keyframeWidth;
 			double scalex = (double) frame_width / max_x;
 
 			max_ix = (int) (9000 * scalex);
@@ -346,32 +341,23 @@ public class Graph {
 				}
 			}
 
-			// rms = buf[0] >> 12;
-			// rms = rms * rms * 23;
-			// rms = rms * rms;
-			// rms = currentFrame.rms;
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
 			for (ix = 1; ix < max_ix; ix++) {
 
 				yy = buf[ix] >> 12;
 			yy = yy * yy * 23;
-			// rms += (yy * yy);
 
 			x2 = ix;
 			y2 = keyframeHeight - ((buf[ix] * keyframeHeight) >> 21);
-			// if(dc != NULL) dc->DrawLine(x1,y1,x2,y2);
 
 			g.drawLine(x1, y1, x2, y2);
 			x1 = x2;
 			y1 = y2;
 			}
 
-			// rms = Math.sqrt(rms) / 200000.0;
 			// apply adjustment from spectseq amplitude
-			// rms = rms * seq_amplitude * currentFrame.amp_adjust / 10000.0;
 
-			// rms = GetRms(seq_amplitude);
 		} // end of SpectFrame::DrawPeaks
 
 
@@ -933,7 +919,6 @@ public class Graph {
 		filePanel2.revalidate();
 		filePanel2.repaint();
 		filePanel2.addKeyListener(keyListener);
-		// filePanel.requestFocus();
 
 	}
 

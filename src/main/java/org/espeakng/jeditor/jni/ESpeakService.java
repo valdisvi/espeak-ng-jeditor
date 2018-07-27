@@ -1,7 +1,6 @@
 package org.espeakng.jeditor.jni;
 
 import org.apache.log4j.Logger;
-import org.espeakng.jeditor.gui.EspeakNg;
 
 
 /*-
