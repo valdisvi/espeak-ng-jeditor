@@ -41,7 +41,7 @@ public class AboutWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		try {
-			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+			setIconImage(ImageIO.read(MainWindow.class.getResourceAsStream("/lips.png")));
 		} catch (IOException e) {
 			logger.warn(e);
 		}

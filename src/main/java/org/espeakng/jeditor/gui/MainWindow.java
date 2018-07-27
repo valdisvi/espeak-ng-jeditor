@@ -215,7 +215,7 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 810));// 810 was 600
 
 		try {
-			mainW.setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+			mainW.setIconImage(ImageIO.read(MainWindow.class.getResourceAsStream("/lips.png")));
 		} catch (IOException e) {
 			logger.warn(e);
 		}

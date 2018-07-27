@@ -32,7 +32,7 @@ public class WordFrequencyWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		try {
-			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+			setIconImage(ImageIO.read(MainWindow.class.getResourceAsStream("/lips.png")));
 		} catch (IOException e) {
 			logger.warn(e);
 		}
