@@ -41,7 +41,7 @@ public class FileMenuItemTest {
 		});
 		fixture = new FrameFixture(mainW);
 		fixture.show();
-		mainW.setSize(new Dimension(1000, 600));
+		mainW.setSize(new Dimension(1000, 850));
 	}
 	
 	 @AfterClass
