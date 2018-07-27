@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -984,16 +985,16 @@ public class MainWindow extends JFrame {
 		Image resume;
 
 		try {
-			play = ImageIO.read(new File("./src/main/resources/play.png"));
+			play = ImageIO.read(MainWindow.class.getResourceAsStream("/play.png"));
 			btnSpeak.setIcon(new ImageIcon(play));
 
-			pause = ImageIO.read(new File("./src/main/resources/pause.png"));
+			pause = ImageIO.read(MainWindow.class.getResourceAsStream("/pause.png"));
 			btnPause.setIcon(new ImageIcon(pause));
 
-			stop = ImageIO.read(new File("./src/main/resources/stop.png"));
+			stop = ImageIO.read(MainWindow.class.getResourceAsStream("/stop.png"));
 			btnStop.setIcon(new ImageIcon(stop));
 
-			resume = ImageIO.read(new File("./src/main/resources/resume.png"));
+			resume = ImageIO.read(MainWindow.class.getResourceAsStream("/resume.png"));
 
 			pauseIcon = new ImageIcon(pause);
 			resumeIcon = new ImageIcon(resume);
