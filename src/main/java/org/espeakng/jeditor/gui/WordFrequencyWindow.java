@@ -12,9 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.SwingConstants;
 
+import org.apache.log4j.Logger;
+
 public class WordFrequencyWindow extends JFrame {
 
 	private static final long serialVersionUID = -5422011242708352299L;
+	private static Logger logger = Logger.getLogger(WordFrequencyWindow.class.getName());
 
 	/**
 	 * Create the frame.
@@ -31,7 +34,7 @@ public class WordFrequencyWindow extends JFrame {
 		try {
 			setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		
 		
