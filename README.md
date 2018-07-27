@@ -1,4 +1,4 @@
-# eSpeak NG Java Editor
+﻿# eSpeak NG Java Editor
 __This is an eSpeakNG Editor rewritten in Java.__
 
 * [Building](#building)
@@ -75,7 +75,7 @@ java -jar eSpeakNG-jEditor.jar
 * [General Editor info](docs/editor.md)
 * [User interface](docs/editor_if.md)
 * [All other documents](docs/)
-* [Documentation for new Changes](docs/Documentation.odt)
+* [Documentation for new Changes](docs/Documentation.md)
 
 ## Licence
 
