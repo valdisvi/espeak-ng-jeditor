@@ -219,7 +219,7 @@ public class MainWindow extends JFrame {
 		mainW.setSize(new Dimension(1000, 810));// 810 was 600
 
 		try {
-			mainW.setIconImage(ImageIO.read(new File("./src/main/resources/lips.png")));
+			mainW.setIconImage(ImageIO.read(MainWindow.class.getResourceAsStream("/lips.png")));
 		} catch (IOException e) {
 			logger.warn(e);
 		}
@@ -548,15 +548,6 @@ public class MainWindow extends JFrame {
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
 		mntmCompileIntonationData.setName(mntmCompileIntonationData.getText());
 		mnCompile.add(mntmCompileIntonationData);
-		//
-		// JSeparator separator_4 = new JSeparator();
-		// mnCompile.add(separator_4);
-		//
-		// mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
-		// mnCompile.add(mntmLayoutrulesFile);
-		//
-		// mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
-		// mnCompile.add(mntmSortrulesFile);
 
 		////////////////
 		// Help group //
