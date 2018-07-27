@@ -1,15 +1,9 @@
 package org.espeakng.jeditor.data;
 
-import static org.junit.Assert.assertEquals;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.FrameFixture;
 import org.espeakng.jeditor.jni.SpectFrame;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -34,8 +28,6 @@ public class GraphTest {
 		 frameList.add(new Frame());
 		 
 		 frameList.get(0).frameLoader(frames, 1, 10.2, 3);
-		 
-	  //    g = new Graph("Graph", frameList);
 	   }
 	 @Test
 	 public void test(){

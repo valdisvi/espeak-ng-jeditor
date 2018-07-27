@@ -3,14 +3,9 @@ package org.espeakng.jeditor.gui;
 import static org.junit.Assert.*;
 
 import java.awt.Dimension;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.AfterClass;
@@ -24,7 +19,6 @@ public class CompileMenuItemTest {
 	static MainWindow cs;
 	private static FrameFixture fixture;
 	private static MainWindow mainW;
-	private static Logger logger = Logger.getLogger(CompileMenuItemTest.class);
 	
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(5);
