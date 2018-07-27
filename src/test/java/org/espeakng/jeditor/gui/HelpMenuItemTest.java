@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,8 +38,13 @@ public class HelpMenuItemTest {
 		fixture.show();
 		mainW.setSize(new Dimension(1000, 600));
 	}
+	
+    @AfterClass
+    public static void tearDownAfterClass() {
+        fixture.cleanUp();
+    }
 
-	@Test
+	//@Test
 	public void showDocumentationTest() {
 		fixture.menuItem(mainW.mntmEspeakDocumentation.getText()).click();
 	}
