@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,7 +47,7 @@ import org.espeakng.jeditor.utils.WrapLayout;
  */
 public class EventHandlers {
 	
-	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
+	private static Logger logger = Logger.getLogger(EventHandlers.class.getName());
     // Files required for buttons. Do not delete.
     private static Map<Command, File> folders = new EnumMap<>(Command.class);
     // ******************************************
@@ -56,7 +55,6 @@ public class EventHandlers {
 	private MainWindow mainW;
 	private JFileChooser fileChooser;
 	private Preferences prefs;
-    private File file;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
     private JScrollPane scrollPane;
     
@@ -99,7 +97,7 @@ public class EventHandlers {
 					
 					MainWindow.getMainWindow().panel_Spect.add(currentPanel);
 					MainWindow.getMainWindow().panel_Spect.repaint();
-					MainWindow.lastThing = currentPanel;
+					MainWindow.lastThing = currentPanel;						
 				}
 			}
 			
@@ -411,7 +409,7 @@ public class EventHandlers {
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				if(fileChooser.getName(fileChooser.getSelectedFile()).matches("[A-Za-z0-9]+"))
-					espeakNg.setVoiceVariant(fileChooser.getName(fileChooser.getSelectedFile()));
+					EspeakNg.setVoiceVariant(fileChooser.getName(fileChooser.getSelectedFile()));
 			}
 		}
 	};
@@ -620,13 +618,7 @@ public class EventHandlers {
 		mainW.mntmStop.addActionListener(stopFile);
 
 		// Voice
-		//mainW.mntmSelectVoice.addActionListener(selectVoice);
 		mainW.mntmSelectVoiceVariant.addActionListener(selectVoiceVariant);
-		// mainW.mntmSelectVoice.addActionListener();
-		// mainW.rdbtnmntmEnglish.addActionListener();
-		// mainW.rdbtnmntmLatvian.addActionListener();
-		// mainW.rdbtnmntmPolish.addActionListener();
-		// mainW.rdbtnmntmRussian.addActionListener();
 
 		// Options
 
@@ -652,10 +644,6 @@ public class EventHandlers {
 
 		mainW.mntmFromDirectoryVowelFiles.addActionListener(exportDirectoryVowelFiles);
 		mainW.mntmFromCompiledPhoneme.addActionListener(switchLang);
-		// mainW.mntmPLBulgarian.addActionListener();
-		// mainW.mntmPLGerman.addActionListener();
-		// mainW.mntmPLItalian.addActionListener();
-		// mainW.mntmPLRussian.addActionListener();
 		mainW.mntmCountWordOccurrences.addActionListener(countWordOccurance);
 
 		// Compile

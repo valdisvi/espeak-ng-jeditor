@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 
 import org.apache.log4j.Logger;
-import org.espeakng.jeditor.gui.EspeakNg;
 
 public class ProcessThread implements Runnable {
 	private static Logger logger = Logger.getLogger(ProcessThread.class.getName());
