@@ -14,7 +14,7 @@ __This is an eSpeakNG Editor rewritten in Java.__
 ![Screenshot](/docs/images/screenshot1.png)
 
 This editor is not production ready yet!
-For latest development news look at [commits](https://github.com/valdisvi/espeak-ng-jeditor/commits/master) and [changelog](CHANGELOG.md). 
+For latest development news look at [commits](https://github.com/valdisvi/espeak-ng-jeditor/commits/master).
 For production purposes you can use older snapshot of [espeak-ng-editor](https://github.com/valdisvi/espeak-ng-espeakedit)!
 
 ## Building
