@@ -10,9 +10,9 @@ eSpeak can be used as a front-end for [Mbrola diphone voices](https://github.com
 
 ### Pronunciation Dictionary
 
-[General info](https://github.com/espeak-ng/espeak-ng/blob/master/docs/dictionary.md)
-*How to add pronunciation corrections. 
-*How to build up pronunciation rules for a new language. 
+* [General info](https://github.com/espeak-ng/espeak-ng/blob/master/docs/dictionary.md)
+* How to add pronunciation corrections. 
+* How to build up pronunciation rules for a new language. 
 
 
 ### Adding a Language
@@ -23,8 +23,8 @@ eSpeak can be used as a front-end for [Mbrola diphone voices](https://github.com
 ### Phonemes
 
 The list of phoneme mnemonics for English, for use in the Pronunciation Dictionary. 
-*[Phoneme Model](https://github.com/espeak-ng/espeak-ng/blob/master/docs/phoneme_model.md)
-*[Phoneme Features and the International Phonetic Alphabet](https://github.com/espeak-ng/espeak-ng/blob/master/docs/phonemes.md)
+* [Phoneme Model](https://github.com/espeak-ng/espeak-ng/blob/master/docs/phoneme_model.md)
+* [Phoneme Features and the International Phonetic Alphabet](https://github.com/espeak-ng/espeak-ng/blob/master/docs/phonemes.md)
 
 
 ### Phoneme Tables
@@ -41,10 +41,10 @@ Different [intonation](https://github.com/espeak-ng/espeak-ng/blob/master/docs/i
 
 API definition and header file for a shared library version of eSpeak.
 
-[speak_lib.h](https://github.com/espeak-ng/espeak-ng/blob/master/src/include/espeak-ng/speak_lib.h)
+* [speak_lib.h](https://github.com/espeak-ng/espeak-ng/blob/master/src/include/espeak-ng/speak_lib.h)
 Guide to create simple program:
-*[simple example code](https://github.com/espeak-ng/espeak-ng/issues/337)
-*[complicated example code (CLI interface for espeak-ng)]( https://github.com/espeak-ng/espeak-ng/blob/master/src/libespeak-ng/espeak_command.c)
+* [simple example code](https://github.com/espeak-ng/espeak-ng/issues/337)
+* [complicated example code (CLI interface for espeak-ng)]( https://github.com/espeak-ng/espeak-ng/blob/master/src/libespeak-ng/espeak_command.c)
 
 
 ### Markup tags
@@ -56,8 +56,8 @@ SSML (Speech Synthesis Markup Language) and HTML tags recognized by eSpeak.
 
 [General info](editor.md)
 GUI software to edit vowel files and to compile the phoneme data for use by eSpeak.
-*espeakedit program GUI details 
-*Analysing sound recordings 
-*Adjusting phoneme data (to be written) 
+* espeakedit program GUI details 
+* Analysing sound recordings 
+* Adjusting phoneme data (to be written) 
 
 
