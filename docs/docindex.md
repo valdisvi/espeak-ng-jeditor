@@ -42,7 +42,7 @@ Different [intonation](https://github.com/espeak-ng/espeak-ng/blob/master/docs/i
 API definition and header file for a shared library version of eSpeak.
 
 * [speak_lib.h](https://github.com/espeak-ng/espeak-ng/blob/master/src/include/espeak-ng/speak_lib.h)
-Guide to create simple program:
+#### Guide to create simple program:
 * [simple example code](https://github.com/espeak-ng/espeak-ng/issues/337)
 * [complicated example code (CLI interface for espeak-ng)]( https://github.com/espeak-ng/espeak-ng/blob/master/src/libespeak-ng/espeak_command.c)
 
@@ -55,6 +55,7 @@ SSML (Speech Synthesis Markup Language) and HTML tags recognized by eSpeak.
 ### The espeakedit program
 
 [General info](editor.md)
+
 GUI software to edit vowel files and to compile the phoneme data for use by eSpeak.
 * espeakedit program GUI details 
 * Analysing sound recordings 
