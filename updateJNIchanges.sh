@@ -11,8 +11,8 @@ if [ ! -d ${espeakDir} ]; then
  echo "eSpeak NG directory was not found!"
  exit 1
 fi
-echo "Compiling ESpeakService.java..."
-javac -cp target/classes src/main/java/org/espeakng/jeditor/jni/ESpeakService.java
+echo "Compiling Java classes..."
+mvn clean compile
 echo "Generating ESpeakService.h..."
 javah -cp target/classes -jni -d src/main/java/org/espeakng/jeditor/jni org.espeakng.jeditor.jni.ESpeakService
 echo "Compiling eSpeakService.c..."
