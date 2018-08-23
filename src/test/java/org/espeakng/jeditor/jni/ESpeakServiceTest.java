@@ -23,4 +23,8 @@ public class ESpeakServiceTest {
 		System.out.println(s.name + ":" + s.amplitude+s.numframes);
 	}
 
+	@Test
+	public void testSpeak() {
+		ESpeakService.nativeSpeak("en", "Hello from C world!");
+	}
 }
