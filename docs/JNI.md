@@ -2,7 +2,7 @@
 
 ### Background for JNI
 
-[*Java Native Interface*] (https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/intro.html) (JNI) allows Java code that runs inside a Java Virtual Machine (VM)
+[Java Native Interface] (https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/intro.html) (JNI) allows Java code that runs inside a Java Virtual Machine (VM)
 to interoperate with applications and libraries written in other programming languages: C, 
 C++, assembly.
 
