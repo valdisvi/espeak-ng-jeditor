@@ -11,8 +11,17 @@ void* user_data;
 unsigned int size, position = 0, end_position = 0, flags = espeakCHARS_AUTO,
 		*unique_identifier;
 
+/* This is simple example, how to call espeak-ng API from C program.
+ * It should be compiled by passing reference to registered library of espeak-ng, e.g.:
+ * gcc speak.c -lespeak-ng -o speak
+ */
+
 int main(int argc, char* argv[]) {
-	printf("language:%s text:%s\n", argv[1], argv[2]);
+	if(argc == 1) {
+		fprintf(stderr, "pass two words as parameters e.g.:\nspeak \"en\" \"Hello world!\"\n");
+		return 1;
+	}
+	printf("language:%s\n", argv[1]);
 	output = AUDIO_OUTPUT_PLAYBACK;
 	espeak_Initialize(output, buflength, path, options);
 	espeak_VOICE voice;
