@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     org_espeakng_jeditor_jni_ESpeakService
+ * Method:    nativeSpeak
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeSpeak
+  (JNIEnv *, jclass, jstring, jstring);
+
+/*
+ * Class:     org_espeakng_jeditor_jni_ESpeakService
  * Method:    nativeGetEspeakNgVersion
  * Signature: ()Ljava/lang/String;
  */
