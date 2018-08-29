@@ -32,7 +32,7 @@ Open the Search dialog
 
 1. In the **Containing text:** field, type the name for which you want to search. 
 2. Select **Regular expresion** which is a is a special sequence of characters that helps you match or find other strings or sets of strings, using a specialized syntax held in a pattern. They can be used to search, edit, or manipulate text and data.
-3. In the **File name patterns:** field limit the search to **" *.c, *.cpp "** files.
+3. In the **File name patterns:** field limit the search to **"*.c"** **"*.cpp"** files.
 4. In the **Scope** narrow the scope of your search - select **Workspace**.
 5. Press **Search**. 
 
