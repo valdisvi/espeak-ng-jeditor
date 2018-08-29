@@ -15,18 +15,18 @@ If you don't know in which class the function is, then use the text search - "Fi
 
 Open the Search dialog by either:
 
-    * Clicking the **Search button** in the toolbar or
-	![Image of Search button]()
+   * Clicking the **Search button** in the toolbar or
+	![Image of Search button](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/Search_button.png)
 
-    * Pressing **Ctrl + H** or
+   * Pressing **Ctrl + H** or
 
-    * Selecting **Search > Search...** from the menu bar. 
+   * Selecting **Search > Search...** from the menu bar. 
 	
 
 ### How to fill Search dialog
 
 Open the Search dialog 
-![Image of File_search_c_empty]()
+![Image of File_search_c_empty](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/File_search_c_emty.png)
 
 1. In the **Containing text:** field, type the name for which you want to search. 
 2. Select **Regular expresion** which is a is a special sequence of characters that helps you match or find other strings or sets of strings, using a specialized syntax held in a pattern. They can be used to search, edit, or manipulate text and data.
@@ -34,11 +34,12 @@ Open the Search dialog
 4. In the **Scope** narrow the scope of your search - select **Workspace**.
 5. Press **Search**. 
 
-![Image of File_search_c_fill]()
+![Image of File_search_c_fill](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/File_search_c_fill.png)
 
 ### Use `F3` and `Ctrl+Shift+G`
 
 `F3` - open declaration
+
 `Ctrl+Shift+G`- search references in workspace
 
 ### Check if method is already used
