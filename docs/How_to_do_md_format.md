@@ -4,7 +4,7 @@
 
 The first you need to install text editor (e.g., **Leafpad** or **Gedit**)
 
-#### How to install
+* How to install
 
 ##### How to install **Leafpad** on Lubuntu
 
@@ -18,11 +18,12 @@ Open terminal and then type this command:
 `sudo apt-get install gedit`
 
 
-#### How to open
+* How to open
 
 ##### From terminal
 
 `sudo leafpad [the_file_you_want_to_edit]`
+
 `sudo gedit [the_file_you_want_to_edit]`
 
 ##### From menu panel
@@ -39,7 +40,7 @@ You can rename file in .md by:
 2. select **Rename...** in toolbar;
 3. change file format to .md.
 
-![Image of Rename_file]()
+![Image of Rename_file](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/Rename_file.png)
 
 
 ### How to do Markdown markup language
