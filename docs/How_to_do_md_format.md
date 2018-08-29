@@ -4,29 +4,29 @@
 
 The first you need to install text editor (e.g., **Leafpad** or **Gedit**)
 
-* How to install
+##### How to install
 
-##### How to install **Leafpad** on Lubuntu
+1. How to install **Leafpad** on Lubuntu
 
 Open terminal and then type this command:
 `sudo apt-get install leafpad`
 
 
-##### How to install **Gedit** on Lubuntu
+2. How to install **Gedit** on Lubuntu
 
 Open terminal and then type this command:
 `sudo apt-get install gedit`
 
 
-* How to open
+##### How to open
 
-##### From terminal
+1. From terminal
 
 `sudo leafpad [the_file_you_want_to_edit]`
 
 `sudo gedit [the_file_you_want_to_edit]`
 
-##### From menu panel
+2. From menu panel
 
 **Accessories** -> **Leafpad** or **Gedit**
 
