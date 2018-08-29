@@ -1,4 +1,4 @@
-# How to add new methods using JNI
+# Call C function from Java using JNI framework
 
 ### Background for JNI
 
@@ -18,6 +18,10 @@ Use JNI calling C from Java.
 (need a image)
 
 1. I first started by declaring the native methods in the Java code.
+	
+	The native keyword transforms our method into a sort of abstract method:
+
+	> private native void aNativeMethod();
 
 2. I regenerate the header file for the JNI methods.
 
