@@ -13,7 +13,7 @@ C++, assembly.`
 
 JNI general workflow
 
-[Image of jni](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/Jni.png)
+[Image of Jni](https://github.com/AneteKlavina/espeak-ng-jeditor/blob/master/docs/images/Jni.png)
 
 
 1. Declare the native method in the Java code.
