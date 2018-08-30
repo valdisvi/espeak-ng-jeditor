@@ -1,26 +1,21 @@
-# How to add new methods using JNI
+# Call C function from Java using JNI framework 
 
 ### Background for JNI
 
-[Java Native Interface] (https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/intro.html) (JNI) allows Java code that runs inside a Java Virtual Machine (VM)
+If you want to call C from Java, you'll need to use JNI - Java Native Interface. 
+
+JNI allows Java code that runs inside a Java Virtual Machine (VM)
 to interoperate with applications and libraries written in other programming languages: C, 
-C++, assembly.
-
-You already have a library written in another language, and wish to make it accessible to Java code through the JNI.
-
-By programming through the JNI, you can use native methods to:
-Call Java methods.
-
-Use JNI calling C from Java.
+C++, assembly.`
 
 
-### Background for this project
-(need a image)
+### How to call C from Java
 
-1. I first started by declaring the native methods in the Java code.
 
-2. I regenerate the header file for the JNI methods.
+1. Declare the native method in the Java code.
 
-3. I immplemented method.
+2. Regenerate the header file for the JNI methods.
 
-4. I create Unit test.
+3. Immplement method.
+
+4. Create Unit test.

@@ -1,5 +1,7 @@
 package org.espeakng.jeditor.jni;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
 /*-
@@ -24,10 +26,7 @@ import org.apache.log4j.Logger;
  * 		
  */
 public class ESpeakService {
-	//private static Logger logger = Logger.getLogger(ESpeakService.class);
-	// FIXME javac can't find log4j library which is located in ~/./m2/repository
-	// if called from command line (look at updateJNIchanges.sh)
-	
+	private static Logger logger = Logger.getLogger(ESpeakService.class);
 
 	private ESpeakService() {
 		throw new IllegalStateException("ESpeakService Utility class");
@@ -39,7 +38,7 @@ public class ESpeakService {
 		try {
 			System.load(System.getProperty("user.dir") + "/.lib/libespeakservice.so");
 		} catch (UnsatisfiedLinkError e) {
-			//logger.warn(e);
+			logger.warn(e);
 			System.exit(1);
 		}
 	}
@@ -66,7 +65,15 @@ public class ESpeakService {
 	 * EspeakNG espeak_TextToPhonemes works only after initialization and
 	 * language has been selected, so Language is not optional.
 	 */
+
 	public static native String[] nativeTextToPhonemes(String textToTranslate, String language);
+
+	public static String textToPhonemes(String textToTranslate, String language) {
+		StringBuilder result = new StringBuilder("");
+		for (String line : nativeTextToPhonemes(textToTranslate, language))
+			result.append(line + "\n");
+		return result.toString();
+	}
 
 	/**
 	 * Language defaults to "en"

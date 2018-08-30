@@ -1,6 +1,7 @@
 package org.espeakng.jeditor.jni;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ESpeakServiceTest {
@@ -13,14 +14,18 @@ public class ESpeakServiceTest {
 
 	@Test
 	public void testNativeTextToPhonemes() {
-		//System.out.println(ESpeakService.nativeTextToPhonemes("Hello").toString());
+		// Need to check, that several sentences are spelled
+		String input = "Hello world. Hello again.";
+		String output = ESpeakService.textToPhonemes(input, "en");
+		Assert.assertEquals("Wrong output", "h@l'oU w'3:ld\nh@l'oU a#g'En\n", output);
+		System.out.println("NativeTextToPhonemes:" + input + " > " + output);
 	}
 
 	@Test
 	public void testGetSpectSeq() {
 		SpectSeq s = new SpectSeq();
 		ESpeakService.nativeGetSpectSeq(s, "../espeak-ng/phsource/b/b");
-		System.out.println(s.name + ":" + s.amplitude+s.numframes);
+		System.out.println(s.name + ":" + s.amplitude + s.numframes);
 	}
 
 	@Test
