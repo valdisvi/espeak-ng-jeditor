@@ -84,8 +84,7 @@ public class VowelChart extends JPanel {
 			g2.setColor(gridColor);
 			g2.drawLine(0, y0, getWidth(), y0);
 			g2.setColor(Color.BLACK);
-	
-
+			
 			int value = (int) (getMinValueY() - (getMinValueY() % 100) + (i * 50));
 
 			String yLabel = value + "";
@@ -166,6 +165,7 @@ public class VowelChart extends JPanel {
 
 		g.setColor(lineColor);
 		g.drawLine(x0, y0, x1, y1);
+	
 		g.setColor(Color.DARK_GRAY);
 		g.drawString(s, x0, y0);
 		g.setColor(forColor(freqCoeff(getMinFrequency(), getMaxFrequency(), max)));

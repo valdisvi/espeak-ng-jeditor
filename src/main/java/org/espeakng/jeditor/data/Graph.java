@@ -46,10 +46,25 @@ This is the class which responds for graphical displaying of opened phoneme.
           / /         \ \
            /           \
           /             \
-
-
-
- */
+                 /\
+/ / / / / / / /      / / / / / / /
+               /+\              /
+  \ /       [-O-|-O-]  \/  \     /
+   \          |||||     \   |  / /
+ ((((O)))}>-----|-----<{(((O)))) /
+  /    \       |||         /     /
+       /       |||         \     /
+\       \      |||             /
+  \            |||           /
+    \ \        |||         /
+      \     ---|||---     /
+       \    |        |    /
+        \                 /
+          \          /  /  /
+            \     /
+              \ /
+ *
+ */          
 
 public class Graph {
 
@@ -210,7 +225,7 @@ public class Graph {
 					x[2] = points[i][0] + points[i][3];
 					y[1] = points[i][1];
 
-					g.setColor(Color.ORANGE);
+					g.setColor(Color.orange);
 					Polygon poly = new Polygon(x, y, 3);
 					g.fillPolygon(poly);
 					g.setColor(Color.RED);
@@ -221,12 +236,13 @@ public class Graph {
 			drawPeaks(peaks, g);
 
 			// draws increments
-			g.setColor(Color.BLACK);
+			g.setColor(Color.black);
 			g.setFont(new Font(g.getFont().getFontName(), g.getFont()
 					.getStyle(), keyframeHeight / 10 - 2));
-			g.drawString(((int) (currentFrame.time * 1000)) + " ms" + "  "
-					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
-					- keyframeWidth / 5, keyframeHeight / 5);
+			g.drawString(((int) (currentFrame.time * 1000)) +"ms"+
+				"-time"+"  "+"freq-"
+					+ ((int) currentFrame.pitch) + "hz", keyframeWidth
+					- keyframeWidth / 4, keyframeHeight / 4);
 
 
 			int rectPosY = keyframeHeight / 10;
@@ -237,7 +253,7 @@ public class Graph {
 					g.fillRect(rectPosX, rectPosY, rectPosY, rectPosY);
 					// if zoom
 					if ((double) keyframeWidth / 600 > 1.0) {
-						g.setColor(Color.WHITE);
+						g.setColor(Color.GREEN);
 						g.drawString("" + j, rectPosX + 2, rectPosY
 								+ g.getFont().getSize() - 2);
 					}
@@ -254,6 +270,8 @@ public class Graph {
 			Formant_t[] formants = currentFrame.formants;
 			// draw the measured formants
 			g.setColor(Color.BLUE);
+			
+			
 			for (peak = 1; peak <= 5; peak++) {
 
 				if (formants[peak].freq != 0) {
@@ -402,8 +420,7 @@ public class Graph {
 		mainW.focusedFrame = frameToLoad;
 		mainW.focusedPanel = currentPanel;
 		selectedFrames.clear();
-		selectedFrames.add(frameToLoad);
-
+		
 
 		for (Map.Entry<JPanel, Frame> entry : mapPanels.entrySet()) {
 			if (!entry.getValue().equals(frameToLoad)) {
@@ -416,9 +433,14 @@ public class Graph {
 			}
 		}
 		currentPanel.requestFocus();
-		currentPanel.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1,
-				Color.red));
-
+	
+	;
+      
+		
+		
+		currentPanel.setBorder(BorderFactory.createTitledBorder(null, "Amplitude", 1, 2));
+		
+       
 		Peak_t[] peaks = frameToLoad.peaks;
 		String value;
 
@@ -445,9 +467,10 @@ public class Graph {
 
 		MainWindow.tfmS.setText(String.valueOf((int)(frameToLoad.time*1000)));
 		MainWindow.spampF.setValue(frameToLoad.amp_adjust);
+	
 
 	}
-
+	
 	KeyListener keyListener = new KeyListener() {
 
 		@Override

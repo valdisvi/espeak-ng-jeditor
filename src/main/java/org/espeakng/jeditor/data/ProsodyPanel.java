@@ -86,7 +86,7 @@ public class ProsodyPanel extends JPanel {
 	}
 	
 	private void writeProsodyNames(Graphics2D g2) {
-		g2.setColor(Color.BLACK);
+		g2.setColor(Color.BLUE);
 		g2.drawString(prosodyPhoneme.getName(), getWidth() / 2 - 5, HEIGHT);
 	}
 }

@@ -27,8 +27,9 @@ public class GraphTest {
 		 frameList.add(new Frame());
 		 frameList.add(new Frame());
 		 
-		 frameList.get(0).frameLoader(frames, 1, 10.2, 3);
-	   }
+		 frameList.get(0).frameLoader(frames, 1, 10.2,3);
+      
+	 }
 	 @Test
 	 public void test(){
 
