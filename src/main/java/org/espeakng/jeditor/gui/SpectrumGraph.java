@@ -44,9 +44,11 @@ public class SpectrumGraph extends JPanel {
         		data[i][1]= frames.get(i).formants[1].freq;
         		data[i][2]= frames.get(i).formants[2].freq;
         		data[i][3]= frames.get(i).formants[3].freq;
+        		
         		data[i][4]= frames.get(i).peaks[1].pkfreq;
         		data[i][5]= frames.get(i).peaks[2].pkfreq;
         		data[i][6]= frames.get(i).peaks[3].pkfreq;
+        		
         	}
         }
         double minTime = Integer.MAX_VALUE;
@@ -84,6 +86,7 @@ public class SpectrumGraph extends JPanel {
             sy += sh;
         }
         // Abscissa label.
+       
         s = "frame time, mS";
         sy = h - PAD + (PAD - sh)/2 + lm.getAscent();
         float sw = (float)font.getStringBounds(s, frc).getWidth();

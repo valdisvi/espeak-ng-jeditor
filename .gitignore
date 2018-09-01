@@ -9,3 +9,4 @@ target/**
 *.orig
 /bin/
 graph.png
+src/main/c/speak

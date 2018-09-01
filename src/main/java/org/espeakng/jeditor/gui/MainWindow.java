@@ -632,6 +632,112 @@ public class MainWindow extends JFrame {
 						.addGroup(groupLayout.createSequentialGroup()
 								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
 								.addContainerGap()))));
+//////////////////////////
+//////// Text Tab ////////
+//////////////////////////
+
+JPanel panelText = new JPanel();
+panelText.setAutoscrolls(true);
+tabbedPane.addTab("Text", null, panelText, null);
+tabbedPane.setName("Text");
+
+// Input text area:
+
+textAreaIn = new JTextArea();
+textAreaIn.setText("Hello");
+textAreaIn.setName("textAreaIn");
+textAreaIn.setLineWrap(true);
+textAreaIn.setWrapStyleWord(true);
+JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+// Output text area:
+
+textAreaOut = new JTextArea();
+textAreaOut.setName("textAreaOut");
+textAreaOut.setLineWrap(true);
+textAreaOut.setWrapStyleWord(true);
+JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+// Command buttons:
+
+btnSpeak = new JButton("");
+btnSpeak.setName("btnSpeak");
+btnPause = new JButton("");
+btnSpeak.setName("btnPause");
+btnPause.setEnabled(false);
+btnStop = new JButton("");
+btnSpeak.setName("btnStop");
+btnStop.setEnabled(false);
+
+Image play;
+Image pause;
+Image stop;
+Image resume;
+
+try {
+play = ImageIO.read(MainWindow.class.getResourceAsStream("/play.png"));
+btnSpeak.setIcon(new ImageIcon(play));
+
+pause = ImageIO.read(MainWindow.class.getResourceAsStream("/pause.png"));
+btnPause.setIcon(new ImageIcon(pause));
+
+stop = ImageIO.read(MainWindow.class.getResourceAsStream("/stop.png"));
+btnStop.setIcon(new ImageIcon(stop));
+
+resume = ImageIO.read(MainWindow.class.getResourceAsStream("/resume.png"));
+
+pauseIcon = new ImageIcon(pause);
+resumeIcon = new ImageIcon(resume);
+} catch (IOException e) {
+logger.warn(e);
+}
+
+btnTranslate = new JButton("Translate");
+btnTranslate.setName("TranslateB");
+btnShowRules = new JButton("Show Rules");
+btnShowRules.setName("ShowRulesB");
+btnShowIPA = new JButton("Show IPA");
+btnShowIPA.setName("ShowIPAB");
+
+// Text tab horizontal grouping
+
+GroupLayout glPanelText = new GroupLayout(panelText);
+glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING).addGroup(glPanelText
+.createSequentialGroup().addContainerGap()
+.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false).addComponent(scrollPaneTextAreaOut)
+		.addGroup(glPanelText.createSequentialGroup()
+				.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(btnSpeak, Alignment.CENTER))
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnPause, Alignment.CENTER))
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnStop, Alignment.CENTER)))
+		.addComponent(scrollPaneTextAreaIn))
+.addContainerGap()));
+glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
+.addGroup(glPanelText.createSequentialGroup().addContainerGap()
+		.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+		.addPreferredGap(ComponentPlacement.UNRELATED)
+		.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
+		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
+				.addComponent(btnShowRules).addComponent(btnShowIPA))
+		.addPreferredGap(ComponentPlacement.RELATED)
+		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
+				.addComponent(btnPause).addComponent(btnStop))
+		.addGap(54)));
+
+panelText.setLayout(glPanelText);
+getContentPane().setLayout(groupLayout);
 
 		///////////////////////////
 		//////// Spect Tab ////////
@@ -926,112 +1032,6 @@ public class MainWindow extends JFrame {
 		spms.setModel(new SpinnerNumberModel(0, 0, 596, 1));
 		spms.setBounds(20, 481, compWidth, compHeight);
 		panel_Spect.add(spms);
-
-		//////////////////////////
-		//////// Text Tab ////////
-		//////////////////////////
-		
-		JPanel panelText = new JPanel();
-		panelText.setAutoscrolls(true);
-		tabbedPane.addTab("Text", null, panelText, null);
-		tabbedPane.setName("Text");
-		
-		// Input text area:
-
-		textAreaIn = new JTextArea();
-		textAreaIn.setText("Hello");
-		textAreaIn.setName("textAreaIn");
-		textAreaIn.setLineWrap(true);
-		textAreaIn.setWrapStyleWord(true);
-		JScrollPane scrollPaneTextAreaIn = new JScrollPane(textAreaIn, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		// Output text area:
-
-		textAreaOut = new JTextArea();
-		textAreaOut.setName("textAreaOut");
-		textAreaOut.setLineWrap(true);
-		textAreaOut.setWrapStyleWord(true);
-		JScrollPane scrollPaneTextAreaOut = new JScrollPane(textAreaOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		// Command buttons:
-
-		btnSpeak = new JButton("");
-		btnSpeak.setName("btnSpeak");
-		btnPause = new JButton("");
-		btnSpeak.setName("btnPause");
-		btnPause.setEnabled(false);
-		btnStop = new JButton("");
-		btnSpeak.setName("btnStop");
-		btnStop.setEnabled(false);
-
-		Image play;
-		Image pause;
-		Image stop;
-		Image resume;
-
-		try {
-			play = ImageIO.read(MainWindow.class.getResourceAsStream("/play.png"));
-			btnSpeak.setIcon(new ImageIcon(play));
-
-			pause = ImageIO.read(MainWindow.class.getResourceAsStream("/pause.png"));
-			btnPause.setIcon(new ImageIcon(pause));
-
-			stop = ImageIO.read(MainWindow.class.getResourceAsStream("/stop.png"));
-			btnStop.setIcon(new ImageIcon(stop));
-
-			resume = ImageIO.read(MainWindow.class.getResourceAsStream("/resume.png"));
-
-			pauseIcon = new ImageIcon(pause);
-			resumeIcon = new ImageIcon(resume);
-		} catch (IOException e) {
-			logger.warn(e);
-		}
-
-		btnTranslate = new JButton("Translate");
-		btnTranslate.setName("TranslateB");
-		btnShowRules = new JButton("Show Rules");
-		btnShowRules.setName("ShowRulesB");
-		btnShowIPA = new JButton("Show IPA");
-		btnShowIPA.setName("ShowIPAB");
-
-		// Text tab horizontal grouping
-
-		GroupLayout glPanelText = new GroupLayout(panelText);
-		glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING).addGroup(glPanelText
-				.createSequentialGroup().addContainerGap()
-				.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false).addComponent(scrollPaneTextAreaOut)
-						.addGroup(glPanelText.createSequentialGroup()
-								.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnSpeak, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowRules, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnPause, Alignment.CENTER))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnShowIPA, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnStop, Alignment.CENTER)))
-						.addComponent(scrollPaneTextAreaIn))
-				.addContainerGap()));
-		glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
-				.addGroup(glPanelText.createSequentialGroup().addContainerGap()
-						.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
-						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-								.addComponent(btnShowRules).addComponent(btnShowIPA))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
-								.addComponent(btnPause).addComponent(btnStop))
-						.addGap(54)));
-
-		panelText.setLayout(glPanelText);
-		getContentPane().setLayout(groupLayout);
 	}
+		
 }
