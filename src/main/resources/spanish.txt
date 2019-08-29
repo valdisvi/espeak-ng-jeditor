@@ -1,0 +1,73 @@
+Guardar
+Guadar como
+Cerca
+Dejar
+Hablar
+Traducir
+Mostrar reglas
+Mostrar IPA
+Hablar
+Hablar archivo...
+Pausa
+Detener
+Voz
+Seleccionar voz...
+Seleccionar variante de voz…
+Seleccionar voz
+Ingles
+Ruso
+Leton
+Polaco
+Opciones
+Establecer caminos
+Archivo de fonemas maestro...
+Fuente de datos de fonema...
+Fuente de datos del diccionario...
+Sonido sintetizado archivo WAV...
+Archivo de voz para modificar picos formantes...
+Idioma
+Ingles
+Leton
+Ruso
+Velocidad
+Habla puntuacion
+Hablar personajes
+Hablar nombre de personaje
+Herramientas
+Hacer tabla de vocales
+De datos de fonemas compilados
+Del directorio de archivos vocales...
+Lexico de proceso
+Ruso
+Bulgaro
+Aleman
+Italiano
+Convertir archivo a UTF8...
+Cuenta frecuencias de palabras...
+Prueba (temporal)
+Compilar
+Compilar diccionario
+Compilar diccionario (depurar)
+Compilar datos de fonema 22050HZ
+Compilar a frecuencia de muestreo
+Compilar la lista de fonemas de mbrola...
+Compilar datos de entonacion
+Diseño de archivo '_rules'
+Ordenar el archivo '_rules'
+Ayuda
+Documentación de eSpeak
+Acerca de
+Enfocar-
+Enfocar+
+Texto
+Traducir
+Mostrar reglas
+Hablar
+Mostrar IPA
+Cierra todo
+Exportar gráfico
+தமிழ்
+한국어
+日本語
+Española
+Hola

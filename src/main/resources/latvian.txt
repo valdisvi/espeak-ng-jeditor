@@ -21,6 +21,9 @@ Anglu
 Krievu
 Latviešu
 Poļu
+Koreiešu
+Japāņu
+Spāņu
 Opcijas
 Skatīt ceļus
 Pārvaldīt fonēmas failu...
@@ -70,4 +73,7 @@ Parādīt IPA
 Aizvērt visu
 Eksportēt grafiku
 தமிழ்
+한국어
+日本語
+Española
 Sveiki

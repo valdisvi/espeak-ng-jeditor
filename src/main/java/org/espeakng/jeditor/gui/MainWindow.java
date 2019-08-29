@@ -54,72 +54,89 @@ public class MainWindow extends JFrame {
 	// Language.java
 	// menuBar group File
 	public JMenu mnFile;
-	public JMenuItem mntmOpen;
-	public JMenuItem mntmOpen2;
-	public JMenuItem mntmSave;
-	public JMenuItem mntmSaveAs;
-	public JMenuItem mntmClose;
-	public JMenuItem mntmCloseAll;
-	public JMenuItem mntmExportGraph;
-	public JMenuItem mntmQuit;
+	public JMenuItem menuItemOpen;
+	public JMenuItem menuItemOpen2;
+	public JMenuItem menuItemSave;
+	public JMenuItem menuItemSaveAs;
+	public JMenuItem menuItemClose;
+	public JMenuItem menuItemCloseAll;
+	public JMenuItem menuItemExportGraph;
+	public JMenuItem menuItemQuit;
 	// menuBar group Speak
-	public JMenu mnSpeak;
-	public JMenuItem mntmTranslate;
-	public JMenuItem mntmShowRules;
-	public JMenuItem mntmShowIPA;
-	public JMenuItem mntmSpeak;
-	public JMenuItem mntmSpeakfile;
-	public JMenuItem mntmPause;
-	public JMenuItem mntmStop;
+	public JMenu menuSpeak;
+	public JMenuItem menuItemTranslate;
+	public JMenuItem menuItemShowRules;
+	public JMenuItem menuItemShowIPA;
+	public JMenuItem menuItemSpeak;
+	public JMenuItem menuItemSpeakfile;
+	public JMenuItem menuItemPause;
+	public JMenuItem menuItemStop;
+	
+	
 	// menuBar group Voice
-	public JMenu mnVoice;
-	public JMenuItem mntmSelectVoiceVariant;
+	public JMenu menuVoice;
+	public JMenuItem menuItemSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
-	public JMenu mnSelectVoice;
-	public JRadioButtonMenuItem rdbtnmntmEnglish;
-	public JRadioButtonMenuItem rdbtnmntmLatvian;
-	public JRadioButtonMenuItem rdbtnmntmPolish;
-	public JRadioButtonMenuItem rdbtnmntmRussian;
+	public JMenu menuSelectVoice;
+	public JRadioButtonMenuItem rdbtnmenuItemEnglish;
+	public JRadioButtonMenuItem rdbtnmenuItemLatvian;
+	public JRadioButtonMenuItem rdbtnmenuItemPolish;
+	public JRadioButtonMenuItem rdbtnmenuItemKorean;
+	public JRadioButtonMenuItem rdbtnmenuItemJapanese;
+	public JRadioButtonMenuItem rdbtnmenuItemSpanish;
+	
+	
+	
+	
 	// menuBar group Options
-	public JMenu mnOptions;
-	public JMenu mnSetPaths;
-	public JMenuItem mntmMasterPhonemesFile;
-	public JMenuItem mntmPhonemeDataSource;
-	public JMenuItem mntmDictionaryDataSource;
-	public JMenuItem mntmSynthesizedSoundWAVfile;
-	public JMenuItem mntmVoiceFileToModifyFormantPeaks;
-	public JMenu mnLanguage;
-	public JMenuItem mntmEnglish;
-	public JMenuItem mntmLatvian;
-	public JMenuItem mntmRussian;
-	public JMenuItem mntmTamil;
-	public JMenuItem mntmSpeed;
+	public JMenu menuOptions;
+	public JMenu menuSetPaths;
+	public JMenuItem menuItemMasterPhonemesFile;
+	public JMenuItem menuItemPhonemeDataSource;
+	public JMenuItem menuItemDictionaryDataSource;
+	public JMenuItem menuItemSynthesizedSoundWAVfile;
+	public JMenuItem menuItemVoiceFileToModifyFormantPeaks;
+	
+	
+	//window/menu language//
+	public JMenu menuLanguage;
+	public JMenuItem menuItemEnglish;
+	public JMenuItem menuItemLatvian;
+	public JMenuItem menuItemRussian;
+	public JMenuItem menuItemTamil;
+	public JMenuItem menuItemKorean;
+	public JMenuItem menuItemJapanese;
+	public JMenuItem menuItemSpanish;
+	
+	public JMenuItem menuItemSpeed;
 	public OptionsSpeedWindow optionsSpeed;
-	public JMenuItem mntmSpeakPunctuation;
-	public JMenuItem mntmSpeakCharacters;
-	public JMenuItem mntmSpeakCharacterName;
+	public JMenuItem menuItemSpeakPunctuation;
+	public JMenuItem menuItemSpeakCharacters;
+	public JMenuItem menuItemSpeakCharacterName;
+	
+	
 	// menuBar group Tools
-	public JMenu mnTools;
-	public JMenu mnMakeVowelsChart;
-	public JMenuItem mntmFromCompiledPhoneme;
-	public JMenuItem mntmFromDirectoryVowelFiles;
-	public JMenu mnProcessLexicon;
-	public JMenuItem mntmPLBulgarian;
-	public JMenuItem mntmPLGerman;
-	public JMenuItem mntmPLItalian;
-	public JMenuItem mntmPLRussian;
-	public JMenuItem mntmCountWordOccurrences;
+	public JMenu menuTools;
+	public JMenu menuMakeVowelsChart;
+	public JMenuItem menuItemFromCompiledPhoneme;
+	public JMenuItem menuItemFromDirectoryVowelFiles;
+	public JMenu menuProcessLexicon;
+	public JMenuItem menuItemPLBulgarian;
+	public JMenuItem menuItemPLGerman;
+	public JMenuItem menuItemPLItalian;
+	public JMenuItem menuItemPLRussian;
+	public JMenuItem menuItemCountWordOccurrences;
 	// menuBar group Compile
 	public JMenu mnCompile;
-	public JMenuItem mntmCompileDictionary;
-	public JMenuItem mntmCompileDictionarydebug;
-	public JMenuItem mntmCompilePhonemeData;
-	public JMenuItem mntmCompileMbrolaPhonemes;
-	public JMenuItem mntmCompileIntonationData;
+	public JMenuItem menuItemCompileDictionary;
+	public JMenuItem menuItemCompileDictionarydebug;
+	public JMenuItem menuItemCompilePhonemeData;
+	public JMenuItem menuItemCompileMbrolaPhonemes;
+	public JMenuItem menuItemCompileIntonationData;
 	// menuBar group Help
-	public JMenu mnHelp;
-	public JMenuItem mntmEspeakDocumentation;
-	public JMenuItem mntmAbout;
+	public JMenu menuHelp;
+	public JMenuItem menuItemEspeakDocumentation;
+	public JMenuItem menuItemAbout;
 
 	// positions & dimensions of components
 	private int labelHeight = 15;
@@ -129,7 +146,7 @@ public class MainWindow extends JFrame {
 	private int tfygap = 1; // vertical interval
 	private int compWidth = 56;
 	private int compHeight = 23;
-	private int labelyOffset = compHeight / 4; // vertical offset from the top
+	private int labelyOffset = compHeight / 20; // vertical offset from the top
 												// of the text field/spinner
 
 	// some components
@@ -285,237 +302,267 @@ public class MainWindow extends JFrame {
 		mnFile.setName("File");
 		mMenuBar.add(mnFile);
 
-		mntmOpen = new JMenuItem("Open");
-		mntmOpen.setName("Open");
-		mnFile.add(mntmOpen);
+		menuItemOpen = new JMenuItem("Open");
+		menuItemOpen.setName("Open");
+		mnFile.add(menuItemOpen);
 
-		mntmOpen2 = new JMenuItem("Open2...");
-		mntmOpen2.setName("Open2...");
-		mnFile.add(mntmOpen2);
+		menuItemOpen2 = new JMenuItem("Open2...");
+		menuItemOpen2.setName("Open2...");
+		mnFile.add(menuItemOpen2);
 
-		mntmExportGraph = new JMenuItem("Export graph");
-		mntmExportGraph.setName("Export graph");
-		mnFile.add(mntmExportGraph);
+		menuItemExportGraph = new JMenuItem("Export graph");
+		menuItemExportGraph.setName("Export graph");
+		mnFile.add(menuItemExportGraph);
 
-		mntmSave = new JMenuItem("Save");
-		mntmSave.setName("Save");
-		mntmSave.setVisible(false);
-		mnFile.add(mntmSave);
+		menuItemSave = new JMenuItem("Save");
+		menuItemSave.setName("Save");
+		menuItemSave.setVisible(false);
+		mnFile.add(menuItemSave);
 
-		mntmSaveAs = new JMenuItem("Save As...");
-		mntmSaveAs.setName("Save As...");
-		mntmSaveAs.setVisible(false);
-		mnFile.add(mntmSaveAs);
+		menuItemSaveAs = new JMenuItem("Save As...");
+		menuItemSaveAs.setName("Save As...");
+		menuItemSaveAs.setVisible(false);
+		mnFile.add(menuItemSaveAs);
 
-		mntmClose = new JMenuItem("Close");
-		mntmClose.setName("Close");
-		mntmClose.setVisible(false);
-		mnFile.add(mntmClose);
+		menuItemClose = new JMenuItem("Close");
+		menuItemClose.setName("Close");
+		menuItemClose.setVisible(false);
+		mnFile.add(menuItemClose);
 
-		mntmCloseAll = new JMenuItem("Close all");
-		mntmCloseAll.setName("Close all");
-		mntmCloseAll.setVisible(false);
-		mnFile.add(mntmCloseAll);
+		menuItemCloseAll = new JMenuItem("Close all");
+		menuItemCloseAll.setName("Close all");
+		menuItemCloseAll.setVisible(false);
+		mnFile.add(menuItemCloseAll);
 
-		mntmQuit = new JMenuItem("Quit");
-		mntmQuit.setName("Quit");
-		mnFile.add(mntmQuit);
+		menuItemQuit = new JMenuItem("Quit");
+		menuItemQuit.setName("Quit");
+		mnFile.add(menuItemQuit);
 
 		/////////////////
 		// Speak group //
 		/////////////////
 
-		mnSpeak = new JMenu("Speak");
-		mnSpeak.setName("Speak");
-		mMenuBar.add(mnSpeak);
+		menuSpeak = new JMenu("Speak");
+		menuSpeak.setName("Speak");
+		mMenuBar.add(menuSpeak);
 
 
-		mntmTranslate = new JMenuItem("Translate");
-		mntmTranslate.setName("Translate");
-		mnSpeak.add(mntmTranslate);
+		menuItemTranslate = new JMenuItem("Translate");
+		menuItemTranslate.setName("Translate");
+		menuSpeak.add(menuItemTranslate);
 
-		mntmShowRules = new JMenuItem("Show Rules");
-		mntmShowRules.setName("Show Rules");
-		mnSpeak.add(mntmShowRules);
+		menuItemShowRules = new JMenuItem("Show Rules");		
+		menuItemShowRules.setName("Show Rules");
+		menuSpeak.add(menuItemShowRules);
 
-		mntmShowIPA = new JMenuItem("Show IPA");
-		mntmShowIPA.setName("Show IPA");
-		mnSpeak.add(mntmShowIPA);
+		menuItemShowIPA = new JMenuItem("Show IPA");
+		menuItemShowIPA.setName("Show IPA");
+		menuSpeak.add(menuItemShowIPA);
 
-		mnSpeak.add(new JSeparator());
+		menuSpeak.add(new JSeparator());
 		
-		mntmSpeak = new JMenuItem("Speak");
-		mntmSpeak.setName("Speak");
-		mnSpeak.add(mntmSpeak);
+		menuItemSpeak = new JMenuItem("Speak");
+		menuItemSpeak.setName("Speak");
+		menuSpeak.add(menuItemSpeak);
 
-		mntmSpeakfile = new JMenuItem("Speak file...");
-		mntmSpeakfile.setName("SpeakFile");
-		mnSpeak.add(mntmSpeakfile);
+		menuItemSpeakfile = new JMenuItem("Speak file...");
+		menuItemSpeakfile.setName("SpeakFile");
+		menuSpeak.add(menuItemSpeakfile);
 
-		mntmPause = new JMenuItem("Pause");
-		mntmPause.setName("Pause");
-		mntmPause.setEnabled(false);
-		mnSpeak.add(mntmPause);
+		menuItemPause = new JMenuItem("Pause");
+		menuItemPause.setName("Pause");
+		menuItemPause.setEnabled(false);
+		menuSpeak.add(menuItemPause);
 
-		mntmStop = new JMenuItem("Stop");
-		mntmStop.setName("Stop");
-		mntmStop.setEnabled(false);
-		mnSpeak.add(mntmStop);
+		menuItemStop = new JMenuItem("Stop");
+		menuItemStop.setName("Stop");
+		menuItemStop.setEnabled(false);
+		menuSpeak.add(menuItemStop);
 
 		/////////////////
 		// Voice group //
 		/////////////////
 
-		mnVoice = new JMenu("Voice");
-		mnVoice.setName("Voice");
-		mMenuBar.add(mnVoice);
+		menuVoice = new JMenu("Voice");
+		menuVoice.setName("Voice");
+		mMenuBar.add(menuVoice);
 
-		mntmSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
-		mntmSelectVoiceVariant.setName("Select Voice Variant...");
-		mnVoice.add(mntmSelectVoiceVariant);
+		menuItemSelectVoiceVariant = new JMenuItem("Select Voice Variant...");
+		menuItemSelectVoiceVariant.setName("Select Voice Variant...");
+		menuVoice.add(menuItemSelectVoiceVariant);
 
-		mnVoice.add(new JSeparator());
+		menuVoice.add(new JSeparator());
 
-		mnSelectVoice = new JMenu("Select Voice ");
-		mnSelectVoice.setName("Select Voice ");
-		mnVoice.add(mnSelectVoice);
+		menuSelectVoice = new JMenu("Select Voice ");
+		menuSelectVoice.setName("Select Voice ");
+		menuVoice.add(menuSelectVoice);
 
-		rdbtnmntmEnglish = new JRadioButtonMenuItem("English");
-		rdbtnmntmEnglish.setName("EnglishVoice");
-		rdbtnmntmEnglish.setSelected(true);
-		mnSelectVoice.add(rdbtnmntmEnglish);
+		rdbtnmenuItemEnglish = new JRadioButtonMenuItem("English");
+		rdbtnmenuItemEnglish.setName("EnglishVoice");
+		rdbtnmenuItemEnglish.setSelected(true);
+		menuSelectVoice.add(rdbtnmenuItemEnglish);
 
-		rdbtnmntmLatvian = new JRadioButtonMenuItem("Latvian");
-		rdbtnmntmLatvian.setName("LatvianVoice");
-		mnSelectVoice.add(rdbtnmntmLatvian);
+		rdbtnmenuItemLatvian = new JRadioButtonMenuItem("Latvian");
+		rdbtnmenuItemLatvian.setName("LatvianVoice");
+		menuSelectVoice.add(rdbtnmenuItemLatvian);
 
-		rdbtnmntmPolish = new JRadioButtonMenuItem("Polish");
-		rdbtnmntmPolish.setName("PolishVoice");
-		mnSelectVoice.add(rdbtnmntmPolish);
-
-		rdbtnmntmRussian = new JRadioButtonMenuItem("Russian");
-		rdbtnmntmRussian.setName("RussianVoice");
-
-		mnSelectVoice.add(rdbtnmntmRussian);
+		rdbtnmenuItemPolish = new JRadioButtonMenuItem("Polish");
+		rdbtnmenuItemPolish.setName("PolishVoice");
+		menuSelectVoice.add(rdbtnmenuItemPolish);
+//
+//		rdbtnmenuItemRussian = new JRadioButtonMenuItem("Russian");
+//		rdbtnmenuItemRussian.setName("RussianVoice");
+//		menuSelectVoice.add(rdbtnmenuItemRussian);
+		
+		rdbtnmenuItemKorean = new JRadioButtonMenuItem("Korean");
+		rdbtnmenuItemKorean.setName("KoreanVoice");
+		menuSelectVoice.add(rdbtnmenuItemKorean);
+		
+		rdbtnmenuItemJapanese = new JRadioButtonMenuItem("Japanese");
+		rdbtnmenuItemJapanese.setName("JapaneseVoice");
+		menuSelectVoice.add(rdbtnmenuItemJapanese);
+		
+		rdbtnmenuItemSpanish = new JRadioButtonMenuItem("Spanish");
+		rdbtnmenuItemSpanish.setName("SpanishVoice");
+		menuSelectVoice.add(rdbtnmenuItemSpanish);
 
 		groupOfVoices = new ButtonGroup();
-		groupOfVoices.add(rdbtnmntmEnglish);
-		groupOfVoices.add(rdbtnmntmRussian);
-		groupOfVoices.add(rdbtnmntmLatvian);
-		groupOfVoices.add(rdbtnmntmPolish);
+		groupOfVoices.add(rdbtnmenuItemEnglish);
+//		groupOfVoices.add(rdbtnmenuItemRussian);
+		groupOfVoices.add(rdbtnmenuItemLatvian);
+		groupOfVoices.add(rdbtnmenuItemPolish);
+		groupOfVoices.add(rdbtnmenuItemKorean);
+		groupOfVoices.add(rdbtnmenuItemJapanese);
+		groupOfVoices.add(rdbtnmenuItemSpanish);
 
 		///////////////////
 		// Options group //
 		///////////////////
 
-		mnOptions = new JMenu("Options");
-		mMenuBar.add(mnOptions);
+		menuOptions = new JMenu("Options");
+		mMenuBar.add(menuOptions);
 
-		mnSetPaths = new JMenu("Set paths");
-		mnSetPaths.setName("Set paths");
-		mnOptions.add(mnSetPaths);
+		menuSetPaths = new JMenu("Set paths");
+		menuSetPaths.setName("Set paths");
+		menuOptions.add(menuSetPaths);
 
-		mntmMasterPhonemesFile = new JMenuItem("Master phonemes file...");
-		mntmMasterPhonemesFile.setName("Master phonemes file...");
-		mnSetPaths.add(mntmMasterPhonemesFile);
+		menuItemMasterPhonemesFile = new JMenuItem("Master phonemes file...");
+		menuItemMasterPhonemesFile.setName("Master phonemes file...");
+		menuSetPaths.add(menuItemMasterPhonemesFile);
 
-		mntmPhonemeDataSource = new JMenuItem("Phoneme data source...");
-		mntmPhonemeDataSource.setName("Phoneme data source...");
-		mnSetPaths.add(mntmPhonemeDataSource);
+		menuItemPhonemeDataSource = new JMenuItem("Phoneme data source...");
+		menuItemPhonemeDataSource.setName("Phoneme data source...");
+		menuSetPaths.add(menuItemPhonemeDataSource);
 
-		mntmDictionaryDataSource = new JMenuItem("Dictionary data source...");
-		mntmDictionaryDataSource.setName("Dictionary data source...");
-		mnSetPaths.add(mntmDictionaryDataSource);
+		menuItemDictionaryDataSource = new JMenuItem("Dictionary data source...");
+		menuItemDictionaryDataSource.setName("Dictionary data source...");
+		menuSetPaths.add(menuItemDictionaryDataSource);
 
-		mntmSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
-		mntmSynthesizedSoundWAVfile.setName("Synthesized sound WAV file...");
-		mnSetPaths.add(mntmSynthesizedSoundWAVfile);
+		menuItemSynthesizedSoundWAVfile = new JMenuItem("Synthesized sound WAV file...");
+		menuItemSynthesizedSoundWAVfile.setName("Synthesized sound WAV file...");
+		menuSetPaths.add(menuItemSynthesizedSoundWAVfile);
 
-		mntmVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
-		mntmVoiceFileToModifyFormantPeaks.setName("Voice file to modify formant peaks...");
-		mnSetPaths.add(mntmVoiceFileToModifyFormantPeaks);
-
-		mnLanguage = new JMenu("Language");
-		mnOptions.add(mnLanguage);
-
-		mntmEnglish = new JMenuItem("English");
-		mntmEnglish.setName("EnglishLang");
-		mnLanguage.add(mntmEnglish);
-
-		mntmLatvian = new JMenuItem("Latviešu");
-		mntmLatvian.setName("LatvianLang");
-		mnLanguage.add(mntmLatvian);
-
-		mntmRussian = new JMenuItem(Texts.RUSSIAN.getText());
-		mntmRussian.setName("RussianLang");
-		mnLanguage.add(mntmRussian);
+		menuItemVoiceFileToModifyFormantPeaks = new JMenuItem("Voice file to modify formant peaks...");
+		menuItemVoiceFileToModifyFormantPeaks.setName("Voice file to modify formant peaks...");
+		menuSetPaths.add(menuItemVoiceFileToModifyFormantPeaks);
 		
-		mntmTamil = new JMenuItem("தமிழ்");
-		mntmTamil.setName("TamilLang");
-		mnLanguage.add(mntmTamil);
+		//Windows/menu languages//
 
-		mntmSpeed = new JMenuItem("Speed...");
-		mntmSpeed.setName("Speed...");
-		mnOptions.add(mntmSpeed);
+		menuLanguage = new JMenu("Language");
+		menuOptions.add(menuLanguage);
+
+		menuItemEnglish = new JMenuItem("English");
+		menuItemEnglish.setName("EnglishLang");
+		menuLanguage.add(menuItemEnglish);
+
+		menuItemLatvian = new JMenuItem("Latviešu");
+		menuItemLatvian.setName("LatvianLang");
+		menuLanguage.add(menuItemLatvian);
+
+		menuItemRussian = new JMenuItem(Texts.RUSSIAN.getText());
+		menuItemRussian.setName("RussianLang");
+		menuLanguage.add(menuItemRussian);
+		
+		menuItemTamil = new JMenuItem("தமிழ்");
+		menuItemTamil.setName("TamilLang");
+		menuLanguage.add(menuItemTamil);
+		
+		menuItemKorean = new JMenuItem("한국어");
+		menuItemKorean.setName("KoreanLang");
+		menuLanguage.add(menuItemKorean);	
+		
+		menuItemJapanese = new JMenuItem("日本語");
+		menuItemJapanese.setName("JapaneseLang");
+		menuLanguage.add(menuItemJapanese);
+		
+		menuItemSpanish = new JMenuItem("Española");
+		menuItemSpanish.setName("SpanishLang");
+		menuLanguage.add(menuItemSpanish);
+		
+		//////////////////////////////////
+
+		menuItemSpeed = new JMenuItem("Speed...");
+		menuItemSpeed.setName("Speed...");
+		menuOptions.add(menuItemSpeed);
 		optionsSpeed = new OptionsSpeedWindow();
 
-		mnOptions.add(new JSeparator());
+		menuOptions.add(new JSeparator());
 
-		mntmSpeakPunctuation = new JMenuItem("Speak punctuation");
-		mntmSpeakPunctuation.setName(mntmSpeakPunctuation.getText());
-		mnOptions.add(mntmSpeakPunctuation);
+		menuItemSpeakPunctuation = new JMenuItem("Speak punctuation");
+		menuItemSpeakPunctuation.setName(menuItemSpeakPunctuation.getText());
+		menuOptions.add(menuItemSpeakPunctuation);
 
-		mntmSpeakCharacters = new JMenuItem("Speak characters");
-		mntmSpeakCharacters.setName(mntmSpeakCharacters.getText());
-		mnOptions.add(mntmSpeakCharacters);
+		menuItemSpeakCharacters = new JMenuItem("Speak characters");
+		menuItemSpeakCharacters.setName(menuItemSpeakCharacters.getText());
+		menuOptions.add(menuItemSpeakCharacters);
 
-		mntmSpeakCharacterName = new JMenuItem("Speak character name");
-		mntmSpeakCharacterName.setName(mntmSpeakCharacterName.getText());
-		mnOptions.add(mntmSpeakCharacterName);
+		menuItemSpeakCharacterName = new JMenuItem("Speak character name");
+		menuItemSpeakCharacterName.setName(menuItemSpeakCharacterName.getText());
+		menuOptions.add(menuItemSpeakCharacterName);
 
 		/////////////////
 		// Tools group //
 		/////////////////
 
-		mnTools = new JMenu("Tools");
-		mnTools.setName(mnTools.getText());
-		mMenuBar.add(mnTools);
+		menuTools = new JMenu("Tools");
+		menuTools.setName(menuTools.getText());
+		mMenuBar.add(menuTools);
 
-		mnMakeVowelsChart = new JMenu("Make Vowels Chart");
-		mnMakeVowelsChart.setName(mnMakeVowelsChart.getText());
-		mnTools.add(mnMakeVowelsChart);
+		menuMakeVowelsChart = new JMenu("Make Vowels Chart");
+		menuMakeVowelsChart.setName(menuMakeVowelsChart.getText());
+		menuTools.add(menuMakeVowelsChart);
 
-		mntmFromCompiledPhoneme = new JMenuItem("From compiled phoneme data");
-		mntmFromCompiledPhoneme.setName(mntmFromCompiledPhoneme.getText());
-		mnMakeVowelsChart.add(mntmFromCompiledPhoneme);
+		menuItemFromCompiledPhoneme = new JMenuItem("From compiled phoneme data");
+		menuItemFromCompiledPhoneme.setName(menuItemFromCompiledPhoneme.getText());
+		menuMakeVowelsChart.add(menuItemFromCompiledPhoneme);
 
-		mntmFromDirectoryVowelFiles = new JMenuItem("From directory of vowel files...");
-		mntmFromDirectoryVowelFiles.setName(mntmFromDirectoryVowelFiles.getText());
-		mnMakeVowelsChart.add(mntmFromDirectoryVowelFiles);
+		menuItemFromDirectoryVowelFiles = new JMenuItem("From directory of vowel files...");
+		menuItemFromDirectoryVowelFiles.setName(menuItemFromDirectoryVowelFiles.getText());
+		menuMakeVowelsChart.add(menuItemFromDirectoryVowelFiles);
 
-		mnProcessLexicon = new JMenu("Process Lexicon");
-		mnProcessLexicon.setName(mnProcessLexicon.getText());
-		mnTools.add(mnProcessLexicon);
+		menuProcessLexicon = new JMenu("Process Lexicon");
+		menuProcessLexicon.setName(menuProcessLexicon.getText());
+		menuTools.add(menuProcessLexicon);
 
-		mntmPLBulgarian = new JMenuItem("Bulgarian");
-		mntmPLBulgarian.setName(mntmPLBulgarian.getText());
-		mnProcessLexicon.add(mntmPLBulgarian);
+		menuItemPLBulgarian = new JMenuItem("Bulgarian");
+		menuItemPLBulgarian.setName(menuItemPLBulgarian.getText());
+		menuProcessLexicon.add(menuItemPLBulgarian);
 
-		mntmPLGerman = new JMenuItem("German");
-		mntmPLGerman.setName(mntmPLGerman.getText());
-		mnProcessLexicon.add(mntmPLGerman);
+		menuItemPLGerman = new JMenuItem("German");
+		menuItemPLGerman.setName(menuItemPLGerman.getText());
+		menuProcessLexicon.add(menuItemPLGerman);
 
-		mntmPLItalian = new JMenuItem("Italian");
-		mntmPLItalian.setName(mntmPLItalian.getText());
-		mnProcessLexicon.add(mntmPLItalian);
+		menuItemPLItalian = new JMenuItem("Italian");
+		menuItemPLItalian.setName(menuItemPLItalian.getText());
+		menuProcessLexicon.add(menuItemPLItalian);
 
-		mntmPLRussian = new JMenuItem(Texts.RUSSIAN.getText());
-		mntmPLRussian.setName(mntmPLRussian.getText());
-		mnProcessLexicon.add(mntmPLRussian);
+		menuItemPLRussian = new JMenuItem(Texts.RUSSIAN.getText());
+		menuItemPLRussian.setName(menuItemPLRussian.getText());
+		menuProcessLexicon.add(menuItemPLRussian);
 
-		mntmCountWordOccurrences = new JMenuItem("Count word occurrences...");
-		mntmCountWordOccurrences.setName("Count word occurrences...");
-		mnTools.add(mntmCountWordOccurrences);
+		menuItemCountWordOccurrences = new JMenuItem("Count word occurrences...");
+		menuItemCountWordOccurrences.setName("Count word occurrences...");
+		menuTools.add(menuItemCountWordOccurrences);
 
 		///////////////////
 		// Compile group //
@@ -525,41 +572,41 @@ public class MainWindow extends JFrame {
 		mnCompile.setName(mnCompile.getText());
 		mMenuBar.add(mnCompile);
 
-		mntmCompileDictionary = new JMenuItem("Compile dictionary");
-		mntmCompileDictionary.setName(mntmCompileDictionary.getText());
-		mnCompile.add(mntmCompileDictionary);
+		menuItemCompileDictionary = new JMenuItem("Compile dictionary");
+		menuItemCompileDictionary.setName(menuItemCompileDictionary.getText());
+		mnCompile.add(menuItemCompileDictionary);
 
-		mntmCompileDictionarydebug = new JMenuItem("Compile dictionary (debug)");
-		mntmCompileDictionarydebug.setName(mntmCompileDictionarydebug.getText());
-		mnCompile.add(mntmCompileDictionarydebug);
+		menuItemCompileDictionarydebug = new JMenuItem("Compile dictionary (debug)");
+		menuItemCompileDictionarydebug.setName(menuItemCompileDictionarydebug.getText());
+		mnCompile.add(menuItemCompileDictionarydebug);
 
-		mntmCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
-		mntmCompilePhonemeData.setName(mntmCompilePhonemeData.getText());
-		mnCompile.add(mntmCompilePhonemeData);
+		menuItemCompilePhonemeData = new JMenuItem("Compile phoneme data 22050HZ");
+		menuItemCompilePhonemeData.setName(menuItemCompilePhonemeData.getText());
+		mnCompile.add(menuItemCompilePhonemeData);
 
-        mntmCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
-        mntmCompileMbrolaPhonemes.setName(mntmCompileMbrolaPhonemes.getText());
-		mnCompile.add(mntmCompileMbrolaPhonemes);
+		menuItemCompileMbrolaPhonemes = new JMenuItem("Compile mbrola phonemes list...");
+        menuItemCompileMbrolaPhonemes.setName(menuItemCompileMbrolaPhonemes.getText());
+		mnCompile.add(menuItemCompileMbrolaPhonemes);
 
-		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
-		mntmCompileIntonationData.setName(mntmCompileIntonationData.getText());
-		mnCompile.add(mntmCompileIntonationData);
+		menuItemCompileIntonationData = new JMenuItem("Compile intonation data");
+		menuItemCompileIntonationData.setName(menuItemCompileIntonationData.getText());
+		mnCompile.add(menuItemCompileIntonationData);
 
 		////////////////
 		// Help group //
 		////////////////
 
-		mnHelp = new JMenu("Help");
-		mnHelp.setName(mnHelp.getText());
-		mMenuBar.add(mnHelp);
+		menuHelp = new JMenu("Help");
+		menuHelp.setName(menuHelp.getText());
+		mMenuBar.add(menuHelp);
 
-		mntmEspeakDocumentation = new JMenuItem("eSpeak Documentation");
-		mntmEspeakDocumentation.setName(mntmEspeakDocumentation.getText());
-		mnHelp.add(mntmEspeakDocumentation);
+		menuItemEspeakDocumentation = new JMenuItem("eSpeak Documentation");
+		menuItemEspeakDocumentation.setName(menuItemEspeakDocumentation.getText());
+		menuHelp.add(menuItemEspeakDocumentation);
 
-		mntmAbout = new JMenuItem("About");
-		mntmAbout.setName(mntmAbout.getText());
-		mnHelp.add(mntmAbout);
+		menuItemAbout = new JMenuItem("About");
+		menuItemAbout.setName(menuItemAbout.getText());
+		menuHelp.add(menuItemAbout);
 
 		pmenu = new JPopupMenu();
 		openMI = new JMenuItem("Open");
@@ -618,17 +665,17 @@ public class MainWindow extends JFrame {
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE).addGap(35))
-				.addComponent(mMenuBar, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE));
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE).addGap(35))
+				.addComponent(mMenuBar, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE));
 		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
 				.createSequentialGroup()
 				.addComponent(mMenuBar, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE).addGap(0))
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE).addGap(0))
 						.addGroup(groupLayout.createSequentialGroup()
 								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
 								.addContainerGap()))));
@@ -664,11 +711,14 @@ JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 btnSpeak = new JButton("");
 btnSpeak.setName("btnSpeak");
+
 btnPause = new JButton("");
-btnSpeak.setName("btnPause");
+btnPause.setName("btnPause");
 btnPause.setEnabled(false);
+
+
 btnStop = new JButton("");
-btnSpeak.setName("btnStop");
+btnStop.setName("btnStop");
 btnStop.setEnabled(false);
 
 Image play;
@@ -726,9 +776,9 @@ glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING
 .addContainerGap()));
 glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
 .addGroup(glPanelText.createSequentialGroup().addContainerGap()
-		.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+		.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
 		.addPreferredGap(ComponentPlacement.UNRELATED)
-		.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE).addGap(20)
+		.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE).addGap(20)
 		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
 				.addComponent(btnShowRules).addComponent(btnShowIPA))
 		.addPreferredGap(ComponentPlacement.RELATED)
@@ -1006,6 +1056,7 @@ getContentPane().setLayout(groupLayout);
 		btnZoom_1.setName("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
+		
 
 		JLabel lblAmpS = new JLabel("% amp - Sequence");
 		lblAmpS.setHorizontalAlignment(SwingConstants.LEFT);
@@ -1032,6 +1083,8 @@ getContentPane().setLayout(groupLayout);
 		spms.setModel(new SpinnerNumberModel(0, 0, 596, 1));
 		spms.setBounds(20, 481, compWidth, compHeight);
 		panel_Spect.add(spms);
+		
+		
 	}
 		
 }
