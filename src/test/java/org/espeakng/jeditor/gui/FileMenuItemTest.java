@@ -59,7 +59,7 @@ public class FileMenuItemTest {
 	public void test01OpenButton() {
 		int numberOfTabs = MainWindow.tabbedPaneGraphs.getTabCount();
 		File temp = new File("../espeak-ng/phsource/vowel/u");
-		fixture.menuItem(mainW.mntmOpen.getName()).click();
+		fixture.menuItem(mainW.menuItemOpen.getName()).click();
 		fixture.fileChooser().setCurrentDirectory(temp.getParentFile());
 		fixture.fileChooser().selectFile(temp);
 		fixture.fileChooser().approve();
@@ -71,7 +71,7 @@ public class FileMenuItemTest {
 	public void test02Open2Button()   {
 		int numberOfTabs = MainWindow.tabbedPaneGraphs.getTabCount();
 		File temp = new File("../espeak-ng/phsource/vowel/e");
-		fixture.menuItem(mainW.mntmOpen2.getName()).click();
+		fixture.menuItem(mainW.menuItemOpen2.getName()).click();
 		fixture.fileChooser().setCurrentDirectory(temp.getParentFile());
 		fixture.fileChooser().selectFile(temp);
 		fixture.fileChooser().approve();
@@ -96,12 +96,12 @@ public class FileMenuItemTest {
 		File vowel = new File("../espeak-ng/phsource/vowel/u");
 		long vowelModifiedAt = vowel.lastModified();
 
-		fixture.menuItem(mainW.mntmOpen.getName()).click();
+		fixture.menuItem(mainW.menuItemOpen.getName()).click();
 		fixture.fileChooser().selectFile(vowel);
 		fixture.fileChooser().approve();
 		assertTrue("Vowel file not found", vowel.exists());
 		
-		fixture.menuItem(mainW.mntmSave.getName()).click();
+		fixture.menuItem(mainW.menuItemSave.getName()).click();
 		assertTrue("Failed to save vowel", vowelModifiedAt != vowel.lastModified());
 		
 	}
@@ -115,7 +115,7 @@ public class FileMenuItemTest {
 		File vowel = new File("../espeak-ng/phsource/vowel/u");
 		assertTrue("Vowel file not found", vowel.exists());
 		
-		fixture.menuItem(mainW.mntmSaveAs.getName()).click();
+		fixture.menuItem(mainW.menuItemSaveAs.getName()).click();
 		fixture.fileChooser().setCurrentDirectory(testFile.getParentFile()).fileNameTextBox().enterText(Integer.toString(fileName));
 		fixture.fileChooser().approve();
 		assertTrue("Vowel file not saved!", vowel.exists());
@@ -130,7 +130,7 @@ public class FileMenuItemTest {
 			assertFalse("Failed to add new tab", numberOfTabs == MainWindow.tabbedPaneGraphs.getTabCount());
 			numberOfTabs++;
 		}
-		fixture.menuItem(mainW.mntmClose.getName()).click();
+		fixture.menuItem(mainW.menuItemClose.getName()).click();
 		assertEquals("Failed to close a tab", numberOfTabs-1, MainWindow.tabbedPaneGraphs.getTabCount());
 	}
 	
@@ -142,7 +142,7 @@ public class FileMenuItemTest {
 			MainWindow.tabbedPaneGraphs.addTab("TestTab2", new JPanel());
 			assertFalse("Failed to add new tab", 0 == MainWindow.tabbedPaneGraphs.getTabCount());
 		}
-		fixture.menuItem(mainW.mntmCloseAll.getName()).click();
+		fixture.menuItem(mainW.menuItemCloseAll.getName()).click();
 		assertEquals("Failed to close tabs", 0, MainWindow.tabbedPaneGraphs.getTabCount());
 	}
 	

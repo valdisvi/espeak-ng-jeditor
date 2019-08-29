@@ -46,7 +46,7 @@ public class VoiceMenuItemTest {
 
 	@Test
 	public void testSelectVoiceVariant() {
-		fixture.menuItem(mainW.mntmSelectVoiceVariant.getName()).click();
+		fixture.menuItem(mainW.menuItemSelectVoiceVariant.getName()).click();
 		fixture.fileChooser().selectFile(new File("../espeak-ng/espeak-ng-data/voices/!v/f1"));
 		fixture.fileChooser().approve();
 		assertEquals("Voice variant not changed.", "f1", mainW.eventHandlers.getVoiceVariant());
@@ -56,13 +56,21 @@ public class VoiceMenuItemTest {
 	public void testSelectVoice() {
 		String voiceVar = mainW.eventHandlers.getVoiceVariant();
 		if (voiceVar.length()>0) voiceVar = "+" + voiceVar;
-		fixture.menuItem(mainW.rdbtnmntmLatvian.getName()).click();
+		fixture.menuItem(mainW.rdbtnmenuItemEnglish.getName()).click();
+		assertEquals("Failed to set english voice", "en" + voiceVar, mainW.eventHandlers.getVoice());
+		fixture.menuItem(mainW.rdbtnmenuItemLatvian.getName()).click();
 		assertEquals("Failed to set latvian voice", "lv" + voiceVar, mainW.eventHandlers.getVoice());
-		fixture.menuItem(mainW.rdbtnmntmPolish.getName()).click();
+		fixture.menuItem(mainW.rdbtnmenuItemPolish.getName()).click();
 		assertEquals("Failed to set polish voice", "pl" + voiceVar, mainW.eventHandlers.getVoice());
-		fixture.menuItem(mainW.rdbtnmntmRussian.getName()).click();
-		assertEquals("Failed to set russian voice", "ru" + voiceVar, mainW.eventHandlers.getVoice());
-		fixture.menuItem(mainW.rdbtnmntmEnglish.getName()).click();
+//		fixture.menuItem(mainW.rdbtnmntmRussian.getName()).click();
+//		assertEquals("Failed to set russian voice", "ru" + voiceVar, mainW.eventHandlers.getVoice());
+		fixture.menuItem(mainW.rdbtnmenuItemKorean.getName()).click();
+		assertEquals("Failed to set korean voice", "ko" + voiceVar, mainW.eventHandlers.getVoice());
+		fixture.menuItem(mainW.rdbtnmenuItemJapanese.getName()).click();
+		assertEquals("Failed to set japanese voice", "ja" + voiceVar, mainW.eventHandlers.getVoice());
+		fixture.menuItem(mainW.rdbtnmenuItemSpanish.getName()).click();
+		assertEquals("Failed to set spanish voice", "es" + voiceVar, mainW.eventHandlers.getVoice());
+		fixture.menuItem(mainW.rdbtnmenuItemEnglish.getName()).click();
 		assertEquals("Failed to set english voice", "en" + voiceVar, mainW.eventHandlers.getVoice());
 	}
 	

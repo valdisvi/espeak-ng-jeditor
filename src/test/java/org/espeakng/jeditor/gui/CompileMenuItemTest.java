@@ -43,10 +43,10 @@ public class CompileMenuItemTest {
     }
 
 	@Test
-	public void compileTest() {
+	public void compileENTest() {
 		File compiledFile = new File("../espeak-ng/espeak-ng-data/en_dict");
 		long prevMod = compiledFile.lastModified();
-		fixture.menuItem(mainW.mntmCompileDictionary.getText()).click();
+		fixture.menuItem(mainW.menuItemCompileDictionary.getText()).click();
 		File selectedFile = new File("../espeak-ng/dictsource/en_list");
 		assertTrue("English list file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
@@ -55,12 +55,60 @@ public class CompileMenuItemTest {
 	}
 	
 	@Test
-	public void compileDebugTest() {
+	public void compileRUDebugTest() {
 		File compiledFile = new File("../espeak-ng/espeak-ng-data/ru_dict");
 		long prevMod = compiledFile.lastModified();
-		fixture.menuItem(mainW.mntmCompileDictionarydebug.getText()).click();
+		fixture.menuItem(mainW.menuItemCompileDictionarydebug.getText()).click();
 		File selectedFile = new File("../espeak-ng/dictsource/ru_list");
 		assertTrue("Russian list file not found", selectedFile.exists());
+		fixture.fileChooser().selectFile(selectedFile);
+		fixture.fileChooser().approve();
+		assertTrue("Failed to compile dictionary", prevMod != compiledFile.lastModified());
+	}
+	
+	@Test
+	public void compileLVDebugTest() {
+		File compiledFile = new File("../espeak-ng/espeak-ng-data/lv_dict");
+		long prevMod = compiledFile.lastModified();
+		fixture.menuItem(mainW.menuItemCompileDictionarydebug.getText()).click();
+		File selectedFile = new File("../espeak-ng/dictsource/lv_list");
+		assertTrue("Latvian list file not found", selectedFile.exists());
+		fixture.fileChooser().selectFile(selectedFile);
+		fixture.fileChooser().approve();
+		assertTrue("Failed to compile dictionary", prevMod != compiledFile.lastModified());
+	}
+	
+	@Test
+	public void compileKRDebugTest() {
+		File compiledFile = new File("../espeak-ng/espeak-ng-data/ko_dict");
+		long prevMod = compiledFile.lastModified();
+		fixture.menuItem(mainW.menuItemCompileDictionarydebug.getText()).click();
+		File selectedFile = new File("../espeak-ng/dictsource/ko_list");
+		assertTrue("Korean list file not found", selectedFile.exists());
+		fixture.fileChooser().selectFile(selectedFile);
+		fixture.fileChooser().approve();
+		assertTrue("Failed to compile dictionary", prevMod != compiledFile.lastModified());
+	}
+	
+	@Test
+	public void compileJPDebugTest() {
+		File compiledFile = new File("../espeak-ng/espeak-ng-data/ja_dict");
+		long prevMod = compiledFile.lastModified();
+		fixture.menuItem(mainW.menuItemCompileDictionarydebug.getText()).click();
+		File selectedFile = new File("../espeak-ng/dictsource/ja_list");
+		assertTrue("Japanese list file not found", selectedFile.exists());
+		fixture.fileChooser().selectFile(selectedFile);
+		fixture.fileChooser().approve();
+		assertTrue("Failed to compile dictionary", prevMod != compiledFile.lastModified());
+	}
+	
+	@Test
+	public void compileSPDebugTest() {
+		File compiledFile = new File("../espeak-ng/espeak-ng-data/es_dict");
+		long prevMod = compiledFile.lastModified();
+		fixture.menuItem(mainW.menuItemCompileDictionarydebug.getText()).click();
+		File selectedFile = new File("../espeak-ng/dictsource/es_list");
+		assertTrue("Spanish list file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
 		fixture.fileChooser().approve();
 		assertTrue("Failed to compile dictionary", prevMod != compiledFile.lastModified());
@@ -70,7 +118,7 @@ public class CompileMenuItemTest {
 	public void compilePhonemeTest() {
 		File compiledFile = new File("../espeak-ng/espeak-ng-data/phondata");
 		long prevMod = compiledFile.lastModified();
-		fixture.menuItem(mainW.mntmCompilePhonemeData.getText()).click();
+		fixture.menuItem(mainW.menuItemCompilePhonemeData.getText()).click();
 		assertTrue("Failed to compile phoneme data", prevMod != compiledFile.lastModified());
 	}
 	
@@ -78,7 +126,7 @@ public class CompileMenuItemTest {
 	public void compileMbrolaTest() {
 		File compiledFile = new File("../espeak-ng/espeak-ng-data/mbrola_ph/en1_phtrans");
 		long prevMod = compiledFile.lastModified();
-		fixture.menuItem(mainW.mntmCompileMbrolaPhonemes.getText()).click();
+		fixture.menuItem(mainW.menuItemCompileMbrolaPhonemes.getText()).click();
 		File selectedFile = new File("../espeak-ng/phsource/mbrola/en1");
 		assertTrue("English mbrola file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
@@ -90,7 +138,7 @@ public class CompileMenuItemTest {
 	public void compileIntonationTest() {
 		File compiledFile = new File("../espeak-ng/espeak-ng-data/intonations");
 		long prevMod = compiledFile.lastModified();
-		fixture.menuItem(mainW.mntmCompileIntonationData.getText()).click();
+		fixture.menuItem(mainW.menuItemCompileIntonationData.getText()).click();
 		assertTrue("Failed to compile intonation data", prevMod != compiledFile.lastModified());
 	}
 }
