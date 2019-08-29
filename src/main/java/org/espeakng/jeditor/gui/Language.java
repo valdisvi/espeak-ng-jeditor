@@ -156,7 +156,7 @@ public class Language {
 		mainW.rdbtnmenuItemKorean.setText(translation.get(78));
 		mainW.rdbtnmenuItemJapanese.setText(translation.get(79));
 		mainW.rdbtnmenuItemSpanish.setText(translation.get(80));
-		
+		mainW.rdbtnmenuItemTamil.setText(translation.get(81));
 	
 	
 	
