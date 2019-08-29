@@ -31,6 +31,7 @@ public class ESpeakService {
 	private ESpeakService() {
 		throw new IllegalStateException("ESpeakService Utility class");
 	}
+	
 
 	public static native void nativeSpeak(String language, String text);
 
@@ -42,7 +43,43 @@ public class ESpeakService {
 			System.exit(1);
 		}
 	}
+	/**  
+	 * 
+	 * @author Andrejs Freiss 28.08.19                                                                                                                
+                                                                                                                                               
+ 		This function has not yet implemented in project.                                                                                             
+                                                                                                                                               
+ 		This function acquires PHONEME_LIST data form "C" espeak-ng project                                                                           
+ 		PHONEME_LIST is not publicly available, so if you want this use this function you need to                                                     
+ 		add this line:                                                                                                                                
+                                                                                                                                               
+				extern PHONEME_LIST *getPhonemeList();                                                                                                   
+                                                                                                                                               
+ 		to synthesize.h in espeak-ng project                                                                                                          
+ 		and add these lines:                                                                                                                            
+                                                                                                                                               	
+				#pragma GCC visibility push(default)                                                                                                     
+			PHONEME_LIST * getPhonemeList() {                                                                                                    
+				return &phoneme_list;                                                                                                            
+			}                                                                                                                                    
+			#pragma GCC visibility pop                                                                                                               
+                                                                                                                                               
+ 		to synthesize.c in espeak-ng project                                                                                                          
+ 		and recompile libespeakservice.so library                                                                                                     
+ 		you can do this with command "./updateJNIchanges.sh" in this project.                                                                         
+		Note that both "espeak-ng" and "espeak-ng-jeditor" projects should be located in the same folder to compile library.                          
+ 		e.g ../workspace/espeak-ng	../workspace/eskeap-ng-jeditor                                                                                   
+                                                                                                                                               
+ 		This function not just gives back PHONEME_DATA for each Phoneme in your text, but also voices it out.                                         
+ 		This conflicts with already existing function, so when you press "Speak" its speaks out twice.                                                
+ 		Possible solution is to somehow disable speech for this function, or replace existing one (found in EvenHandlers.java:298) with this one.     
+ 		Unfortunately due to Thread problems and time limits i was not able to do this.                                                               
+ 		Also i created 3 classes - PhonemeList.java, PhonemeList2.java and PhonemeTab.java,                                                           
+ 		which right now does nothing, but could be used to store this data                                                                            
+	 */
+	public static native int nativeGetPhonemeList(String textToTranslate, String language);
 
+	
 	/** Function returns string with Espeak-NG version */
 	public static native String nativeGetEspeakNgVersion();
 
