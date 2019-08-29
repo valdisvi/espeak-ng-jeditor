@@ -46,12 +46,12 @@ public class HelpMenuItemTest {
 
 	//@Test
 	public void showDocumentationTest() {
-		fixture.menuItem(mainW.mntmEspeakDocumentation.getText()).click();
+		fixture.menuItem(mainW.menuItemEspeakDocumentation.getText()).click();
 	}
 	
 	@Test
 	public void aboutTest() {
-		fixture.menuItem(mainW.mntmAbout.getText()).click();
+		fixture.menuItem(mainW.menuItemAbout.getText()).click();
 		FrameFixture aboutWindow = findFrame("About").using(fixture.robot());
 		aboutWindow.button("OK").click();
 	}

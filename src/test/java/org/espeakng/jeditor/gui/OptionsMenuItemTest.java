@@ -55,27 +55,27 @@ public class OptionsMenuItemTest {
 		File setPath = new File("../espeak-ng");
 		String absPath = setPath.getName();
 		
-		fixture.menuItem(mainW.mntmMasterPhonemesFile.getName()).click();
+		fixture.menuItem(mainW.menuItemMasterPhonemesFile.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Master phonemes file location not changed", 
 				EventHandlers.getFolders().get(Command.PH_FILE).getName().equals(absPath));
 		
-		fixture.menuItem(mainW.mntmPhonemeDataSource.getName()).click();
+		fixture.menuItem(mainW.menuItemPhonemeDataSource.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Phonemes source file location not changed", 
 				EventHandlers.getFolders().get(Command.PHONEME_SOURCE).getName().equals(absPath));
 		
-		fixture.menuItem(mainW.mntmDictionaryDataSource.getName()).click();
+		fixture.menuItem(mainW.menuItemDictionaryDataSource.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Dictionary source file location not changed", 
 				EventHandlers.getFolders().get(Command.DICT_SOURCE).getName().equals(absPath));
 		
-		fixture.menuItem(mainW.mntmSynthesizedSoundWAVfile.getName()).click();
+		fixture.menuItem(mainW.menuItemSynthesizedSoundWAVfile.getName()).click();
 		selectAndApprove(setPath);
 		assertTrue("Synthesized WAV file location not changed", 
 				EventHandlers.getFolders().get(Command.WAV_FILE).getName().equals(absPath));
 		
-		fixture.menuItem(mainW.mntmVoiceFileToModifyFormantPeaks.getText()).click();
+		fixture.menuItem(mainW.menuItemVoiceFileToModifyFormantPeaks.getText()).click();
 		selectAndApprove(setPath);
 		assertTrue("Voice file location not changed", 
 				EventHandlers.getFolders().get(Command.VOICE_FILE).getName().equals(absPath));
@@ -92,31 +92,31 @@ public class OptionsMenuItemTest {
 		// Roughly checks if at least 1 word has been changed to file word
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("./src/main/resources/latvian.txt"));
-			fixture.menuItem(mainW.mntmLatvian.getName()).click();
+			fixture.menuItem(mainW.menuItemLatvian.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/russian.txt"));
-			fixture.menuItem(mainW.mntmRussian.getName()).click();
+			fixture.menuItem(mainW.menuItemRussian.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/tamil.txt"));
-			fixture.menuItem(mainW.mntmTamil.getName()).click();
+			fixture.menuItem(mainW.menuItemTamil.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/korean.txt"));
-			fixture.menuItem(mainW.mntmTamil.getName()).click();
+			fixture.menuItem(mainW.menuItemKorean.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/japanese.txt"));
-			fixture.menuItem(mainW.mntmTamil.getName()).click();
+			fixture.menuItem(mainW.menuItemJapanese.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/spanish.txt"));
-			fixture.menuItem(mainW.mntmTamil.getName()).click();
+			fixture.menuItem(mainW.menuItemSpanish.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 			br = new BufferedReader(new FileReader("./src/main/resources/english.txt"));
-			fixture.menuItem(mainW.mntmEnglish.getName()).click();
+			fixture.menuItem(mainW.menuItemEnglish.getName()).click();
 			checkChanges(br.readLine());
 			br.close();
 		} catch (IOException e) {
@@ -132,14 +132,14 @@ public class OptionsMenuItemTest {
 	@Test
 	public void setSpeedTest() {
 		int oldValue = mainW.optionsSpeed.getSpinnerValue();
-		fixture.menuItem(mainW.mntmSpeed.getText()).click();
+		fixture.menuItem(mainW.menuItemSpeed.getText()).click();
 		FrameFixture speedFixture = findFrame("Speed").using(fixture.robot());
 		speedFixture.spinner("spinner").increment(30);
 		speedFixture.button("OK").click();
 		int newValue = mainW.optionsSpeed.getSpinnerValue();
 		assertTrue("Spinner value not changed!", oldValue != newValue);
 		
-		fixture.menuItem(mainW.mntmSpeed.getText()).click();
+		fixture.menuItem(mainW.menuItemSpeed.getText()).click();
 		speedFixture.spinner("spinner").decrement(20);
 		speedFixture.button("Cancel").click();
 		assertEquals("Spinner saves value on cancel", newValue, mainW.optionsSpeed.getSpinnerValue());
@@ -148,7 +148,7 @@ public class OptionsMenuItemTest {
 	@Test
 	public void speakPunctuationTest() {
 		mainW.textAreaIn.setText("*******************Hello******************");
-		fixture.menuItem(mainW.mntmSpeakPunctuation.getName()).click();
+		fixture.menuItem(mainW.menuItemSpeakPunctuation.getName()).click();
 //		checkRunningProcess();
 	}
 	
@@ -157,8 +157,8 @@ public class OptionsMenuItemTest {
 		mainW.textAreaIn.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 				+ " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
 				+ " when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-		fixture.menuItem(mainW.mntmSpeakCharacters.getName()).click();
-//		checkRunningProcess();
+		fixture.menuItem(mainW.menuItemSpeakCharacters.getName()).click();
+		checkRunningProcess();
 	}
 	
 	@Test
@@ -166,24 +166,24 @@ public class OptionsMenuItemTest {
 		mainW.textAreaIn.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 				+ " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
 				+ " when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-		fixture.menuItem(mainW.mntmSpeakCharacterName.getName()).click();
-//		checkRunningProcess();
+		fixture.menuItem(mainW.menuItemSpeakCharacterName.getName()).click();
+		checkRunningProcess();
 	}
 
-//	private void checkRunningProcess() {
-//		Runtime rt = Runtime.getRuntime();
-//		try {
-//			//Kills current running speak process (if there is one)
-//			rt.exec("pkill -9 aplay");
-//			
-//			Process pc = rt.exec("pgrep aplay");
-//			pc.waitFor();
-//			assertEquals("Running process (aplay) not found", 0, pc.exitValue());
-//			rt.exec("pkill -9 aplay");
-//		} catch (IOException | InterruptedException e) {
-//			e.printStackTrace();
-//			fail("Command line failure");
-//		}
-//	}
+	private void checkRunningProcess() {
+		Runtime rt = Runtime.getRuntime();
+		try {
+			//Kills current running speak process (if there is one)
+			rt.exec("pkill -9 aplay");
+			
+			Process pc = rt.exec("pgrep aplay");
+			pc.waitFor();
+			assertEquals("Running process (aplay) not found", 0, pc.exitValue());
+			rt.exec("pkill -9 aplay");
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			fail("Command line failure");
+		}
+	}
 	
 }
