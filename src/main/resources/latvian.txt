@@ -21,9 +21,6 @@ Anglu
 Krievu
 Latviešu
 Poļu
-Koreiešu
-Japāņu
-Spāņu
 Opcijas
 Skatīt ceļus
 Pārvaldīt fonēmas failu...
@@ -77,3 +74,8 @@ Eksportēt grafiku
 日本語
 Española
 Sveiki
+
+
+Koreješu
+Japāņu
+Spāņu
