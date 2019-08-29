@@ -84,9 +84,7 @@ public class MainWindow extends JFrame {
 	public JRadioButtonMenuItem rdbtnmenuItemKorean;
 	public JRadioButtonMenuItem rdbtnmenuItemJapanese;
 	public JRadioButtonMenuItem rdbtnmenuItemSpanish;
-	
-	
-	
+	public JRadioButtonMenuItem rdbtnmenuItemTamil;	
 	
 	// menuBar group Options
 	public JMenu menuOptions;
@@ -425,6 +423,10 @@ public class MainWindow extends JFrame {
 		rdbtnmenuItemSpanish = new JRadioButtonMenuItem("Spanish");
 		rdbtnmenuItemSpanish.setName("SpanishVoice");
 		menuSelectVoice.add(rdbtnmenuItemSpanish);
+		
+		rdbtnmenuItemTamil = new JRadioButtonMenuItem("Tamil");
+		rdbtnmenuItemTamil.setName("TamilVoice");
+		menuSelectVoice.add(rdbtnmenuItemTamil);
 
 		groupOfVoices = new ButtonGroup();
 		groupOfVoices.add(rdbtnmenuItemEnglish);
@@ -434,6 +436,7 @@ public class MainWindow extends JFrame {
 		groupOfVoices.add(rdbtnmenuItemKorean);
 		groupOfVoices.add(rdbtnmenuItemJapanese);
 		groupOfVoices.add(rdbtnmenuItemSpanish);
+		groupOfVoices.add(rdbtnmenuItemTamil);
 
 		///////////////////
 		// Options group //
@@ -759,8 +762,7 @@ glPanelText.setHorizontalGroup(glPanelText.createParallelGroup(Alignment.LEADING
 .addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false).addComponent(scrollPaneTextAreaOut)
 		.addGroup(glPanelText.createSequentialGroup()
 				.addGroup(glPanelText.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
+						.addComponent(btnTranslate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(btnSpeak, Alignment.CENTER))
 				.addPreferredGap(ComponentPlacement.RELATED)
 				.addGroup(glPanelText.createParallelGroup(Alignment.TRAILING, false)
@@ -779,8 +781,10 @@ glPanelText.setVerticalGroup(glPanelText.createParallelGroup(Alignment.TRAILING)
 		.addComponent(scrollPaneTextAreaIn, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
 		.addPreferredGap(ComponentPlacement.UNRELATED)
 		.addComponent(scrollPaneTextAreaOut, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE).addGap(20)
-		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnTranslate)
-				.addComponent(btnShowRules).addComponent(btnShowIPA))
+		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE)
+				.addComponent(btnTranslate)
+				.addComponent(btnShowRules)
+				.addComponent(btnShowIPA))
 		.addPreferredGap(ComponentPlacement.RELATED)
 		.addGroup(glPanelText.createParallelGroup(Alignment.BASELINE).addComponent(btnSpeak)
 				.addComponent(btnPause).addComponent(btnStop))
