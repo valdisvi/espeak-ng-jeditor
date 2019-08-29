@@ -93,5 +93,4 @@ public class CompileMenuItemTest {
 		fixture.menuItem(mainW.mntmCompileIntonationData.getText()).click();
 		assertTrue("Failed to compile intonation data", prevMod != compiledFile.lastModified());
 	}
-
 }

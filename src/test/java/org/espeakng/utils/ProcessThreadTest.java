@@ -1,8 +1,5 @@
 package org.espeakng.utils;
 
-import static org.junit.Assert.*;
-
-
 import org.espeakng.jeditor.utils.ProcessThread;
 import org.junit.BeforeClass;
 import org.junit.Test;

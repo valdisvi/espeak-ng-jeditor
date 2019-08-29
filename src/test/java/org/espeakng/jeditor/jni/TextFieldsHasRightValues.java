@@ -6,7 +6,7 @@ public class TextFieldsHasRightValues {
 	
 	@Test
 	public void test()  {
-		return;
+
 	}
 
 }
