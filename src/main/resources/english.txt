@@ -74,3 +74,8 @@ Export Graph
 日本語
 Española
 Hello
+
+
+Korean
+Japanese
+Spanish

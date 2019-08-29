@@ -150,12 +150,16 @@ public class Language {
 		mainW.menuItemJapanese.setText(translation.get(73));
 		mainW.menuItemSpanish.setText(translation.get(74));
 		
-		
-		mainW.menuItemKorean.setText(translation.get(75));
-		mainW.menuItemJapanese.setText(translation.get(76));
-		mainW.menuItemSpanish.setText(translation.get(77));
 		//text area
-		mainW.textAreaIn.setText(translation.get(78));
+				mainW.textAreaIn.setText(translation.get(75));
+		
+		mainW.rdbtnmenuItemKorean.setText(translation.get(78));
+		mainW.rdbtnmenuItemJapanese.setText(translation.get(79));
+		mainW.rdbtnmenuItemSpanish.setText(translation.get(80));
+		
+	
+	
+	
 	}
 
 }
