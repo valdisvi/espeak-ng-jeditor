@@ -50,19 +50,8 @@ public class SpeakMenuItemTest {
         fixture.cleanUp();
     }
 	
-	@Test
-	public void test01TranslateButton()   {
-		mainW.textAreaIn.setText("hi!");
-		fixture.menuItem(mainW.menuItemTranslate.getName()).click();
-		assertEquals("h'aI", mainW.textAreaOut.getText().trim());
-		
-//		fixture.tabbedPane("Text").selectTab(1);
-//		fixture.button("TranslateB").click();
-//		assertEquals("eItS 'aI", mainW.textAreaOut.getText().trim());
-	}
 	
-	
-	public void test02ShowRulesButton()   {
+	public void test01ShowRulesButton()   {
 		mainW.textAreaIn.setText("hello");
 		fixture.menuItem(mainW.menuItemShowRules.getText()).click();
 		assertEquals("Found: 'hello' [h@loU]  \n h@l'oU", mainW.textAreaOut.getText().trim());
@@ -84,7 +73,7 @@ public class SpeakMenuItemTest {
 		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n _:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
 	}
 	 @Test
-	 public void test03ShowIPAButton()   {
+	 public void test02ShowIPAButton()   {
 		 mainW.textAreaIn.setText("hello");
 		 fixture.menuItem(mainW.menuItemShowRules.getText()).click();
 		assertEquals("Found: 'hello' [h@loU]  \nh@l'oU", mainW.textAreaOut.getText().trim());
@@ -96,7 +85,7 @@ public class SpeakMenuItemTest {
 		assertEquals("Translate '!'\n 22	!        [_:Ekskl@meIS@n_:]\n\n_:'Ekskl@m,eIS@n_:\n", mainW.textAreaOut.getText());
 	}
 	 @Test
-	 public void test04SpeakFileButton()   {
+	 public void test03SpeakFileButton()   {
 
 		 	fixture.menuItem("SpeakFile").click();
 			fixture.fileChooser().selectFile(new File("../espeak-ng/espeak-ng-data/phondata-manifest"));
