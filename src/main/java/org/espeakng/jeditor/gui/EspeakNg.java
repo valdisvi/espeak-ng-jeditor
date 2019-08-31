@@ -86,7 +86,8 @@ public class EspeakNg {
 
 				// The following three commands do not require file for output (but the
 				// rest of commands DO require output file):
-				boolean isFile = !(command.equals(Command.SPEAK_PUNC) || command.equals(Command.SPEAK_BY_SYMBOL)|| command.equals(Command.SPEAK_CHAR_NAME) || command.equals(Command.SPEAK));
+				boolean isFile = !(command.equals(Command.SPEAK_PUNC) || command.equals(Command.SPEAK_BY_SYMBOL)
+						|| command.equals(Command.SPEAK_CHAR_NAME) || command.equals(Command.SPEAK));
 				
 				if (isFile) createFileOutput();
 				
@@ -99,7 +100,7 @@ public class EspeakNg {
 				} catch (IOException e) {
 					logger.warn(e);
 				}
-				
+
 				// Read the espeak-ng written text fiel, and write this text to lower text area on "Text" tab:
 				if (isFile)	readOutputFile();
 	}
@@ -258,7 +259,7 @@ public class EspeakNg {
 	}
 	/**
 	 * This method sets pronunciation rules depending on chosen voice (Voice ->
-	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
+	 * Select Voice). It returns string "en", "ru", "lv" "pl" "ko" "ja" "es".
 	 * 
 	 */
 	public String getVoiceFromSelection() {
@@ -275,12 +276,18 @@ public class EspeakNg {
 		}
 
 		String voice = "en";
-		if (text.equals("Russian"))
-			voice = "ru";
+//		if (text.equals("Russian"))
+//			voice = "ru";
 		if (text.equals("Latvian"))
 			voice = "lv";
 		if (text.equals("Polish"))
 			voice = "pl";
+		if (text.equals("Korean"))
+			voice = "ko";
+		if (text.equals("Japanese"))
+			voice = "ja";
+		if (text.equals("Spanish"))
+			voice = "es";
 
 		if(!voiceVariant.equals(""))
 			voice +="+"+voiceVariant;

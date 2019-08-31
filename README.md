@@ -33,6 +33,11 @@ Clone [eSpeakNG](https://github.com/espeak-ng/espeak-ng/) project and [solve dep
 sudo apt-get install libwxgtk3.0 libportaudio2 sox libwxgtk3.0-dev libportaudio-dev
 ```
 
+You need to install Mbrola to see Prosody tab, use this command: 
+```
+sudo apt install mbrola mbrola-en1
+```
+
 When invoke building of `espeak-ng` project add additional `-fPIC` flags to compiler, e.g. by compiling in following way:
 
 

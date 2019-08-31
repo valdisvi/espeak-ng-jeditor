@@ -48,14 +48,14 @@ public class ToolsMenuItemTest {
 	@Test
 	public void vowelsFromPhDataTest() {
 		int tabCount = MainWindow.tabbedPaneGraphs.getTabCount();
-		fixture.menuItem(mainW.mntmFromCompiledPhoneme.getName()).click();
+		fixture.menuItem(mainW.menuItemFromCompiledPhoneme.getName()).click();
 		assertEquals("Failed to open tab from compiled phoneme data", tabCount+1, mainW.tabbedPaneGraphs.getTabCount());
 	}
 	
 	@Test
 	public void vowelsFromVowelFilesTest() {
 		int tabCount = MainWindow.tabbedPaneGraphs.getTabCount();
-		fixture.menuItem(mainW.mntmFromDirectoryVowelFiles.getText()).click();
+		fixture.menuItem(mainW.menuItemFromDirectoryVowelFiles.getText()).click();
 		File selectedFile = new File("../espeak-ng/phsource/vowelcharts/ru");
 		assertTrue("Russian chart file not found", selectedFile.exists());
 		fixture.fileChooser().selectFile(selectedFile);
@@ -67,7 +67,7 @@ public class ToolsMenuItemTest {
 	public void wordFrequencyTest() {
 		fixture.tabbedPane("Text").click();
 		mainW.textAreaIn.setText("hello Hello HELLO world! world java swing");
-		fixture.menuItem(mainW.mntmCountWordOccurrences.getName()).click();
+		fixture.menuItem(mainW.menuItemCountWordOccurrences.getName()).click();
 		FrameFixture frequencyWindow = findFrame("Word Occurences").using(fixture.robot());
 		assertTrue("Incorrect output of word frequency window, expected first line: hello=3",
 				frequencyWindow.list("list").contents()[0].equals("hello=3"));

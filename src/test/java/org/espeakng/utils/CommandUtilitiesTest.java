@@ -25,4 +25,35 @@ public class CommandUtilitiesTest {
 		System.out.println(CommandUtilities.handleError(trow2));
 		assertFalse(CommandUtilities.getLastThread()==null);
 	}
+	
+	@Test
+	public void testWrapLayout() {
+	}
+
+	@Test
+	public void testWrapLayoutInt() {
+		int align = 0;
+		System.out.println(align);
+	}
+
+	@Test
+	public void testWrapLayoutIntIntInt() {
+		int align = 0;
+		int hgap = 0;
+		int vgap = 0;
+		System.out.print(align);
+		System.out.print(hgap);
+		System.out.print(vgap);
+	}
+
+//	@Test
+//	public void testPreferredLayoutSizeContainer() {
+//		Target target = new Target();
+//		
+//	}
+
+//	@Test
+//	public void testMinimumLayoutSizeContainer() {
+//		fail("Not yet implemented");
+//	}
 }

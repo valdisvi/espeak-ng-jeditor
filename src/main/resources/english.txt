@@ -70,4 +70,13 @@ Show IPA
 Close All
 Export Graph
 தமிழ்
+한국어
+日本語
+Española
 Hello
+
+
+Korean
+Japanese
+Spanish
+Tamil

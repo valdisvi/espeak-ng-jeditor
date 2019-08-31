@@ -48,8 +48,8 @@ unsigned int size, position = 0, end_position = 0, flags = espeakCHARS_AUTO,
  * Signature: (ILjava/lang/String;Ljava/lang/String;)V
  */
 
-JNIEXPORT void JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeSpeak
-(JNIEnv * env, jclass class, jstring language, jstring text) {
+JNIEXPORT void JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeSpeak(
+		JNIEnv * env, jclass class, jstring language, jstring text) {
 	const char *nativeLanguage = (*env)->GetStringUTFChars(env, language, 0);
 	const char *nativeText = (*env)->GetStringUTFChars(env, text, 0);
 	printf ("nativeLanguage:%s nativeText:%s\n", nativeLanguage, nativeText);
@@ -69,6 +69,103 @@ JNIEXPORT void JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeSpeak
 	espeak_Synchronize();
 	printf("\n:Done\n");
 }
+
+/*
+ * Class:     org_espeakng_jeditor_jni_ESpeakService
+ * Method:    nativeGetPhonemeList
+ * Signature: ()I
+ *
+ *@author Andrejs Freiss 28.08.19
+ *
+ * This function has not yet implemented in project.
+ *
+ * This function acquires PHONEME_LIST data form "C" espeak-ng project
+ * PHONEME_LIST is not publicly available, so if you want this use this function you need to
+ * add this line:
+
+  		extern PHONEME_LIST *getPhonemeList();
+
+ * to synthesize.h in espeak-ng project
+ * and add this line:
+
+  		#pragma GCC visibility push(default)
+			PHONEME_LIST * getPhonemeList() {
+				return &phoneme_list;
+			}
+		#pragma GCC visibility pop
+
+ * to synthesize.c in espeak-ng project
+ * and recompile libespeakservice.so library
+ * you can do this with command "./updateJNIchanges.sh" in this project.
+ * Note that both "espeak-ng" and "espeak-ng-jeditor" projects should be located in the same folder to compile library.
+ * e.g ../workspace/espeak-ng	../workspace/eskeap-ng-jeditor
+ *
+ * This function not just gives back PHONEME_DATA for each Phoneme in your text, but also voices it out.
+ * This conflicts with already existing function, so when you press "Speak" its speaks out twice.
+ * Possible solution is to somehow disable speech for this function, or replace existing one (found in EvenHandlers.java:298) with this one.
+ * Unfortunately due to Thread problems and time limits i was not able to do this.
+ * Also i created 3 classes - PhonemeList.java, PhonemeList2.java and PhonemeTab.java,
+ * which right now does nothing, but could be used to store this data
+ */
+JNIEXPORT jint JNICALL Java_org_espeakng_jeditor_jni_ESpeakService_nativeGetPhonemeList
+  (JNIEnv *env, jclass obj, jstring jTextToTranslate, jstring language) {
+
+	const char* cLanguage = (*env)->GetStringUTFChars(env, language, NULL);
+
+	const char* cTextToTranslate =
+			jTextToTranslate ?
+					(*env)->GetStringUTFChars(env, jTextToTranslate, NULL) :
+					NULL;
+
+	int bufferlength = 500;
+
+	espeak_Initialize(output, bufferlength, path, options);
+	espeak_SetVoiceByName(cLanguage);
+	size = strlen(cTextToTranslate) + 1;;
+	espeak_Synth(cTextToTranslate, size, position, position_type, end_position,
+					flags, unique_identifier, user_data);
+	PHONEME_LIST *myphlist = getPhonemeList();
+	espeak_Synchronize();
+
+	// Loops through each Phoneme and gives back its data
+	for (int j = 1; j < strlen(cTextToTranslate)+1; j++) {
+		if (myphlist[j].amp == 0) { break; }
+		//PHONEME_LIST2
+			printf(" synthflags:%04x", myphlist[j].synthflags);
+			printf(" phcode:%02x", myphlist[j].phcode);
+			printf(" stresslevel:%02x", myphlist[j].stresslevel);
+			printf(" sourceix:%04x", myphlist[j].sourceix);
+			printf(" wordstress:%02x", myphlist[j].wordstress);
+			printf(" tone_ph:%02x\n", myphlist[j].tone_ph);
+
+		//PHONEME_TAB
+			printf(" ph->mnemonic:%04x", myphlist[j].ph->mnemonic);
+			printf(" ph->phflags:%04x", myphlist[j].ph->phflags);
+			printf(" ph->program:%04x", myphlist[j].ph->program);
+			printf(" ph->code:%02x", myphlist[j].ph->code);
+			printf(" ph->type:%02x", myphlist[j].ph->type);
+			printf(" ph->start_type:%02x", myphlist[j].ph->start_type);
+			printf(" ph->end_type:%02x", myphlist[j].ph->end_type);
+			printf(" ph->std_length:%02x", myphlist[j].ph->std_length);
+			printf(" ph->length_mod:%02x\n", myphlist[j].ph->length_mod);
+
+		//PHONEME_LIST
+			printf(" length:%04x", myphlist[j].length);
+			printf(" env:%02x", myphlist[j].env);
+			printf(" type:%02x", myphlist[j].type);
+			printf(" prepause:%02x", myphlist[j].prepause);
+			printf(" postpause:%02x", myphlist[j].postpause);
+			printf(" amp:%02x", myphlist[j].amp);
+			printf(" newword:%02x", myphlist[j].newword);
+			printf(" pitch1:%02x", myphlist[j].pitch1);
+			printf(" pitch2:%02x", myphlist[j].pitch2);
+			printf(" std_length:%02x", myphlist[j].std_length);
+			printf(" phontab_addr:%04x", myphlist[j].phontab_addr);
+			printf(" sound_param:%04x\n", myphlist[j].sound_param);
+	}
+	espeak_Terminate();
+	return 0;
+};
 
 /*
  * Class:     org_espeakng_jeditor_jni_ESpeakService
